@@ -2,13 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url(../node_modules/posy-fnb-ds/src/styles/colors.css);
+@import url(../node_modules/posy-fnb-ds/src/styles/typography.css);
+
 html {
   height: 100%;
   scroll-behavior: smooth;
 }
 
-/* body {
+body {
   min-height: 100%;
-  max-width: 576px;
+  background: var(--neutral-30);
   margin: auto;
-} */
+}
+
+.ps-sidebar-root {
+  border: unset;
+}
+
+.ps-sidebar-container {
+  border-radius: 16px;
+}
