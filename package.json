@@ -19,10 +19,10 @@
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "eslint-config-next": "13.1.2",
+    "framer-motion": "^8.5.0",
     "next": "13.1.2",
     "posy-fnb-ds": "^1.2.23",
     "react": "18.2.0",
-    "react-device-detect": "^2.2.2",
     "react-dom": "18.2.0",
     "react-pro-sidebar": "^1.0.0-beta.2",
     "typescript": "4.9.4"

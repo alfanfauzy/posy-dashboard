@@ -12,7 +12,6 @@ html {
 
 body {
   min-height: 100%;
-  background: var(--neutral-30);
   margin: auto;
 }
 
@@ -22,4 +21,8 @@ body {
 
 .ps-sidebar-container {
   border-radius: 16px;
+}
+
+.ps-menu-button:hover {
+  background-color: unset !important;
 }

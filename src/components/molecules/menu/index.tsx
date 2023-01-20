@@ -1,8 +1,6 @@
-/* eslint-disable no-console */
 import React from 'react'
 import { useRouter } from 'next/router'
 import { Menu, MenuItem, SubMenu } from 'react-pro-sidebar'
-import { isMobile } from 'react-device-detect'
 
 interface MoleculesMenuProps {
   item: {
@@ -11,28 +9,18 @@ interface MoleculesMenuProps {
     icon: JSX.Element
     subMenu?: { title: string; path: string }[]
   }
-  handleCollapseSidebar: () => void
   collapse: boolean
 }
 
-const MoleculesMenu = ({
-  item,
-  handleCollapseSidebar,
-  collapse,
-}: MoleculesMenuProps) => {
-  const { pathname } = useRouter()
+const MoleculesMenu = ({ item, collapse }: MoleculesMenuProps) => {
+  const { pathname, push } = useRouter()
 
-  const handleLogout = () => {
-    console.log('logout will be trigger here')
+  const linkTo = (path: string) => {
+    push(`/${path}`)
   }
 
   return (
-    <Menu
-      key={item.path}
-      className={`w-full transition duration-300 ease-in-out py-1 ${
-        !collapse ? 'px-6' : ''
-      }`}
-    >
+    <Menu key={item.path} className={`w-full py-1 ${!collapse ? 'px-6' : ''}`}>
       {Array.isArray(item.subMenu) && item.subMenu.length > 0 && (
         <SubMenu
           label={item.title}
@@ -46,20 +34,16 @@ const MoleculesMenu = ({
       )}
       {!Array.isArray(item.subMenu) && (
         <MenuItem
-          className={`text-xxl-semibold py-2  ${
+          className={`text-xxl-semibold transition-all duration-300 ease-in-out py-1.5 ${
             pathname.indexOf(item.path) !== -1
-              ? 'text-primary'
+              ? 'bg-neutral-20 rounded-lg'
               : 'hover:bg-neutral-20 hover:rounded-lg'
           }`}
           icon={item.icon}
-          onClick={isMobile ? handleCollapseSidebar : () => undefined}
+          onClick={() => linkTo(item.path)}
+          // onClick={item.path === 'login' ? handleLogout : () => undefined}
         >
-          <p
-            role="presentation"
-            onClick={item.path === 'login' ? handleLogout : () => undefined}
-          >
-            {item.title}
-          </p>
+          <p>{item.title}</p>
         </MenuItem>
       )}
     </Menu>
