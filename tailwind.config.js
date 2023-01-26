@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -22,7 +23,8 @@ module.exports = {
         },
         'red-caution': '#D40000',
         'red-accent': '#FC5454',
-        success: '#37B175',
+        'green-success': '#37B175',
+        'blue-success': '#003BD4',
       },
       container: {
         screens: {
@@ -31,7 +33,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/line-clamp'),
-  ],
+  plugins: [require('@tailwindcss/line-clamp')],
 }

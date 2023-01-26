@@ -9,7 +9,7 @@ const TemplatesSidebar = () => {
   const { collapseSidebar, collapsed } = useProSidebar()
 
   return (
-    <Sidebar className="h-full rounded-r-2xl bg-neutral-10" width="256px">
+    <Sidebar className="h-full rounded-r-2xl bg-neutral-10" width="250px">
       <aside className="pt-10 px-6 flex w-full items-center sm:justify-center">
         {!collapsed ? (
           <p
