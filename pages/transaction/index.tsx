@@ -1,5 +1,6 @@
-import { Button } from 'posy-fnb-ds'
-import React from 'react'
+import { Button, Modal } from 'posy-fnb-ds'
+import React, { useState } from 'react'
+import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
 import SearchIcon from 'src/assets/icons/search'
@@ -38,7 +39,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a432-dc111ef6ad26e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -54,7 +55,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a432-dc1131ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -70,7 +71,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a432-d4c111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -86,7 +87,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a432-dc5111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -102,7 +103,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-6a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -118,7 +119,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-466a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -134,7 +135,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a6432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -150,7 +151,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-465a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -166,7 +167,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a432-6dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -182,7 +183,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-2188c-46a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -198,7 +199,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-4633a8-a432-dc111ef63ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -214,7 +215,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-4633a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -230,7 +231,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-12146a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -246,7 +247,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a42137-188c-46a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -262,7 +263,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-4641a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -278,7 +279,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a432-dc125111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -294,7 +295,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a432-dc152111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -310,7 +311,7 @@ const data = [
     },
   },
   {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
+    uuid: '76915a37-188c-46a8-a432-dc55111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
@@ -344,7 +345,16 @@ const FilterChip = ({ label, onClick }: AtomsFilterChipProps) => (
 )
 
 const Page = () => {
-  const tes = ''
+  const { mutate, isLoading } = useMutateCreateTransaction()
+  const [open, setOpen] = useState(false)
+
+  const handleGenerateQr = () => {
+    mutate()
+    setTimeout(() => {
+      setOpen(true)
+    }, 300)
+  }
+
   return (
     <main className="h-full">
       <article className="h-fit">
@@ -366,7 +376,13 @@ const Page = () => {
           </div>
 
           <div className="w-1/4">
-            <Button size="m" fullWidth>
+            <Button
+              onClick={handleGenerateQr}
+              size="m"
+              fullWidth
+              variant="red-accent"
+              isLoading={isLoading}
+            >
               <p className="whitespace-nowrap">+ New Trx</p>
             </Button>
           </div>
@@ -411,6 +427,13 @@ const Page = () => {
           <p className="text-s-semibold">Order Served</p>
         </div>
       </article>
+
+      <Modal open={open} handleClose={() => setOpen(false)}>
+        <img
+          src="data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEX///8AAABVwtN+AAACT0lEQVR42uyZzW0sIRCEa8SBIyFMKCRmzY+cGKEQAkcOaOqpmrF37RfAwnvLwdKi79Ka7qqijfd5n//yLCR5IbIsZAMCyQNRt2kioALYAITDp4YtJON1MRWwsmw+ubIzubyQWM8SPdt4AFmWCn2LXsWsgPqorRdixVLmA9RR+n3W2LAX+Lz93XIvBmx4fTLA5S2kqo76Pd2DA/34TjHv5Z7lX2dwQB3VhXTz1EVkXlRmGwi4qQiYBG2BPlszWT2zAEtdW7g8G3Zp6CEJIgm4b8+aA5DpJsfDJ6wkqwa7/vSs8QG0wBpdgU+klXkF/sgPrweYVQBhEqR7z7OgPkW1KQA6Xhrsey4SZFxW8DzA13T3WrGX2IcjOw4FsOwV1vbOJDWbmn6EqYDV8WRqmoWGHjhVoftW2gmAhZlKzC1cQJPpyn5jfQjpAMAdD5TtZVxLQV0lQRlhIkBlksqaQPzK9oH+ETCmAOS8J4nACpKl14r1GApQH/ne8dZRXkmH/HwytfEBzQXsSeLJvN/x4CGkUwCQCWympndU8z11fgvpAIA9Bm93TU7qQ8WDHx01A7DeHWWP75M9Ffv8HJsnANCCTNfWOaSElHeImAlY0V8ofREiIT1J5o/Hx3o58OVZkPPavsyE1POzTATcW1aLanQZgO1AnqZ7CqDvo1L/s559gakyORLQt6y99xWIvU3vUxXzAHykYqU0eh4TAv2Hy7uE1Jxg50iArfIiy1KjdVTVi9DnX/9cGBzoW1bq1RSpdzfz1heWEwHv8z7/2PkTAAD//70iOfs2jkD5AAAAAElFTkSuQmCC"
+          alt="qr-code"
+        />
+      </Modal>
     </main>
   )
 }
