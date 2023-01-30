@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
@@ -16,7 +15,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     if (authData) router.replace('/transaction')
     router.replace('/auth/login')
-  }, [authData])
+  }, [authData, router])
 
   return (
     <QueryClientProvider client={queryClient}>
