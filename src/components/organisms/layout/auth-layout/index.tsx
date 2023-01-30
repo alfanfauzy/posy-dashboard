@@ -26,16 +26,16 @@ const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
   const { asPath } = useRouter()
 
   return (
-    <div className="flex min-h-screen max-h-screen items-center bg-gray-50">
-      <div className="mx-auto min-h-screen h-screen flex-1 rounded-lg bg-white shadow-xl">
+    <div className="flex max-h-screen min-h-screen items-center overflow-hidden bg-gray-50">
+      <div className="mx-auto h-screen min-h-screen flex-1 rounded-lg bg-white shadow-xl">
         <div className="flex min-h-screen flex-col md:flex-row">
           <div
-            className="h-32 hidden md:flex md:h-auto md:w-1/2 bg-cover bg-center"
+            className="hidden h-32 bg-cover bg-center md:flex md:h-auto md:w-1/2"
             style={{
-              backgroundImage: 'url(/images/tree-bg.png)',
+              backgroundImage: 'url(/images/auth-bg.png)',
             }}
           >
-            <div className="px-24 min-h-screen w-full h-full flex flex-col justify-center backdrop-brightness-75">
+            {/* <div className="px-24 min-h-screen w-full h-full flex flex-col justify-center backdrop-brightness-75">
               <div
                 className="text-4xl lg:text-6xl text-neutral-10"
                 style={{
@@ -55,9 +55,9 @@ const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
                 <br />
                 must reduce emissions and alleviate poverty.
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="p-10 md:w-1/2 flex min-h-screen max-h-screen overflow-scroll flex-col justify-center items-center bg-[#f9f9f9]">
+          <div className="h-screen bg-[#f9f9f9] md:w-1/2">
             <AnimatePresence initial>
               <motion.div
                 key={`an${asPath}`}
@@ -65,7 +65,7 @@ const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
                 animate="in"
                 initial="out"
                 exit="out"
-                className="w-full max-w-lg"
+                className="h-full w-full bg-slate-50"
               >
                 {children}
               </motion.div>

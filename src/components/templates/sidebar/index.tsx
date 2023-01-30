@@ -10,12 +10,12 @@ const TemplatesSidebar = () => {
 
   return (
     <Sidebar className="h-full rounded-r-2xl bg-neutral-10" width="250px">
-      <aside className="pt-10 px-6 flex w-full items-center sm:justify-center">
+      <aside className="flex w-full items-center px-6 pt-10 sm:justify-center">
         {!collapsed ? (
           <p
             role="presentation"
             onClick={() => collapseSidebar()}
-            className="cursor-pointer font-bold text-red-accent text-3xl transition duration-500 ease-in-out"
+            className="cursor-pointer text-3xl font-bold text-red-accent transition duration-500 ease-in-out"
           >
             Posy Resto
           </p>
@@ -23,7 +23,7 @@ const TemplatesSidebar = () => {
           <BsList
             size={28}
             onClick={() => collapseSidebar()}
-            className="cursor-pointer fill-primary"
+            className="fill-primary cursor-pointer"
           />
         )}
       </aside>
@@ -34,10 +34,10 @@ const TemplatesSidebar = () => {
         ))}
       </aside>
 
-      <aside className="absolute bottom-6 bg-neutral-30 w-[90%] py-6 rounded-r-2xl">
+      <aside className="absolute bottom-6 w-[90%] rounded-r-2xl bg-neutral-30 py-6">
         <div
           className={`flex gap-2 ${
-            collapsed ? 'justify-center' : 'justify-start ml-7'
+            collapsed ? 'justify-center' : 'ml-7 justify-start'
           }`}
         >
           <div>

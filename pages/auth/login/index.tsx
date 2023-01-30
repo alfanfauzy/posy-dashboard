@@ -1,8 +1,17 @@
-import React from 'react'
+import MetaHeader from '@/molecules/meta-header'
+import ContainerLogin from 'containers/login'
+import { SEO } from '@/constants/seo'
 
-const Page = () => {
-  const tes = ''
-  return <div>Page Login</div>
-}
+const Page = () => (
+  <>
+    <MetaHeader
+      title="Posy Fnb - Login"
+      description={SEO.description}
+      keywords={SEO.keywords}
+      image={SEO.image}
+    />
+    <ContainerLogin />
+  </>
+)
 
 export default Page

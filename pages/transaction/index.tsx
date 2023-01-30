@@ -338,7 +338,7 @@ const FilterChip = ({ label, onClick }: AtomsFilterChipProps) => (
     role="button"
     onClick={onClick}
     onKeyDown={onClick}
-    className="px-4 py-[6px] rounded-full text-m-semibold border border-neutral-50 w-fit text-neutral-80"
+    className="text-m-semibold w-fit rounded-full border border-neutral-50 px-4 py-[6px] text-neutral-80"
   >
     <p className="whitespace-nowrap">{label}</p>
   </div>
@@ -358,19 +358,19 @@ const Page = () => {
   return (
     <main className="h-full">
       <article className="h-fit">
-        <aside className="flex justify-between items-center">
+        <aside className="flex items-center justify-between">
           <p className="heading-s-semibold">Restaurant Transaction</p>
-          <div className="border border-neutral-70 rounded-3xl px-[18px] py-2 w-fit flex justify-center items-center cursor-pointer transition-all duration-500 ease-in-out hover:bg-neutral-20">
+          <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-70 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
             <NotificationIcon />
           </div>
         </aside>
 
         <aside className="mt-4 flex gap-2">
-          <div className="flex gap-2 w-3/4 overflow-x-auto">
+          <div className="flex w-3/4 gap-2 overflow-x-auto">
             <FilterChip label="Waiting Order: 0" />
             <FilterChip label="Waiting Payment: 0" />
             <FilterChip label="Table Capacity: 10" />
-            <div className="border border-neutral-60 rounded-3xl px-[18px] py-2 w-fit flex justify-center items-center cursor-pointer transition-all duration-500 ease-in-out hover:bg-neutral-20">
+            <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-60 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
               <SearchIcon />
             </div>
           </div>
@@ -392,19 +392,19 @@ const Page = () => {
       <article
         className={`${
           data.length === 0
-            ? 'bg-neutral-20 flex justify-center items-center'
-            : 'grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1'
-        } overflow-auto w-full mt-6 h-[75%] gap-3`}
+            ? 'flex items-center justify-center bg-neutral-20'
+            : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+        } mt-6 h-[75%] w-full gap-3 overflow-auto`}
       >
         {data.length === 0 && <PlusCircleIcon />}
         {data.length > 0 &&
           data.map((el) => (
             <aside
               key={el.uuid}
-              className="border border-neutral-30 shadow-sm cursor-pointer hover:border-neutral-70 active:shadow-md duration-300 ease-in-out p-4 rounded-2xl h-[124px] min-w-[130px]"
+              className="h-[124px] min-w-[130px] cursor-pointer rounded-2xl border border-neutral-30 p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md"
             >
-              <div className="border-b flex justify-center pb-2">
-                <p className="text-neutral-70 font-normal text-4xl">01</p>
+              <div className="flex justify-center border-b pb-2">
+                <p className="text-4xl font-normal text-neutral-70">01</p>
               </div>
               <div className="mt-2">
                 <p className="text-s-semibold text-neutral-90">Name</p>
@@ -416,14 +416,14 @@ const Page = () => {
           ))}
       </article>
 
-      <article className="flex gap-4 py-9 h-[10%]">
+      <article className="flex h-[10%] gap-4 py-9">
         <div className="flex items-center gap-1">
-          <div className="border-[3px] border-blue-success rounded-full h-[13.3px] w-[13.3px]" />
+          <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
           <p className="text-s-semibold">Order Received</p>
         </div>
 
         <div className="flex items-center gap-1">
-          <div className="border-[3px] border-green-success rounded-full h-[13.3px] w-[13.3px]" />
+          <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-green-success" />
           <p className="text-s-semibold">Order Served</p>
         </div>
       </article>

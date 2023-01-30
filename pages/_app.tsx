@@ -1,28 +1,34 @@
-import { useState } from 'react'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
+import { useRouter } from 'next/router'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import Layout from '@/organisms/layout'
 import AuthLayout from '@/organisms/layout/auth-layout'
+import Layout from '@/organisms/layout'
 import '../styles/globals.css'
 
 const App = ({ Component, pageProps }: AppProps) => {
+  const router = useRouter()
   const [queryClient] = useState(new QueryClient())
-  const authData = 'ada'
+  const authData = null
 
-  if (!authData) {
-    return (
-      <AuthLayout>
-        <Component {...pageProps} />
-      </AuthLayout>
-    )
-  }
+  useEffect(() => {
+    if (authData) router.replace('/transaction')
+    router.replace('/auth/login')
+  }, [authData])
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      {!authData ? (
+        <AuthLayout>
+          <Component {...pageProps} />
+        </AuthLayout>
+      ) : (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      )}
       <ReactQueryDevtools />
     </QueryClientProvider>
   )

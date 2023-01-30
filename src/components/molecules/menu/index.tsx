@@ -34,10 +34,10 @@ const MoleculesMenu = ({ item, collapse }: MoleculesMenuProps) => {
       )}
       {!Array.isArray(item.subMenu) && (
         <MenuItem
-          className={`text-xxl-semibold transition-all duration-300 ease-in-out py-1.5 ${
+          className={`text-xxl-semibold py-1.5 transition-all duration-300 ease-in-out ${
             pathname.indexOf(item.path) !== -1
-              ? 'bg-neutral-20 rounded-lg'
-              : 'hover:bg-neutral-20 hover:rounded-lg'
+              ? 'rounded-lg bg-neutral-20'
+              : 'hover:rounded-lg hover:bg-neutral-20'
           }`}
           icon={item.icon}
           onClick={() => linkTo(item.path)}
