@@ -9,6 +9,7 @@ const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div className="flex max-h-screen min-h-screen items-center overflow-hidden bg-gray-50">
       <div className="mx-auto h-screen min-h-screen flex-1 rounded-lg bg-white shadow-xl">
+        <div className="h-4 w-full bg-red-accent shadow-md" />
         <div className="flex min-h-screen flex-col md:flex-row">
           <div
             className="hidden h-32 bg-cover bg-center md:flex md:h-auto md:w-1/2"
