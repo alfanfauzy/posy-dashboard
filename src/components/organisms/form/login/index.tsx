@@ -1,35 +1,78 @@
-import React, { useState } from 'react'
-import { Button, Input } from 'posy-fnb-ds'
-import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
-import Logo from '@/atoms/logo'
+import React from 'react'
 import { useRouter } from 'next/router'
+import { Button, Input } from 'posy-fnb-ds'
+import { SubmitHandler } from 'react-hook-form'
+import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
+import { useAppDispatch } from 'store/hooks'
+import { authSuccess } from 'store/slices/auth'
+import { ValidationSchemaType, validationSchema } from 'src/schemas/login'
+import Logo from '@/atoms/logo'
+import { useForm } from '@/hooks/useForm'
+import { useDisclosure } from '@/hooks/useDisclosure'
 
 const OrganismsFormLogin = () => {
   const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
+  const dispatch = useAppDispatch()
+  const [showPassword, { toggle }] = useDisclosure({ initialState: false })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    schema: validationSchema,
+  })
 
   const goDashboard = () => router.push('/transaction')
+  const onSubmit: SubmitHandler<ValidationSchemaType> = () => {
+    dispatch(
+      authSuccess({
+        expired_at: {
+          nanos: 3353,
+          seconds: 124412,
+        },
+        refresh_token: '214412',
+        token: '314133',
+        uuid: '14143',
+      }),
+    )
+    goDashboard()
+  }
 
   return (
     <article className="flex h-full flex-col items-center justify-center overflow-y-auto p-14 lg:p-16 xl:p-24">
       <Logo />
-      <section className="mt-16 w-full rounded-3xl p-10 shadow-basic">
-        <p className="text-xxl-semibold">Hello, Welcome Back!</p>
+      <form
+        className="mt-16 w-full rounded-3xl p-10 shadow-basic"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <p className="text-xxl-semibold line-clamp-3">
+          Hello, Welcome Back! Welcome Back! Welcome Back! Welcome Back! Welcome
+          Back!
+        </p>
         <div className="mt-4 flex flex-col gap-4">
-          <Input labelText="Email Address" placeholder="Enter a valid email" />
+          <Input
+            type="text"
+            labelText="Email Address"
+            placeholder="Enter a valid email"
+            error={!!errors?.email}
+            helperText={errors.email?.message}
+            {...register('email')}
+          />
           <Input
             type={showPassword ? 'text' : 'password'}
             labelText="Password"
             placeholder="Input Password"
             endAdornment={
               showPassword ? (
-                <AiOutlineEyeInvisible
-                  onClick={() => setShowPassword(!showPassword)}
-                />
+                <AiOutlineEyeInvisible onClick={toggle} />
               ) : (
-                <AiOutlineEye onClick={() => setShowPassword(!showPassword)} />
+                <AiOutlineEye onClick={toggle} />
               )
             }
+            {...register('password')}
+            error={!!errors?.password}
+            helperText={errors.password?.message}
           />
           <p className="text-m-semibold cursor-pointer self-end text-red-caution hover:text-opacity-75">
             Forget Password
@@ -40,11 +83,11 @@ const OrganismsFormLogin = () => {
           size="xl"
           fullWidth
           className="mt-4"
-          onClick={goDashboard}
+          type="submit"
         >
           Login
         </Button>
-      </section>
+      </form>
     </article>
   )
 }

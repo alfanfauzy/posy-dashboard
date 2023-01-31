@@ -1,8 +1,10 @@
 import MetaHeader from '@/molecules/meta-header'
 import ContainerLogin from 'containers/login'
 import { SEO } from '@/constants/seo'
+import AuthLayout from '@/organisms/layout/auth-layout'
+import type { NextPageWithLayout } from '@/types/index'
 
-const Page = () => (
+const Page: NextPageWithLayout = () => (
   <>
     <MetaHeader
       title="Posy Fnb - Login"
@@ -13,5 +15,7 @@ const Page = () => (
     <ContainerLogin />
   </>
 )
+
+Page.getLayout = (page) => <AuthLayout>{page}</AuthLayout>
 
 export default Page

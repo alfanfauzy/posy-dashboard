@@ -1,9 +1,10 @@
+import React from 'react'
 import { Button, Modal } from 'posy-fnb-ds'
-import React, { useState } from 'react'
 import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
 import SearchIcon from 'src/assets/icons/search'
+import { useDisclosure } from '@/hooks/useDisclosure'
 
 const data = [
   {
@@ -346,12 +347,12 @@ const FilterChip = ({ label, onClick }: AtomsFilterChipProps) => (
 
 const Page = () => {
   const { mutate, isLoading } = useMutateCreateTransaction()
-  const [open, setOpen] = useState(false)
+  const [showModal, { open, close }] = useDisclosure({ initialState: false })
 
   const handleGenerateQr = () => {
     mutate()
     setTimeout(() => {
-      setOpen(true)
+      open()
     }, 300)
   }
 
@@ -428,7 +429,7 @@ const Page = () => {
         </div>
       </article>
 
-      <Modal open={open} handleClose={() => setOpen(false)}>
+      <Modal open={showModal} handleClose={close}>
         <img
           src="data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEX///8AAABVwtN+AAACT0lEQVR42uyZzW0sIRCEa8SBIyFMKCRmzY+cGKEQAkcOaOqpmrF37RfAwnvLwdKi79Ka7qqijfd5n//yLCR5IbIsZAMCyQNRt2kioALYAITDp4YtJON1MRWwsmw+ubIzubyQWM8SPdt4AFmWCn2LXsWsgPqorRdixVLmA9RR+n3W2LAX+Lz93XIvBmx4fTLA5S2kqo76Pd2DA/34TjHv5Z7lX2dwQB3VhXTz1EVkXlRmGwi4qQiYBG2BPlszWT2zAEtdW7g8G3Zp6CEJIgm4b8+aA5DpJsfDJ6wkqwa7/vSs8QG0wBpdgU+klXkF/sgPrweYVQBhEqR7z7OgPkW1KQA6Xhrsey4SZFxW8DzA13T3WrGX2IcjOw4FsOwV1vbOJDWbmn6EqYDV8WRqmoWGHjhVoftW2gmAhZlKzC1cQJPpyn5jfQjpAMAdD5TtZVxLQV0lQRlhIkBlksqaQPzK9oH+ETCmAOS8J4nACpKl14r1GApQH/ne8dZRXkmH/HwytfEBzQXsSeLJvN/x4CGkUwCQCWympndU8z11fgvpAIA9Bm93TU7qQ8WDHx01A7DeHWWP75M9Ffv8HJsnANCCTNfWOaSElHeImAlY0V8ofREiIT1J5o/Hx3o58OVZkPPavsyE1POzTATcW1aLanQZgO1AnqZ7CqDvo1L/s559gakyORLQt6y99xWIvU3vUxXzAHykYqU0eh4TAv2Hy7uE1Jxg50iArfIiy1KjdVTVi9DnX/9cGBzoW1bq1RSpdzfz1heWEwHv8z7/2PkTAAD//70iOfs2jkD5AAAAAElFTkSuQmCC"
           alt="qr-code"

@@ -1,36 +1,44 @@
-import { useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
-import { useRouter } from 'next/router'
+import { Suspense, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
+import withRedux from 'next-redux-wrapper'
+import { PersistGate } from 'redux-persist/integration/react'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import AuthLayout from '@/organisms/layout/auth-layout'
+import { store, persistor } from 'store/index'
 import Layout from '@/organisms/layout'
+import Transition from '@/atoms/animations/transition'
 import '../styles/globals.css'
+import type { NextPageWithLayout } from '@/types/index'
 
-const App = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter()
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const [queryClient] = useState(new QueryClient())
-  const authData = null
 
-  useEffect(() => {
-    if (authData) router.replace('/transaction')
-    router.replace('/auth/login')
-  }, [authData, router])
+  const getLayout =
+    Component.getLayout ??
+    ((page) => (
+      <Suspense fallback={page}>
+        <Layout>{page}</Layout>
+      </Suspense>
+    ))
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!authData ? (
-        <AuthLayout>
-          <Component {...pageProps} />
-        </AuthLayout>
-      ) : (
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      )}
-      <ReactQueryDevtools />
+      <PersistGate persistor={persistor}>
+        <AnimatePresence initial={false}>
+          <Transition>
+            {getLayout(<Component {...pageProps} />)}
+            <ReactQueryDevtools />
+          </Transition>
+        </AnimatePresence>
+      </PersistGate>
     </QueryClientProvider>
   )
 }
 
-export default App
+const makeStore = () => store
+export default withRedux(makeStore)(App)

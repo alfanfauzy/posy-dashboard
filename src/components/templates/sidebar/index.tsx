@@ -1,12 +1,22 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import { Sidebar, useProSidebar } from 'react-pro-sidebar'
 import { BsList } from 'react-icons/bs'
 import { links } from 'config/link'
 import PersonIcon from 'src/assets/icons/person'
 import Menu from '@/molecules/menu'
+import { useAppDispatch } from 'store/hooks'
+import { onLogout } from 'store/slices/auth'
 
 const TemplatesSidebar = () => {
   const { collapseSidebar, collapsed } = useProSidebar()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    dispatch(onLogout())
+    router.replace('/auth/login')
+  }
 
   return (
     <Sidebar className="h-full rounded-r-2xl bg-neutral-10" width="250px">
@@ -44,9 +54,15 @@ const TemplatesSidebar = () => {
             <PersonIcon height={24} width={24} />
           </div>
           {!collapsed && (
-            <p className="text-m-semibold line-clamp-1">
+            <div
+              role="button"
+              onClick={handleLogout}
+              onKeyDown={handleLogout}
+              tabIndex={0}
+              className="text-m-semibold line-clamp-1"
+            >
               Cyntia Simmon junior junior
-            </p>
+            </div>
           )}
         </div>
       </aside>
