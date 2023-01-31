@@ -46,10 +46,7 @@ const OrganismsFormLogin = () => {
         className="mt-16 w-full rounded-3xl p-10 shadow-basic"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <p className="text-xxl-semibold line-clamp-3">
-          Hello, Welcome Back! Welcome Back! Welcome Back! Welcome Back! Welcome
-          Back!
-        </p>
+        <p className="text-xxl-semibold">Hello, Welcome Back!</p>
         <div className="mt-4 flex flex-col gap-4">
           <Input
             type="text"

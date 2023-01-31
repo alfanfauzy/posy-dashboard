@@ -5,15 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 import RightBar from '@/templates/rightbar'
 import Sidebar from '@/templates/sidebar'
 import { useAppSelector } from 'store/hooks'
+import Loading from '@/atoms/loading'
 
-const variants = {
+export const variants = {
   in: {
     opacity: 1,
     scale: 1,
     y: 0,
     transition: {
       duration: 0.5,
-      delay: 0.25,
+      delay: 0.5,
     },
   },
   out: {
@@ -48,7 +49,11 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
   }, [firstRender, isLoggedIn, router])
 
   if (loading) {
-    return <p className="bg-red-500">load...</p>
+    return (
+      <main className="flex h-screen w-full items-center justify-center">
+        <Loading size={96} />
+      </main>
+    )
   }
 
   return (

@@ -1,13 +1,13 @@
 import MetaHeader from '@/molecules/meta-header'
 import ContainerLogin from 'containers/login'
 import { SEO } from '@/constants/seo'
-import AuthLayout from '@/organisms/layout/auth-layout'
+import AuthLayout from '@/templates/layout/auth-layout'
 import type { NextPageWithLayout } from '@/types/index'
 
 const Page: NextPageWithLayout = () => (
   <>
     <MetaHeader
-      title="Posy Fnb - Login"
+      title="Posy Resto - Login"
       description={SEO.description}
       keywords={SEO.keywords}
       image={SEO.image}

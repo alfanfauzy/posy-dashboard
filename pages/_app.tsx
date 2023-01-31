@@ -5,7 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { store, persistor } from 'store/index'
-import Layout from '@/organisms/layout'
+import Layout from '@/templates/layout'
 import type { NextPageWithLayout } from '@/types/index'
 import '../styles/globals.css'
 
