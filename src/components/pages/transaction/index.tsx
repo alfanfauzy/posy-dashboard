@@ -1,11 +1,12 @@
 import React from 'react'
-import { Button, Modal } from 'posy-fnb-ds'
+import { Button, Modal } from 'posy-fnb-core'
 import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
 import SearchIcon from 'src/assets/icons/search'
 import { useDisclosure } from '@/hooks/useDisclosure'
 import FilterChip from '@/atoms/chips/filter-chip'
+import TemplatesRightBar from '@/templates/rightbar'
 
 const data = [
   {
@@ -342,84 +343,87 @@ const PagesTransaction = () => {
   }
 
   return (
-    <main className="h-full">
-      <article className="h-fit">
-        <aside className="flex items-center justify-between">
-          <p className="heading-s-semibold">Restaurant Transaction</p>
-          <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-70 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
-            <NotificationIcon />
-          </div>
-        </aside>
-
-        <aside className="mt-4 flex gap-2">
-          <div className="flex w-3/4 gap-2 overflow-x-auto">
-            <FilterChip label="Waiting Order: 0" />
-            <FilterChip label="Waiting Payment: 0" />
-            <FilterChip label="Table Capacity: 10" />
-            <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-60 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
-              <SearchIcon />
+    <main className="flex h-full gap-4">
+      <section className="h-full overflow-y-scroll rounded-2xl bg-neutral-10 p-6">
+        <article className="h-fit">
+          <aside className="flex items-start justify-between">
+            <p className="heading-s-semibold">Restaurant Transaction</p>
+            <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-70 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
+              <NotificationIcon />
             </div>
+          </aside>
+
+          <aside className="mt-4 flex gap-2">
+            <div className="flex w-3/4 gap-2 overflow-x-auto">
+              <FilterChip label="Waiting Order: 0" />
+              <FilterChip label="Waiting Payment: 0" />
+              <FilterChip label="Table Capacity: 10" />
+              <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-60 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
+                <SearchIcon />
+              </div>
+            </div>
+
+            <div className="w-1/4">
+              <Button
+                onClick={handleGenerateQr}
+                size="m"
+                fullWidth
+                variant="red-accent"
+                isLoading={isLoading}
+              >
+                <p className="whitespace-nowrap">+ New Trx</p>
+              </Button>
+            </div>
+          </aside>
+        </article>
+
+        <article
+          className={`${
+            data.length === 0
+              ? 'flex items-center justify-center bg-neutral-20'
+              : 'grid grid-cols-4 xl:grid-cols-5'
+          } mt-6 h-[73%] w-full gap-3 overflow-y-auto`}
+        >
+          {data.length === 0 && <PlusCircleIcon />}
+          {data.length > 0 &&
+            data.map((el) => (
+              <aside
+                key={el.uuid}
+                className="h-[124px] min-w-[130px] cursor-pointer rounded-2xl border border-neutral-30 p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md"
+              >
+                <div className="flex justify-center border-b pb-2">
+                  <p className="text-4xl font-normal text-neutral-70">01</p>
+                </div>
+                <div className="mt-2">
+                  <p className="text-s-semibold text-neutral-90">Name</p>
+                  <p className="text-m-regular text-neutral-90 line-clamp-1">
+                    Henderson Calistaa
+                  </p>
+                </div>
+              </aside>
+            ))}
+        </article>
+
+        <article className="flex gap-4 pt-8">
+          <div className="flex items-center gap-1">
+            <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
+            <p className="text-s-semibold">Order Received</p>
           </div>
 
-          <div className="w-1/4">
-            <Button
-              onClick={handleGenerateQr}
-              size="m"
-              fullWidth
-              variant="red-accent"
-              isLoading={isLoading}
-            >
-              <p className="whitespace-nowrap">+ New Trx</p>
-            </Button>
+          <div className="flex items-center gap-1">
+            <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-green-success" />
+            <p className="text-s-semibold">Order Served</p>
           </div>
-        </aside>
-      </article>
+        </article>
 
-      <article
-        className={`${
-          data.length === 0
-            ? 'flex items-center justify-center bg-neutral-20'
-            : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-        } mt-6 h-[75%] w-full gap-3 overflow-auto`}
-      >
-        {data.length === 0 && <PlusCircleIcon />}
-        {data.length > 0 &&
-          data.map((el) => (
-            <aside
-              key={el.uuid}
-              className="h-[124px] min-w-[130px] cursor-pointer rounded-2xl border border-neutral-30 p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md"
-            >
-              <div className="flex justify-center border-b pb-2">
-                <p className="text-4xl font-normal text-neutral-70">01</p>
-              </div>
-              <div className="mt-2">
-                <p className="text-s-semibold text-neutral-90">Name</p>
-                <p className="text-m-regular text-neutral-90 line-clamp-1">
-                  Henderson Calistaa
-                </p>
-              </div>
-            </aside>
-          ))}
-      </article>
-
-      <article className="flex h-[10%] gap-4 py-9">
-        <div className="flex items-center gap-1">
-          <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
-          <p className="text-s-semibold">Order Received</p>
-        </div>
-
-        <div className="flex items-center gap-1">
-          <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-green-success" />
-          <p className="text-s-semibold">Order Served</p>
-        </div>
-      </article>
-
-      <Modal open={showModal} handleClose={close}>
-        <img
-          src="data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEX///8AAABVwtN+AAACT0lEQVR42uyZzW0sIRCEa8SBIyFMKCRmzY+cGKEQAkcOaOqpmrF37RfAwnvLwdKi79Ka7qqijfd5n//yLCR5IbIsZAMCyQNRt2kioALYAITDp4YtJON1MRWwsmw+ubIzubyQWM8SPdt4AFmWCn2LXsWsgPqorRdixVLmA9RR+n3W2LAX+Lz93XIvBmx4fTLA5S2kqo76Pd2DA/34TjHv5Z7lX2dwQB3VhXTz1EVkXlRmGwi4qQiYBG2BPlszWT2zAEtdW7g8G3Zp6CEJIgm4b8+aA5DpJsfDJ6wkqwa7/vSs8QG0wBpdgU+klXkF/sgPrweYVQBhEqR7z7OgPkW1KQA6Xhrsey4SZFxW8DzA13T3WrGX2IcjOw4FsOwV1vbOJDWbmn6EqYDV8WRqmoWGHjhVoftW2gmAhZlKzC1cQJPpyn5jfQjpAMAdD5TtZVxLQV0lQRlhIkBlksqaQPzK9oH+ETCmAOS8J4nACpKl14r1GApQH/ne8dZRXkmH/HwytfEBzQXsSeLJvN/x4CGkUwCQCWympndU8z11fgvpAIA9Bm93TU7qQ8WDHx01A7DeHWWP75M9Ffv8HJsnANCCTNfWOaSElHeImAlY0V8ofREiIT1J5o/Hx3o58OVZkPPavsyE1POzTATcW1aLanQZgO1AnqZ7CqDvo1L/s559gakyORLQt6y99xWIvU3vUxXzAHykYqU0eh4TAv2Hy7uE1Jxg50iArfIiy1KjdVTVi9DnX/9cGBzoW1bq1RSpdzfz1heWEwHv8z7/2PkTAAD//70iOfs2jkD5AAAAAElFTkSuQmCC"
-          alt="qr-code"
-        />
-      </Modal>
+        <Modal open={showModal} handleClose={close}>
+          <img
+            src="data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEX///8AAABVwtN+AAACT0lEQVR42uyZzW0sIRCEa8SBIyFMKCRmzY+cGKEQAkcOaOqpmrF37RfAwnvLwdKi79Ka7qqijfd5n//yLCR5IbIsZAMCyQNRt2kioALYAITDp4YtJON1MRWwsmw+ubIzubyQWM8SPdt4AFmWCn2LXsWsgPqorRdixVLmA9RR+n3W2LAX+Lz93XIvBmx4fTLA5S2kqo76Pd2DA/34TjHv5Z7lX2dwQB3VhXTz1EVkXlRmGwi4qQiYBG2BPlszWT2zAEtdW7g8G3Zp6CEJIgm4b8+aA5DpJsfDJ6wkqwa7/vSs8QG0wBpdgU+klXkF/sgPrweYVQBhEqR7z7OgPkW1KQA6Xhrsey4SZFxW8DzA13T3WrGX2IcjOw4FsOwV1vbOJDWbmn6EqYDV8WRqmoWGHjhVoftW2gmAhZlKzC1cQJPpyn5jfQjpAMAdD5TtZVxLQV0lQRlhIkBlksqaQPzK9oH+ETCmAOS8J4nACpKl14r1GApQH/ne8dZRXkmH/HwytfEBzQXsSeLJvN/x4CGkUwCQCWympndU8z11fgvpAIA9Bm93TU7qQ8WDHx01A7DeHWWP75M9Ffv8HJsnANCCTNfWOaSElHeImAlY0V8ofREiIT1J5o/Hx3o58OVZkPPavsyE1POzTATcW1aLanQZgO1AnqZ7CqDvo1L/s559gakyORLQt6y99xWIvU3vUxXzAHykYqU0eh4TAv2Hy7uE1Jxg50iArfIiy1KjdVTVi9DnX/9cGBzoW1bq1RSpdzfz1heWEwHv8z7/2PkTAAD//70iOfs2jkD5AAAAAElFTkSuQmCC"
+            alt="qr-code"
+          />
+        </Modal>
+      </section>
+      <TemplatesRightBar />
     </main>
   )
 }

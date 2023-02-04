@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { store, persistor } from 'store/index'
 import Layout from '@/templates/layout'
 import type { NextPageWithLayout } from '@/types/index'
+import 'posy-fnb-core/dist/index.css'
 import '../styles/globals.css'
 
 type AppPropsWithLayout = AppProps & {

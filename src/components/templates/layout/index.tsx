@@ -2,7 +2,6 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { ProSidebarProvider } from 'react-pro-sidebar'
 import { motion, AnimatePresence } from 'framer-motion'
-import RightBar from '@/templates/rightbar'
 import Sidebar from '@/templates/sidebar'
 import { useAppSelector } from 'store/hooks'
 import Loading from '@/atoms/loading'
@@ -27,7 +26,7 @@ export const variants = {
   },
 }
 
-type OrganismsLayoutProps = {
+interface OrganismsLayoutProps {
   children: ReactNode
 }
 
@@ -42,6 +41,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
       if (!isLoggedIn) router.replace('/auth/login')
       else {
         setLoading(false)
+        // router.replace('/transaction')
       }
     } else {
       setFirstRender(false)
@@ -61,7 +61,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
       <main className="h-screen max-h-screen overflow-auto bg-neutral-30 py-4">
         <section className="flex h-full w-full gap-4">
           <Sidebar />
-          <div className="flex-1 overflow-y-scroll rounded-2xl bg-neutral-10 px-6 py-10">
+          <div className="flex-1">
             <AnimatePresence initial>
               <motion.div
                 key={`an${router.asPath}`}
@@ -75,7 +75,6 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
               </motion.div>
             </AnimatePresence>
           </div>
-          <RightBar />
         </section>
       </main>
     </ProSidebarProvider>

@@ -1,14 +1,14 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { Button, Input } from 'posy-fnb-ds'
-import { SubmitHandler } from 'react-hook-form'
+import { Button, Input } from 'posy-fnb-core'
+import * as reactHookForm from 'react-hook-form'
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
 import { useAppDispatch } from 'store/hooks'
 import { authSuccess } from 'store/slices/auth'
 import { ValidationSchemaType, validationSchema } from 'src/schemas/login'
-import Logo from '@/atoms/logo'
 import { useForm } from '@/hooks/useForm'
 import { useDisclosure } from '@/hooks/useDisclosure'
+import Logo from '@/atoms/logo'
 
 const OrganismsFormLogin = () => {
   const router = useRouter()
@@ -24,7 +24,7 @@ const OrganismsFormLogin = () => {
   })
 
   const goDashboard = () => router.push('/transaction')
-  const onSubmit: SubmitHandler<ValidationSchemaType> = () => {
+  const onSubmit: reactHookForm.SubmitHandler<ValidationSchemaType> = () => {
     dispatch(
       authSuccess({
         expired_at: {
@@ -53,7 +53,7 @@ const OrganismsFormLogin = () => {
             labelText="Email Address"
             placeholder="Enter a valid email"
             error={!!errors?.email}
-            helperText={errors.email?.message}
+            helperText={errors?.email?.message}
             {...register('email')}
           />
           <Input
@@ -69,9 +69,9 @@ const OrganismsFormLogin = () => {
             }
             {...register('password')}
             error={!!errors?.password}
-            helperText={errors.password?.message}
+            helperText={errors?.password?.message}
           />
-          <p className="text-m-semibold cursor-pointer self-end text-red-caution hover:text-opacity-75">
+          <p className="cursor-pointer self-end text-m-semibold text-red-caution hover:text-opacity-75">
             Forget Password
           </p>
         </div>

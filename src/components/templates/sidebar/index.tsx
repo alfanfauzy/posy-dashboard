@@ -20,7 +20,7 @@ const TemplatesSidebar = () => {
 
   return (
     <Sidebar className="h-full rounded-r-2xl bg-neutral-10" width="250px">
-      <aside className="flex w-full items-center px-6 pt-10 sm:justify-center">
+      <aside className="flex w-full items-center px-6 pt-6 sm:justify-center">
         {!collapsed ? (
           <p
             role="presentation"
