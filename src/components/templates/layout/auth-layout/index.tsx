@@ -1,7 +1,7 @@
-import { variants } from '..'
 import { ReactNode, FC } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
+import { variants } from '..'
 
 const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
   const { asPath } = useRouter()

@@ -34,7 +34,7 @@ const MoleculesMenu = ({ item, collapse }: MoleculesMenuProps) => {
       )}
       {!Array.isArray(item.subMenu) && (
         <MenuItem
-          className={`text-xxl-semibold py-1.5 transition-all duration-300 ease-in-out ${
+          className={`py-1.5 text-xxl-semibold transition-all duration-300 ease-in-out ${
             pathname.indexOf(item.path) !== -1
               ? 'rounded-lg bg-neutral-20'
               : 'hover:rounded-lg hover:bg-neutral-20'

@@ -11,7 +11,7 @@ const AtomsFilterChip = ({ label, onClick }: AtomsFilterChipProps) => (
     role="button"
     onClick={onClick}
     onKeyDown={onClick}
-    className="text-m-semibold w-fit rounded-full border border-neutral-50 px-4 py-[6px] text-neutral-80"
+    className="w-fit rounded-full border border-neutral-50 px-4 py-[6px] text-m-semibold text-neutral-80"
   >
     <p className="whitespace-nowrap">{label}</p>
   </div>

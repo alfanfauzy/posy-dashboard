@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import { ProSidebarProvider } from 'react-pro-sidebar'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '@/templates/sidebar'
-import { useAppSelector } from 'store/hooks'
 import Loading from '@/atoms/loading'
+import { useAppSelector } from 'store/hooks'
 
 export const variants = {
   in: {

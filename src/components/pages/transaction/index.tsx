@@ -347,7 +347,7 @@ const PagesTransaction = () => {
       <section className="h-full overflow-y-scroll rounded-2xl bg-neutral-10 p-6">
         <article className="h-fit">
           <aside className="flex items-start justify-between">
-            <p className="heading-s-semibold">Restaurant Transaction</p>
+            <p className="text-heading-s-semibold">Restaurant Transaction</p>
             <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-70 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
               <NotificationIcon />
             </div>

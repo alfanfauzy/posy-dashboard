@@ -36,7 +36,7 @@
     "import/order": [
       "error",
       {
-        "groups": ["builtin", "parent", "external", "sibling", "index"]
+        "groups": ["external", "sibling", "index", "parent", "builtin"]
       }
     ],
     "jsx-a11y/label-has-associated-control": [
