@@ -1,5 +1,9 @@
-import React from 'react'
-import { Button, Modal } from 'posy-fnb-core'
+/* eslint-disable react/button-has-type */
+/* eslint-disable react/no-unstable-nested-components */
+import React, { useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
+import { Button } from 'posy-fnb-core'
+import ReactToPrint, { useReactToPrint } from 'react-to-print'
 import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
@@ -7,6 +11,10 @@ import SearchIcon from 'src/assets/icons/search'
 import { useDisclosure } from '@/hooks/useDisclosure'
 import FilterChip from '@/atoms/chips/filter-chip'
 import TemplatesRightBar from '@/templates/rightbar'
+
+const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
+  ssr: false,
+})
 
 const data = [
   {
@@ -342,6 +350,12 @@ const PagesTransaction = () => {
     }, 300)
   }
 
+  const fetchTodos = async () => {
+    const response = await fetch('http://localhost:9994/api/todos')
+    const datas: any = await response.json()
+    console.log(datas)
+    // settodos(data)
+  }
   return (
     <main className="flex h-full gap-4">
       <section className="h-full overflow-y-scroll rounded-2xl bg-neutral-10 p-6">
@@ -404,7 +418,7 @@ const PagesTransaction = () => {
             ))}
         </article>
 
-        <article className="flex gap-4 pt-8">
+        <article className="flex gap-4 pt-8 ">
           <div className="flex items-center gap-1">
             <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
             <p className="text-s-semibold">Order Received</p>
@@ -416,11 +430,11 @@ const PagesTransaction = () => {
           </div>
         </article>
 
-        <Modal open={showModal} handleClose={close}>
-          <img
+        <Modal open={showModal} handleClose={fetchTodos}>
+          {/* <img
             src="data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEX///8AAABVwtN+AAACT0lEQVR42uyZzW0sIRCEa8SBIyFMKCRmzY+cGKEQAkcOaOqpmrF37RfAwnvLwdKi79Ka7qqijfd5n//yLCR5IbIsZAMCyQNRt2kioALYAITDp4YtJON1MRWwsmw+ubIzubyQWM8SPdt4AFmWCn2LXsWsgPqorRdixVLmA9RR+n3W2LAX+Lz93XIvBmx4fTLA5S2kqo76Pd2DA/34TjHv5Z7lX2dwQB3VhXTz1EVkXlRmGwi4qQiYBG2BPlszWT2zAEtdW7g8G3Zp6CEJIgm4b8+aA5DpJsfDJ6wkqwa7/vSs8QG0wBpdgU+klXkF/sgPrweYVQBhEqR7z7OgPkW1KQA6Xhrsey4SZFxW8DzA13T3WrGX2IcjOw4FsOwV1vbOJDWbmn6EqYDV8WRqmoWGHjhVoftW2gmAhZlKzC1cQJPpyn5jfQjpAMAdD5TtZVxLQV0lQRlhIkBlksqaQPzK9oH+ETCmAOS8J4nACpKl14r1GApQH/ne8dZRXkmH/HwytfEBzQXsSeLJvN/x4CGkUwCQCWympndU8z11fgvpAIA9Bm93TU7qQ8WDHx01A7DeHWWP75M9Ffv8HJsnANCCTNfWOaSElHeImAlY0V8ofREiIT1J5o/Hx3o58OVZkPPavsyE1POzTATcW1aLanQZgO1AnqZ7CqDvo1L/s559gakyORLQt6y99xWIvU3vUxXzAHykYqU0eh4TAv2Hy7uE1Jxg50iArfIiy1KjdVTVi9DnX/9cGBzoW1bq1RSpdzfz1heWEwHv8z7/2PkTAAD//70iOfs2jkD5AAAAAElFTkSuQmCC"
             alt="qr-code"
-          />
+          /> */}
         </Modal>
       </section>
       <TemplatesRightBar />

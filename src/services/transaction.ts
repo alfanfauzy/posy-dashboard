@@ -15,7 +15,8 @@ export const getListTransaction = async () => {
 
 export const createTransaction = async () => {
   const response = await Post({
-    endpoint: `${process.env.NEXT_PUBLIC_API}/order/transaction/create`,
+    // endpoint: `${process.env.NEXT_PUBLIC_API}/order/transaction/create`,
+    endpoint: `http://localhost:9994/api/hello`,
     data: {},
   })
 
