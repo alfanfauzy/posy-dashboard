@@ -1,10 +1,10 @@
-import React, { ReactNode, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { ProSidebarProvider } from 'react-pro-sidebar'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ProSidebarProvider } from 'react-pro-sidebar'
+import { useAppSelector } from 'store/hooks'
 import Sidebar from '@/templates/sidebar'
 import Loading from '@/atoms/loading'
-import { useAppSelector } from 'store/hooks'
 
 export const variants = {
   in: {
@@ -34,19 +34,21 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
   const router = useRouter()
   const { isLoggedIn } = useAppSelector((state) => state.auth)
   const [loading, setLoading] = useState(true)
-  const [firstRender, setFirstRender] = useState(true)
+  // const [firstRender, setFirstRender] = useState(true)
 
   useEffect(() => {
-    if (!firstRender) {
-      if (!isLoggedIn) router.replace('/auth/login')
-      else {
-        setLoading(false)
-        // router.replace('/transaction')
-      }
+    // if (!firstRender) {
+    if (!isLoggedIn) router.replace('/auth/login')
+    else if (router.asPath === '/') {
+      router.replace('/transaction')
+      setLoading(false)
     } else {
-      setFirstRender(false)
+      setLoading(false)
     }
-  }, [firstRender, isLoggedIn, router])
+    // } else {
+    //   setFirstRender(false)
+    // }
+  }, [isLoggedIn, router])
 
   if (loading) {
     return (
