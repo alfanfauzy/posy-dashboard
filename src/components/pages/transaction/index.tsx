@@ -1,9 +1,8 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable react/no-unstable-nested-components */
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import { Button } from 'posy-fnb-core'
-import ReactToPrint, { useReactToPrint } from 'react-to-print'
+import { useReactToPrint } from 'react-to-print'
 import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
@@ -343,18 +342,18 @@ const PagesTransaction = () => {
   const { mutate, isLoading } = useMutateCreateTransaction()
   const [showModal, { open, close }] = useDisclosure({ initialState: false })
 
+  const componentRef = useRef<any>()
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
+
   const handleGenerateQr = () => {
     mutate()
+    handlePrint()
     setTimeout(() => {
       open()
     }, 300)
-  }
-
-  const fetchTodos = async () => {
-    const response = await fetch('http://localhost:9994/api/todos')
-    const datas: any = await response.json()
-    console.log(datas)
-    // settodos(data)
   }
   return (
     <main className="flex h-full gap-4">
@@ -430,11 +429,39 @@ const PagesTransaction = () => {
           </div>
         </article>
 
-        <Modal open={showModal} handleClose={fetchTodos}>
-          {/* <img
-            src="data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEX///8AAABVwtN+AAACT0lEQVR42uyZzW0sIRCEa8SBIyFMKCRmzY+cGKEQAkcOaOqpmrF37RfAwnvLwdKi79Ka7qqijfd5n//yLCR5IbIsZAMCyQNRt2kioALYAITDp4YtJON1MRWwsmw+ubIzubyQWM8SPdt4AFmWCn2LXsWsgPqorRdixVLmA9RR+n3W2LAX+Lz93XIvBmx4fTLA5S2kqo76Pd2DA/34TjHv5Z7lX2dwQB3VhXTz1EVkXlRmGwi4qQiYBG2BPlszWT2zAEtdW7g8G3Zp6CEJIgm4b8+aA5DpJsfDJ6wkqwa7/vSs8QG0wBpdgU+klXkF/sgPrweYVQBhEqR7z7OgPkW1KQA6Xhrsey4SZFxW8DzA13T3WrGX2IcjOw4FsOwV1vbOJDWbmn6EqYDV8WRqmoWGHjhVoftW2gmAhZlKzC1cQJPpyn5jfQjpAMAdD5TtZVxLQV0lQRlhIkBlksqaQPzK9oH+ETCmAOS8J4nACpKl14r1GApQH/ne8dZRXkmH/HwytfEBzQXsSeLJvN/x4CGkUwCQCWympndU8z11fgvpAIA9Bm93TU7qQ8WDHx01A7DeHWWP75M9Ffv8HJsnANCCTNfWOaSElHeImAlY0V8ofREiIT1J5o/Hx3o58OVZkPPavsyE1POzTATcW1aLanQZgO1AnqZ7CqDvo1L/s559gakyORLQt6y99xWIvU3vUxXzAHykYqU0eh4TAv2Hy7uE1Jxg50iArfIiy1KjdVTVi9DnX/9cGBzoW1bq1RSpdzfz1heWEwHv8z7/2PkTAAD//70iOfs2jkD5AAAAAElFTkSuQmCC"
-            alt="qr-code"
-          /> */}
+        <Modal open={showModal} handleClose={close}>
+          <section ref={componentRef}>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-l-semibold">Solaria</p>
+              <p className="text-m-regular">Stasiun Gambir</p>
+              <Image
+                src="/favicon.ico"
+                alt="logo"
+                width={57}
+                height={57}
+                className="mt-3 mb-6"
+              />
+            </div>
+            <div className="border-b border-neutral-40" />
+            <div className="mt-6 flex flex-col items-center justify-center">
+              <p className="text-m-semibold">QR CODE MENU</p>
+              <Image
+                src="data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAABlBMVEX///8AAABVwtN+AAACT0lEQVR42uyZzW0sIRCEa8SBIyFMKCRmzY+cGKEQAkcOaOqpmrF37RfAwnvLwdKi79Ka7qqijfd5n//yLCR5IbIsZAMCyQNRt2kioALYAITDp4YtJON1MRWwsmw+ubIzubyQWM8SPdt4AFmWCn2LXsWsgPqorRdixVLmA9RR+n3W2LAX+Lz93XIvBmx4fTLA5S2kqo76Pd2DA/34TjHv5Z7lX2dwQB3VhXTz1EVkXlRmGwi4qQiYBG2BPlszWT2zAEtdW7g8G3Zp6CEJIgm4b8+aA5DpJsfDJ6wkqwa7/vSs8QG0wBpdgU+klXkF/sgPrweYVQBhEqR7z7OgPkW1KQA6Xhrsey4SZFxW8DzA13T3WrGX2IcjOw4FsOwV1vbOJDWbmn6EqYDV8WRqmoWGHjhVoftW2gmAhZlKzC1cQJPpyn5jfQjpAMAdD5TtZVxLQV0lQRlhIkBlksqaQPzK9oH+ETCmAOS8J4nACpKl14r1GApQH/ne8dZRXkmH/HwytfEBzQXsSeLJvN/x4CGkUwCQCWympndU8z11fgvpAIA9Bm93TU7qQ8WDHx01A7DeHWWP75M9Ffv8HJsnANCCTNfWOaSElHeImAlY0V8ofREiIT1J5o/Hx3o58OVZkPPavsyE1POzTATcW1aLanQZgO1AnqZ7CqDvo1L/s559gakyORLQt6y99xWIvU3vUxXzAHykYqU0eh4TAv2Hy7uE1Jxg50iArfIiy1KjdVTVi9DnX/9cGBzoW1bq1RSpdzfz1heWEwHv8z7/2PkTAAD//70iOfs2jkD5AAAAAElFTkSuQmCC"
+                alt="qr-code"
+                width={243}
+                height={248}
+              />
+              <div className="mb-6 flex flex-col items-center justify-center">
+                <p className="text-m-regular">Please scan to order,</p>
+                <p className="text-m-regular">Thank you</p>
+              </div>
+            </div>
+            <div className="border-b border-neutral-40" />
+            <p className="my-5 text-center text-m-semibold">Powered by Monu</p>
+          </section>
+          {/* <Button variant="secondary" fullWidth onClick={handlePrint}>
+            Print QR
+          </Button> */}
         </Modal>
       </section>
       <TemplatesRightBar />
