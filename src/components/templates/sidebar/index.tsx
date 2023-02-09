@@ -7,6 +7,7 @@ import PersonIcon from 'src/assets/icons/person'
 import Menu from '@/molecules/menu'
 import { useAppDispatch } from 'store/hooks'
 import { onLogout } from 'store/slices/auth'
+import Logo from '@/atoms/logo'
 
 const TemplatesSidebar = () => {
   const { collapseSidebar, collapsed } = useProSidebar()
@@ -20,15 +21,13 @@ const TemplatesSidebar = () => {
 
   return (
     <Sidebar className="h-full rounded-r-2xl bg-neutral-10" width="250px">
-      <aside className="flex w-full items-center px-6 pt-6 sm:justify-center">
+      <aside
+        className={`flex w-full items-center pt-6 transition-all duration-300 ease-in-out sm:justify-start ${
+          collapsed ? 'px-6' : 'px-12'
+        }`}
+      >
         {!collapsed ? (
-          <p
-            role="presentation"
-            onClick={() => collapseSidebar()}
-            className="cursor-pointer text-3xl font-bold text-red-accent transition duration-500 ease-in-out"
-          >
-            Posy Resto
-          </p>
+          <Logo onClick={() => collapseSidebar()} />
         ) : (
           <BsList
             size={28}

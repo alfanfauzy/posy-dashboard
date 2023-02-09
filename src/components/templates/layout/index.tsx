@@ -58,7 +58,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
 
   return (
     <ProSidebarProvider>
-      <main className="h-screen max-h-screen overflow-auto bg-neutral-30 py-4">
+      <main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30 py-4">
         <section className="flex h-full w-full gap-4">
           <Sidebar />
           <div className="flex-1">

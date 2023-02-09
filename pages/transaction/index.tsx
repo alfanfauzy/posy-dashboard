@@ -6,7 +6,7 @@ import type { NextPageWithLayout } from '@/types/index'
 const Page: NextPageWithLayout = () => (
   <>
     <MetaHeader
-      title="Posy Resto - Transaction"
+      title="Monu - Transaction"
       description={SEO.description}
       keywords={SEO.keywords}
       image={SEO.image}
