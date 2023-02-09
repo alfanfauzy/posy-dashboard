@@ -357,7 +357,7 @@ const PagesTransaction = () => {
   }
   return (
     <main className="flex h-full gap-4">
-      <section className="h-full overflow-y-scroll rounded-2xl bg-neutral-10 p-6">
+      <section className="h-full flex-1 overflow-y-scroll rounded-2xl bg-neutral-10 p-6">
         <article className="h-fit">
           <aside className="flex items-start justify-between">
             <p className="text-heading-s-semibold">Restaurant Transaction</p>

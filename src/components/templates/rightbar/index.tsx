@@ -52,7 +52,7 @@ const TemplatesRightBar = () => {
 
   return (
     <main
-      className="relative w-auto rounded-l-2xl bg-neutral-10"
+      className="relative w-[340px] rounded-l-2xl bg-neutral-10"
       ref={componentRef}
     >
       {noTransaction && (
