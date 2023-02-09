@@ -93,6 +93,7 @@ const TemplatesRightBar = () => {
                         size="m"
                         labelText="Dine in / Take away"
                         options={orderType}
+                        placeholder="Select Type"
                       />
                     </div>
                   </div>
@@ -105,6 +106,7 @@ const TemplatesRightBar = () => {
                         size="m"
                         labelText="Table"
                         options={tableNumber}
+                        placeholder="table"
                       />
                     </div>
                   </div>
@@ -143,11 +145,12 @@ const TemplatesRightBar = () => {
                         <p>Order 1</p>
                         <p className="text-neutral-50">Processed</p>
                       </div>
-                      <div className="w-full">
+                      <div className="mt-2 w-full">
                         <Checkbox
                           title="Fried Kwetiau"
                           onChange={() => undefined}
                           size="m"
+                          disabled
                         />
                         <Checkbox
                           title="Fried Kwetiau"
@@ -164,6 +167,39 @@ const TemplatesRightBar = () => {
                           onChange={() => undefined}
                           size="m"
                         />
+                      </div>
+                    </div>
+
+                    <div className="mt-4 w-full">
+                      <div className="flex items-center justify-between text-s-bold">
+                        <p>Order 1</p>
+                        <p className="text-red-accent">Cancel Order</p>
+                      </div>
+                      <div className="mt-2 w-full">
+                        <div className="my-2 flex items-center justify-between">
+                          <p className="text-m-regular">Fried Kwetiau</p>
+                          <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
+                            Cancel
+                          </p>
+                        </div>
+                        <div className="my-2 flex items-center justify-between">
+                          <p className="text-m-regular">Fried Kwetiau</p>
+                          <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
+                            Cancel
+                          </p>
+                        </div>
+                        <div className="my-2 flex items-center justify-between">
+                          <p className="text-m-regular">Fried Kwetiau</p>
+                          <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
+                            Cancel
+                          </p>
+                        </div>
+                        <div className="my-2 flex items-center justify-between">
+                          <p className="text-m-regular">Fried Kwetiau</p>
+                          <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
+                            Cancel
+                          </p>
+                        </div>
                       </div>
                     </div>
                     <Button
