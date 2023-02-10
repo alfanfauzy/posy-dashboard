@@ -1,7 +1,6 @@
 import { ReactNode, FC } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
-import { variants } from '..'
+import Transition from '@/atoms/animations/transition'
 
 const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
   const { asPath } = useRouter()
@@ -16,42 +15,9 @@ const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
             style={{
               backgroundImage: 'url(/images/auth-bg.png)',
             }}
-          >
-            {/* <div className="px-24 min-h-screen w-full h-full flex flex-col justify-center backdrop-brightness-75">
-              <div
-                className="text-4xl lg:text-6xl text-neutral-10"
-                style={{
-                  lineHeight: 1.25,
-                }}
-              >
-                Take responsibility for
-                <br />
-                your carbon footprint.
-                <br />
-                Invest in climate
-                <br />
-                justice.
-              </div>
-              <div className="text-lg lg:text-2xl text-neutral-10 mt-3">
-                All our projects are independently audited and
-                <br />
-                must reduce emissions and alleviate poverty.
-              </div>
-            </div> */}
-          </div>
+          />
           <div className="h-screen bg-[#f9f9f9] md:w-1/2">
-            <AnimatePresence initial>
-              <motion.div
-                key={`an${asPath}`}
-                variants={variants}
-                animate="in"
-                initial="out"
-                exit="out"
-                className="h-full w-full bg-slate-50"
-              >
-                {children}
-              </motion.div>
-            </AnimatePresence>
+            <Transition asPath={asPath}>{children}</Transition>
           </div>
         </div>
       </div>
