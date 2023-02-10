@@ -1,30 +1,10 @@
 import { useRouter } from 'next/router'
 import React, { ReactNode, useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { ProSidebarProvider } from 'react-pro-sidebar'
 import { useAppSelector } from 'store/hooks'
 import Sidebar from '@/templates/sidebar'
 import Loading from '@/atoms/loading'
-
-export const variants = {
-  in: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      delay: 0.5,
-    },
-  },
-  out: {
-    opacity: 0,
-    scale: 1,
-    y: 40,
-    transition: {
-      duration: 0.5,
-    },
-  },
-}
+import Transition from '@/atoms/animations/transition'
 
 interface OrganismsLayoutProps {
   children: ReactNode
@@ -63,19 +43,8 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
       <main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30 py-4">
         <section className="flex h-full w-full gap-4">
           <Sidebar />
-          <div className="flex-1">
-            <AnimatePresence initial>
-              <motion.div
-                key={`an${router.asPath}`}
-                variants={variants}
-                animate="in"
-                initial="out"
-                exit="out"
-                className="h-full w-full"
-              >
-                {children}
-              </motion.div>
-            </AnimatePresence>
+          <div className="h-full flex-1 overflow-y-scroll">
+            <Transition asPath={router.asPath}>{children}</Transition>
           </div>
         </section>
       </main>

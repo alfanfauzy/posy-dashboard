@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { Button, Checkbox, Input, Select, Tabs } from 'posy-fnb-core'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
-import { CgTrash } from 'react-icons/cg'
 import { useReactToPrint } from 'react-to-print'
+import { CgTrash } from 'react-icons/cg'
 import NoOrderIcon from 'src/assets/icons/noOrder'
 
 const orderType = [

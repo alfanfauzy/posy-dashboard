@@ -18,6 +18,7 @@ interface AuthData {
 export interface AuthState {
   isLoggedIn: boolean
   authData: AuthData
+  showSidebar: boolean
 }
 
 const initialState: AuthState = {
@@ -31,6 +32,7 @@ const initialState: AuthState = {
       nanos: 0,
     },
   },
+  showSidebar: false,
 }
 
 export const AuthSlice = createSlice({
@@ -53,10 +55,13 @@ export const AuthSlice = createSlice({
         },
       }
     },
+    setShowSidebar: (state: AuthState, action: PayloadAction<boolean>) => {
+      state.showSidebar = action.payload
+    },
   },
 })
 
 // export the action from the slice
-export const { authSuccess, onLogout } = AuthSlice.actions
+export const { authSuccess, onLogout, setShowSidebar } = AuthSlice.actions
 
 export default AuthSlice.reducer

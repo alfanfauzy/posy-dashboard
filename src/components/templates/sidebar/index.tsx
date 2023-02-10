@@ -2,11 +2,11 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { Sidebar, useProSidebar } from 'react-pro-sidebar'
 import { BsList } from 'react-icons/bs'
-import { links } from 'config/link'
+import { onLogout, setShowSidebar } from 'store/slices/auth'
 import PersonIcon from 'src/assets/icons/person'
-import Menu from '@/molecules/menu'
 import { useAppDispatch } from 'store/hooks'
-import { onLogout } from 'store/slices/auth'
+import { links } from 'config/link'
+import Menu from '@/molecules/menu'
 import Logo from '@/atoms/logo'
 
 const TemplatesSidebar = () => {
@@ -19,19 +19,28 @@ const TemplatesSidebar = () => {
     router.replace('/auth/login')
   }
 
+  const onCollapse = () => {
+    dispatch(setShowSidebar(collapsed))
+    collapseSidebar()
+  }
+
   return (
-    <Sidebar className="h-full rounded-r-2xl bg-neutral-10" width="250px">
+    <Sidebar
+      defaultCollapsed
+      className="h-full rounded-r-2xl bg-neutral-10"
+      width="250px"
+    >
       <aside
         className={`flex w-full items-center pt-6 transition-all duration-300 ease-in-out sm:justify-start ${
           collapsed ? 'px-6' : 'px-12'
         }`}
       >
         {!collapsed ? (
-          <Logo onClick={() => collapseSidebar()} />
+          <Logo onClick={onCollapse} />
         ) : (
           <BsList
             size={28}
-            onClick={() => collapseSidebar()}
+            onClick={onCollapse}
             className="fill-primary cursor-pointer"
           />
         )}

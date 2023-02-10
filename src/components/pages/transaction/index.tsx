@@ -1,18 +1,23 @@
-import React, { useRef } from 'react'
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
+import React, { useRef } from 'react'
 import { Button } from 'posy-fnb-core'
 import { useReactToPrint } from 'react-to-print'
+import { useAppSelector } from 'store/hooks'
+import { useDisclosure } from '@/hooks/useDisclosure'
+import useViewportListener from '@/hooks/useViewportListener'
 import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
 import SearchIcon from 'src/assets/icons/search'
-import { useDisclosure } from '@/hooks/useDisclosure'
 import FilterChip from '@/atoms/chips/filter-chip'
-import TemplatesRightBar from '@/templates/rightbar'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
-  ssr: false,
+  loading: () => <div />,
+})
+
+const TemplatesRightBar = dynamic(() => import('@/templates/rightbar'), {
+  loading: () => <div />,
 })
 
 const data = [
@@ -339,6 +344,8 @@ const data = [
 ]
 
 const PagesTransaction = () => {
+  const { showSidebar } = useAppSelector((state) => state.auth)
+  const { width } = useViewportListener()
   const { mutate, isLoading } = useMutateCreateTransaction()
   const [showModal, { open, close }] = useDisclosure({ initialState: false })
 
@@ -355,12 +362,15 @@ const PagesTransaction = () => {
       open()
     }, 300)
   }
+
   return (
     <main className="flex h-full gap-4">
-      <section className="h-full flex-1 overflow-y-scroll rounded-2xl bg-neutral-10 p-6">
+      <section className="relative h-full flex-1 overflow-y-hidden rounded-2xl bg-neutral-10 p-6">
         <article className="h-fit">
           <aside className="flex items-start justify-between">
-            <p className="text-heading-s-semibold">Restaurant Transaction</p>
+            <p className="text-xxl-semibold lg:text-heading-s-semibold">
+              Restaurant Transaction
+            </p>
             <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-70 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
               <NotificationIcon />
             </div>
@@ -394,15 +404,15 @@ const PagesTransaction = () => {
           className={`${
             data.length === 0
               ? 'flex items-center justify-center bg-neutral-20'
-              : 'grid grid-cols-4 xl:grid-cols-5'
-          } mt-6 h-[73%] w-full gap-3 overflow-y-auto`}
+              : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+          } h-[80%] w-full gap-3 overflow-y-auto lg:my-4`}
         >
           {data.length === 0 && <PlusCircleIcon />}
           {data.length > 0 &&
             data.map((el) => (
               <aside
                 key={el.uuid}
-                className="h-[124px] min-w-[130px] cursor-pointer rounded-2xl border border-neutral-30 p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md"
+                className="h-[124px] cursor-pointer rounded-2xl border border-neutral-30 p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md"
               >
                 <div className="flex justify-center border-b pb-2">
                   <p className="text-4xl font-normal text-neutral-70">01</p>
@@ -417,7 +427,7 @@ const PagesTransaction = () => {
             ))}
         </article>
 
-        <article className="flex gap-4 pt-8 ">
+        <article className="absolute bottom-0 flex w-full gap-4">
           <div className="flex items-center gap-1">
             <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
             <p className="text-s-semibold">Order Received</p>
@@ -461,12 +471,11 @@ const PagesTransaction = () => {
               Powered by Posy Resto
             </p>
           </section>
-          {/* <Button variant="secondary" fullWidth onClick={handlePrint}>
-            Print QR
-          </Button> */}
         </Modal>
       </section>
-      <TemplatesRightBar />
+
+      {width > 1200 && <TemplatesRightBar />}
+      {width <= 1200 && !showSidebar && <TemplatesRightBar />}
     </main>
   )
 }
