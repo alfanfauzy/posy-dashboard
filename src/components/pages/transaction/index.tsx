@@ -365,7 +365,7 @@ const PagesTransaction = () => {
 
   return (
     <main className="flex h-full gap-4">
-      <section className="relative h-full flex-1 overflow-y-hidden rounded-2xl bg-neutral-10 p-6">
+      <section className="relative h-full flex-1 overflow-hidden rounded-2xl bg-neutral-10 p-6">
         <article className="h-fit">
           <aside className="flex items-start justify-between">
             <p className="text-xxl-semibold lg:text-heading-s-semibold">
@@ -405,7 +405,7 @@ const PagesTransaction = () => {
             data.length === 0
               ? 'flex items-center justify-center bg-neutral-20'
               : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-          } h-[80%] w-full gap-3 overflow-y-auto lg:my-4`}
+          } h-[80%] w-full gap-3 overflow-y-auto py-4`}
         >
           {data.length === 0 && <PlusCircleIcon />}
           {data.length > 0 &&
@@ -427,7 +427,7 @@ const PagesTransaction = () => {
             ))}
         </article>
 
-        <article className="absolute bottom-0 flex w-full gap-4">
+        <article className="absolute bottom-0 mb-5 flex w-full gap-4">
           <div className="flex items-center gap-1">
             <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
             <p className="text-s-semibold">Order Received</p>

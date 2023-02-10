@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { Sidebar, useProSidebar } from 'react-pro-sidebar'
 import { BsList } from 'react-icons/bs'
 import { onLogout, setShowSidebar } from 'store/slices/auth'
+import useViewportListener from '@/hooks/useViewportListener'
 import PersonIcon from 'src/assets/icons/person'
 import { useAppDispatch } from 'store/hooks'
 import { links } from 'config/link'
@@ -10,6 +11,7 @@ import Menu from '@/molecules/menu'
 import Logo from '@/atoms/logo'
 
 const TemplatesSidebar = () => {
+  const { width } = useViewportListener()
   const { collapseSidebar, collapsed } = useProSidebar()
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -26,7 +28,7 @@ const TemplatesSidebar = () => {
 
   return (
     <Sidebar
-      defaultCollapsed
+      defaultCollapsed={width < 1200}
       className="h-full rounded-r-2xl bg-neutral-10"
       width="250px"
     >
