@@ -457,7 +457,9 @@ const PagesTransaction = () => {
               </div>
             </div>
             <div className="border-b border-neutral-40" />
-            <p className="my-5 text-center text-m-semibold">Powered by Monu</p>
+            <p className="my-5 text-center text-m-semibold">
+              Powered by Posy Resto
+            </p>
           </section>
           {/* <Button variant="secondary" fullWidth onClick={handlePrint}>
             Print QR

@@ -9,10 +9,12 @@ const AtomsLogo = ({ onClick }: AtomsLogoProps) => (
   <div
     role="presentation"
     onClick={onClick}
-    className="flex cursor-default items-center justify-center gap-3"
+    className="flex cursor-default items-center justify-center gap-[10px]"
   >
     <Logo />
-    <p className="text-3xl font-bold text-red-accent">Monu</p>
+    <p className="whitespace-nowrap text-xl font-bold text-[#2F265B]">
+      Posy Resto
+    </p>
   </div>
 )
 
