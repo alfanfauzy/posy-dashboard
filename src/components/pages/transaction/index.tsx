@@ -4,17 +4,13 @@ import React, { useRef } from 'react'
 import { Button } from 'posy-fnb-core'
 import { useReactToPrint } from 'react-to-print'
 import { useAppSelector } from 'store/hooks'
-import { useDisclosure } from '@/hooks/useDisclosure'
 import useViewportListener from '@/hooks/useViewportListener'
 import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
-import SearchIcon from 'src/assets/icons/search'
 import FilterChip from '@/atoms/chips/filter-chip'
-
-const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
-  loading: () => <div />,
-})
+import InputSearch from '@/atoms/input/search'
+import useDisclosure from '@/hooks/useDisclosure'
 
 const TemplatesRightBar = dynamic(() => import('@/templates/rightbar'), {
   loading: () => <div />,
@@ -344,12 +340,12 @@ const data = [
 ]
 
 const PagesTransaction = () => {
-  const { showSidebar } = useAppSelector((state) => state.auth)
-  const { width } = useViewportListener()
-  const { mutate, isLoading } = useMutateCreateTransaction()
-  const [showModal, { open, close }] = useDisclosure({ initialState: false })
-
   const componentRef = useRef<any>()
+  const { width } = useViewportListener()
+  const { showSidebar } = useAppSelector((state) => state.auth)
+  const [openSearch, { open, close }] = useDisclosure({ initialState: false })
+
+  const { mutate, isLoading } = useMutateCreateTransaction()
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -358,9 +354,6 @@ const PagesTransaction = () => {
   const handleGenerateQr = () => {
     mutate()
     handlePrint()
-    setTimeout(() => {
-      open()
-    }, 300)
   }
 
   return (
@@ -377,13 +370,11 @@ const PagesTransaction = () => {
           </aside>
 
           <aside className="mt-4 flex gap-2">
-            <div className="flex w-3/4 gap-2 overflow-x-auto">
-              <FilterChip label="Waiting Order: 0" />
-              <FilterChip label="Waiting Payment: 0" />
-              <FilterChip label="Table Capacity: 10" />
-              <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-60 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
-                <SearchIcon />
-              </div>
+            <div className="flex flex-1 gap-2 overflow-x-auto transition-all duration-500 ease-in-out">
+              <FilterChip label="Waiting Order: 0" openSearch={openSearch} />
+              <FilterChip label="Waiting Payment: 0" openSearch={openSearch} />
+              <FilterChip label="Table Capacity: 10" openSearch={openSearch} />
+              <InputSearch isOpen={openSearch} close={close} open={open} />
             </div>
 
             <div className="w-1/4">
@@ -439,8 +430,8 @@ const PagesTransaction = () => {
           </div>
         </article>
 
-        <Modal open={showModal} handleClose={close}>
-          <section ref={componentRef}>
+        <article className="hidden">
+          <section ref={componentRef} className="py-5">
             <div className="flex flex-col items-center justify-center">
               <p className="text-l-semibold">Solaria</p>
               <p className="text-m-regular">Stasiun Gambir</p>
@@ -471,11 +462,13 @@ const PagesTransaction = () => {
               Powered by Posy Resto
             </p>
           </section>
-        </Modal>
+        </article>
       </section>
 
-      {width > 1200 && <TemplatesRightBar />}
-      {width <= 1200 && !showSidebar && <TemplatesRightBar />}
+      {width > 1200 && <TemplatesRightBar qrRef={componentRef} />}
+      {width <= 1200 && !showSidebar && (
+        <TemplatesRightBar qrRef={componentRef} />
+      )}
     </main>
   )
 }

@@ -1,9 +1,15 @@
-import React, { useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+import React, { useState } from 'react'
 import { Button, Checkbox, Input, Select, Tabs } from 'posy-fnb-core'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { useReactToPrint } from 'react-to-print'
 import { CgTrash } from 'react-icons/cg'
+import useDisclosure from '@/hooks/useDisclosure'
 import NoOrderIcon from 'src/assets/icons/noOrder'
+
+const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
+  loading: () => <div />,
+})
 
 const orderType = [
   {
@@ -39,22 +45,25 @@ const tableNumber = [
   },
 ]
 
-const TemplatesRightBar = () => {
-  const componentRef = useRef<any>()
+interface TemplatesRightBarProps {
+  qrRef: React.RefObject<HTMLDivElement>
+}
 
+const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    content: () => qrRef.current,
   })
+  const [isOpenCancelTrx, { open: openCancelTrx, close: closeCancelTrx }] =
+    useDisclosure({
+      initialState: false,
+    })
   const noTransaction = false
 
   const Items = [{ label: 'Order' }, { label: 'Payment' }]
   const [tabValue, setTabValue] = useState(0)
 
   return (
-    <main
-      className="relative w-[340px] rounded-l-2xl bg-neutral-10"
-      ref={componentRef}
-    >
+    <main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
       {noTransaction && (
         <div className="h-full w-full p-6">
           <p className="text-xxl-bold">Transaction Details</p>
@@ -71,7 +80,11 @@ const TemplatesRightBar = () => {
             <aside>
               <div className="flex items-center justify-between">
                 <p className="text-xxl-bold">Transaction Details</p>
-                <CgTrash size={20} className="cursor-pointer text-neutral-70" />
+                <CgTrash
+                  size={20}
+                  className="cursor-pointer text-neutral-70"
+                  onClick={openCancelTrx}
+                />
               </div>
 
               <div className="mt-2 flex flex-col items-start">
@@ -205,7 +218,6 @@ const TemplatesRightBar = () => {
                     <Button
                       variant="secondary"
                       fullWidth
-                      onClick={handlePrint}
                       size="m"
                       className="my-2"
                     >
@@ -218,12 +230,51 @@ const TemplatesRightBar = () => {
           </section>
 
           <section className="absolute bottom-0 w-full rounded-bl-2xl bg-white p-4 shadow-basic">
-            <Button variant="secondary" fullWidth onClick={handlePrint}>
-              Reprint QR
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="secondary" onClick={handlePrint}>
+                <p className="whitespace-nowrap text-m-semibold">Reprint QR</p>
+              </Button>
+              <Button
+                variant="primary"
+                fullWidth
+                onClick={handlePrint}
+                className="whitespace-nowrap text-m-semibold"
+              >
+                Print to Kitchen
+              </Button>
+            </div>
           </section>
         </article>
       )}
+
+      <Modal open={isOpenCancelTrx} handleClose={closeCancelTrx}>
+        <section className="flex w-[380px] flex-col items-center justify-center p-4">
+          <div className="px-16">
+            <p className="text-center text-l-semibold line-clamp-2">
+              Are you sure you want to delete this transaction?
+            </p>
+          </div>
+          <div className="mt-8 flex w-full gap-3">
+            <Button
+              variant="secondary"
+              size="m"
+              fullWidth
+              onClick={closeCancelTrx}
+              className="whitespace-nowrap"
+            >
+              No, Maybe Later
+            </Button>
+            <Button
+              variant="primary"
+              size="m"
+              fullWidth
+              onClick={closeCancelTrx}
+            >
+              Delete Trx
+            </Button>
+          </div>
+        </section>
+      </Modal>
     </main>
   )
 }

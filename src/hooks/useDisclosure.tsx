@@ -5,10 +5,7 @@ interface UseDisclosureType {
   callbacks?: { onOpen?(): void; onClose?(): void }
 }
 
-export const useDisclosure = ({
-  initialState,
-  callbacks,
-}: UseDisclosureType) => {
+const useDisclosure = ({ initialState, callbacks }: UseDisclosureType) => {
   const [isOpen, setIsOpen] = useState(initialState)
 
   const open = () => {
@@ -35,3 +32,5 @@ export const useDisclosure = ({
 
   return [isOpen, { open, close, toggle }] as const
 }
+
+export default useDisclosure
