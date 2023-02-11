@@ -7,7 +7,7 @@ import { useAppDispatch } from 'store/hooks'
 import { authSuccess } from 'store/slices/auth'
 import { ValidationSchemaType, validationSchema } from 'src/schemas/login'
 import { useForm } from '@/hooks/useForm'
-import { useDisclosure } from '@/hooks/useDisclosure'
+import useDisclosure from '@/hooks/useDisclosure'
 import Logo from '@/atoms/logo'
 
 const OrganismsFormLogin = () => {

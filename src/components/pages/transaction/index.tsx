@@ -1,9 +1,10 @@
+/* eslint-disable no-shadow */
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button } from 'posy-fnb-core'
 import { useReactToPrint } from 'react-to-print'
-import { useAppSelector } from 'store/hooks'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import useViewportListener from '@/hooks/useViewportListener'
 import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
@@ -11,17 +12,23 @@ import PlusCircleIcon from 'src/assets/icons/plusCircle'
 import FilterChip from '@/atoms/chips/filter-chip'
 import InputSearch from '@/atoms/input/search'
 import useDisclosure from '@/hooks/useDisclosure'
+import { onChangeSearch } from 'store/slices/transaction'
 
 const TemplatesRightBar = dynamic(() => import('@/templates/rightbar'), {
   loading: () => <div />,
 })
+
+enum STATUS {
+  WAITING_ORDER = 'WAITING_ORDER',
+  WAITING_PAYMENT = 'WAITING_PAYMENT',
+}
 
 const data = [
   {
     uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '1',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -32,12 +39,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi',
   },
   {
     uuid: '76915a37-188c-46a8-a432-214241124214',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '2',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -48,6 +56,7 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 2',
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc111ef6ad26e',
@@ -64,12 +73,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 3',
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc1131ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '4',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -80,12 +90,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 4',
   },
   {
     uuid: '76915a37-188c-46a8-a432-d4c111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '5',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -96,12 +107,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 5',
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc5111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '6',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -112,12 +124,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 6',
   },
   {
     uuid: '76915a37-188c-46a8-6a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '7',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -128,12 +141,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 7',
   },
   {
     uuid: '76915a37-188c-466a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '8',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -144,12 +158,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 8',
   },
   {
     uuid: '76915a37-188c-46a8-a6432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '9',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -160,12 +175,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 9',
   },
   {
     uuid: '76915a37-188c-465a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '10',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -176,12 +192,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 10',
   },
   {
     uuid: '76915a37-188c-46a8-a432-6dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '11',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -192,12 +209,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 11',
   },
   {
     uuid: '76915a37-2188c-46a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '12',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -208,12 +226,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 12',
   },
   {
     uuid: '76915a37-188c-4633a8-a432-dc111ef63ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '13',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -224,12 +243,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 13',
   },
   {
     uuid: '76915a37-188c-4633a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '14',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -240,12 +260,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 14',
   },
   {
     uuid: '76915a37-188c-12146a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '15',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -256,12 +277,13 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 15',
   },
   {
     uuid: '76915a42137-188c-46a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '16',
     total_pax: 5,
     total_order: 3,
     status: 'WAITING_ORDER',
@@ -272,15 +294,16 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 16',
   },
   {
     uuid: '76915a37-188c-4641a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '17',
     total_pax: 5,
     total_order: 3,
-    status: 'WAITING_ORDER',
+    status: 'WAITING_PAYMENT',
     is_open: true,
     is_order: false,
     is_paid: false,
@@ -288,15 +311,16 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 17',
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc125111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '18',
     total_pax: 5,
     total_order: 3,
-    status: 'WAITING_ORDER',
+    status: 'WAITING_PAYMENT',
     is_open: true,
     is_order: false,
     is_paid: false,
@@ -304,15 +328,16 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 18',
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc152111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '19',
     total_pax: 5,
     total_order: 3,
-    status: 'WAITING_ORDER',
+    status: 'WAITING_PAYMENT',
     is_open: true,
     is_order: false,
     is_paid: false,
@@ -320,15 +345,16 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 19',
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc55111ef6ad6e',
     transaction_code: 'O150123-001',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
+    table_number: '20',
     total_pax: 5,
     total_order: 3,
-    status: 'WAITING_ORDER',
+    status: 'WAITING_PAYMENT',
     is_open: true,
     is_order: false,
     is_paid: false,
@@ -336,16 +362,21 @@ const data = [
       seconds: 1673889919,
       nanos: 92881211,
     },
+    name: 'Andi 20',
   },
 ]
 
 const PagesTransaction = () => {
+  const dispatch = useAppDispatch()
   const componentRef = useRef<any>()
   const { width } = useViewportListener()
   const { showSidebar } = useAppSelector((state) => state.auth)
   const [openSearch, { open, close }] = useDisclosure({ initialState: false })
+  const [status, setStatus] = useState('')
 
   const { mutate, isLoading } = useMutateCreateTransaction()
+
+  const [dataTransaction, setDataTransaction] = useState(data)
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -354,6 +385,51 @@ const PagesTransaction = () => {
   const handleGenerateQr = () => {
     mutate()
     handlePrint()
+  }
+
+  const calculateWaitingOrder = () => {
+    const temp = data.filter((el) => el.status === STATUS.WAITING_ORDER)
+    return temp.length
+  }
+
+  const calculateWaitingPayment = () => {
+    const temp = data.filter((el) => el.status === STATUS.WAITING_PAYMENT)
+    return temp.length
+  }
+
+  const generateBorderColor = (status: string) => {
+    const borderColor: { [key: string]: string } = {
+      WAITING_ORDER: 'border-2 border-blue-success',
+      WAITING_PAYMENT: 'border-2 border-green-success',
+    }
+    return borderColor[status]
+  }
+
+  const handleSetStatus = (
+    e: React.MouseEvent<HTMLElement>,
+    statusParams: string,
+  ) => {
+    // if (e.detail === 1) {
+    //   setStatus(status)
+    // } else if (e.detail === 2) {
+    //   setStatus('')
+    // }
+
+    if (status === statusParams) {
+      setStatus('')
+      setDataTransaction(data)
+    } else {
+      setStatus(statusParams)
+      const newData = data.filter((el) => el.status === statusParams)
+      setDataTransaction(newData)
+    }
+  }
+
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const regex = new RegExp(e.target.value, 'i')
+    const newData = data.filter(({ name }) => name.match(regex))
+    setDataTransaction(newData)
+    dispatch(onChangeSearch({ search: e.target.value }))
   }
 
   return (
@@ -371,10 +447,33 @@ const PagesTransaction = () => {
 
           <aside className="mt-4 flex gap-2">
             <div className="flex flex-1 gap-2 overflow-x-auto transition-all duration-500 ease-in-out">
-              <FilterChip label="Waiting Order: 0" openSearch={openSearch} />
-              <FilterChip label="Waiting Payment: 0" openSearch={openSearch} />
+              <FilterChip
+                label={`Waiting Order: ${calculateWaitingOrder()}`}
+                openSearch={openSearch}
+                onClick={(e) => handleSetStatus(e, 'WAITING_ORDER')}
+                className={`${
+                  status === 'WAITING_ORDER'
+                    ? 'border-2 border-blue-success'
+                    : 'border-neutral-50 '
+                }`}
+              />
+              <FilterChip
+                label={`Waiting Payment: ${calculateWaitingPayment()}`}
+                openSearch={openSearch}
+                onClick={(e) => handleSetStatus(e, 'WAITING_PAYMENT')}
+                className={`${
+                  status === 'WAITING_PAYMENT'
+                    ? 'border-2 border-green-success'
+                    : 'border-neutral-50 '
+                }`}
+              />
               <FilterChip label="Table Capacity: 10" openSearch={openSearch} />
-              <InputSearch isOpen={openSearch} close={close} open={open} />
+              <InputSearch
+                isOpen={openSearch}
+                close={close}
+                open={open}
+                onSearch={onSearch}
+              />
             </div>
 
             <div className="w-1/4">
@@ -400,18 +499,22 @@ const PagesTransaction = () => {
         >
           {data.length === 0 && <PlusCircleIcon />}
           {data.length > 0 &&
-            data.map((el) => (
+            dataTransaction.map((el) => (
               <aside
                 key={el.uuid}
-                className="h-[124px] cursor-pointer rounded-2xl border border-neutral-30 p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md"
+                className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
+                  status,
+                )}`}
               >
                 <div className="flex justify-center border-b pb-2">
-                  <p className="text-4xl font-normal text-neutral-70">01</p>
+                  <p className="text-4xl font-normal text-neutral-70">
+                    {el.table_number}
+                  </p>
                 </div>
                 <div className="mt-2">
                   <p className="text-s-semibold text-neutral-90">Name</p>
                   <p className="text-m-regular text-neutral-90 line-clamp-1">
-                    Henderson Calistaa
+                    {el.name}
                   </p>
                 </div>
               </aside>
@@ -421,12 +524,12 @@ const PagesTransaction = () => {
         <article className="absolute bottom-0 mb-5 flex w-full gap-4">
           <div className="flex items-center gap-1">
             <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
-            <p className="text-s-semibold">Order Received</p>
+            <p className="text-s-semibold">Waiting Order</p>
           </div>
 
           <div className="flex items-center gap-1">
             <div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-green-success" />
-            <p className="text-s-semibold">Order Served</p>
+            <p className="text-s-semibold">Waiting Payment</p>
           </div>
         </article>
 

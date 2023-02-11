@@ -17,10 +17,7 @@ export const TransactionSlice = createSlice({
   name: 'transaction',
   initialState,
   reducers: {
-    onChangeSearch: (
-      state,
-      action: PayloadAction<{ search: string; menus: any[] }>,
-    ) => {
+    onChangeSearch: (state, action: PayloadAction<{ search: string }>) => {
       const { search } = action.payload
       //   const regex = new RegExp(search, 'i')
       //   const filteredMenu = menus

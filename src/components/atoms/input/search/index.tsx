@@ -2,20 +2,19 @@ import React from 'react'
 import { FiSearch } from 'react-icons/fi'
 import { MdCancel } from 'react-icons/md'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { onChangeSearch, onClearSearch } from 'store/slices/transaction'
-// import { onChangeSearch, onClearSearch } from 'store/slices/menu'
+import { onClearSearch } from 'store/slices/transaction'
 
 interface AtomsInputSearchProps {
   isOpen: boolean
   open: () => void
   close: () => void
-  menus?: any[]
+  onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 const AtomsInputSearch = ({
   isOpen,
   open,
   close,
-  menus,
+  onSearch,
 }: AtomsInputSearchProps) => {
   const dispatch = useAppDispatch()
   const { search } = useAppSelector((state) => state.transaction)
@@ -23,10 +22,6 @@ const AtomsInputSearch = ({
   const onClear = () => {
     dispatch(onClearSearch())
     close()
-  }
-
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(onChangeSearch({ search: e.target.value, menus: [] }))
   }
 
   return (
