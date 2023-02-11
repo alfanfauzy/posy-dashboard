@@ -7,10 +7,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface TransactionState {
   search: string
+  selectedTrxId: string
 }
 
 const initialState: TransactionState = {
   search: '',
+  selectedTrxId: '',
 }
 
 export const TransactionSlice = createSlice({
@@ -29,10 +31,14 @@ export const TransactionSlice = createSlice({
     onClearSearch: (state) => {
       state.search = ''
     },
+    onChangeSelectedTrxId: (state, action: PayloadAction<{ id: string }>) => {
+      state.selectedTrxId = action.payload.id
+    },
   },
 })
 
 // export the action from the slice
-export const { onChangeSearch, onClearSearch } = TransactionSlice.actions
+export const { onChangeSearch, onClearSearch, onChangeSelectedTrxId } =
+  TransactionSlice.actions
 
 export default TransactionSlice.reducer

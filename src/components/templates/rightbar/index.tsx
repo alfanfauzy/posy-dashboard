@@ -6,6 +6,7 @@ import { useReactToPrint } from 'react-to-print'
 import { CgTrash } from 'react-icons/cg'
 import useDisclosure from '@/hooks/useDisclosure'
 import NoOrderIcon from 'src/assets/icons/noOrder'
+import { useAppSelector } from 'store/hooks'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,
@@ -45,26 +46,50 @@ const tableNumber = [
   },
 ]
 
+const Items = [{ label: 'Order' }, { label: 'Payment' }]
+
 interface TemplatesRightBarProps {
   qrRef: React.RefObject<HTMLDivElement>
 }
 
 const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
-  const handlePrint = useReactToPrint({
-    content: () => qrRef.current,
-  })
+  const { selectedTrxId } = useAppSelector((state) => state.transaction)
+
+  const [tabValue, setTabValue] = useState(0)
+
   const [isOpenCancelTrx, { open: openCancelTrx, close: closeCancelTrx }] =
     useDisclosure({
       initialState: false,
     })
-  const noTransaction = false
 
-  const Items = [{ label: 'Order' }, { label: 'Payment' }]
-  const [tabValue, setTabValue] = useState(0)
+  const [
+    isOpenCancelOrder,
+    { open: openCancelOrder, close: closeCancelOrder },
+  ] = useDisclosure({
+    initialState: false,
+  })
+
+  const [
+    isOpenCancelAllOrder,
+    { open: openCancelAllOrder, close: closeCancelAllOrder },
+  ] = useDisclosure({
+    initialState: false,
+  })
+
+  const [
+    showDeleteOrder,
+    { toggle: toggleShowDeleteOrder, close: closeDeleteOrder },
+  ] = useDisclosure({
+    initialState: false,
+  })
+
+  const handlePrint = useReactToPrint({
+    content: () => qrRef.current,
+  })
 
   return (
     <main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
-      {noTransaction && (
+      {!selectedTrxId && (
         <div className="h-full w-full p-6">
           <p className="text-xxl-bold">Transaction Details</p>
 
@@ -74,15 +99,15 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           </div>
         </div>
       )}
-      {!noTransaction && (
+      {selectedTrxId && (
         <article className="flex h-full flex-col">
           <section className="h-full px-4 py-6">
             <aside>
               <div className="flex items-center justify-between">
                 <p className="text-xxl-bold">Transaction Details</p>
                 <CgTrash
-                  size={20}
                   className="cursor-pointer text-neutral-70"
+                  size={20}
                   onClick={openCancelTrx}
                 />
               </div>
@@ -135,6 +160,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                   <CgTrash
                     size={20}
                     className="cursor-pointer text-neutral-70"
+                    onClick={toggleShowDeleteOrder}
                   />
                 </div>
 
@@ -153,68 +179,82 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                       Order Time: 10:00
                       <AiOutlineInfoCircle />
                     </div>
-                    <div className="w-full">
-                      <div className="flex items-center justify-between text-s-bold">
-                        <p>Order 1</p>
-                        <p className="text-neutral-50">Processed</p>
+                    {!showDeleteOrder && (
+                      <div className="w-full">
+                        <div className="flex items-center justify-between text-s-bold">
+                          <p>Order 1</p>
+                          <p className="text-neutral-50">Processed</p>
+                        </div>
+                        <div className="mt-2 w-full">
+                          <Checkbox
+                            title="Fried Kwetiau"
+                            onChange={() => undefined}
+                            size="m"
+                            disabled
+                          />
+                          <Checkbox
+                            title="Fried Kwetiau"
+                            onChange={() => undefined}
+                            size="m"
+                          />
+                          <Checkbox
+                            title="Fried Kwetiau"
+                            onChange={() => undefined}
+                            size="m"
+                          />
+                          <Checkbox
+                            title="Fried Kwetiau"
+                            onChange={() => undefined}
+                            size="m"
+                          />
+                        </div>
                       </div>
-                      <div className="mt-2 w-full">
-                        <Checkbox
-                          title="Fried Kwetiau"
-                          onChange={() => undefined}
-                          size="m"
-                          disabled
-                        />
-                        <Checkbox
-                          title="Fried Kwetiau"
-                          onChange={() => undefined}
-                          size="m"
-                        />
-                        <Checkbox
-                          title="Fried Kwetiau"
-                          onChange={() => undefined}
-                          size="m"
-                        />
-                        <Checkbox
-                          title="Fried Kwetiau"
-                          onChange={() => undefined}
-                          size="m"
-                        />
-                      </div>
-                    </div>
+                    )}
 
-                    <div className="mt-4 w-full">
-                      <div className="flex items-center justify-between text-s-bold">
-                        <p>Order 1</p>
-                        <p className="text-red-accent">Cancel Order</p>
+                    {showDeleteOrder && (
+                      <div className="mt-4 w-full">
+                        <div className="flex items-center justify-between text-s-bold">
+                          <p>Order 1</p>
+                          <div
+                            className="cursor-pointer text-red-accent duration-150"
+                            role="presentation"
+                            onClick={openCancelAllOrder}
+                          >
+                            Cancel Order
+                          </div>
+                        </div>
+                        <div className="mt-2 w-full">
+                          <div className="my-2 flex items-center justify-between">
+                            <p className="text-m-regular">Fried Kwetiau</p>
+                            <p
+                              role="presentation"
+                              onClick={openCancelOrder}
+                              className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75"
+                            >
+                              Cancel
+                            </p>
+                          </div>
+                          <div className="my-2 flex items-center justify-between">
+                            <p className="text-m-regular">Fried Kwetiau</p>
+                            <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
+                              Cancel
+                            </p>
+                          </div>
+                          <div className="my-2 flex items-center justify-between">
+                            <p className="text-m-regular">Fried Kwetiau</p>
+                            <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
+                              Cancel
+                            </p>
+                          </div>
+                          <div className="my-2 flex items-center justify-between">
+                            <p className="text-m-regular">Fried Kwetiau</p>
+                            <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
+                              Cancel
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="mt-2 w-full">
-                        <div className="my-2 flex items-center justify-between">
-                          <p className="text-m-regular">Fried Kwetiau</p>
-                          <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
-                            Cancel
-                          </p>
-                        </div>
-                        <div className="my-2 flex items-center justify-between">
-                          <p className="text-m-regular">Fried Kwetiau</p>
-                          <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
-                            Cancel
-                          </p>
-                        </div>
-                        <div className="my-2 flex items-center justify-between">
-                          <p className="text-m-regular">Fried Kwetiau</p>
-                          <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
-                            Cancel
-                          </p>
-                        </div>
-                        <div className="my-2 flex items-center justify-between">
-                          <p className="text-m-regular">Fried Kwetiau</p>
-                          <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
-                            Cancel
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    )}
                     <Button
                       variant="secondary"
                       fullWidth
@@ -230,19 +270,30 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           </section>
 
           <section className="absolute bottom-0 w-full rounded-bl-2xl bg-white p-4 shadow-basic">
-            <div className="flex gap-2">
-              <Button variant="secondary" onClick={handlePrint}>
-                <p className="whitespace-nowrap text-m-semibold">Reprint QR</p>
+            {showDeleteOrder && (
+              <Button variant="secondary" onClick={closeDeleteOrder} fullWidth>
+                <p className="whitespace-nowrap text-m-semibold">
+                  Back to order details
+                </p>
               </Button>
-              <Button
-                variant="primary"
-                fullWidth
-                onClick={handlePrint}
-                className="whitespace-nowrap text-m-semibold"
-              >
-                Print to Kitchen
-              </Button>
-            </div>
+            )}
+            {!showDeleteOrder && (
+              <div className="flex gap-2">
+                <Button variant="secondary" onClick={handlePrint}>
+                  <p className="whitespace-nowrap text-m-semibold">
+                    Reprint QR
+                  </p>
+                </Button>
+                <Button
+                  variant="primary"
+                  fullWidth
+                  onClick={handlePrint}
+                  className="whitespace-nowrap text-m-semibold"
+                >
+                  Print to Kitchen
+                </Button>
+              </div>
+            )}
           </section>
         </article>
       )}
@@ -271,6 +322,80 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
               onClick={closeCancelTrx}
             >
               Delete Trx
+            </Button>
+          </div>
+        </section>
+      </Modal>
+
+      <Modal open={isOpenCancelOrder} handleClose={closeCancelOrder}>
+        <section className="flex w-[340px] flex-col items-center justify-center p-4">
+          <div className="px-12">
+            <p className="text-center text-l-semibold line-clamp-2">
+              Are you sure you want to cancel Fried Kwetiau?
+            </p>
+            <div className="mt-6">
+              <Select
+                className="w-full"
+                size="l"
+                options={orderType}
+                placeholder="Select Type"
+              />
+            </div>
+          </div>
+          <div className="mt-8 flex w-full gap-3">
+            <Button
+              variant="secondary"
+              size="l"
+              fullWidth
+              onClick={closeCancelOrder}
+              className="whitespace-nowrap"
+            >
+              No
+            </Button>
+            <Button
+              variant="primary"
+              size="l"
+              fullWidth
+              onClick={closeCancelOrder}
+            >
+              Yes
+            </Button>
+          </div>
+        </section>
+      </Modal>
+
+      <Modal open={isOpenCancelAllOrder} handleClose={closeCancelAllOrder}>
+        <section className="flex w-[340px] flex-col items-center justify-center p-4">
+          <div className="px-12">
+            <p className="text-center text-l-semibold line-clamp-2">
+              Are you sure you want to cancel all order ?
+            </p>
+            <div className="mt-6">
+              <Select
+                className="w-full"
+                size="l"
+                options={orderType}
+                placeholder="Select Type"
+              />
+            </div>
+          </div>
+          <div className="mt-8 flex w-full gap-3">
+            <Button
+              variant="secondary"
+              size="l"
+              fullWidth
+              onClick={closeCancelAllOrder}
+              className="whitespace-nowrap"
+            >
+              No
+            </Button>
+            <Button
+              variant="primary"
+              size="l"
+              fullWidth
+              onClick={closeCancelAllOrder}
+            >
+              Yes
             </Button>
           </div>
         </section>

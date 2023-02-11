@@ -12,7 +12,7 @@ import PlusCircleIcon from 'src/assets/icons/plusCircle'
 import FilterChip from '@/atoms/chips/filter-chip'
 import InputSearch from '@/atoms/input/search'
 import useDisclosure from '@/hooks/useDisclosure'
-import { onChangeSearch } from 'store/slices/transaction'
+import { onChangeSearch, onChangeSelectedTrxId } from 'store/slices/transaction'
 
 const TemplatesRightBar = dynamic(() => import('@/templates/rightbar'), {
   loading: () => <div />,
@@ -26,7 +26,7 @@ enum STATUS {
 const data = [
   {
     uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-000',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '1',
     total_pax: 5,
@@ -60,7 +60,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc111ef6ad26e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-002',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '3',
     total_pax: 5,
@@ -77,7 +77,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc1131ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-003',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '4',
     total_pax: 5,
@@ -94,7 +94,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a432-d4c111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-004',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '5',
     total_pax: 5,
@@ -111,7 +111,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc5111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-005',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '6',
     total_pax: 5,
@@ -128,7 +128,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-6a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-006',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '7',
     total_pax: 5,
@@ -145,7 +145,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-466a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-007',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '8',
     total_pax: 5,
@@ -162,7 +162,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a6432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-008',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '9',
     total_pax: 5,
@@ -179,7 +179,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-465a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-009',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '10',
     total_pax: 5,
@@ -196,7 +196,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a432-6dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-010',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '11',
     total_pax: 5,
@@ -213,7 +213,7 @@ const data = [
   },
   {
     uuid: '76915a37-2188c-46a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-011',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '12',
     total_pax: 5,
@@ -230,7 +230,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-4633a8-a432-dc111ef63ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-012',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '13',
     total_pax: 5,
@@ -247,7 +247,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-4633a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-013',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '14',
     total_pax: 5,
@@ -264,7 +264,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-12146a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-014',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '15',
     total_pax: 5,
@@ -281,7 +281,7 @@ const data = [
   },
   {
     uuid: '76915a42137-188c-46a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-015',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '16',
     total_pax: 5,
@@ -298,7 +298,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-4641a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-016',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '17',
     total_pax: 5,
@@ -315,7 +315,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc125111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-017',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '18',
     total_pax: 5,
@@ -332,7 +332,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc152111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-018',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '19',
     total_pax: 5,
@@ -349,7 +349,7 @@ const data = [
   },
   {
     uuid: '76915a37-188c-46a8-a432-dc55111ef6ad6e',
-    transaction_code: 'O150123-001',
+    transaction_code: 'O150123-019',
     table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
     table_number: '20',
     total_pax: 5,
@@ -371,6 +371,7 @@ const PagesTransaction = () => {
   const componentRef = useRef<any>()
   const { width } = useViewportListener()
   const { showSidebar } = useAppSelector((state) => state.auth)
+  const { selectedTrxId } = useAppSelector((state) => state.transaction)
   const [openSearch, { open, close }] = useDisclosure({ initialState: false })
   const [status, setStatus] = useState('')
 
@@ -397,7 +398,14 @@ const PagesTransaction = () => {
     return temp.length
   }
 
-  const generateBorderColor = (status: string) => {
+  const generateBorderColor = (
+    status: string,
+    code: string,
+    selectedCode: string,
+  ) => {
+    if (code === selectedCode) {
+      return 'border-2 border-neutral-100'
+    }
     const borderColor: { [key: string]: string } = {
       WAITING_ORDER: 'border-2 border-blue-success',
       WAITING_PAYMENT: 'border-2 border-green-success',
@@ -430,6 +438,10 @@ const PagesTransaction = () => {
     const newData = data.filter(({ name }) => name.match(regex))
     setDataTransaction(newData)
     dispatch(onChangeSearch({ search: e.target.value }))
+  }
+
+  const handleSelectTrx = (id: string) => {
+    dispatch(onChangeSelectedTrxId({ id }))
   }
 
   return (
@@ -502,8 +514,12 @@ const PagesTransaction = () => {
             dataTransaction.map((el) => (
               <aside
                 key={el.uuid}
+                onClick={() => handleSelectTrx(el.transaction_code)}
+                role="presentation"
                 className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
                   status,
+                  el.transaction_code,
+                  selectedTrxId,
                 )}`}
               >
                 <div className="flex justify-center border-b pb-2">
