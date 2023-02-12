@@ -12,6 +12,29 @@ const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,
 })
 
+const listCancelReason = [
+  {
+    label: 'Out of stock',
+    value: 'Out of stock',
+  },
+  {
+    label: 'Customer cancellation',
+    value: 'Customer cancellation',
+  },
+  {
+    label: 'Long waiting time',
+    value: 'Long waiting time',
+  },
+  {
+    label: 'Wrong order',
+    value: 'Wrong order',
+  },
+  {
+    label: 'Others',
+    value: 'Others',
+  },
+]
+
 const orderType = [
   {
     label: 'Dine in',
@@ -308,7 +331,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           <div className="mt-8 flex w-full gap-3">
             <Button
               variant="secondary"
-              size="m"
+              size="l"
               fullWidth
               onClick={closeCancelTrx}
               className="whitespace-nowrap"
@@ -317,7 +340,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             </Button>
             <Button
               variant="primary"
-              size="m"
+              size="l"
               fullWidth
               onClick={closeCancelTrx}
             >
@@ -327,9 +350,13 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
         </section>
       </Modal>
 
-      <Modal open={isOpenCancelOrder} handleClose={closeCancelOrder}>
+      <Modal
+        open={isOpenCancelOrder}
+        handleClose={closeCancelOrder}
+        overflow={false}
+      >
         <section className="flex w-[340px] flex-col items-center justify-center p-4">
-          <div className="px-12">
+          <div className="">
             <p className="text-center text-l-semibold line-clamp-2">
               Are you sure you want to cancel Fried Kwetiau?
             </p>
@@ -337,8 +364,8 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
               <Select
                 className="w-full"
                 size="l"
-                options={orderType}
-                placeholder="Select Type"
+                options={listCancelReason}
+                placeholder="Select the reason"
               />
             </div>
           </div>
@@ -364,9 +391,13 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
         </section>
       </Modal>
 
-      <Modal open={isOpenCancelAllOrder} handleClose={closeCancelAllOrder}>
+      <Modal
+        open={isOpenCancelAllOrder}
+        handleClose={closeCancelAllOrder}
+        overflow={false}
+      >
         <section className="flex w-[340px] flex-col items-center justify-center p-4">
-          <div className="px-12">
+          <div>
             <p className="text-center text-l-semibold line-clamp-2">
               Are you sure you want to cancel all order ?
             </p>
@@ -374,8 +405,8 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
               <Select
                 className="w-full"
                 size="l"
-                options={orderType}
-                placeholder="Select Type"
+                options={listCancelReason}
+                placeholder="Select the reason"
               />
             </div>
           </div>
