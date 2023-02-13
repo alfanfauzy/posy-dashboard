@@ -294,12 +294,18 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                     <article className="hidden">
                       <section ref={kitchenRef} className="p-6">
                         <div className="flex items-center justify-between">
-                          <p className="text-xxl-bold">Solaria</p>
-                          <p className="text-m-bold">Print x1</p>
+                          <p className="text-xl-semibold">Dine in</p>
+                          <p className="text-xl-semibold">Print x1</p>
                         </div>
-                        <div className="mt-2 flex items-center justify-between">
-                          <p className="text-m-semibold">Trx ID</p>
-                          <p className="text-m-semibold">O150123002</p>
+                        <div className="mt-4">
+                          <div className="flex items-center justify-between">
+                            <p className="text-m-semibold">Trx ID</p>
+                            <p className="text-m-semibold">O150123002</p>
+                          </div>
+                          <div className="mt-2 flex items-center justify-between">
+                            <p className="text-m-semibold">Henderson</p>
+                            <p className="text-m-semibold">Table 01</p>
+                          </div>
                         </div>
                         <div className="mt-4 border-b border-dotted border-neutral-40" />
 
