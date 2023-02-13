@@ -12,7 +12,11 @@ import PlusCircleIcon from 'src/assets/icons/plusCircle'
 import FilterChip from '@/atoms/chips/filter-chip'
 import InputSearch from '@/atoms/input/search'
 import useDisclosure from '@/hooks/useDisclosure'
-import { onChangeSearch, onChangeSelectedTrxId } from 'store/slices/transaction'
+import {
+  onChangeSearch,
+  onChangeSelectedTrxId,
+  onClearSearch,
+} from 'store/slices/transaction'
 
 const TemplatesRightBar = dynamic(() => import('@/templates/rightbar'), {
   loading: () => <div />,
@@ -439,6 +443,11 @@ const PagesTransaction = () => {
     setDataTransaction(newData)
     dispatch(onChangeSearch({ search: e.target.value }))
   }
+  const onClear = () => {
+    dispatch(onClearSearch())
+    setDataTransaction(data)
+    close()
+  }
 
   const handleSelectTrx = (id: string) => {
     dispatch(onChangeSelectedTrxId({ id }))
@@ -482,9 +491,9 @@ const PagesTransaction = () => {
               <FilterChip label="Table Capacity: 10" openSearch={openSearch} />
               <InputSearch
                 isOpen={openSearch}
-                close={close}
                 open={open}
                 onSearch={onSearch}
+                onClearSearch={onClear}
               />
             </div>
 

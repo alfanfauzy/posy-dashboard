@@ -1,28 +1,21 @@
 import React from 'react'
 import { FiSearch } from 'react-icons/fi'
 import { MdCancel } from 'react-icons/md'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { onClearSearch } from 'store/slices/transaction'
+import { useAppSelector } from 'store/hooks'
 
 interface AtomsInputSearchProps {
   isOpen: boolean
   open: () => void
-  close: () => void
   onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onClearSearch: () => void
 }
 const AtomsInputSearch = ({
   isOpen,
   open,
-  close,
   onSearch,
+  onClearSearch,
 }: AtomsInputSearchProps) => {
-  const dispatch = useAppDispatch()
   const { search } = useAppSelector((state) => state.transaction)
-
-  const onClear = () => {
-    dispatch(onClearSearch())
-    close()
-  }
 
   return (
     <div
@@ -38,7 +31,7 @@ const AtomsInputSearch = ({
           onFocus={open}
           onBlur={
             search.length === 0
-              ? () => setTimeout(() => onClear(), 100)
+              ? () => setTimeout(() => onClearSearch(), 100)
               : () => undefined
           }
           onChange={onSearch}
@@ -54,7 +47,7 @@ const AtomsInputSearch = ({
             <MdCancel
               size={20}
               className="cursor-pointer fill-neutral-60"
-              onClick={onClear}
+              onClick={onClearSearch}
             />
           </div>
         )}
