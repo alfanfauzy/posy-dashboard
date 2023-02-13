@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, Checkbox, Input, Select, Tabs } from 'posy-fnb-core'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { useReactToPrint } from 'react-to-print'
@@ -76,6 +76,7 @@ interface TemplatesRightBarProps {
 }
 
 const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
+  const kitchenRef = useRef<any>()
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
 
   const [tabValue, setTabValue] = useState(0)
@@ -106,8 +107,11 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     initialState: false,
   })
 
-  const handlePrint = useReactToPrint({
+  const handlePrintQr = useReactToPrint({
     content: () => qrRef.current,
+  })
+  const handlePrintToKitchen = useReactToPrint({
+    content: () => kitchenRef.current,
   })
 
   return (
@@ -286,6 +290,66 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                     >
                       + Add New Order
                     </Button>
+
+                    <article className="hidden">
+                      <section ref={kitchenRef} className="p-6">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xxl-bold">Solaria</p>
+                          <p className="text-m-bold">Print x1</p>
+                        </div>
+                        <div className="mt-2 flex items-center justify-between">
+                          <p className="text-m-semibold">Trx ID</p>
+                          <p className="text-m-semibold">O150123002</p>
+                        </div>
+                        <div className="mt-4 border-b border-dotted border-neutral-40" />
+
+                        <div className="mt-4 flex flex-col items-start">
+                          <p className="text-xl-semibold">Order 1</p>
+                          <div className="mt-5">
+                            <p className="text-xxl-bold">Fried Kwetiau x1</p>
+                            <p className="mt-2 text-l-regular">
+                              Spicy lv 1, Extra Mushroom, Extra Eggs, Extra
+                              Baso, Extra Sausages
+                            </p>
+                            <p className="mt-2 text-l-regular">
+                              <b className="mr-1">Notes:</b>I want to make this
+                              food is super spicy without any other ingredients
+                            </p>
+                          </div>
+                          <div className="mt-5">
+                            <p className="text-xxl-bold">Fried Capcay x1</p>
+                            <p className="mt-2 text-l-regular">Spicy lv 3</p>
+                          </div>
+                          <div className="mt-5">
+                            <p className="text-xxl-bold">Orange Juice x1</p>
+                          </div>
+                        </div>
+                        <div className="mt-4 border-b border-dotted border-neutral-40" />
+
+                        <div className="mt-4 flex flex-col items-start">
+                          <p className="text-xl-semibold">Order 2</p>
+                          <div className="mt-5">
+                            <p className="text-xxl-bold">Fried Kwetiau x1</p>
+                            <p className="mt-2 text-l-regular">
+                              Spicy lv 1, Extra Mushroom, Extra Eggs, Extra
+                              Baso, Extra Sausages
+                            </p>
+                            <p className="mt-2 text-l-regular">
+                              <b className="mr-1">Notes:</b>I want to make this
+                              food is super spicy without any other ingredients
+                            </p>
+                          </div>
+                          <div className="mt-5">
+                            <p className="text-xxl-bold">Fried Capcay x1</p>
+                            <p className="mt-2 text-l-regular">Spicy lv 3</p>
+                          </div>
+                          <div className="mt-5">
+                            <p className="text-xxl-bold">Orange Juice x1</p>
+                          </div>
+                        </div>
+                        <div className="mt-4 border-b border-dotted border-neutral-40" />
+                      </section>
+                    </article>
                   </div>
                 )}
               </aside>
@@ -302,7 +366,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             )}
             {!showDeleteOrder && (
               <div className="flex gap-2">
-                <Button variant="secondary" onClick={handlePrint}>
+                <Button variant="secondary" onClick={handlePrintQr}>
                   <p className="whitespace-nowrap text-m-semibold">
                     Reprint QR
                   </p>
@@ -310,7 +374,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 <Button
                   variant="primary"
                   fullWidth
-                  onClick={handlePrint}
+                  onClick={handlePrintToKitchen}
                   className="whitespace-nowrap text-m-semibold"
                 >
                   Print to Kitchen
