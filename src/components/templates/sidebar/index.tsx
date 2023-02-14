@@ -29,7 +29,7 @@ const TemplatesSidebar = () => {
   return (
     <Sidebar
       defaultCollapsed={width < 1200}
-      className="h-full rounded-r-2xl bg-neutral-10"
+      className="z-0 h-full rounded-r-2xl bg-neutral-10"
       width="250px"
     >
       <aside

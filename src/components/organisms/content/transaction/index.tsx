@@ -160,39 +160,41 @@ const OrganismsContentsTransaction = ({
         </aside>
       </article>
 
-      <article
-        className={`${
-          data.length === 0
-            ? 'flex items-center justify-center bg-neutral-20'
-            : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-        } h-[80%] w-full gap-3 overflow-y-auto py-4`}
-      >
-        {data.length === 0 && <PlusCircleIcon />}
-        {data.length > 0 &&
-          dataTransaction.map((el) => (
-            <aside
-              key={el.uuid}
-              onClick={() => handleSelectTrx(el.transaction_code)}
-              role="presentation"
-              className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
-                status,
-                el.transaction_code,
-                selectedTrxId,
-              )}`}
-            >
-              <div className="flex justify-center border-b pb-2">
-                <p className="text-4xl font-normal text-neutral-70">
-                  {el.table_number}
-                </p>
-              </div>
-              <div className="mt-2">
-                <p className="text-s-semibold text-neutral-90">Name</p>
-                <p className="text-m-regular text-neutral-90 line-clamp-1">
-                  {el.name}
-                </p>
-              </div>
-            </aside>
-          ))}
+      <article className="h-[80%] w-full overflow-y-auto py-4">
+        <article
+          className={`${
+            data.length === 0
+              ? 'flex items-center justify-center bg-neutral-20'
+              : 'grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+          }`}
+        >
+          {data.length === 0 && <PlusCircleIcon />}
+          {data.length > 0 &&
+            dataTransaction.map((el) => (
+              <aside
+                key={el.uuid}
+                onClick={() => handleSelectTrx(el.transaction_code)}
+                role="presentation"
+                className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
+                  status,
+                  el.transaction_code,
+                  selectedTrxId,
+                )}`}
+              >
+                <div className="flex justify-center border-b pb-2">
+                  <p className="text-4xl font-normal text-neutral-70">
+                    {el.table_number}
+                  </p>
+                </div>
+                <div className="mt-2">
+                  <p className="text-s-semibold text-neutral-90">Name</p>
+                  <p className="text-m-regular text-neutral-90 line-clamp-1">
+                    {el.name}
+                  </p>
+                </div>
+              </aside>
+            ))}
+        </article>
       </article>
 
       <article className="absolute bottom-0 mb-5 flex w-full gap-4">

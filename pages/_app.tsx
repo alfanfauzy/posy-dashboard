@@ -8,6 +8,7 @@ import { persistor, wrapper } from 'store/index'
 import Layout from '@/templates/layout'
 import type { NextPageWithLayout } from '@/types/index'
 import 'posy-fnb-core/dist/index.css'
+import 'posy-fnb-core/dist/style.css'
 import '../styles/globals.css'
 
 type AppPropsWithLayout = AppProps & {

@@ -1,75 +1,34 @@
 import dynamic from 'next/dynamic'
 import React, { useRef, useState } from 'react'
-import { Button, Checkbox, Input, Select, Tabs } from 'posy-fnb-core'
+import { Button, Checkbox, Input, Select, Tabs, Textarea } from 'posy-fnb-core'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { useReactToPrint } from 'react-to-print'
 import { CgTrash } from 'react-icons/cg'
+import { IoMdArrowBack } from 'react-icons/io'
+import {
+  listMenus,
+  listMenuTabs,
+  listCancelReason,
+  listOrderTabs,
+  orderType,
+  tableNumber,
+} from './helpertemp'
 import useDisclosure from '@/hooks/useDisclosure'
 import NoOrderIcon from 'src/assets/icons/noOrder'
 import { useAppSelector } from 'store/hooks'
+import InputSearch from '@/atoms/input/search'
+import { toRupiah } from 'utils/common'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,
 })
 
-const listCancelReason = [
+const BottomSheet = dynamic(
+  () => import('posy-fnb-core').then((el) => el.BottomSheet),
   {
-    label: 'Out of stock',
-    value: 'Out of stock',
+    loading: () => <div />,
   },
-  {
-    label: 'Customer cancellation',
-    value: 'Customer cancellation',
-  },
-  {
-    label: 'Long waiting time',
-    value: 'Long waiting time',
-  },
-  {
-    label: 'Wrong order',
-    value: 'Wrong order',
-  },
-  {
-    label: 'Others',
-    value: 'Others',
-  },
-]
-
-const orderType = [
-  {
-    label: 'Dine in',
-    value: 'dine_in',
-  },
-  {
-    label: 'Take away',
-    value: 'take_away',
-  },
-]
-
-const tableNumber = [
-  {
-    label: '1',
-    value: 1,
-  },
-  {
-    label: '2',
-    value: 2,
-  },
-  {
-    label: '3',
-    value: 3,
-  },
-  {
-    label: '4',
-    value: 4,
-  },
-  {
-    label: '5',
-    value: 5,
-  },
-]
-
-const Items = [{ label: 'Order' }, { label: 'Payment' }]
+)
 
 interface TemplatesRightBarProps {
   qrRef: React.RefObject<HTMLDivElement>
@@ -79,7 +38,8 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const kitchenRef = useRef<any>()
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
 
-  const [tabValue, setTabValue] = useState(0)
+  const [tabValueorder, setTabValueOrder] = useState(0)
+  const [tabValueMenu, setTabValueMenu] = useState(0)
 
   const [isOpenCancelTrx, { open: openCancelTrx, close: closeCancelTrx }] =
     useDisclosure({
@@ -107,12 +67,36 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     initialState: false,
   })
 
+  const [
+    isOpenCreateOrder,
+    { open: openCreateOrder, close: closeCreateOrder },
+  ] = useDisclosure({ initialState: false })
+
+  const [
+    isOpenAddVariantOrder,
+    { open: openAddVariantOrder, close: closeAddVariantOrder },
+  ] = useDisclosure({ initialState: false })
+
+  const noOrder = true
+
   const handlePrintQr = useReactToPrint({
     content: () => qrRef.current,
   })
   const handlePrintToKitchen = useReactToPrint({
     content: () => kitchenRef.current,
   })
+
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // const regex = new RegExp(e.target.value, 'i')
+    // const newData = data.filter(({ name }) => name.match(regex))
+    // setDataTransaction(newData)
+    // dispatch(onChangeSearch({ search: e.target.value }))
+  }
+  const onClear = () => {
+    // dispatch(onClearSearch())
+    // setDataTransaction(data)
+    // closeSearch()
+  }
 
   return (
     <main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
@@ -143,7 +127,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 <p className="text-l-semibold">Trx ID: O150123002</p>
                 <p className="text-m-semibold">Trx time: 09:45</p>
               </div>
-              <div className="my-2 border border-neutral-30" />
+              <div className="my-2 border-b border-neutral-30" />
             </aside>
 
             <section className="h-4/5 overflow-y-auto">
@@ -193,14 +177,14 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
 
                 <div className="w-full">
                   <Tabs
-                    items={Items}
-                    value={tabValue}
-                    onChange={(e) => setTabValue(e)}
+                    items={listOrderTabs}
+                    value={tabValueorder}
+                    onChange={(e) => setTabValueOrder(e)}
                     fullWidth
                   />
                 </div>
 
-                {tabValue === 0 && (
+                {tabValueorder === 0 && (
                   <div className="pb-10">
                     <div className="my-4 flex w-full items-center justify-center gap-1 rounded-lg border border-neutral-40 py-2 text-m-semibold">
                       Order Time: 10:00
@@ -287,6 +271,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                       fullWidth
                       size="m"
                       className="my-2"
+                      onClick={openCreateOrder}
                     >
                       + Add New Order
                     </Button>
@@ -501,6 +486,262 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           </div>
         </section>
       </Modal>
+
+      <BottomSheet
+        open={isOpenCreateOrder}
+        onClose={closeCreateOrder}
+        style={{
+          background: '#F7F7F7',
+          padding: '24px 0',
+          height: '100%',
+          borderRadius: 0,
+        }}
+      >
+        <section className="flex h-full gap-6 bg-neutral-20">
+          <div className="w-2/3 flex-1 rounded-r-2xl bg-neutral-10 p-6">
+            <section id="filter" className="flex items-center justify-between">
+              <div className="flex items-center gap-[10px]">
+                <IoMdArrowBack
+                  size={24}
+                  onClick={closeCreateOrder}
+                  className="cursor-pointer hover:opacity-70"
+                />
+                <p className="cursor-default text-xxl-bold">Choose Orders</p>
+              </div>
+              <div className="w-1/3">
+                <InputSearch
+                  placeholder="Search product"
+                  isOpen
+                  onSearch={onSearch}
+                  onClearSearch={onClear}
+                />
+              </div>
+            </section>
+
+            <section id="menus" className="mt-6 h-full w-full">
+              <Tabs
+                scrollable
+                items={listMenuTabs}
+                value={tabValueMenu}
+                onChange={(e) => setTabValueMenu(e)}
+              />
+              <article className="my-6 h-4/5 overflow-y-auto">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  {listMenus.map((menu) => (
+                    <div
+                      role="presentation"
+                      onClick={openAddVariantOrder}
+                      key={menu.name}
+                      className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
+                    >
+                      <p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
+                        {menu.name}
+                      </p>
+                      <div className="my-2 border-b border-neutral-40" />
+                      <div className="flex items-center justify-center gap-1">
+                        <p className="text-m-regular text-neutral-90">
+                          {toRupiah(menu.discount_price || menu.price)}
+                        </p>
+                        {menu.discount_price && (
+                          <p className="text-xs line-through">
+                            {toRupiah(menu.price)}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            </section>
+          </div>
+
+          <div className="relative flex w-60 flex-col gap-[10px] rounded-l-2xl bg-neutral-10 md:w-72 lg:w-96 xl:w-[500px]">
+            <aside className="w-full px-6 pt-6">
+              <div className="flex flex-col items-start">
+                <p className="mb-2 text-xxl-bold">Your Order</p>
+                <p className="text-l-semibold">Trx ID: O150123002</p>
+                <p className="text-m-semibold">Trx time: 09:45</p>
+              </div>
+              <div className="my-2 border-b border-neutral-30" />
+              <div className="flex gap-2">
+                <div className="w-2/3">
+                  <div>
+                    <p className="text-s-regular">Customer name</p>
+                    <p className="text-l-semibold line-clamp-1">
+                      Henderson Moraes
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-s-regular">Type of transaction</p>
+                    <p className="text-l-semibold">Dine in</p>
+                  </div>
+                </div>
+                <div className="w-1/3">
+                  <div>
+                    <p className="text-s-regular">Total pax</p>
+                    <p className="text-l-semibold">4</p>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-s-regular">Table number</p>
+                    <p className="text-l-semibold">20</p>
+                  </div>
+                </div>
+              </div>
+              <div className="my-2 border-b border-neutral-30" />
+            </aside>
+
+            {noOrder && (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                <div className="-mt-24">
+                  <NoOrderIcon />
+                  <p className="text-l-medium">There’s no order yet</p>
+                </div>
+              </div>
+            )}
+            {!noOrder && <div className="px-6">tes</div>}
+
+            <section className="absolute bottom-0 w-full rounded-bl-2xl bg-neutral-10 p-6 shadow-basic">
+              <Button variant="primary" onClick={closeDeleteOrder} fullWidth>
+                Submit Order
+              </Button>
+            </section>
+          </div>
+        </section>
+
+        <Modal
+          open={isOpenAddVariantOrder}
+          handleClose={() => undefined}
+          style={{ maxWidth: '80%', width: '80%', padding: 0 }}
+        >
+          <section>
+            <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
+              <aside>
+                <p className="text-heading-s-semibold">Fried Capcay</p>
+                <p className="text-xxl-medium">{toRupiah(50000)}</p>
+              </aside>
+
+              <aside className="mt-4 flex items-center gap-10">
+                <div className="flex-1 border-b border-neutral-40">
+                  <p className="text-xxl-semibold">Item Quantity</p>
+                </div>
+                <div className="flex items-center justify-center gap-6">
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    -
+                  </div>
+                  <div className="text-heading-s-semibold">1</div>
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    +
+                  </div>
+                </div>
+              </aside>
+
+              <aside className="mt-6">
+                <div className="flex items-center gap-4">
+                  <p className="text-xxl-semibold">Spicy Level</p>
+                  <div className="text-m-regular">Required | select 1</div>
+                </div>
+
+                <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    Spicy lv 0
+                  </div>
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    Spicy lv 1
+                  </div>
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    Spicy lv 2
+                  </div>
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    Spicy lv 3
+                  </div>
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    Spicy lv 4
+                  </div>
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    Spicy lv 5
+                  </div>
+                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                    Spicy lv 6
+                  </div>
+                </div>
+              </aside>
+
+              <aside className="mt-6">
+                <div className="flex items-center gap-4">
+                  <p className="text-xxl-semibold">Additional Request</p>
+                  <div className="text-m-regular">Optional</div>
+                </div>
+
+                <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
+                  <div className="flex flex-col items-center">
+                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                      Extra Salt
+                    </div>
+                    <div className="mt-1 text-m-regular">+ 0</div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                      Extra Shrimp
+                    </div>
+                    <div className="mt-1 text-m-regular">
+                      + {toRupiah(100000)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                      Extra Eggs
+                    </div>
+                    <div className="mt-1 text-m-regular">
+                      + {toRupiah(130000)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                      Extra Carrot
+                    </div>
+                    <div className="mt-1 text-m-regular">
+                      + {toRupiah(200000)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                      Extra Meatball
+                    </div>
+                    <div className="mt-1 text-m-regular">
+                      + {toRupiah(45000)}
+                    </div>
+                  </div>
+                </div>
+              </aside>
+
+              <aside className="mt-6">
+                <p className="text-xxl-semibold">Notes</p>
+                <Textarea
+                  className="mt-2 h-32"
+                  placeholder="Example: no onion, please"
+                />
+              </aside>
+            </section>
+
+            <section className="fixed bottom-8 flex w-4/5 items-center justify-between gap-6 rounded-b-2xl bg-neutral-10 p-6 px-12 shadow-basic md:px-20 lg:px-28">
+              <Button
+                variant="secondary"
+                onClick={closeAddVariantOrder}
+                fullWidth
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={closeAddVariantOrder}
+                fullWidth
+              >
+                Add to Basket
+              </Button>
+            </section>
+          </section>
+        </Modal>
+      </BottomSheet>
     </main>
   )
 }

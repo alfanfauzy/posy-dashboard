@@ -5,15 +5,17 @@ import { useAppSelector } from 'store/hooks'
 
 interface AtomsInputSearchProps {
   isOpen: boolean
-  open: () => void
-  onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onClearSearch: () => void
+  open?: () => void
+  onSearch?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onClearSearch?: () => void
+  placeholder?: string
 }
 const AtomsInputSearch = ({
   isOpen,
   open,
   onSearch,
   onClearSearch,
+  placeholder,
 }: AtomsInputSearchProps) => {
   const { search } = useAppSelector((state) => state.transaction)
 
@@ -30,14 +32,14 @@ const AtomsInputSearch = ({
         <input
           onFocus={open}
           onBlur={
-            search.length === 0
+            onClearSearch && search.length === 0
               ? () => setTimeout(() => onClearSearch(), 100)
               : () => undefined
           }
           onChange={onSearch}
           value={search}
           type="text"
-          placeholder={isOpen ? 'Search' : ''}
+          placeholder={placeholder || ''}
           className={`h-8 rounded-full border border-neutral-70 pl-10 text-m-medium placeholder:text-neutral-80 focus:outline-neutral-50 ${
             isOpen ? 'w-full pr-10' : 'w-10'
           } `}
