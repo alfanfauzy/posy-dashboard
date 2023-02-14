@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { login } from 'services/login'
 
-const useMutateCreateTransaction = () => {
+const useMutateLogin = () => {
   const queryClient = useQueryClient()
   return useMutation(() => login(), {
     //   onMutate: () => {
@@ -17,4 +17,4 @@ const useMutateCreateTransaction = () => {
   })
 }
 
-export { useMutateCreateTransaction }
+export { useMutateLogin }
