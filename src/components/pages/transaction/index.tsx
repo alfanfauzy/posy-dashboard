@@ -564,7 +564,7 @@ const PagesTransaction = () => {
               <p className="text-l-semibold">Solaria</p>
               <p className="text-m-regular">Stasiun Gambir</p>
               <Image
-                src="/favicon.ico"
+                src="/images/logo.png"
                 alt="logo"
                 width={57}
                 height={57}

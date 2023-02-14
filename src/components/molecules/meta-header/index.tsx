@@ -27,7 +27,7 @@ const MoleculesMetaHeader: React.FC<MoleculesMetaHeaderProps> = ({
       />
       <meta name="robots" content="index,follow" />
       <meta name="keywords" content={keywords} />
-      <meta name="theme-color" content="#FC5454" />
+      <meta name="theme-color" content="#2F265B" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:image" content={image} />
       <meta name="twitter:domain" content="www.posyfnb.co.id" />
