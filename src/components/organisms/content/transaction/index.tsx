@@ -151,7 +151,7 @@ const OrganismsContentsTransaction = ({
               onClick={handleGenerateQr}
               size="m"
               fullWidth
-              variant="red-accent"
+              variant="primary"
               isLoading={isLoading}
             >
               <p className="whitespace-nowrap">+ New Trx</p>

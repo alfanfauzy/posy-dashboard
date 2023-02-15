@@ -28,7 +28,7 @@
     "next": "13.1.2",
     "next-redux-wrapper": "^8.1.0",
     "node-thermal-printer": "^4.2.0",
-    "posy-fnb-core": "^1.0.33",
+    "posy-fnb-core": "^1.0.34",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.0",

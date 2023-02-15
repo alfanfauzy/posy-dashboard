@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-syntax */
 import dynamic from 'next/dynamic'
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Button, Checkbox, Input, Select, Tabs, Textarea } from 'posy-fnb-core'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { useReactToPrint } from 'react-to-print'
@@ -15,9 +16,23 @@ import {
 } from './helpertemp'
 import useDisclosure from '@/hooks/useDisclosure'
 import NoOrderIcon from 'src/assets/icons/noOrder'
-import { useAppSelector } from 'store/hooks'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import InputSearch from '@/atoms/input/search'
-import { toRupiah } from 'utils/common'
+import {
+  calculateOrder,
+  calculateOrderBeforeDiscount,
+  toRupiah,
+} from 'utils/common'
+import {
+  onAddOrder,
+  onChangeAddOn,
+  onChangeNotes,
+  onChangeProduct,
+  onChangeQuantity,
+  onCloseOrderModal,
+  onDropOrder,
+} from 'store/slices/order'
+import type { Product } from '@/types/product'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,
@@ -35,6 +50,7 @@ interface TemplatesRightBarProps {
 }
 
 const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
+  const dispatch = useAppDispatch()
   const kitchenRef = useRef<any>()
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
 
@@ -77,7 +93,12 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     { open: openAddVariantOrder, close: closeAddVariantOrder },
   ] = useDisclosure({ initialState: false })
 
-  const noOrder = true
+  const [
+    isOpenDeleteNewOrder,
+    { open: openDeleteNewOrder, close: closeDeleteNewOrder },
+  ] = useDisclosure({
+    initialState: false,
+  })
 
   const handlePrintQr = useReactToPrint({
     content: () => qrRef.current,
@@ -98,6 +119,107 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     // closeSearch()
   }
 
+  const onOpenAddVariantOrder = (product: Partial<Product>) => {
+    openAddVariantOrder()
+    dispatch(onChangeProduct({ product }))
+    dispatch(onChangeQuantity({ operator: 'plus', value: 1 }))
+  }
+
+  const onCloseAddVariantOrder = () => {
+    closeAddVariantOrder()
+    dispatch(onCloseOrderModal())
+  }
+
+  const { quantity, product, notes, addOnVariant } = useAppSelector(
+    (state) => state.order.orderForm,
+  )
+  const { order } = useAppSelector((state) => state.order)
+
+  const handleIncreamentQuantity = useCallback(
+    () => dispatch(onChangeQuantity({ operator: 'plus', value: 1 })),
+    [dispatch],
+  )
+
+  const handleDecreamentQuantity = useCallback(
+    () => dispatch(onChangeQuantity({ operator: 'minus', value: 1 })),
+    [dispatch],
+  )
+
+  const handleChangeAddon = (
+    type: 'radio' | 'checkbox',
+    variant: any,
+    addOn: { addOnName: string; addOnUuid: string },
+  ) =>
+    dispatch(
+      onChangeAddOn({
+        type,
+        addOnVariant: {
+          addOnName: addOn.addOnName,
+          addOnUuid: addOn.addOnUuid,
+          ...variant,
+        },
+      }),
+    )
+
+  const generateBgColor = (variant_uuid: string) => {
+    const selected = addOnVariant?.some(
+      (el) => el.variant_uuid === variant_uuid,
+    )
+
+    if (selected) return 'bg-[#F2F1F9] border-[#654DE4]'
+    return 'bg-neutral-10 border-neutral-100'
+  }
+
+  const handleAddOrder = () => {
+    dispatch(
+      onAddOrder({
+        quantity,
+        product,
+        addOnVariant,
+        notes,
+        order_uuid: Math.floor(Math.random() * Date.now()),
+      }),
+    )
+    onCloseAddVariantOrder()
+  }
+
+  const handleDropOrder = (order_uuid: number) => {
+    dispatch(onDropOrder({ order_uuid }))
+  }
+
+  const onSubmitOrder = () => {
+    const payload = order.map((el) => {
+      const tempAddOn: any[] = []
+      const addOn = el.addOnVariant
+
+      addOn.map((addon) => {
+        const filteredAddOn = tempAddOn.find((v) => v.uuid === addon.addOnUuid)
+        if (filteredAddOn) {
+          return filteredAddOn.variant_uuids.push(addon.variant_uuid)
+        }
+
+        const obj: any = {
+          uuid: addon.addOnUuid,
+          variant_uuids: [],
+        }
+        obj.variant_uuids.push(addon.variant_uuid)
+        return tempAddOn.push(obj)
+      })
+
+      return {
+        product_uuid: el.product.product_uuid,
+        qty: el.quantity,
+        order_note: el.notes,
+        addon: tempAddOn,
+      }
+    })
+
+    console.log(order, 'order')
+    console.log(payload, 'submit order')
+  }
+
+  // const onDeleteNewOrder = (order_uuid: string) => {}
+
   return (
     <main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
       {!selectedTrxId && (
@@ -115,7 +237,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           <section className="h-full px-4 py-6">
             <aside>
               <div className="flex items-center justify-between">
-                <p className="text-xxl-bold">Transaction Details</p>
+                <p className="text-xxl-bold">Transaction details</p>
                 <CgTrash
                   className="cursor-pointer text-neutral-70"
                   size={20}
@@ -123,9 +245,9 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 />
               </div>
 
-              <div className="mt-2 flex flex-col items-start">
-                <p className="text-l-semibold">Trx ID: O150123002</p>
-                <p className="text-m-semibold">Trx time: 09:45</p>
+              <div className="mt-2 flex items-center justify-between">
+                <p className="text-l-semibold">ID: O150123002</p>
+                <p className="text-l-semibold">Time: 09:45</p>
               </div>
               <div className="my-2 border-b border-neutral-30" />
             </aside>
@@ -135,7 +257,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 <div className="flex gap-4">
                   <div className="w-2/3">
                     <div>
-                      <Input size="m" labelText="Customer Name (Optional)" />
+                      <Input size="m" labelText="Customer name" />
                     </div>
                     <div className="mt-3">
                       <Select
@@ -160,14 +282,14 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                     </div>
                   </div>
                 </div>
-                <Button size="m" variant="secondary" fullWidth className="mt-4">
+                <Button size="l" variant="secondary" fullWidth className="mt-4">
                   Save
                 </Button>
               </aside>
 
               <aside className="mt-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-xxl-bold">Order Details</p>
+                  <p className="text-xxl-bold">Order details</p>
                   <CgTrash
                     size={20}
                     className="cursor-pointer text-neutral-70"
@@ -187,7 +309,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 {tabValueorder === 0 && (
                   <div className="pb-10">
                     <div className="my-4 flex w-full items-center justify-center gap-1 rounded-lg border border-neutral-40 py-2 text-m-semibold">
-                      Order Time: 10:00
+                      Order time: 10:00
                       <AiOutlineInfoCircle />
                     </div>
                     {!showDeleteOrder && (
@@ -198,23 +320,23 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                         </div>
                         <div className="mt-2 w-full">
                           <Checkbox
-                            title="Fried Kwetiau"
+                            title="Fried kwetiau x1"
                             onChange={() => undefined}
                             size="m"
                             disabled
                           />
                           <Checkbox
-                            title="Fried Kwetiau"
+                            title="Fried kwetiau x1"
                             onChange={() => undefined}
                             size="m"
                           />
                           <Checkbox
-                            title="Fried Kwetiau"
+                            title="Fried kwetiau x3"
                             onChange={() => undefined}
                             size="m"
                           />
                           <Checkbox
-                            title="Fried Kwetiau"
+                            title="Fried kwetiau x4"
                             onChange={() => undefined}
                             size="m"
                           />
@@ -269,11 +391,11 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                     <Button
                       variant="secondary"
                       fullWidth
-                      size="m"
+                      size="l"
                       className="my-2"
                       onClick={openCreateOrder}
                     >
-                      + Add New Order
+                      Add New Order
                     </Button>
 
                     <article className="hidden">
@@ -487,6 +609,39 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
         </section>
       </Modal>
 
+      <Modal
+        open={isOpenDeleteNewOrder}
+        handleClose={closeDeleteNewOrder}
+        overflow={false}
+      >
+        <section className="flex w-[380px] flex-col items-center justify-center p-4">
+          <div className="px-16">
+            <p className="text-center text-l-semibold line-clamp-2">
+              Are you sure you want to delete this order?
+            </p>
+          </div>
+          <div className="mt-8 flex w-full gap-3">
+            <Button
+              variant="secondary"
+              size="l"
+              fullWidth
+              onClick={closeDeleteNewOrder}
+              className="whitespace-nowrap"
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              size="l"
+              fullWidth
+              onClick={closeDeleteNewOrder}
+            >
+              Yes, confirm
+            </Button>
+          </div>
+        </section>
+      </Modal>
+
       <BottomSheet
         open={isOpenCreateOrder}
         onClose={closeCreateOrder}
@@ -530,21 +685,24 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                   {listMenus.map((menu) => (
                     <div
                       role="presentation"
-                      onClick={openAddVariantOrder}
-                      key={menu.name}
+                      onClick={() => onOpenAddVariantOrder(menu)}
+                      key={menu.product_name}
                       className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
                     >
                       <p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
-                        {menu.name}
+                        {menu.product_name}
                       </p>
                       <div className="my-2 border-b border-neutral-40" />
                       <div className="flex items-center justify-center gap-1">
                         <p className="text-m-regular text-neutral-90">
-                          {toRupiah(menu.discount_price || menu.price)}
+                          {toRupiah(
+                            menu.price_after_discount ||
+                              menu.price_before_discount,
+                          )}
                         </p>
-                        {menu.discount_price && (
+                        {menu.price_after_discount && (
                           <p className="text-xs line-through">
-                            {toRupiah(menu.price)}
+                            {toRupiah(menu.price_before_discount)}
                           </p>
                         )}
                       </div>
@@ -555,7 +713,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             </section>
           </div>
 
-          <div className="relative flex w-60 flex-col gap-[10px] rounded-l-2xl bg-neutral-10 md:w-72 lg:w-96 xl:w-[500px]">
+          <div className="relative flex w-60 flex-col gap-4 rounded-l-2xl bg-neutral-10 md:w-72 lg:w-96 xl:w-[500px]">
             <aside className="w-full px-6 pt-6">
               <div className="flex flex-col items-start">
                 <p className="mb-2 text-xxl-bold">Your Order</p>
@@ -590,7 +748,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
               <div className="my-2 border-b border-neutral-30" />
             </aside>
 
-            {noOrder && (
+            {order.length === 0 && (
               <div className="flex h-full w-full flex-col items-center justify-center gap-4">
                 <div className="-mt-24">
                   <NoOrderIcon />
@@ -598,10 +756,75 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 </div>
               </div>
             )}
-            {!noOrder && <div className="px-6">tes</div>}
+
+            {order.length > 0 && (
+              <div className="px-6">
+                {order.map((item) => (
+                  <aside key={item.order_uuid} className="pb-4">
+                    <div id="product-info" className="grid grid-cols-10 gap-2">
+                      <div className="w-fit">
+                        <p className="text-l-medium">x{item.quantity}</p>
+                      </div>
+
+                      <div className="col-span-5 flex items-start">
+                        <div>
+                          <div className="line-clamp-1">
+                            <p className=" text-l-medium">
+                              {item.product.product_name}
+                            </p>
+                          </div>
+                          <p className="text-m-regular">
+                            {item.addOnVariant
+                              .map((variant) => variant.variant_name)
+                              .join(', ')}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="col-span-3 flex flex-col items-start">
+                        <div>
+                          <p className="text-l-medium">
+                            {item.product.price_after_discount
+                              ? toRupiah(calculateOrder(item) || 0)
+                              : toRupiah(
+                                  calculateOrderBeforeDiscount(item) || 0,
+                                )}
+                          </p>
+                          {item.product.price_after_discount && (
+                            <p className="text-m-regular text-neutral-60 line-through">
+                              {toRupiah(
+                                calculateOrderBeforeDiscount(item) || 0,
+                              )}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="mt-0.5 flex justify-end">
+                        <CgTrash
+                          className="cursor-pointer text-neutral-70 hover:opacity-80"
+                          size={20}
+                          // onClick={() => handleDropOrder(item.order_uuid)}
+                          onClick={openDeleteNewOrder}
+                        />
+                      </div>
+                    </div>
+                    {/* 
+                    <div id="notes" className="ml-7 mt-0.5">
+                      <p className="text-s-regular text-neutral-70">
+                        <span className="text-s-semibold">Notes:</span>{' '}
+                        {item.notes || '-'}
+                      </p>
+                    </div> */}
+
+                    <div className="mt-4 border-t border-neutral-30" />
+                  </aside>
+                ))}
+              </div>
+            )}
 
             <section className="absolute bottom-0 w-full rounded-bl-2xl bg-neutral-10 p-6 shadow-basic">
-              <Button variant="primary" onClick={closeDeleteOrder} fullWidth>
+              <Button variant="primary" onClick={onSubmitOrder} fullWidth>
                 Submit Order
               </Button>
             </section>
@@ -611,13 +834,27 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
         <Modal
           open={isOpenAddVariantOrder}
           handleClose={() => undefined}
-          style={{ maxWidth: '80%', width: '80%', padding: 0 }}
+          style={{
+            maxWidth: '80%',
+            width: '80%',
+            padding: 0,
+            borderBottomRightRadius: 0,
+            borderBottomLeftRadius: 0,
+          }}
         >
           <section>
             <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
               <aside>
-                <p className="text-heading-s-semibold">Fried Capcay</p>
-                <p className="text-xxl-medium">{toRupiah(50000)}</p>
+                <p className="text-heading-s-semibold">
+                  {product.product_name}
+                </p>
+                {product.price_after_discount && (
+                  <div>
+                    <p className="text-xxl-medium">
+                      {toRupiah(product.price_after_discount)}
+                    </p>
+                  </div>
+                )}
               </aside>
 
               <aside className="mt-4 flex items-center gap-10">
@@ -625,100 +862,76 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                   <p className="text-xxl-semibold">Item Quantity</p>
                 </div>
                 <div className="flex items-center justify-center gap-6">
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                  <div
+                    role="presentation"
+                    onClick={
+                      quantity === 0
+                        ? () => undefined
+                        : handleDecreamentQuantity
+                    }
+                    className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
+                  >
                     -
                   </div>
-                  <div className="text-heading-s-semibold">1</div>
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
+                  <div className="text-heading-s-semibold">{quantity}</div>
+                  <div
+                    role="presentation"
+                    onClick={handleIncreamentQuantity}
+                    className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
+                  >
                     +
                   </div>
                 </div>
               </aside>
 
-              <aside className="mt-6">
-                <div className="flex items-center gap-4">
-                  <p className="text-xxl-semibold">Spicy Level</p>
-                  <div className="text-m-regular">Required | select 1</div>
-                </div>
+              {product.addon &&
+                product.addon.map((addon) => (
+                  <aside key={addon.addon_uuid} className="mt-6">
+                    <div className="flex items-center gap-4">
+                      <p className="text-xxl-semibold">{addon.addon_name}</p>
+                      <div className="text-m-regular">Required | select 1</div>
+                    </div>
 
-                <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                    Spicy lv 0
-                  </div>
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                    Spicy lv 1
-                  </div>
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                    Spicy lv 2
-                  </div>
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                    Spicy lv 3
-                  </div>
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                    Spicy lv 4
-                  </div>
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                    Spicy lv 5
-                  </div>
-                  <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                    Spicy lv 6
-                  </div>
-                </div>
-              </aside>
-
-              <aside className="mt-6">
-                <div className="flex items-center gap-4">
-                  <p className="text-xxl-semibold">Additional Request</p>
-                  <div className="text-m-regular">Optional</div>
-                </div>
-
-                <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
-                  <div className="flex flex-col items-center">
-                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                      Extra Salt
+                    <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
+                      {addon.variant.map((variant) => (
+                        <div
+                          key={variant.variant_uuid}
+                          className="flex flex-col items-center"
+                        >
+                          <div
+                            role="presentation"
+                            onClick={() =>
+                              handleChangeAddon(
+                                addon.is_multiple ? 'checkbox' : 'radio',
+                                variant,
+                                {
+                                  addOnName: addon.addon_name,
+                                  addOnUuid: addon.addon_uuid,
+                                },
+                              )
+                            }
+                            className={`flex cursor-pointer items-center justify-center rounded-3xl border  py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-[#F2F1F9] hover:bg-opacity-80 ${generateBgColor(
+                              variant.variant_uuid,
+                            )}`}
+                          >
+                            {variant.variant_name}
+                          </div>
+                          <div className="mt-1 text-m-regular">
+                            + {toRupiah(variant.price)}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="mt-1 text-m-regular">+ 0</div>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                      Extra Shrimp
-                    </div>
-                    <div className="mt-1 text-m-regular">
-                      + {toRupiah(100000)}
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                      Extra Eggs
-                    </div>
-                    <div className="mt-1 text-m-regular">
-                      + {toRupiah(130000)}
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                      Extra Carrot
-                    </div>
-                    <div className="mt-1 text-m-regular">
-                      + {toRupiah(200000)}
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80">
-                      Extra Meatball
-                    </div>
-                    <div className="mt-1 text-m-regular">
-                      + {toRupiah(45000)}
-                    </div>
-                  </div>
-                </div>
-              </aside>
+                  </aside>
+                ))}
 
               <aside className="mt-6">
                 <p className="text-xxl-semibold">Notes</p>
                 <Textarea
                   className="mt-2 h-32"
                   placeholder="Example: no onion, please"
+                  value={notes}
+                  onChange={(e) => dispatch(onChangeNotes(e.target.value))}
                 />
               </aside>
             </section>
@@ -726,16 +939,12 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             <section className="fixed bottom-8 flex w-4/5 items-center justify-between gap-6 rounded-b-2xl bg-neutral-10 p-6 px-12 shadow-basic md:px-20 lg:px-28">
               <Button
                 variant="secondary"
-                onClick={closeAddVariantOrder}
+                onClick={onCloseAddVariantOrder}
                 fullWidth
               >
                 Cancel
               </Button>
-              <Button
-                variant="primary"
-                onClick={closeAddVariantOrder}
-                fullWidth
-              >
+              <Button variant="primary" onClick={handleAddOrder} fullWidth>
                 Add to Basket
               </Button>
             </section>
