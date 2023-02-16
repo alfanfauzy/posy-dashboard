@@ -12,7 +12,7 @@ const AtomsLogo = ({ onClick }: AtomsLogoProps) => (
     className="flex cursor-default items-center justify-center gap-[10px]"
   >
     <Logo />
-    <p className="whitespace-nowrap text-xl font-bold text-[#2F265B]">
+    <p className="whitespace-nowrap text-2xl font-bold text-[#2F265B]">
       Posy Resto
     </p>
   </div>

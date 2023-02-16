@@ -1,25 +1,16 @@
-import Image from 'next/image'
 import { ReactNode, FC } from 'react'
 import { useRouter } from 'next/router'
-import bgImage from 'public/images/auth-bg.png'
 import Transition from '@/atoms/animations/transition'
 
-const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
+const PlainLayout: FC<{ children: ReactNode }> = ({ children }) => {
   const { asPath } = useRouter()
 
   return (
     <div className="flex max-h-screen min-h-screen items-center overflow-hidden bg-gray-50">
       <div className="mx-auto h-screen min-h-screen flex-1 rounded-lg bg-white shadow-xl">
         <div className="h-4 w-full bg-primary-main shadow-md" />
-        <div className="flex min-h-screen flex-col md:flex-row">
-          <div className="hidden bg-cover bg-top md:flex md:h-auto md:w-1/2">
-            <Image
-              src={bgImage}
-              alt="img"
-              style={{ objectFit: 'cover', objectPosition: 'top' }}
-            />
-          </div>
-          <div className="h-screen bg-[#f9f9f9] md:w-1/2">
+        <div className="flex min-h-screen w-full">
+          <div className="h-screen w-full bg-[#f9f9f9]">
             <Transition asPath={asPath}>{children}</Transition>
           </div>
         </div>
@@ -28,4 +19,4 @@ const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
   )
 }
 
-export default AuthLayout
+export default PlainLayout

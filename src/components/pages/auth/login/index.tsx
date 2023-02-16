@@ -1,5 +1,5 @@
 import React from 'react'
-import LoginForm from '@/organisms/form/login'
+import LoginForm from '@/organisms/form/auth/login'
 
 const PagesLogin = () => (
   <main className="h-full">

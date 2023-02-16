@@ -34,7 +34,7 @@ const TemplatesSidebar = () => {
     >
       <aside
         className={`flex w-full items-center pt-6 transition-all duration-300 ease-in-out sm:justify-start ${
-          collapsed ? 'px-6' : 'px-12'
+          collapsed ? 'px-6' : 'px-9'
         }`}
       >
         {!collapsed ? (

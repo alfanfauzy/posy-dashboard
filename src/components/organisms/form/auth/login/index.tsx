@@ -5,7 +5,10 @@ import * as reactHookForm from 'react-hook-form'
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
 import { useAppDispatch } from 'store/hooks'
 import { authSuccess } from 'store/slices/auth'
-import { ValidationSchemaType, validationSchema } from 'src/schemas/login'
+import {
+  ValidationSchemaLoginType,
+  validationSchemaLogin,
+} from 'src/schemas/auth'
 import { useForm } from '@/hooks/useForm'
 import useDisclosure from '@/hooks/useDisclosure'
 import Logo from '@/atoms/logo'
@@ -20,11 +23,13 @@ const OrganismsFormLogin = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    schema: validationSchema,
+    schema: validationSchemaLogin,
   })
 
   const goDashboard = () => router.push('/transaction')
-  const onSubmit: reactHookForm.SubmitHandler<ValidationSchemaType> = () => {
+  const onSubmit: reactHookForm.SubmitHandler<
+    ValidationSchemaLoginType
+  > = () => {
     dispatch(
       authSuccess({
         expired_at: {
@@ -71,7 +76,11 @@ const OrganismsFormLogin = () => {
             error={!!errors?.password}
             helperText={errors?.password?.message}
           />
-          <p className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75">
+          <p
+            role="presentation"
+            onClick={() => router.push('forget-password')}
+            className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75"
+          >
             Forget Password
           </p>
         </div>
@@ -79,7 +88,7 @@ const OrganismsFormLogin = () => {
           variant="primary"
           size="l"
           fullWidth
-          className="mt-4"
+          className="mt-6"
           type="submit"
         >
           Login

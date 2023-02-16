@@ -1,21 +1,21 @@
 import { SEO } from '@/constants/seo'
-import ContainerLogin from '@/containers/auth/login'
-import AuthLayout from '@/templates/layout/auth-layout'
+import ContainerCreateNewPassword from '@/containers/auth/create-new-password'
+import PlainLayout from '@/templates/layout/plain-layout'
 import MetaHeader from '@/molecules/meta-header'
 import type { NextPageWithLayout } from '@/types/index'
 
 const Page: NextPageWithLayout = () => (
   <>
     <MetaHeader
-      title="Posy Resto - Login"
+      title="Posy Resto - Create New Password"
       description={SEO.description}
       keywords={SEO.keywords}
       image={SEO.image}
     />
-    <ContainerLogin />
+    <ContainerCreateNewPassword />
   </>
 )
 
-Page.getLayout = (page) => <AuthLayout>{page}</AuthLayout>
+Page.getLayout = (page) => <PlainLayout>{page}</PlainLayout>
 
 export default Page
