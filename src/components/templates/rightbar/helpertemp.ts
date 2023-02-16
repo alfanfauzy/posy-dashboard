@@ -131,38 +131,38 @@ export const listMenus = [
           },
         ],
       },
-      {
-        addon_uuid: '76d2b80e-e836-43db-ae63-8f307f0402ad',
-        addon_name: 'Additional Request',
-        is_multiple: true,
-        variant: [
-          {
-            variant_uuid: 'b9d5532c-f9a9-4a1d-a8c3-d023644e5c67',
-            variant_name: 'Telur Dadar',
-            price: 5000,
-          },
-          {
-            variant_uuid: '19e2d513-57cc-4d43-95ee-485b394e2dea',
-            variant_name: 'Telur Bulat',
-            price: 2500,
-          },
-          {
-            variant_uuid: '19e2d513-57cc-4d43-95ee-485b394e2zao',
-            variant_name: 'Telur Mata Sapi',
-            price: 3000,
-          },
-          {
-            variant_uuid: '19e2d513-57cc-4d43-95ee-485b394e2dan',
-            variant_name: 'Telur Unta',
-            price: 120000,
-          },
-          {
-            variant_uuid: '19e2d513-57cc-4d43-95ee-485b394e2dan1',
-            variant_name: 'Tahu Bulat',
-            price: 99999,
-          },
-        ],
-      },
+      // {
+      //   addon_uuid: '76d2b80e-e836-43db-ae63-8f307f0402ad',
+      //   addon_name: 'Additional Request',
+      //   is_multiple: true,
+      //   variant: [
+      //     {
+      //       variant_uuid: 'b9d5532c-f9a9-4a1d-a8c3-d023644e5c67',
+      //       variant_name: 'Telur Dadar',
+      //       price: 5000,
+      //     },
+      //     {
+      //       variant_uuid: '19e2d513-57cc-4d43-95ee-485b394e2dea',
+      //       variant_name: 'Telur Bulat',
+      //       price: 2500,
+      //     },
+      //     {
+      //       variant_uuid: '19e2d513-57cc-4d43-95ee-485b394e2zao',
+      //       variant_name: 'Telur Mata Sapi',
+      //       price: 3000,
+      //     },
+      //     {
+      //       variant_uuid: '19e2d513-57cc-4d43-95ee-485b394e2dan',
+      //       variant_name: 'Telur Unta',
+      //       price: 120000,
+      //     },
+      //     {
+      //       variant_uuid: '19e2d513-57cc-4d43-95ee-485b394e2dan1',
+      //       variant_name: 'Tahu Bulat',
+      //       price: 99999,
+      //     },
+      //   ],
+      // },
     ],
   },
   {

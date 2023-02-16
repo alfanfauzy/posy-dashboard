@@ -26,6 +26,7 @@ import {
 import {
   onAddOrder,
   onChangeAddOn,
+  onChangeDeleteOrderId,
   onChangeNotes,
   onChangeProduct,
   onChangeQuantity,
@@ -133,7 +134,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const { quantity, product, notes, addOnVariant } = useAppSelector(
     (state) => state.order.orderForm,
   )
-  const { order } = useAppSelector((state) => state.order)
+  const { order, deleteOrderId } = useAppSelector((state) => state.order)
 
   const handleIncreamentQuantity = useCallback(
     () => dispatch(onChangeQuantity({ operator: 'plus', value: 1 })),
@@ -183,10 +184,6 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     onCloseAddVariantOrder()
   }
 
-  const handleDropOrder = (order_uuid: number) => {
-    dispatch(onDropOrder({ order_uuid }))
-  }
-
   const onSubmitOrder = () => {
     const payload = order.map((el) => {
       const tempAddOn: any[] = []
@@ -218,7 +215,21 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     console.log(payload, 'submit order')
   }
 
-  // const onDeleteNewOrder = (order_uuid: string) => {}
+  const onOpenDeleteNewOrder = (order_uuid: number) => {
+    dispatch(onChangeDeleteOrderId({ order_uuid }))
+    openDeleteNewOrder()
+  }
+
+  const onDeleteNewOrder = (order_uuid: number) => {
+    dispatch(onDropOrder({ order_uuid }))
+    dispatch(onChangeDeleteOrderId({ order_uuid: 0 }))
+    closeDeleteNewOrder()
+  }
+
+  const onCloseDeleteNewOrder = () => {
+    dispatch(onChangeDeleteOrderId({ order_uuid: 0 }))
+    closeDeleteNewOrder()
+  }
 
   return (
     <main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
@@ -498,149 +509,157 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
         </article>
       )}
 
-      <Modal open={isOpenCancelTrx} handleClose={closeCancelTrx}>
-        <section className="flex w-[380px] flex-col items-center justify-center p-4">
-          <div className="px-16">
-            <p className="text-center text-l-semibold line-clamp-2">
-              Are you sure you want to delete this transaction?
-            </p>
-          </div>
-          <div className="mt-8 flex w-full gap-3">
-            <Button
-              variant="secondary"
-              size="l"
-              fullWidth
-              onClick={closeCancelTrx}
-              className="whitespace-nowrap"
-            >
-              No, Maybe Later
-            </Button>
-            <Button
-              variant="primary"
-              size="l"
-              fullWidth
-              onClick={closeCancelTrx}
-            >
-              Delete Trx
-            </Button>
-          </div>
-        </section>
-      </Modal>
-
-      <Modal
-        open={isOpenCancelOrder}
-        handleClose={closeCancelOrder}
-        overflow={false}
-      >
-        <section className="flex w-[340px] flex-col items-center justify-center p-4">
-          <div className="">
-            <p className="text-center text-l-semibold line-clamp-2">
-              Are you sure you want to cancel Fried Kwetiau?
-            </p>
-            <div className="mt-6">
-              <Select
-                className="w-full"
-                size="l"
-                options={listCancelReason}
-                placeholder="Select the reason"
-              />
+      {isOpenCancelTrx && (
+        <Modal open={isOpenCancelTrx} handleClose={closeCancelTrx}>
+          <section className="flex w-[380px] flex-col items-center justify-center p-4">
+            <div className="px-16">
+              <p className="text-center text-l-semibold line-clamp-2">
+                Are you sure you want to delete this transaction?
+              </p>
             </div>
-          </div>
-          <div className="mt-8 flex w-full gap-3">
-            <Button
-              variant="secondary"
-              size="l"
-              fullWidth
-              onClick={closeCancelOrder}
-              className="whitespace-nowrap"
-            >
-              No
-            </Button>
-            <Button
-              variant="primary"
-              size="l"
-              fullWidth
-              onClick={closeCancelOrder}
-            >
-              Yes
-            </Button>
-          </div>
-        </section>
-      </Modal>
-
-      <Modal
-        open={isOpenCancelAllOrder}
-        handleClose={closeCancelAllOrder}
-        overflow={false}
-      >
-        <section className="flex w-[340px] flex-col items-center justify-center p-4">
-          <div>
-            <p className="text-center text-l-semibold line-clamp-2">
-              Are you sure you want to cancel all order ?
-            </p>
-            <div className="mt-6">
-              <Select
-                className="w-full"
+            <div className="mt-8 flex w-full gap-3">
+              <Button
+                variant="secondary"
                 size="l"
-                options={listCancelReason}
-                placeholder="Select the reason"
-              />
+                fullWidth
+                onClick={closeCancelTrx}
+                className="whitespace-nowrap"
+              >
+                No, Maybe Later
+              </Button>
+              <Button
+                variant="primary"
+                size="l"
+                fullWidth
+                onClick={closeCancelTrx}
+              >
+                Delete Trx
+              </Button>
             </div>
-          </div>
-          <div className="mt-8 flex w-full gap-3">
-            <Button
-              variant="secondary"
-              size="l"
-              fullWidth
-              onClick={closeCancelAllOrder}
-              className="whitespace-nowrap"
-            >
-              No
-            </Button>
-            <Button
-              variant="primary"
-              size="l"
-              fullWidth
-              onClick={closeCancelAllOrder}
-            >
-              Yes
-            </Button>
-          </div>
-        </section>
-      </Modal>
+          </section>
+        </Modal>
+      )}
 
-      <Modal
-        open={isOpenDeleteNewOrder}
-        handleClose={closeDeleteNewOrder}
-        overflow={false}
-      >
-        <section className="flex w-[380px] flex-col items-center justify-center p-4">
-          <div className="px-16">
-            <p className="text-center text-l-semibold line-clamp-2">
-              Are you sure you want to delete this order?
-            </p>
-          </div>
-          <div className="mt-8 flex w-full gap-3">
-            <Button
-              variant="secondary"
-              size="l"
-              fullWidth
-              onClick={closeDeleteNewOrder}
-              className="whitespace-nowrap"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="primary"
-              size="l"
-              fullWidth
-              onClick={closeDeleteNewOrder}
-            >
-              Yes, confirm
-            </Button>
-          </div>
-        </section>
-      </Modal>
+      {isOpenCancelOrder && (
+        <Modal
+          open={isOpenCancelOrder}
+          handleClose={closeCancelOrder}
+          overflow={false}
+        >
+          <section className="flex w-[340px] flex-col items-center justify-center p-4">
+            <div className="">
+              <p className="text-center text-l-semibold line-clamp-2">
+                Are you sure you want to cancel Fried Kwetiau?
+              </p>
+              <div className="mt-6">
+                <Select
+                  className="w-full"
+                  size="l"
+                  options={listCancelReason}
+                  placeholder="Select the reason"
+                />
+              </div>
+            </div>
+            <div className="mt-8 flex w-full gap-3">
+              <Button
+                variant="secondary"
+                size="l"
+                fullWidth
+                onClick={closeCancelOrder}
+                className="whitespace-nowrap"
+              >
+                No
+              </Button>
+              <Button
+                variant="primary"
+                size="l"
+                fullWidth
+                onClick={closeCancelOrder}
+              >
+                Yes
+              </Button>
+            </div>
+          </section>
+        </Modal>
+      )}
+
+      {isOpenCancelAllOrder && (
+        <Modal
+          open={isOpenCancelAllOrder}
+          handleClose={closeCancelAllOrder}
+          overflow={false}
+        >
+          <section className="flex w-[340px] flex-col items-center justify-center p-4">
+            <div>
+              <p className="text-center text-l-semibold line-clamp-2">
+                Are you sure you want to cancel all order ?
+              </p>
+              <div className="mt-6">
+                <Select
+                  className="w-full"
+                  size="l"
+                  options={listCancelReason}
+                  placeholder="Select the reason"
+                />
+              </div>
+            </div>
+            <div className="mt-8 flex w-full gap-3">
+              <Button
+                variant="secondary"
+                size="l"
+                fullWidth
+                onClick={closeCancelAllOrder}
+                className="whitespace-nowrap"
+              >
+                No
+              </Button>
+              <Button
+                variant="primary"
+                size="l"
+                fullWidth
+                onClick={closeCancelAllOrder}
+              >
+                Yes
+              </Button>
+            </div>
+          </section>
+        </Modal>
+      )}
+
+      {isOpenDeleteNewOrder && (
+        <Modal
+          open={isOpenDeleteNewOrder}
+          handleClose={closeDeleteNewOrder}
+          overflow={false}
+        >
+          <section className="flex w-[380px] flex-col items-center justify-center p-4">
+            <div className="px-16">
+              <p className="text-center text-l-semibold line-clamp-2">
+                Are you sure you want to delete this order?
+              </p>
+            </div>
+            <div className="mt-8 flex w-full gap-3">
+              <Button
+                variant="secondary"
+                size="l"
+                fullWidth
+                onClick={onCloseDeleteNewOrder}
+                className="whitespace-nowrap"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="l"
+                fullWidth
+                onClick={() => onDeleteNewOrder(deleteOrderId)}
+              >
+                Yes, confirm
+              </Button>
+            </div>
+          </section>
+        </Modal>
+      )}
 
       <BottomSheet
         open={isOpenCreateOrder}
@@ -804,8 +823,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                         <CgTrash
                           className="cursor-pointer text-neutral-70 hover:opacity-80"
                           size={20}
-                          // onClick={() => handleDropOrder(item.order_uuid)}
-                          onClick={openDeleteNewOrder}
+                          onClick={() => onOpenDeleteNewOrder(item.order_uuid)}
                         />
                       </div>
                     </div>
@@ -831,125 +849,131 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           </div>
         </section>
 
-        <Modal
-          open={isOpenAddVariantOrder}
-          handleClose={() => undefined}
-          style={{
-            maxWidth: '80%',
-            width: '80%',
-            padding: 0,
-            borderBottomRightRadius: 0,
-            borderBottomLeftRadius: 0,
-          }}
-        >
-          <section>
-            <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
-              <aside>
-                <p className="text-heading-s-semibold">
-                  {product.product_name}
-                </p>
-                {product.price_after_discount && (
-                  <div>
-                    <p className="text-xxl-medium">
-                      {toRupiah(product.price_after_discount)}
-                    </p>
-                  </div>
-                )}
-              </aside>
-
-              <aside className="mt-4 flex items-center gap-10">
-                <div className="flex-1 border-b border-neutral-40">
-                  <p className="text-xxl-semibold">Item Quantity</p>
-                </div>
-                <div className="flex items-center justify-center gap-6">
-                  <div
-                    role="presentation"
-                    onClick={
-                      quantity === 0
-                        ? () => undefined
-                        : handleDecreamentQuantity
-                    }
-                    className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
-                  >
-                    -
-                  </div>
-                  <div className="text-heading-s-semibold">{quantity}</div>
-                  <div
-                    role="presentation"
-                    onClick={handleIncreamentQuantity}
-                    className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
-                  >
-                    +
-                  </div>
-                </div>
-              </aside>
-
-              {product.addon &&
-                product.addon.map((addon) => (
-                  <aside key={addon.addon_uuid} className="mt-6">
-                    <div className="flex items-center gap-4">
-                      <p className="text-xxl-semibold">{addon.addon_name}</p>
-                      <div className="text-m-regular">Required | select 1</div>
+        {isOpenAddVariantOrder && (
+          <Modal
+            open={isOpenAddVariantOrder}
+            handleClose={() => undefined}
+            style={{
+              maxWidth: '80%',
+              width: '80%',
+              padding: 0,
+            }}
+          >
+            <section>
+              <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
+                <aside>
+                  <p className="text-heading-s-semibold">
+                    {product.product_name}
+                  </p>
+                  {product.price_after_discount && (
+                    <div>
+                      <p className="text-xxl-medium">
+                        {toRupiah(product.price_after_discount)}
+                      </p>
                     </div>
+                  )}
+                </aside>
 
-                    <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
-                      {addon.variant.map((variant) => (
-                        <div
-                          key={variant.variant_uuid}
-                          className="flex flex-col items-center"
-                        >
-                          <div
-                            role="presentation"
-                            onClick={() =>
-                              handleChangeAddon(
-                                addon.is_multiple ? 'checkbox' : 'radio',
-                                variant,
-                                {
-                                  addOnName: addon.addon_name,
-                                  addOnUuid: addon.addon_uuid,
-                                },
-                              )
-                            }
-                            className={`flex cursor-pointer items-center justify-center rounded-3xl border  py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-[#F2F1F9] hover:bg-opacity-80 ${generateBgColor(
-                              variant.variant_uuid,
-                            )}`}
-                          >
-                            {variant.variant_name}
-                          </div>
-                          <div className="mt-1 text-m-regular">
-                            + {toRupiah(variant.price)}
-                          </div>
+                <aside className="mt-4 flex items-center gap-10">
+                  <div className="flex-1 border-b border-neutral-40">
+                    <p className="text-xxl-semibold">Item Quantity</p>
+                  </div>
+                  <div className="flex items-center justify-center gap-6">
+                    <div
+                      role="presentation"
+                      onClick={
+                        quantity === 0
+                          ? () => undefined
+                          : handleDecreamentQuantity
+                      }
+                      className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
+                    >
+                      -
+                    </div>
+                    <div className="text-heading-s-semibold">{quantity}</div>
+                    <div
+                      role="presentation"
+                      onClick={handleIncreamentQuantity}
+                      className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
+                    >
+                      +
+                    </div>
+                  </div>
+                </aside>
+
+                {product.addon &&
+                  product.addon.map((addon) => (
+                    <aside key={addon.addon_uuid} className="mt-6">
+                      <div className="flex items-center gap-4">
+                        <p className="text-xxl-semibold">{addon.addon_name}</p>
+                        <div className="text-m-regular">
+                          Required | select 1
                         </div>
-                      ))}
-                    </div>
-                  </aside>
-                ))}
+                      </div>
 
-              <aside className="mt-6">
-                <p className="text-xxl-semibold">Notes</p>
-                <Textarea
-                  className="mt-2 h-32"
-                  placeholder="Example: no onion, please"
-                  value={notes}
-                  onChange={(e) => dispatch(onChangeNotes(e.target.value))}
-                />
-              </aside>
-            </section>
+                      <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
+                        {addon.variant.map((variant) => (
+                          <div
+                            key={variant.variant_uuid}
+                            className="flex flex-col items-center"
+                          >
+                            <div
+                              role="presentation"
+                              onClick={() =>
+                                handleChangeAddon(
+                                  addon.is_multiple ? 'checkbox' : 'radio',
+                                  variant,
+                                  {
+                                    addOnName: addon.addon_name,
+                                    addOnUuid: addon.addon_uuid,
+                                  },
+                                )
+                              }
+                              className={`flex cursor-pointer items-center justify-center rounded-3xl border  py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-[#F2F1F9] hover:bg-opacity-80 ${generateBgColor(
+                                variant.variant_uuid,
+                              )}`}
+                            >
+                              {variant.variant_name}
+                            </div>
+                            <div className="mt-1 text-m-regular">
+                              + {toRupiah(variant.price)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </aside>
+                  ))}
 
-            <section className="fixed bottom-8 flex w-4/5 items-center justify-between gap-6 rounded-b-2xl bg-neutral-10 p-6 px-12 shadow-basic md:px-20 lg:px-28">
-              <Button
-                variant="secondary"
-                onClick={onCloseAddVariantOrder}
-                fullWidth
+                <aside className="mt-6">
+                  <p className="text-xxl-semibold">Notes</p>
+                  <Textarea
+                    className="mt-2 h-32"
+                    placeholder="Example: no onion, please"
+                    value={notes}
+                    onChange={(e) => dispatch(onChangeNotes(e.target.value))}
+                  />
+                </aside>
+              </section>
+
+              <section
+                className={`flex items-center justify-between gap-6 rounded-b-2xl bg-neutral-10 p-6 px-12 shadow-modal md:px-20 lg:px-28 ${
+                  product?.addon ? 'fixed bottom-8 w-4/5' : 'w-full'
+                }`}
               >
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleAddOrder} fullWidth>
-                Add to Basket
-              </Button>
+                <Button
+                  variant="secondary"
+                  onClick={onCloseAddVariantOrder}
+                  fullWidth
+                >
+                  Cancel
+                </Button>
+                <Button variant="primary" onClick={handleAddOrder} fullWidth>
+                  Add to Basket
+                </Button>
+              </section>
             </section>
-          </section>
-        </Modal>
+          </Modal>
+        )}
       </BottomSheet>
     </main>
   )

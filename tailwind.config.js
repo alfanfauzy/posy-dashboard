@@ -7,4 +7,11 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx}',
   ],
   presets: [preset],
+  theme: {
+    extend: {
+      boxShadow: {
+        modal: ' 0px -6px 24px rgba(0, 0, 0, 0.15);',
+      },
+    },
+  },
 }
