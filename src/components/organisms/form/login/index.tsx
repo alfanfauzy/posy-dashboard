@@ -71,12 +71,12 @@ const OrganismsFormLogin = () => {
             error={!!errors?.password}
             helperText={errors?.password?.message}
           />
-          <p className="cursor-pointer self-end text-m-semibold text-red-caution hover:text-opacity-75">
+          <p className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75">
             Forget Password
           </p>
         </div>
         <Button
-          variant="red-accent"
+          variant="primary"
           size="l"
           fullWidth
           className="mt-4"
