@@ -1,6 +1,6 @@
-import MetaHeader from '@/molecules/meta-header'
-import ContainerTransaction from 'containers/transaction'
 import { SEO } from '@/constants/seo'
+import ContainerTransaction from '@/containers/transaction'
+import MetaHeader from '@/molecules/meta-header'
 import type { NextPageWithLayout } from '@/types/index'
 
 const Page: NextPageWithLayout = () => (
