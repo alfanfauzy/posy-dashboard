@@ -32,3 +32,20 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.ant-table table {
+  color: #0a0a0a;
+  font-family: 'Inter', Sans-serif;
+}
+
+thead > tr > th {
+  background-color: #ededed !important;
+}
+
+.ant-pagination .ant-pagination-item-active {
+  border-color: #0a0a0a !important;
+}
+
+.ant-pagination-item a {
+  color: #0a0a0a !important;
+}

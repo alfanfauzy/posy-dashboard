@@ -1,5 +1,5 @@
 import React from 'react'
-import VerifyAccountForm from '@/organisms/form/auth/verify-account'
+import VerifyAccountForm from '@/organisms/modal/auth/verify-account'
 
 const PagesVerifyAccount = () => (
   <main className="h-full">

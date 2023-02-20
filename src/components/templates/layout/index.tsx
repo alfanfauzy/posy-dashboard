@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ProSidebarProvider } from 'react-pro-sidebar'
+import { Loading } from 'posy-fnb-core'
 import { useAppSelector } from 'store/hooks'
 import Sidebar from '@/templates/sidebar'
-import Loading from '@/atoms/loading'
 import Transition from '@/atoms/animations/transition'
 
 interface OrganismsLayoutProps {
@@ -33,7 +33,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
   if (loading) {
     return (
       <main className="flex h-screen w-full items-center justify-center">
-        <Loading size={96} />
+        <Loading backgroundColor="#2F265B" color="#2F265B" size={100} />
       </main>
     )
   }
