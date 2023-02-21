@@ -30,7 +30,6 @@ export interface OrderState {
     notes?: string
   }
   order: OrderItem[]
-  deleteOrderId: number
 }
 
 const initialState: OrderState = {
@@ -40,7 +39,6 @@ const initialState: OrderState = {
     addOnVariant: [],
   },
   order: [],
-  deleteOrderId: 0,
 }
 
 export const OrderSlice = createSlice({
@@ -130,12 +128,6 @@ export const OrderSlice = createSlice({
       )
       state.order = filteredOrder
     },
-    onChangeDeleteOrderId: (
-      state,
-      action: PayloadAction<{ order_uuid: number }>,
-    ) => {
-      state.deleteOrderId = action.payload.order_uuid
-    },
   },
 })
 
@@ -148,7 +140,6 @@ export const {
   onChangeAddOn,
   onAddOrder,
   onDropOrder,
-  onChangeDeleteOrderId,
 } = OrderSlice.actions
 
 export default OrderSlice.reducer

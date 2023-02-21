@@ -4,6 +4,7 @@ import PersistStorage from 'redux-persist/lib/storage'
 import auth from './slices/auth'
 import transaction from './slices/transaction'
 import order from './slices/order'
+import modal from './slices/modal'
 
 const persistConfig = {
   key: 'root',
@@ -18,6 +19,7 @@ const persistedReducer = persistReducer(
     auth,
     transaction,
     order,
+    modal,
   }),
 )
 

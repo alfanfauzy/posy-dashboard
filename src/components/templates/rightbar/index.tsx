@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import dynamic from 'next/dynamic'
 import React, { useCallback, useRef, useState } from 'react'
 import { Button, Checkbox, Input, Select, Tabs, Textarea } from 'posy-fnb-core'
@@ -26,7 +25,6 @@ import {
 import {
   onAddOrder,
   onChangeAddOn,
-  onChangeDeleteOrderId,
   onChangeNotes,
   onChangeProduct,
   onChangeQuantity,
@@ -34,6 +32,7 @@ import {
   onDropOrder,
 } from 'store/slices/order'
 import type { Product } from '@/types/product'
+import { closeModal, openModal } from 'store/slices/modal'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,
@@ -58,25 +57,6 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const [tabValueorder, setTabValueOrder] = useState(0)
   const [tabValueMenu, setTabValueMenu] = useState(0)
 
-  const [isOpenCancelTrx, { open: openCancelTrx, close: closeCancelTrx }] =
-    useDisclosure({
-      initialState: false,
-    })
-
-  const [
-    isOpenCancelOrder,
-    { open: openCancelOrder, close: closeCancelOrder },
-  ] = useDisclosure({
-    initialState: false,
-  })
-
-  const [
-    isOpenCancelAllOrder,
-    { open: openCancelAllOrder, close: closeCancelAllOrder },
-  ] = useDisclosure({
-    initialState: false,
-  })
-
   const [
     showDeleteOrder,
     { toggle: toggleShowDeleteOrder, close: closeDeleteOrder },
@@ -94,13 +74,6 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     { open: openAddVariantOrder, close: closeAddVariantOrder },
   ] = useDisclosure({ initialState: false })
 
-  const [
-    isOpenDeleteNewOrder,
-    { open: openDeleteNewOrder, close: closeDeleteNewOrder },
-  ] = useDisclosure({
-    initialState: false,
-  })
-
   const handlePrintQr = useReactToPrint({
     content: () => qrRef.current,
   })
@@ -114,6 +87,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     // setDataTransaction(newData)
     // dispatch(onChangeSearch({ search: e.target.value }))
   }
+
   const onClear = () => {
     // dispatch(onClearSearch())
     // setDataTransaction(data)
@@ -134,7 +108,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const { quantity, product, notes, addOnVariant } = useAppSelector(
     (state) => state.order.orderForm,
   )
-  const { order, deleteOrderId } = useAppSelector((state) => state.order)
+  const { order } = useAppSelector((state) => state.order)
 
   const handleIncreamentQuantity = useCallback(
     () => dispatch(onChangeQuantity({ operator: 'plus', value: 1 })),
@@ -215,20 +189,163 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     console.log(payload, 'submit order')
   }
 
-  const onOpenDeleteNewOrder = (order_uuid: number) => {
-    dispatch(onChangeDeleteOrderId({ order_uuid }))
-    openDeleteNewOrder()
+  const openCancelTransaction = () => {
+    dispatch(
+      openModal({
+        component: (
+          <section className="flex w-[380px] flex-col items-center justify-center p-4">
+            <div className="px-16">
+              <p className="text-center text-l-semibold line-clamp-2">
+                Are you sure you want to delete this transaction?
+              </p>
+            </div>
+            <div className="mt-8 flex w-full gap-3">
+              <Button
+                variant="secondary"
+                size="l"
+                fullWidth
+                onClick={() => dispatch(closeModal({}))}
+                className="whitespace-nowrap"
+              >
+                No, Maybe Later
+              </Button>
+              <Button
+                variant="primary"
+                size="l"
+                fullWidth
+                onClick={() => dispatch(closeModal({}))}
+              >
+                Delete Trx
+              </Button>
+            </div>
+          </section>
+        ),
+      }),
+    )
   }
 
-  const onDeleteNewOrder = (order_uuid: number) => {
-    dispatch(onDropOrder({ order_uuid }))
-    dispatch(onChangeDeleteOrderId({ order_uuid: 0 }))
-    closeDeleteNewOrder()
+  const openCancelAllOrder = () => {
+    dispatch(
+      openModal({
+        component: (
+          <section className="flex w-[340px] flex-col items-center justify-center p-4">
+            <div>
+              <p className="text-center text-l-semibold line-clamp-2">
+                Are you sure you want to cancel all order ?
+              </p>
+              <div className="mt-6">
+                <Select
+                  className="w-full"
+                  size="l"
+                  options={listCancelReason}
+                  placeholder="Select the reason"
+                />
+              </div>
+            </div>
+            <div className="mt-8 flex w-full gap-3">
+              <Button
+                variant="secondary"
+                size="l"
+                fullWidth
+                onClick={() => dispatch(closeModal({}))}
+                className="whitespace-nowrap"
+              >
+                No
+              </Button>
+              <Button
+                variant="primary"
+                size="l"
+                fullWidth
+                onClick={() => dispatch(closeModal({}))}
+              >
+                Yes
+              </Button>
+            </div>
+          </section>
+        ),
+      }),
+    )
   }
 
-  const onCloseDeleteNewOrder = () => {
-    dispatch(onChangeDeleteOrderId({ order_uuid: 0 }))
-    closeDeleteNewOrder()
+  const openCancelOrder = () => {
+    dispatch(
+      openModal({
+        component: (
+          <section className="flex w-[340px] flex-col items-center justify-center p-4">
+            <div className="">
+              <p className="text-center text-l-semibold line-clamp-2">
+                Are you sure you want to cancel Fried Kwetiau?
+              </p>
+              <div className="mt-6">
+                <Select
+                  className="w-full"
+                  size="l"
+                  options={listCancelReason}
+                  placeholder="Select the reason"
+                />
+              </div>
+            </div>
+            <div className="mt-8 flex w-full gap-3">
+              <Button
+                variant="secondary"
+                size="l"
+                fullWidth
+                onClick={() => dispatch(closeModal({}))}
+                className="whitespace-nowrap"
+              >
+                No
+              </Button>
+              <Button
+                variant="primary"
+                size="l"
+                fullWidth
+                onClick={() => dispatch(closeModal({}))}
+              >
+                Yes
+              </Button>
+            </div>
+          </section>
+        ),
+      }),
+    )
+  }
+
+  const openDeleteNewOrder = (order_uuid: number) => {
+    dispatch(
+      openModal({
+        component: (
+          <section className="flex w-[380px] flex-col items-center justify-center p-4">
+            <div className="px-16">
+              <p className="text-center text-l-semibold line-clamp-2">
+                Are you sure you want to delete this order?
+              </p>
+            </div>
+            <div className="mt-8 flex w-full gap-3">
+              <Button
+                variant="secondary"
+                size="l"
+                fullWidth
+                onClick={() => dispatch(closeModal({}))}
+                className="whitespace-nowrap"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="l"
+                fullWidth
+                onClick={async () => {
+                  dispatch(onDropOrder({ order_uuid }))
+                  await dispatch(closeModal({}))
+                }}
+              >
+                Yes, confirm
+              </Button>
+            </div>
+          </section>
+        ),
+      }),
+    )
   }
 
   return (
@@ -252,7 +369,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 <CgTrash
                   className="cursor-pointer text-neutral-70"
                   size={20}
-                  onClick={openCancelTrx}
+                  onClick={openCancelTransaction}
                 />
               </div>
 
@@ -509,158 +626,6 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
         </article>
       )}
 
-      {isOpenCancelTrx && (
-        <Modal open={isOpenCancelTrx} handleClose={closeCancelTrx}>
-          <section className="flex w-[380px] flex-col items-center justify-center p-4">
-            <div className="px-16">
-              <p className="text-center text-l-semibold line-clamp-2">
-                Are you sure you want to delete this transaction?
-              </p>
-            </div>
-            <div className="mt-8 flex w-full gap-3">
-              <Button
-                variant="secondary"
-                size="l"
-                fullWidth
-                onClick={closeCancelTrx}
-                className="whitespace-nowrap"
-              >
-                No, Maybe Later
-              </Button>
-              <Button
-                variant="primary"
-                size="l"
-                fullWidth
-                onClick={closeCancelTrx}
-              >
-                Delete Trx
-              </Button>
-            </div>
-          </section>
-        </Modal>
-      )}
-
-      {isOpenCancelOrder && (
-        <Modal
-          open={isOpenCancelOrder}
-          handleClose={closeCancelOrder}
-          overflow={false}
-        >
-          <section className="flex w-[340px] flex-col items-center justify-center p-4">
-            <div className="">
-              <p className="text-center text-l-semibold line-clamp-2">
-                Are you sure you want to cancel Fried Kwetiau?
-              </p>
-              <div className="mt-6">
-                <Select
-                  className="w-full"
-                  size="l"
-                  options={listCancelReason}
-                  placeholder="Select the reason"
-                />
-              </div>
-            </div>
-            <div className="mt-8 flex w-full gap-3">
-              <Button
-                variant="secondary"
-                size="l"
-                fullWidth
-                onClick={closeCancelOrder}
-                className="whitespace-nowrap"
-              >
-                No
-              </Button>
-              <Button
-                variant="primary"
-                size="l"
-                fullWidth
-                onClick={closeCancelOrder}
-              >
-                Yes
-              </Button>
-            </div>
-          </section>
-        </Modal>
-      )}
-
-      {isOpenCancelAllOrder && (
-        <Modal
-          open={isOpenCancelAllOrder}
-          handleClose={closeCancelAllOrder}
-          overflow={false}
-        >
-          <section className="flex w-[340px] flex-col items-center justify-center p-4">
-            <div>
-              <p className="text-center text-l-semibold line-clamp-2">
-                Are you sure you want to cancel all order ?
-              </p>
-              <div className="mt-6">
-                <Select
-                  className="w-full"
-                  size="l"
-                  options={listCancelReason}
-                  placeholder="Select the reason"
-                />
-              </div>
-            </div>
-            <div className="mt-8 flex w-full gap-3">
-              <Button
-                variant="secondary"
-                size="l"
-                fullWidth
-                onClick={closeCancelAllOrder}
-                className="whitespace-nowrap"
-              >
-                No
-              </Button>
-              <Button
-                variant="primary"
-                size="l"
-                fullWidth
-                onClick={closeCancelAllOrder}
-              >
-                Yes
-              </Button>
-            </div>
-          </section>
-        </Modal>
-      )}
-
-      {isOpenDeleteNewOrder && (
-        <Modal
-          open={isOpenDeleteNewOrder}
-          handleClose={closeDeleteNewOrder}
-          overflow={false}
-        >
-          <section className="flex w-[380px] flex-col items-center justify-center p-4">
-            <div className="px-16">
-              <p className="text-center text-l-semibold line-clamp-2">
-                Are you sure you want to delete this order?
-              </p>
-            </div>
-            <div className="mt-8 flex w-full gap-3">
-              <Button
-                variant="secondary"
-                size="l"
-                fullWidth
-                onClick={onCloseDeleteNewOrder}
-                className="whitespace-nowrap"
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                size="l"
-                fullWidth
-                onClick={() => onDeleteNewOrder(deleteOrderId)}
-              >
-                Yes, confirm
-              </Button>
-            </div>
-          </section>
-        </Modal>
-      )}
-
       <BottomSheet
         open={isOpenCreateOrder}
         onClose={closeCreateOrder}
@@ -823,7 +788,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                         <CgTrash
                           className="cursor-pointer text-neutral-70 hover:opacity-80"
                           size={20}
-                          onClick={() => onOpenDeleteNewOrder(item.order_uuid)}
+                          onClick={() => openDeleteNewOrder(item.order_uuid)}
                         />
                       </div>
                     </div>
@@ -858,6 +823,20 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
               width: '80%',
               padding: 0,
             }}
+            confirmButton={
+              <div className="flex w-full max-w-[80%] items-center justify-center gap-4">
+                <Button
+                  variant="secondary"
+                  onClick={onCloseAddVariantOrder}
+                  fullWidth
+                >
+                  Cancel
+                </Button>
+                <Button variant="primary" onClick={handleAddOrder} fullWidth>
+                  Add to Basket
+                </Button>
+              </div>
+            }
           >
             <section>
               <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
@@ -953,23 +932,6 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                     onChange={(e) => dispatch(onChangeNotes(e.target.value))}
                   />
                 </aside>
-              </section>
-
-              <section
-                className={`flex items-center justify-between gap-6 rounded-b-2xl bg-neutral-10 p-6 px-12 shadow-modal md:px-20 lg:px-28 ${
-                  product?.addon ? 'fixed bottom-8 w-4/5' : 'w-full'
-                }`}
-              >
-                <Button
-                  variant="secondary"
-                  onClick={onCloseAddVariantOrder}
-                  fullWidth
-                >
-                  Cancel
-                </Button>
-                <Button variant="primary" onClick={handleAddOrder} fullWidth>
-                  Add to Basket
-                </Button>
               </section>
             </section>
           </Modal>

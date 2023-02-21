@@ -10,6 +10,7 @@ import type { NextPageWithLayout } from '@/types/index'
 import 'posy-fnb-core/dist/index.css'
 import 'posy-fnb-core/dist/style.css'
 import '../styles/globals.css'
+import ModalWrapper from '@/atoms/modal'
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
@@ -31,6 +32,7 @@ const App = ({ Component, pageProps, ...rest }: AppPropsWithLayout) => {
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <PersistGate persistor={persistor}>
+          <ModalWrapper />
           {getLayout(<Component {...pageProps} />)}
         </PersistGate>
       </Provider>
