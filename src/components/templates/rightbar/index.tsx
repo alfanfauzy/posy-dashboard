@@ -838,101 +838,97 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
               </div>
             }
           >
-            <section>
-              <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
-                <aside>
-                  <p className="text-heading-s-semibold">
-                    {product.product_name}
-                  </p>
-                  {product.price_after_discount && (
-                    <div>
-                      <p className="text-xxl-medium">
-                        {toRupiah(product.price_after_discount)}
-                      </p>
-                    </div>
-                  )}
-                </aside>
-
-                <aside className="mt-4 flex items-center gap-10">
-                  <div className="flex-1 border-b border-neutral-40">
-                    <p className="text-xxl-semibold">Item Quantity</p>
+            <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
+              <aside>
+                <p className="text-heading-s-semibold">
+                  {product.product_name}
+                </p>
+                {product.price_after_discount && (
+                  <div>
+                    <p className="text-xxl-medium">
+                      {toRupiah(product.price_after_discount)}
+                    </p>
                   </div>
-                  <div className="flex items-center justify-center gap-6">
-                    <div
-                      role="presentation"
-                      onClick={
-                        quantity === 0
-                          ? () => undefined
-                          : handleDecreamentQuantity
-                      }
-                      className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
-                    >
-                      -
-                    </div>
-                    <div className="text-heading-s-semibold">{quantity}</div>
-                    <div
-                      role="presentation"
-                      onClick={handleIncreamentQuantity}
-                      className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
-                    >
-                      +
-                    </div>
+                )}
+              </aside>
+
+              <aside className="mt-4 flex items-center gap-10">
+                <div className="flex-1 border-b border-neutral-40">
+                  <p className="text-xxl-semibold">Item Quantity</p>
+                </div>
+                <div className="flex items-center justify-center gap-6">
+                  <div
+                    role="presentation"
+                    onClick={
+                      quantity === 0
+                        ? () => undefined
+                        : handleDecreamentQuantity
+                    }
+                    className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
+                  >
+                    -
                   </div>
-                </aside>
+                  <div className="text-heading-s-semibold">{quantity}</div>
+                  <div
+                    role="presentation"
+                    onClick={handleIncreamentQuantity}
+                    className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
+                  >
+                    +
+                  </div>
+                </div>
+              </aside>
 
-                {product.addon &&
-                  product.addon.map((addon) => (
-                    <aside key={addon.addon_uuid} className="mt-6">
-                      <div className="flex items-center gap-4">
-                        <p className="text-xxl-semibold">{addon.addon_name}</p>
-                        <div className="text-m-regular">
-                          Required | select 1
-                        </div>
-                      </div>
+              {product.addon &&
+                product.addon.map((addon) => (
+                  <aside key={addon.addon_uuid} className="mt-6">
+                    <div className="flex items-center gap-4">
+                      <p className="text-xxl-semibold">{addon.addon_name}</p>
+                      <div className="text-m-regular">Required | select 1</div>
+                    </div>
 
-                      <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
-                        {addon.variant.map((variant) => (
+                    <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
+                      {addon.variant.map((variant) => (
+                        <div
+                          key={variant.variant_uuid}
+                          className="flex flex-col items-center"
+                        >
                           <div
-                            key={variant.variant_uuid}
-                            className="flex flex-col items-center"
+                            role="presentation"
+                            onClick={() =>
+                              handleChangeAddon(
+                                addon.is_multiple ? 'checkbox' : 'radio',
+                                variant,
+                                {
+                                  addOnName: addon.addon_name,
+                                  addOnUuid: addon.addon_uuid,
+                                },
+                              )
+                            }
+                            className={`flex cursor-pointer items-center justify-center rounded-3xl border  py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-[#F2F1F9] hover:bg-opacity-80 ${generateBgColor(
+                              variant.variant_uuid,
+                            )}`}
                           >
-                            <div
-                              role="presentation"
-                              onClick={() =>
-                                handleChangeAddon(
-                                  addon.is_multiple ? 'checkbox' : 'radio',
-                                  variant,
-                                  {
-                                    addOnName: addon.addon_name,
-                                    addOnUuid: addon.addon_uuid,
-                                  },
-                                )
-                              }
-                              className={`flex cursor-pointer items-center justify-center rounded-3xl border  py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-[#F2F1F9] hover:bg-opacity-80 ${generateBgColor(
-                                variant.variant_uuid,
-                              )}`}
-                            >
-                              {variant.variant_name}
-                            </div>
-                            <div className="mt-1 text-m-regular">
-                              + {toRupiah(variant.price)}
-                            </div>
+                            {variant.variant_name}
                           </div>
-                        ))}
-                      </div>
-                    </aside>
-                  ))}
+                          <div className="mt-1 text-m-regular">
+                            + {toRupiah(variant.price)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </aside>
+                ))}
 
-                <aside className="mt-6">
-                  <p className="text-xxl-semibold">Notes</p>
-                  <Textarea
-                    className="mt-2 h-32"
-                    placeholder="Example: no onion, please"
-                    value={notes}
-                    onChange={(e) => dispatch(onChangeNotes(e.target.value))}
-                  />
-                </aside>
-              </section>
+              <aside className="mt-6">
+                <p className="text-xxl-semibold">Notes</p>
+                <Textarea
+                  className="mt-2 h-32"
+                  placeholder="Example: no onion, please"
+                  value={notes}
+                  onChange={(e) => dispatch(onChangeNotes(e.target.value))}
+                />
+              </aside>
             </section>
           </Modal>
         )}

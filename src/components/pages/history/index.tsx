@@ -1,10 +1,12 @@
 import React from 'react'
 import moment from 'moment'
 import { Table } from 'antd'
-import Link from 'next/link'
 import type { ColumnsType } from 'antd/es/table'
 import InputSearch from '@/atoms/input/search'
 import { type Transaction, TransactionStatus } from '@/types/transaction'
+import { useAppDispatch } from 'store/hooks'
+import { openModal } from 'store/slices/modal'
+import { toRupiah } from 'utils/common'
 
 const data: Transaction[] = [
   {
@@ -389,7 +391,13 @@ const generateStatus = (status: TransactionStatus) => {
   return <p className={`${statusColor[status]}`}>{statusText[status]}</p>
 }
 
-const columns: ColumnsType<Transaction> = [
+interface ColumnsProps {
+  handleOpenDetails: (record: Transaction) => void
+}
+
+const columns = ({
+  handleOpenDetails,
+}: ColumnsProps): ColumnsType<Transaction> => [
   {
     title: 'Trx ID',
     dataIndex: 'transaction_code',
@@ -454,18 +462,170 @@ const columns: ColumnsType<Transaction> = [
     title: 'Action',
     key: 'action',
     render: (_, record) => (
-      <Link
-        href={`history/${record.transaction_code}`}
+      <div
+        role="presentation"
+        onClick={() => handleOpenDetails(record)}
+        // href={`history/${record.transaction_code}`}
         className="cursor-pointer whitespace-nowrap text-s-regular transition-all duration-300 ease-in-out hover:text-neutral-100 hover:text-opacity-50"
       >
         View Details
-      </Link>
+      </div>
     ),
   },
 ]
 
 const PagesTransaction = () => {
-  const a = ''
+  const dispatch = useAppDispatch()
+
+  const handleOpenDetails = (record: Transaction) => {
+    dispatch(
+      openModal({
+        overflow: true,
+        className: 'w-3/4 overflow-auto',
+        component: (
+          <section className="px-4 pt-6 pb-4 text-primary-main">
+            <aside className="flex items-center justify-between gap-4 border-b border-neutral-40 pb-4">
+              <div className="flex-1">
+                <p className="text-xxl-bold">{record.transaction_code}</p>
+              </div>
+              <div className="flex gap-5 text-xl-regular">
+                <div className="border-r border-neutral-40 pr-5">
+                  <p>{record.customer_name}</p>
+                </div>
+                <div className="border-r border-neutral-40 pr-5">
+                  <p>{`Table ${record.table_number}`}</p>
+                </div>
+                <div>
+                  <p>{`Table ${record.total_pax}`}</p>
+                </div>
+              </div>
+            </aside>
+            <aside className="grid grid-cols-4 border-b border-neutral-40 py-4">
+              <div>
+                <p>Date</p>
+                <p className="text-l-bold">
+                  {moment(record.created_at.seconds).format('ll, hh:mm')}
+                </p>
+              </div>
+              <div>
+                <p>Staff</p>
+                <p className="text-l-bold">{record.staff}</p>
+              </div>
+              <div>
+                <p>Payment</p>
+                <p className="text-l-bold">OVO</p>
+              </div>
+              <div className="flex flex-col items-end">
+                <p>Status</p>
+                <p className="text-l-bold">{generateStatus(record.status)}</p>
+              </div>
+            </aside>
+            <aside className="border-b border-neutral-40 py-4">
+              <div>
+                <div className="flex items-start justify-between">
+                  <div className="flex w-3/4 items-start break-words lg:w-1/2">
+                    <p className="mr-5 text-xl-semibold">20x</p>
+                    <p className="flex-1 text-l-regular">Fried Capcay</p>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <p className="text-l-regular">{toRupiah(200000)}</p>
+                  </div>
+                </div>
+                <div id="addon" className="mt-2 ml-12 flex flex-col gap-1">
+                  <div className="flex items-start justify-between">
+                    <p className="w-3/4 text-l-regular line-clamp-2">
+                      Spicy Level 0
+                    </p>
+                    <p className="text-l-regular text-neutral-60">
+                      {toRupiah(200000)}
+                    </p>
+                  </div>
+                  {/* {item.addOnVariant.map((addon) => (
+                  <div
+                    key={addon.variant_uuid}
+                    className="flex items-start justify-between"
+                  >
+                    <p className="w-3/4 text-s-regular text-neutral-90 line-clamp-1">{`${addon.addOnName} ${addon.variant_name}`}</p>
+                  </div>
+                ))} */}
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex w-1/2 items-start break-words">
+                    <p className="mr-5 text-xl-semibold">20x</p>
+                    <p className="flex-1 text-l-regular line-clamp-3">
+                      Special Fried Capcay by Chef Ahmed with Extra Spicy
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <p className="text-l-regular">{toRupiah(200000)}</p>
+                  </div>
+                </div>
+                <div id="addon" className="mt-2 ml-12 flex flex-col gap-1">
+                  <div className="flex items-start justify-between">
+                    <p className="w-3/4 text-l-regular line-clamp-2">
+                      Extra Capcay
+                    </p>
+                    <p className="text-l-regular text-neutral-60">
+                      {toRupiah(200000)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex w-1/2 items-start break-words">
+                    <p className="mr-5 text-xl-semibold">20x</p>
+                    <p className="flex-1 text-l-regular line-clamp-3">
+                      Special Fried Capcay by Chef Ahmed with Extra Spicy
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <p className="text-l-regular">{toRupiah(200000)}</p>
+                  </div>
+                </div>
+                <div id="addon" className="mt-2 ml-12 flex flex-col gap-1">
+                  <div className="flex items-start justify-between">
+                    <p className="w-3/4 text-l-regular line-clamp-2">
+                      Extra Capcay
+                    </p>
+                    <p className="text-l-regular text-neutral-60">
+                      {toRupiah(200000)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            <aside className="flex flex-col gap-2 pt-4">
+              <div className="flex items-center justify-between text-m-medium">
+                <p>Subtotal</p>
+                <p>{toRupiah(210000)}</p>
+              </div>
+              <div className="flex items-center justify-between text-m-medium">
+                <p>Discount</p>
+                <p>{toRupiah(0)}</p>
+              </div>
+              <div className="flex items-center justify-between text-m-medium">
+                <p>Service</p>
+                <p>{toRupiah(0)}</p>
+              </div>
+              <div className="flex items-center justify-between text-m-medium">
+                <p>Tax 10%</p>
+                <p>{toRupiah(0)}</p>
+              </div>
+              <div className="flex items-center justify-between text-l-semibold">
+                <p>Total</p>
+                <p>{toRupiah(2000000)}</p>
+              </div>
+            </aside>
+          </section>
+        ),
+      }),
+    )
+  }
+
   return (
     <main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
       <article>
@@ -490,7 +650,7 @@ const PagesTransaction = () => {
       <article className="mt-6">
         <div className="w-full overflow-auto">
           <Table
-            columns={columns}
+            columns={columns({ handleOpenDetails })}
             dataSource={data}
             scroll={{ y: '54vh', x: 1100 }}
             // onChange={onChange}
