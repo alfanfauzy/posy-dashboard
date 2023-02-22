@@ -34,11 +34,11 @@ const TemplatesSidebar = () => {
     >
       <aside
         className={`flex w-full items-center pt-6 transition-all duration-300 ease-in-out sm:justify-start ${
-          collapsed ? 'px-6' : 'px-9'
+          collapsed ? 'px-6' : 'pl-12'
         }`}
       >
         {!collapsed ? (
-          <Logo onClick={onCollapse} />
+          <Logo onClick={onCollapse} titleProps="text-xl" />
         ) : (
           <BsList
             size={28}

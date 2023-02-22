@@ -3,16 +3,19 @@ import Logo from 'src/assets/icons/logo'
 
 interface AtomsLogoProps {
   onClick?: () => void
+  titleProps?: string
 }
 
-const AtomsLogo = ({ onClick }: AtomsLogoProps) => (
+const AtomsLogo = ({ onClick, titleProps }: AtomsLogoProps) => (
   <div
     role="presentation"
     onClick={onClick}
     className="flex cursor-default items-center justify-center gap-[10px]"
   >
     <Logo />
-    <p className="whitespace-nowrap text-2xl font-bold text-[#2F265B]">
+    <p
+      className={`${titleProps} whitespace-nowrap text-2xl font-bold text-[#2F265B]`}
+    >
       Posy Resto
     </p>
   </div>

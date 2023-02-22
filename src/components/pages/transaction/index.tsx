@@ -357,7 +357,7 @@ const PagesTransaction = () => {
   const { showSidebar } = useAppSelector((state) => state.auth)
 
   return (
-    <main className="flex h-full gap-4">
+    <main className="flex h-full gap-4 overflow-hidden">
       <ContentTransaction componentRef={componentRef} data={data} />
       {width > 1200 && <TemplatesRightBar qrRef={componentRef} />}
       {width <= 1200 && !showSidebar && (

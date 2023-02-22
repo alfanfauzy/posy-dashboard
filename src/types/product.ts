@@ -14,13 +14,13 @@ export interface Addon {
 export interface Product {
   product_uuid: string
   product_name: string
-  product_thumbnail?: string
-  product_description: string
-  is_favourite: boolean
-  is_discount: boolean
-  price_before_discount: number
-  price_after_discount: number
-  is_available: boolean
-  cooking_duration: number
-  addon: Addon[]
+  // product_thumbnail?: string
+  // product_description: string
+  // is_favourite?: boolean
+  // is_discount?: boolean
+  price_before_discount?: number
+  price_after_discount?: number
+  // is_available?: boolean
+  // cooking_duration?: number
+  addon?: Addon[]
 }
