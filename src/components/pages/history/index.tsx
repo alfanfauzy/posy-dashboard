@@ -1,12 +1,13 @@
-import React from 'react'
-import moment from 'moment'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import InputSearch from '@/atoms/input/search'
-import { type Transaction, TransactionStatus } from '@/types/transaction'
+import moment from 'moment'
+import React from 'react'
 import { useAppDispatch } from 'store/hooks'
 import { openModal } from 'store/slices/modal'
 import { toRupiah } from 'utils/common'
+
+import InputSearch from '@/atoms/input/search'
+import { type Transaction, TransactionStatus } from '@/types/transaction'
 
 const data: Transaction[] = [
   {

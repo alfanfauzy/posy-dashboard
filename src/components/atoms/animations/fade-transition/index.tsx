@@ -1,5 +1,5 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import React, { FC } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 
 const variants = {
   fadeIn: {

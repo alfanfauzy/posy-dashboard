@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
 import { Table } from 'antd'
-import { Toggle } from 'posy-fnb-core'
-import { BiEdit } from 'react-icons/bi'
 import type { ColumnsType } from 'antd/es/table'
-import InputSearch from '@/atoms/input/search'
+import { Toggle } from 'posy-fnb-core'
+import React, { useState } from 'react'
+import { BiEdit } from 'react-icons/bi'
 import { useAppDispatch } from 'store/hooks'
 import { openModal } from 'store/slices/modal'
 import { toRupiah } from 'utils/common'
+
+import InputSearch from '@/atoms/input/search'
 import { listMenus } from '@/templates/rightbar/helpertemp'
 import type { Product } from '@/types/product'
 
@@ -48,7 +49,7 @@ const columns = ({ handleOpenDetails }: ColumnsProps): ColumnsType<Product> => [
     dataIndex: 'category',
     key: 'category',
     width: '125px',
-    render: (text) => (
+    render: () => (
       // <p className="whitespace-nowrap text-m-semibold">{text}</p>
       <p className="whitespace-nowrap text-m-semibold">Beverages</p>
     ),
@@ -58,7 +59,7 @@ const columns = ({ handleOpenDetails }: ColumnsProps): ColumnsType<Product> => [
     dataIndex: 'is_available',
     key: 'is_available',
     width: '128px',
-    render: (text) => (
+    render: () => (
       <div className="flex items-center justify-center">
         <Toggle value onChange={() => undefined} />
       </div>
@@ -69,7 +70,7 @@ const columns = ({ handleOpenDetails }: ColumnsProps): ColumnsType<Product> => [
     dataIndex: 'stock_available',
     key: 'stock_available',
     width: '135px',
-    render: (text) => (
+    render: () => (
       <div className="flex items-center justify-center">
         <Toggle value onChange={() => undefined} />
       </div>
@@ -107,7 +108,7 @@ const columns = ({ handleOpenDetails }: ColumnsProps): ColumnsType<Product> => [
     key: 'edit',
     width: '60px',
     fixed: 'right',
-    render: (_, record) => (
+    render: () => (
       <div className="flex items-center justify-center">
         <BiEdit
           size={18}
@@ -272,7 +273,6 @@ const PagesTransaction = () => {
   }
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys)
     setSelectedRowKeys(newSelectedRowKeys)
   }
 
@@ -281,7 +281,6 @@ const PagesTransaction = () => {
     onChange: onSelectChange,
   }
 
-  console.log(rowSelection)
   return (
     <main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
       <article>

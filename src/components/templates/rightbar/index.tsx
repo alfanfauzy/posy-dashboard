@@ -1,27 +1,13 @@
 import dynamic from 'next/dynamic'
-import React, { useCallback, useRef, useState } from 'react'
 import { Button, Checkbox, Input, Select, Tabs, Textarea } from 'posy-fnb-core'
+import React, { useCallback, useRef, useState } from 'react'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
-import { useReactToPrint } from 'react-to-print'
 import { CgTrash } from 'react-icons/cg'
 import { IoMdArrowBack } from 'react-icons/io'
-import {
-  listMenus,
-  listMenuTabs,
-  listCancelReason,
-  listOrderTabs,
-  orderType,
-  tableNumber,
-} from './helpertemp'
-import useDisclosure from '@/hooks/useDisclosure'
+import { useReactToPrint } from 'react-to-print'
 import NoOrderIcon from 'src/assets/icons/noOrder'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import InputSearch from '@/atoms/input/search'
-import {
-  calculateOrder,
-  calculateOrderBeforeDiscount,
-  toRupiah,
-} from 'utils/common'
+import { closeModal, openModal } from 'store/slices/modal'
 import {
   onAddOrder,
   onChangeAddOn,
@@ -31,8 +17,24 @@ import {
   onCloseOrderModal,
   onDropOrder,
 } from 'store/slices/order'
+import {
+  calculateOrder,
+  calculateOrderBeforeDiscount,
+  toRupiah,
+} from 'utils/common'
+
+import InputSearch from '@/atoms/input/search'
+import useDisclosure from '@/hooks/useDisclosure'
 import type { Product } from '@/types/product'
-import { closeModal, openModal } from 'store/slices/modal'
+
+import {
+  listCancelReason,
+  listMenus,
+  listMenuTabs,
+  listOrderTabs,
+  orderType,
+  tableNumber,
+} from './helpertemp'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,

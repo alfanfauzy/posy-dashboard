@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router'
+import { Loading } from 'posy-fnb-core'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ProSidebarProvider } from 'react-pro-sidebar'
-import { Loading } from 'posy-fnb-core'
 import { useAppSelector } from 'store/hooks'
-import Sidebar from '@/templates/sidebar'
+
 import Transition from '@/atoms/animations/transition'
+import Sidebar from '@/templates/sidebar'
 
 interface OrganismsLayoutProps {
   children: ReactNode

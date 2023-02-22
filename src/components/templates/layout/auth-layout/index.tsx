@@ -1,7 +1,8 @@
 import Image from 'next/image'
-import { ReactNode, FC } from 'react'
 import { useRouter } from 'next/router'
 import bgImage from 'public/images/auth-bg.png'
+import { FC, ReactNode } from 'react'
+
 import Transition from '@/atoms/animations/transition'
 
 const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {

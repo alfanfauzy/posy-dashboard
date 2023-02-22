@@ -1,6 +1,7 @@
-import React from 'react'
 import { useRouter } from 'next/router'
 import { Button } from 'posy-fnb-core'
+import React from 'react'
+
 import Logo from '@/atoms/logo'
 
 const OrganismsFormVerifyAccount = () => {

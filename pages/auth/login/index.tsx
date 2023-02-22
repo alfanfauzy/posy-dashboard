@@ -1,7 +1,7 @@
 import { SEO } from '@/constants/seo'
 import ContainerLogin from '@/containers/auth/login'
-import AuthLayout from '@/templates/layout/auth-layout'
 import MetaHeader from '@/molecules/meta-header'
+import AuthLayout from '@/templates/layout/auth-layout'
 import type { NextPageWithLayout } from '@/types/index'
 
 const Page: NextPageWithLayout = () => (

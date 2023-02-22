@@ -1,10 +1,11 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import { persistReducer } from 'redux-persist'
 import PersistStorage from 'redux-persist/lib/storage'
+
 import auth from './slices/auth'
-import transaction from './slices/transaction'
-import order from './slices/order'
 import modal from './slices/modal'
+import order from './slices/order'
+import transaction from './slices/transaction'
 
 const persistConfig = {
   key: 'root',

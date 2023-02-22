@@ -1,5 +1,6 @@
-import { ReactNode, FC } from 'react'
 import { useRouter } from 'next/router'
+import { FC, ReactNode } from 'react'
+
 import Transition from '@/atoms/animations/transition'
 
 const PlainLayout: FC<{ children: ReactNode }> = ({ children }) => {

@@ -1,13 +1,14 @@
-import React from 'react'
 import { useRouter } from 'next/router'
 import { Button, Input } from 'posy-fnb-core'
+import React from 'react'
 import * as reactHookForm from 'react-hook-form'
 import {
-  ValidationSchemaForgetPasswordType,
   validationSchemaForgetPassword,
+  ValidationSchemaForgetPasswordType,
 } from 'src/schemas/auth'
-import { useForm } from '@/hooks/useForm'
+
 import Logo from '@/atoms/logo'
+import { useForm } from '@/hooks/useForm'
 
 const OrganismsFormForgetPassword = () => {
   const router = useRouter()

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import CreateNewPasswordForm from '@/organisms/form/auth/create-new-password'
 
 const PagesCreateNewPassword = () => (

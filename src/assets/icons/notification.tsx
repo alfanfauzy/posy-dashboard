@@ -1,4 +1,5 @@
 import React from 'react'
+
 import type { IconType } from '@/types/icon'
 
 export const NotificationIcon = ({

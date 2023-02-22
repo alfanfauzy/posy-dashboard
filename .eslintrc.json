@@ -6,7 +6,14 @@
     "plugin:react/recommended",
     "prettier"
   ],
-  "plugins": ["react", "import", "jsx-a11y", "prettier", "tailwindcss"],
+  "plugins": [
+    "react",
+    "import",
+    "jsx-a11y",
+    "prettier",
+    "tailwindcss",
+    "simple-import-sort"
+  ],
   "rules": {
     "@next/next/no-img-element": "off",
     "@typescript-eslint/naming-convention": [
@@ -33,12 +40,18 @@
     "import/prefer-default-export": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/href-no-hash": "off",
-    "import/order": [
-      "error",
-      {
-        "groups": ["external", "sibling", "index", "parent", "builtin"]
-      }
-    ],
+    // "import/order": [
+    //   "error",
+    //   {
+    //     "groups": [
+    //       "external",
+    //       "sibling",
+    //       "index",
+    //       "parent",
+    //       "builtin"
+    //     ]
+    //   }
+    // ],
     "jsx-a11y/label-has-associated-control": [
       "error",
       {
@@ -111,6 +124,8 @@
     "react/prop-types": "off",
     "tailwindcss/classnames-order": "warn",
     "tailwindcss/no-custom-classname": "off",
-    "tailwindcss/no-contradicting-classname": "error"
+    "tailwindcss/no-contradicting-classname": "error",
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn"
   }
 }

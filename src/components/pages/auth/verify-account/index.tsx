@@ -1,4 +1,5 @@
 import React from 'react'
+
 import VerifyAccountForm from '@/organisms/modal/auth/verify-account'
 
 const PagesVerifyAccount = () => (

@@ -1,9 +1,9 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   useForm as useHookForm,
   UseFormProps as UseHookFormProps,
 } from 'react-hook-form'
-import { ZodSchema, z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { z, ZodSchema } from 'zod'
 
 interface UseFormProps<T extends ZodSchema<any>>
   extends UseHookFormProps<z.infer<T>> {

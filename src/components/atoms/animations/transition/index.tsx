@@ -1,5 +1,5 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { FC, ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 
 export const variant = {
   in: {

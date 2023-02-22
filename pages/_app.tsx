@@ -1,16 +1,18 @@
+import 'posy-fnb-core/dist/index.css'
+import 'posy-fnb-core/dist/style.css'
+import '../styles/globals.css'
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import type { AppProps } from 'next/app'
 import { Suspense, useState } from 'react'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { persistor, wrapper } from 'store/index'
+
+import ModalWrapper from '@/atoms/modal'
 import Layout from '@/templates/layout'
 import type { NextPageWithLayout } from '@/types/index'
-import 'posy-fnb-core/dist/index.css'
-import 'posy-fnb-core/dist/style.css'
-import '../styles/globals.css'
-import ModalWrapper from '@/atoms/modal'
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout

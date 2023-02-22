@@ -1,6 +1,6 @@
-import { useAnimation, motion, Variants, Transition } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
+import { motion, Transition, useAnimation, Variants } from 'framer-motion'
 import { FC, useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 const fadeInDown = {
   visible: { opacity: 1, y: 0 },
