@@ -8,9 +8,9 @@ import type { AppProps } from 'next/app'
 import { Suspense, useState } from 'react'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import { persistor, wrapper } from 'store/index'
 
 import ModalWrapper from '@/atoms/modal'
+import { persistor, wrapper } from '@/store/index'
 import Layout from '@/templates/layout'
 import type { NextPageWithLayout } from '@/types/index'
 

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createTransaction } from 'services/transaction'
+
+import { createTransaction } from '@/services/transaction'
 
 const useFetchListTransaction = () =>
   useQuery(['transaction/get-transaction'], () => createTransaction(), {

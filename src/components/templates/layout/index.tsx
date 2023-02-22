@@ -2,9 +2,9 @@ import { useRouter } from 'next/router'
 import { Loading } from 'posy-fnb-core'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ProSidebarProvider } from 'react-pro-sidebar'
-import { useAppSelector } from 'store/hooks'
 
 import Transition from '@/atoms/animations/transition'
+import { useAppSelector } from '@/store/hooks'
 import Sidebar from '@/templates/sidebar'
 
 interface OrganismsLayoutProps {

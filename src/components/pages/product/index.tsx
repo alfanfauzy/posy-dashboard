@@ -3,13 +3,13 @@ import type { ColumnsType } from 'antd/es/table'
 import { Toggle } from 'posy-fnb-core'
 import React, { useState } from 'react'
 import { BiEdit } from 'react-icons/bi'
-import { useAppDispatch } from 'store/hooks'
-import { openModal } from 'store/slices/modal'
-import { toRupiah } from 'utils/common'
 
 import InputSearch from '@/atoms/input/search'
+import { useAppDispatch } from '@/store/hooks'
+import { openModal } from '@/store/slices/modal'
 import { listMenus } from '@/templates/rightbar/helpertemp'
 import type { Product } from '@/types/product'
+import { toRupiah } from '@/utils/common'
 
 // const generateStatus = (status: TransactionStatus) => {
 //   const statusColor = {

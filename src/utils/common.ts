@@ -1,4 +1,4 @@
-import type { OrderItem } from 'store/slices/order'
+import type { OrderItem } from '@/store/slices/order'
 
 export const toRupiah = (number: number | bigint | string) =>
   new Intl.NumberFormat('en-US', {

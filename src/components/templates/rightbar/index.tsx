@@ -5,9 +5,12 @@ import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { CgTrash } from 'react-icons/cg'
 import { IoMdArrowBack } from 'react-icons/io'
 import { useReactToPrint } from 'react-to-print'
-import NoOrderIcon from 'src/assets/icons/noOrder'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { closeModal, openModal } from 'store/slices/modal'
+
+import InputSearch from '@/atoms/input/search'
+import useDisclosure from '@/hooks/useDisclosure'
+import NoOrderIcon from '@/icons/noOrder'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { closeModal, openModal } from '@/store/slices/modal'
 import {
   onAddOrder,
   onChangeAddOn,
@@ -16,16 +19,13 @@ import {
   onChangeQuantity,
   onCloseOrderModal,
   onDropOrder,
-} from 'store/slices/order'
+} from '@/store/slices/order'
+import type { Product } from '@/types/product'
 import {
   calculateOrder,
   calculateOrderBeforeDiscount,
   toRupiah,
-} from 'utils/common'
-
-import InputSearch from '@/atoms/input/search'
-import useDisclosure from '@/hooks/useDisclosure'
-import type { Product } from '@/types/product'
+} from '@/utils/common'
 
 import {
   listCancelReason,

@@ -7,12 +7,12 @@ import {
   validationSchemaLogin,
   ValidationSchemaLoginType,
 } from 'src/schemas/auth'
-import { useAppDispatch } from 'store/hooks'
-import { authSuccess } from 'store/slices/auth'
 
 import Logo from '@/atoms/logo'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useForm } from '@/hooks/useForm'
+import { useAppDispatch } from '@/store/hooks'
+import { authSuccess } from '@/store/slices/auth'
 
 const OrganismsFormLogin = () => {
   const router = useRouter()

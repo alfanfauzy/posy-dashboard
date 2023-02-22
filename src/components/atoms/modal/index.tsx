@@ -1,7 +1,8 @@
 import dynamic from 'next/dynamic'
 import React from 'react'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { closeModal } from 'store/slices/modal'
+
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { closeModal } from '@/store/slices/modal'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,

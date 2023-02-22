@@ -1,15 +1,15 @@
-import { links } from 'config/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { BsList } from 'react-icons/bs'
 import { Sidebar, useProSidebar } from 'react-pro-sidebar'
-import PersonIcon from 'src/assets/icons/person'
-import { useAppDispatch } from 'store/hooks'
-import { onLogout, setShowSidebar } from 'store/slices/auth'
 
 import Logo from '@/atoms/logo'
+import { links } from '@/config/link'
 import useViewportListener from '@/hooks/useViewportListener'
+import PersonIcon from '@/icons/person'
 import Menu from '@/molecules/menu'
+import { useAppDispatch } from '@/store/hooks'
+import { onLogout, setShowSidebar } from '@/store/slices/auth'
 
 const TemplatesSidebar = () => {
   const { width } = useViewportListener()

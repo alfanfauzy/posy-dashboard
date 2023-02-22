@@ -1,7 +1,8 @@
 import React from 'react'
 import { FiSearch } from 'react-icons/fi'
 import { MdCancel } from 'react-icons/md'
-import { useAppSelector } from 'store/hooks'
+
+import { useAppSelector } from '@/store/hooks'
 
 interface AtomsInputSearchProps {
   isOpen: boolean

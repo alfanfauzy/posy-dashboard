@@ -2,12 +2,12 @@ import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import moment from 'moment'
 import React from 'react'
-import { useAppDispatch } from 'store/hooks'
-import { openModal } from 'store/slices/modal'
-import { toRupiah } from 'utils/common'
 
 import InputSearch from '@/atoms/input/search'
+import { useAppDispatch } from '@/store/hooks'
+import { openModal } from '@/store/slices/modal'
 import { type Transaction, TransactionStatus } from '@/types/transaction'
+import { toRupiah } from '@/utils/common'
 
 const data: Transaction[] = [
   {

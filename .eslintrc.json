@@ -40,18 +40,7 @@
     "import/prefer-default-export": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/href-no-hash": "off",
-    // "import/order": [
-    //   "error",
-    //   {
-    //     "groups": [
-    //       "external",
-    //       "sibling",
-    //       "index",
-    //       "parent",
-    //       "builtin"
-    //     ]
-    //   }
-    // ],
+    "import/order": "off",
     "jsx-a11y/label-has-associated-control": [
       "error",
       {
