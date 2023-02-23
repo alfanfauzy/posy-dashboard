@@ -1,5 +1,7 @@
 import 'posy-fnb-core/dist/index.css'
 import 'posy-fnb-core/dist/style.css'
+import 'react-date-range/dist/styles.css'
+import 'react-date-range/dist/theme/default.css'
 import '../styles/globals.css'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'

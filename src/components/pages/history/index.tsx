@@ -1,13 +1,21 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import moment from 'moment'
-import React from 'react'
+import dynamic from 'next/dynamic'
+import React, { useState } from 'react'
 
 import InputSearch from '@/atoms/input/search'
+import useDisclosure from '@/hooks/useDisclosure'
 import { useAppDispatch } from '@/store/hooks'
 import { openModal } from '@/store/slices/modal'
 import { type Transaction, TransactionStatus } from '@/types/transaction'
 import { toRupiah } from '@/utils/common'
+import { defineds } from '@/utils/date'
+
+const Datepicker = dynamic(() => import('@/atoms/input/datepicker'), {
+  loading: () => <div />,
+})
 
 const data: Transaction[] = [
   {
@@ -477,6 +485,16 @@ const columns = ({
 
 const PagesTransaction = () => {
   const dispatch = useAppDispatch()
+  const [isOpenFilterDate, { open: openFilterDate, close: closeFilterDate }] =
+    useDisclosure({ initialState: false })
+
+  const [date, setDate] = useState([
+    {
+      startDate: defineds.startOfDay,
+      endDate: defineds.endOfDay,
+      key: 'selection',
+    },
+  ])
 
   const handleOpenDetails = (record: Transaction) => {
     dispatch(
@@ -501,7 +519,7 @@ const PagesTransaction = () => {
                 </div>
               </div>
             </aside>
-            <aside className="grid grid-cols-4 border-b border-neutral-40 py-4">
+            <aside className="grid grid-cols-4 gap-6 border-b border-neutral-40 py-4">
               <div>
                 <p>Date</p>
                 <p className="text-l-bold">
@@ -638,9 +656,13 @@ const PagesTransaction = () => {
         <aside className="mt-4">
           <p className="text-m-regular">Date</p>
           <div className="mt-1 flex items-center space-x-6">
-            <div className="w-1/2 whitespace-nowrap rounded-md border border-neutral-50 py-1.5 px-3 text-m-regular lg:w-1/4">
-              8 feb - 14 feb 2023
-            </div>
+            <Datepicker
+              date={date}
+              close={closeFilterDate}
+              open={openFilterDate}
+              isOpen={isOpenFilterDate}
+              handleChange={(item: any) => setDate([item])}
+            />
             <div className="flex w-1/2 items-center lg:w-1/4">
               <InputSearch placeholder="Search Transaction" isOpen />
             </div>
@@ -654,17 +676,18 @@ const PagesTransaction = () => {
             columns={columns({ handleOpenDetails })}
             dataSource={data}
             scroll={{ y: '54vh', x: 1100 }}
-            // onChange={onChange}
-            // pagination={{
-            //   showTotal: (total: number) => (
-            //     <Pagination
-            //       onChangePagination={onChangePaginationItem}
-            //       total={total}
-            //       limitSize={limitSize}
-            //     />
-            //   ),
-            //   ...paginationProps,
-            // }}
+            pagination={{
+              showTotal: () => (
+                <div className="absolute left-0 flex w-fit items-center">
+                  <select className="h-8 w-[164px] rounded-full border border-neutral-40 px-3 text-m-medium placeholder:text-neutral-80 hover:border-neutral-100 focus:outline-none">
+                    <option value="10">Select Row: 10</option>
+                    <option value="10">Select Row: 20</option>
+                    <option value="10">Select Row: 50</option>
+                    <option value="10">Select Row: 100</option>
+                  </select>
+                </div>
+              ),
+            }}
           />
         </div>
       </article>

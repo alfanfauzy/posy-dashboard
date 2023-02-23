@@ -49,3 +49,63 @@ thead > tr > th {
 .ant-pagination-item a {
   color: #0a0a0a !important;
 }
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 2px;
+}
+
+.rdrDateRangePickerWrapper {
+  display: flex;
+  gap: 32px;
+}
+
+.rdrCalendarWrapper {
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 16px 16px 0;
+}
+
+.rdrDefinedRangesWrapper {
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+}
+
+.rdrStaticRangeLabel {
+  padding: 14px 20px;
+}
+
+.rdrStaticRange:hover:first-child .rdrStaticRangeLabel,
+.rdrStaticRange:focus .rdrStaticRangeLabel {
+  border-radius: 16px 16px 0 0;
+}
+
+.rdrStaticRange:hover .rdrStaticRangeLabel,
+.rdrStaticRange:focus .rdrStaticRangeLabel {
+  background: #e0dbfa;
+}
+
+.rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
+  color: #2f265b;
+}
+
+.rdrWeekDays {
+  margin-top: 8px;
+}
+
+.rdrWeekDay,
+.rdrDayNumber span {
+  color: #2f265b;
+}
+
+.rdrMonthName {
+  display: none;
+}

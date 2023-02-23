@@ -41,7 +41,7 @@ const AtomsInputSearch = ({
           value={search}
           type="text"
           placeholder={placeholder || ''}
-          className={`h-8 rounded-full border border-neutral-70 pl-10 text-m-medium placeholder:text-neutral-80 focus:outline-neutral-50 ${
+          className={`h-8 rounded-full border border-neutral-40 pl-10 text-m-medium placeholder:text-neutral-80 focus:outline-neutral-50 ${
             isOpen ? 'w-full pr-10' : 'w-10'
           } `}
         />
