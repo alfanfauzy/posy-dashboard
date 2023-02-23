@@ -2,7 +2,7 @@ import { addYears } from 'date-fns'
 import isEqual from 'lodash.isequal'
 import dynamic from 'next/dynamic'
 import { Button } from 'posy-fnb-core'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DateRangePicker, Range } from 'react-date-range'
 
 import ArrowDownIcon from '@/icons/arrowDown'
@@ -29,7 +29,7 @@ export const checkLabelColor = (date: Range) => {
 }
 
 interface DatepickerProps {
-  date: Range[]
+  dateProps: Range[]
   handleChange: (item: Range) => void
   open: () => void
   close: () => void
@@ -37,15 +37,27 @@ interface DatepickerProps {
 }
 
 const Datepicker: React.FC<DatepickerProps> = ({
-  date,
+  dateProps,
   handleChange,
   open,
   close,
   isOpen,
 }) => {
+  const [date, setDate] = useState(dateProps)
+
   const onChange = (item: { selection: Range }) => {
-    handleChange(item.selection)
+    setDate([item.selection])
     checkLabelColor(item.selection)
+  }
+
+  const onApply = () => {
+    handleChange(date[0])
+    close()
+  }
+
+  const onCancel = () => {
+    setDate(dateProps)
+    close()
   }
 
   useEffect(() => {
@@ -61,15 +73,18 @@ const Datepicker: React.FC<DatepickerProps> = ({
       >
         <p>
           {isEqual(
-            formatDate({ date: date[0].startDate, format: 'DD/MM/YYYY' }),
-            formatDate({ date: date[0].endDate, format: 'DD/MM/YYYY' }),
+            formatDate({ date: dateProps[0].startDate, format: 'DD/MM/YYYY' }),
+            formatDate({ date: dateProps[0].endDate, format: 'DD/MM/YYYY' }),
           )
-            ? formatDate({ date: date[0].startDate, format: 'DD MMMM YYYY' })
+            ? formatDate({
+                date: dateProps[0].startDate,
+                format: 'DD MMMM YYYY',
+              })
             : `${formatDate({
-                date: date[0].startDate,
+                date: dateProps[0].startDate,
                 format: 'DD MMMM YYYY',
               })} - ${formatDate({
-                date: date[0].endDate,
+                date: dateProps[0].endDate,
                 format: 'DD MMMM YYYY',
               })}`}
         </p>
@@ -83,10 +98,10 @@ const Datepicker: React.FC<DatepickerProps> = ({
         handleClose={close}
         confirmButton={
           <div className="flex w-full max-w-[80%] items-center justify-center gap-4">
-            <Button variant="secondary" onClick={close} fullWidth>
+            <Button variant="secondary" onClick={onCancel} fullWidth>
               Cancel
             </Button>
-            <Button variant="primary" onClick={close} fullWidth>
+            <Button variant="primary" onClick={onApply} fullWidth>
               Apply
             </Button>
           </div>

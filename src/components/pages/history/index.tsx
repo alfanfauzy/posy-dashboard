@@ -657,7 +657,7 @@ const PagesTransaction = () => {
           <p className="text-m-regular">Date</p>
           <div className="mt-1 flex items-center space-x-6">
             <Datepicker
-              date={date}
+              dateProps={date}
               close={closeFilterDate}
               open={openFilterDate}
               isOpen={isOpenFilterDate}
