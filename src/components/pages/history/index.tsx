@@ -1,11 +1,11 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import moment from 'moment'
 import dynamic from 'next/dynamic'
 import React, { useState } from 'react'
 
 import InputSearch from '@/atoms/input/search'
+import Table from '@/atoms/table'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useAppDispatch } from '@/store/hooks'
 import { openModal } from '@/store/slices/modal'
@@ -434,7 +434,7 @@ const columns = ({
     ),
   },
   {
-    title: <p className="whitespace-nowrap">Total Order</p>,
+    title: <p className="whitespace-nowrap">Total order</p>,
     dataIndex: 'total_order',
     key: 'total_order',
     render: (text) => (
@@ -442,7 +442,7 @@ const columns = ({
     ),
   },
   {
-    title: <p className="whitespace-nowrap">Payment Method</p>,
+    title: <p className="whitespace-nowrap">Payment method</p>,
     dataIndex: 'payment_method',
     key: 'payment_method',
     render: (text) => (
@@ -450,7 +450,7 @@ const columns = ({
     ),
   },
   {
-    title: <p className="whitespace-nowrap">Total Payment</p>,
+    title: <p className="whitespace-nowrap">Total payment</p>,
     dataIndex: 'total_payment',
     key: 'total_payment',
     render: (text) => (
@@ -458,6 +458,7 @@ const columns = ({
     ),
   },
   {
+    align: 'center',
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
@@ -468,7 +469,7 @@ const columns = ({
     ),
   },
   {
-    title: 'Action',
+    title: ' ',
     key: 'action',
     render: (_, record) => (
       <div
@@ -521,7 +522,6 @@ const PagesTransaction = () => {
             </aside>
             <aside className="grid grid-cols-4 gap-6 border-b border-neutral-40 py-4">
               <div>
-                <p>Date</p>
                 <p className="text-l-bold">
                   {moment(record.created_at.seconds).format('ll, hh:mm')}
                 </p>
@@ -653,9 +653,8 @@ const PagesTransaction = () => {
             History
           </p>
         </aside>
-        <aside className="mt-4">
-          <p className="text-m-regular">Date</p>
-          <div className="mt-1 flex items-center space-x-6">
+        <aside className="mt-6">
+          <div className="mt-1 flex items-center space-x-4">
             <Datepicker
               dateProps={date}
               close={closeFilterDate}
@@ -671,25 +670,11 @@ const PagesTransaction = () => {
       </article>
 
       <article className="mt-6">
-        <div className="w-full overflow-auto">
-          <Table
-            columns={columns({ handleOpenDetails })}
-            dataSource={data}
-            scroll={{ y: '54vh', x: 1100 }}
-            pagination={{
-              showTotal: () => (
-                <div className="absolute left-0 flex w-fit items-center">
-                  <select className="h-8 w-[164px] rounded-full border border-neutral-40 px-3 text-m-medium placeholder:text-neutral-80 hover:border-neutral-100 focus:outline-none">
-                    <option value="10">Select Row: 10</option>
-                    <option value="10">Select Row: 20</option>
-                    <option value="10">Select Row: 50</option>
-                    <option value="10">Select Row: 100</option>
-                  </select>
-                </div>
-              ),
-            }}
-          />
-        </div>
+        <Table
+          columns={columns({ handleOpenDetails })}
+          dataSource={data}
+          scroll={{ y: '54vh', x: 1100 }}
+        />
       </article>
     </main>
   )

@@ -78,14 +78,14 @@ const Datepicker: React.FC<DatepickerProps> = ({
           )
             ? formatDate({
                 date: dateProps[0].startDate,
-                format: 'DD MMMM YYYY',
+                format: 'DD MMM YYYY',
               })
             : `${formatDate({
                 date: dateProps[0].startDate,
-                format: 'DD MMMM YYYY',
+                format: 'DD MMM YYYY',
               })} - ${formatDate({
                 date: dateProps[0].endDate,
-                format: 'DD MMMM YYYY',
+                format: 'DD MMM YYYY',
               })}`}
         </p>
         <ArrowDownIcon />

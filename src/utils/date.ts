@@ -126,6 +126,7 @@ interface FormatDateProps {
     | 'LLL'
     | 'lll'
     | 'DD MMMM YYYY'
+    | 'DD MMM YYYY'
   isIso?: boolean
 }
 export const formatDate = ({
