@@ -108,7 +108,7 @@ const OrganismsContentsTransaction = ({
     <section className="relative h-full flex-1 overflow-hidden rounded-2xl bg-neutral-10 p-6">
       <article className="h-fit">
         <aside className="flex items-start justify-between">
-          <p className="text-xxl-semibold lg:text-heading-s-semibold">
+          <p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
             Restaurant Transaction
           </p>
           <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-70 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">

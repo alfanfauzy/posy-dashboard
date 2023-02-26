@@ -1,11 +1,21 @@
 import type { ColumnsType } from 'antd/es/table'
-import { Toggle } from 'posy-fnb-core'
+import Image from 'next/image'
+import { Button, Input, Modal, Textarea, Toggle } from 'posy-fnb-core'
 import React, { useState } from 'react'
+import { FormProvider, useFieldArray } from 'react-hook-form'
+import { CgTrash } from 'react-icons/cg'
 
 import InputSearch from '@/atoms/input/search'
 import Table from '@/atoms/table'
+import useDisclosure from '@/hooks/useDisclosure'
+import { useForm } from '@/hooks/useForm'
+import { validationSchemaProduct } from '@/schemas/product'
+import { useAppDispatch } from '@/store/hooks'
+import { onChangeProductId } from '@/store/slices/product'
 import { listMenus } from '@/templates/rightbar/helpertemp'
 import type { Product } from '@/types/product'
+
+import VariantTemp from './VariantTemp'
 
 const columns: ColumnsType<Product> = [
   {
@@ -21,10 +31,7 @@ const columns: ColumnsType<Product> = [
     dataIndex: 'category',
     key: 'category',
     width: '125px',
-    render: () => (
-      // <p className="whitespace-nowrap text-m-semibold">{text}</p>
-      <p className="whitespace-nowrap">Beverages</p>
-    ),
+    render: () => <p className="whitespace-nowrap">Beverages</p>,
   },
   {
     title: (
@@ -89,7 +96,12 @@ const columns: ColumnsType<Product> = [
 ]
 
 const PagesTransaction = () => {
+  const dispatch = useAppDispatch()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const [
+    isOpenEditProduct,
+    { open: openEditProduct, close: closeEditProduct },
+  ] = useDisclosure({ initialState: false })
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys)
@@ -100,16 +112,87 @@ const PagesTransaction = () => {
     onChange: onSelectChange,
   }
 
+  const onOpenEditProduct = (product_uuid: string) => {
+    openEditProduct()
+    dispatch(onChangeProductId(product_uuid))
+  }
+
+  const onCloseEditProduct = () => {
+    closeEditProduct()
+    dispatch(onChangeProductId(''))
+  }
+
+  const [product, setProduct] = useState<Product>({
+    product_name: 'Fried Capcay',
+    product_uuid: '214122',
+    price_before_discount: 12222,
+    price_after_discount: 10000,
+    addon: [],
+  })
+
+  const handleAddAddOn = () => {
+    const addonTemp = {
+      addon_uuid: '',
+      addon_name: '',
+      is_multiple: false,
+      variant: [
+        {
+          variant_uuid: '',
+          variant_name: '',
+          price: 0,
+        },
+      ],
+    }
+    setProduct({ ...product, addon: product.addon?.concat(addonTemp) })
+  }
+
+  const handleAddAddOnVariant = (addonIdx: number) => {
+    const variantTemp = {
+      variant_uuid: '',
+      variant_name: '',
+      price: 0,
+    }
+    if (product.addon) {
+      const selectedAddon = product.addon[addonIdx]
+      const newVariant = [...selectedAddon.variant].concat(variantTemp)
+
+      selectedAddon.variant = newVariant
+
+      const prevAddon = product.addon
+      prevAddon[addonIdx] = selectedAddon
+
+      setProduct({ ...product, addon: prevAddon })
+    }
+  }
+
+  const methods = useForm({ schema: validationSchemaProduct })
+  const {
+    control,
+    formState: { errors },
+  } = methods
+
+  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
+    {
+      control,
+      name: 'addon', // unique name for your Field Array
+    },
+  )
+
+  const onSubmit = (e: any) => {
+    console.log(e, 'data')
+  }
+
+  // console.log(methods.watch(), '<')
+  // console.log(errors, 'error')
   return (
     <main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
       <article>
         <aside className="flex items-start">
-          <p className="text-xxl-semibold lg:text-heading-s-semibold">
+          <p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
             Product
           </p>
         </aside>
         <aside className="mt-4">
-          <p className="text-m-regular">Date</p>
           <div className="mt-1 flex items-center space-x-4">
             <div className="w-1/2 whitespace-nowrap rounded-md border border-neutral-50 py-1.5 px-3 text-m-regular lg:w-1/4">
               8 feb - 14 feb 2023
@@ -123,34 +206,166 @@ const PagesTransaction = () => {
 
       <article className="mt-6">
         <Table
+          onRow={(record) => ({
+            onClick: () => onOpenEditProduct(record.product_uuid),
+          })}
           columns={columns}
           dataSource={listMenus}
           rowKey="product_uuid"
           rowSelection={rowSelection}
           scroll={{ y: '54vh', x: 1100 }}
         />
-        {/* <div className="w-full overflow-auto">
-          <Table
-            // loading
-            rowKey="product_uuid"
-            rowSelection={rowSelection}
-            columns={columns}
-            dataSource={listMenus}
-            scroll={{ y: '54vh', x: 1100 }}
-            // onChange={onChange}
-            // pagination={{
-            //   showTotal: (total: number) => (
-            //     <Pagination
-            //       onChangePagination={onChangePaginationItem}
-            //       total={total}
-            //       limitSize={limitSize}
-            //     />
-            //   ),
-            //   ...paginationProps,
-            // }}
-          />
-        </div> */}
       </article>
+
+      {isOpenEditProduct && (
+        <Modal
+          isForm
+          handleSubmit={methods.handleSubmit(onSubmit)}
+          showCloseButton
+          open={isOpenEditProduct}
+          handleClose={onCloseEditProduct}
+          confirmButton={
+            <div className="flex w-full items-center justify-center gap-4">
+              <Button variant="secondary" type="submit" fullWidth>
+                Save
+              </Button>
+            </div>
+          }
+        >
+          <FormProvider {...methods}>
+            <aside className="flex gap-6">
+              <div>
+                <Image
+                  src="/images/logo.png"
+                  alt="product image"
+                  width={142}
+                  height={142}
+                />
+              </div>
+
+              <div className="flex-1">
+                <div>
+                  <Input
+                    fullwidth
+                    labelText="Product Name"
+                    {...methods.register('product_name')}
+                    error={!!errors?.product_name}
+                    helperText={errors?.product_name?.message}
+                  />
+                </div>
+                <div className="mt-4">
+                  <Input fullwidth labelText="Category" />
+                </div>
+              </div>
+            </aside>
+            <aside className="mt-6">
+              <div>
+                <Input labelText="Price" />
+              </div>
+            </aside>
+
+            <aside className="mt-6 grid grid-cols-3 gap-6">
+              <div>
+                <p className="mb-4">Activate Discount</p>
+                <Toggle value onChange={() => undefined} />
+              </div>
+              <div>
+                <Input labelText="Discount (%)" />
+              </div>
+              <div>
+                <Input labelText="Price after discount" />
+              </div>
+            </aside>
+
+            <aside className="mt-6">
+              <Textarea labelText="Description" />
+            </aside>
+
+            <aside className="mt-6 border-b-2 border-b-neutral-30 pb-6">
+              <div className="text-l-semibold">View setup</div>
+              <aside className="mt-6 grid grid-cols-3 gap-6">
+                <div>
+                  <p className="mb-4">Activate Discount</p>
+                  <Toggle value onChange={() => undefined} />
+                </div>
+                <div>
+                  <p className="mb-4">Product Available</p>
+                  <Toggle value onChange={() => undefined} />
+                </div>
+                <div>
+                  <p className="mb-4">Recommendation</p>
+                  <Toggle value onChange={() => undefined} />
+                </div>
+              </aside>
+            </aside>
+
+            {/* {product.addon?.map((addon, addonIdx) => ( */}
+            {fields.map((addon, addonIdx) => (
+              <aside key={addon.id} className="mt-6">
+                <div className="flex items-center justify-between text-l-semibold">
+                  Add on details
+                  {/* <CgTrash
+                  className="cursor-pointer text-neutral-70"
+                  size={20}
+                  onClick={handleDeleteAddOn}
+                /> */}
+                </div>
+                <div className="mt-6">
+                  <Input
+                    labelText="Addon name"
+                    {...methods.register(`addon.${addonIdx}.addon_name`)}
+                    error={
+                      errors?.addon && !!errors?.addon[addonIdx]?.addon_name
+                    }
+                    helperText={
+                      errors?.addon &&
+                      errors?.addon[addonIdx]?.addon_name?.message
+                    }
+                  />
+                </div>
+                <aside className="mt-6 grid grid-cols-3 gap-6">
+                  <div>
+                    <p className="mb-4">Required</p>
+                    <Toggle value onChange={() => undefined} />
+                  </div>
+                  <div>
+                    <p className="mb-4">Choose multiple</p>
+                    <Toggle value onChange={() => undefined} />
+                  </div>
+                </aside>
+
+                <VariantTemp addonIdx={addonIdx} errors={errors} />
+              </aside>
+            ))}
+
+            <aside className="mt-6 flex items-center justify-center ">
+              <p
+                role="presentation"
+                // onClick={handleAddAddOn}
+                onClick={() =>
+                  append({
+                    addon_name: '',
+                    addon_variants: [
+                      {
+                        variant_name: '',
+                        variant_price: '',
+                      },
+                    ],
+                  })
+                }
+                className="cursor-pointer text-l-semibold text-secondary-main hover:opacity-70"
+              >
+                + Add addon
+              </p>
+            </aside>
+            {/* <div className="flex w-full items-center justify-center gap-4">
+                <Button variant="secondary" type="submit" fullWidth>
+                  Save
+                </Button>
+              </div> */}
+          </FormProvider>
+        </Modal>
+      )}
     </main>
   )
 }
