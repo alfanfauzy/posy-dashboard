@@ -3,9 +3,9 @@ import Image from 'next/image'
 import { Button, Input, Modal, Textarea, Toggle } from 'posy-fnb-core'
 import React, { useState } from 'react'
 import { FormProvider, useFieldArray } from 'react-hook-form'
-import { CgTrash } from 'react-icons/cg'
 
 import InputSearch from '@/atoms/input/search'
+import Select from '@/atoms/input/select'
 import Table from '@/atoms/table'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useForm } from '@/hooks/useForm'
@@ -122,48 +122,40 @@ const PagesTransaction = () => {
     dispatch(onChangeProductId(''))
   }
 
-  const [product, setProduct] = useState<Product>({
-    product_name: 'Fried Capcay',
-    product_uuid: '214122',
-    price_before_discount: 12222,
-    price_after_discount: 10000,
-    addon: [],
-  })
+  // const handleAddAddOn = () => {
+  //   const addonTemp = {
+  //     addon_uuid: '',
+  //     addon_name: '',
+  //     is_multiple: false,
+  //     variant: [
+  //       {
+  //         variant_uuid: '',
+  //         variant_name: '',
+  //         price: 0,
+  //       },
+  //     ],
+  //   }
+  //   setProduct({ ...product, addon: product.addon?.concat(addonTemp) })
+  // }
 
-  const handleAddAddOn = () => {
-    const addonTemp = {
-      addon_uuid: '',
-      addon_name: '',
-      is_multiple: false,
-      variant: [
-        {
-          variant_uuid: '',
-          variant_name: '',
-          price: 0,
-        },
-      ],
-    }
-    setProduct({ ...product, addon: product.addon?.concat(addonTemp) })
-  }
+  // const handleAddAddOnVariant = (addonIdx: number) => {
+  //   const variantTemp = {
+  //     variant_uuid: '',
+  //     variant_name: '',
+  //     price: 0,
+  //   }
+  //   if (product.addon) {
+  //     const selectedAddon = product.addon[addonIdx]
+  //     const newVariant = [...selectedAddon.variant].concat(variantTemp)
 
-  const handleAddAddOnVariant = (addonIdx: number) => {
-    const variantTemp = {
-      variant_uuid: '',
-      variant_name: '',
-      price: 0,
-    }
-    if (product.addon) {
-      const selectedAddon = product.addon[addonIdx]
-      const newVariant = [...selectedAddon.variant].concat(variantTemp)
+  //     selectedAddon.variant = newVariant
 
-      selectedAddon.variant = newVariant
+  //     const prevAddon = product.addon
+  //     prevAddon[addonIdx] = selectedAddon
 
-      const prevAddon = product.addon
-      prevAddon[addonIdx] = selectedAddon
-
-      setProduct({ ...product, addon: prevAddon })
-    }
-  }
+  //     setProduct({ ...product, addon: prevAddon })
+  //   }
+  // }
 
   const methods = useForm({ schema: validationSchemaProduct })
   const {
@@ -171,19 +163,37 @@ const PagesTransaction = () => {
     formState: { errors },
   } = methods
 
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: 'addon', // unique name for your Field Array
-    },
-  )
+  const { fields, append } = useFieldArray({
+    control,
+    name: 'addon',
+  })
 
   const onSubmit = (e: any) => {
     console.log(e, 'data')
   }
 
-  // console.log(methods.watch(), '<')
-  // console.log(errors, 'error')
+  const actionOptions = (length: number) => [
+    {
+      label: `Selected ${length} ${length === 1 ? 'item' : 'items'}`,
+      value: '',
+      hide: true,
+    },
+    { label: 'Mark as shown', value: 'is_active' },
+    { label: 'Mark as available', value: 'is_available' },
+  ]
+
+  const categoryOptions = [
+    { label: 'Select Category', value: '', hide: true },
+    { label: 'Category: All', value: 'all' },
+    { label: 'Category: Food', value: 'food' },
+    { label: 'Category: Beverages', value: 'beverages' },
+    { label: 'Category: Desserts', value: 'desserts' },
+  ]
+
+  const handleChangeRowAction = () => {
+    setSelectedRowKeys([])
+  }
+
   return (
     <main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
       <article>
@@ -194,9 +204,13 @@ const PagesTransaction = () => {
         </aside>
         <aside className="mt-4">
           <div className="mt-1 flex items-center space-x-4">
-            <div className="w-1/2 whitespace-nowrap rounded-md border border-neutral-50 py-1.5 px-3 text-m-regular lg:w-1/4">
-              8 feb - 14 feb 2023
-            </div>
+            {rowSelection.selectedRowKeys.length > 0 && (
+              <Select
+                options={actionOptions(rowSelection.selectedRowKeys.length)}
+                onChange={handleChangeRowAction}
+              />
+            )}
+            <Select options={categoryOptions} />
             <div className="flex w-1/2 items-center lg:w-1/4">
               <InputSearch placeholder="Search Product" isOpen />
             </div>

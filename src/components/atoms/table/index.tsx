@@ -3,6 +3,8 @@ import { Table } from 'antd'
 import type { TableProps } from 'antd/es/table'
 import React, { useState } from 'react'
 
+import Select from '@/atoms/input/select'
+
 interface AtomsTableProps extends TableProps<any> {
   className?: string
 }
@@ -11,16 +13,19 @@ interface PaginationProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
+const paginationOptions = [
+  { label: 'Select Row: 10', value: '10' },
+  { label: 'Select Row: 20', value: '20' },
+  { label: 'Select Row: 50', value: '50' },
+]
+
 const Pagination = ({ onChange }: PaginationProps) => (
   <div className="absolute left-0 flex w-fit items-center">
-    <select
+    <Select
+      className="!w-[164px]"
+      options={paginationOptions}
       onChange={onChange}
-      className="h-8 w-[164px] rounded-full border border-neutral-40 px-3 text-m-medium placeholder:text-neutral-80 hover:border-neutral-100 focus:outline-none"
-    >
-      <option value="10">Select Row: 10</option>
-      <option value="20">Select Row: 20</option>
-      <option value="50">Select Row: 50</option>
-    </select>
+    />
   </div>
 )
 
