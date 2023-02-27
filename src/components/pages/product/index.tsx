@@ -194,6 +194,7 @@ const PagesTransaction = () => {
     setSelectedRowKeys([])
   }
 
+  console.log(fields)
   return (
     <main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
       <article>
@@ -233,6 +234,7 @@ const PagesTransaction = () => {
 
       {isOpenEditProduct && (
         <Modal
+          className="w-3/4 lg:w-1/2"
           isForm
           handleSubmit={methods.handleSubmit(onSubmit)}
           showCloseButton
@@ -372,11 +374,6 @@ const PagesTransaction = () => {
                 + Add addon
               </p>
             </aside>
-            {/* <div className="flex w-full items-center justify-center gap-4">
-                <Button variant="secondary" type="submit" fullWidth>
-                  Save
-                </Button>
-              </div> */}
           </FormProvider>
         </Modal>
       )}

@@ -26,17 +26,17 @@ const VariantTemp = ({ addonIdx, errors }: VariantTempProps) => {
               {...register(
                 `addon.${addonIdx}.addon_variants.${variantIdx}.variant_name`,
               )}
-              error={
-                errors?.addon?.length > 0 &&
-                errors?.addon[addonIdx]?.addon_variants?.length > 0 &&
-                !!errors?.addon[addonIdx]?.addon_variants[variantIdx]
-                  ?.variant_name
-              }
-              helperText={
-                errors?.addon &&
-                errors?.addon[addonIdx]?.addon_variants[variantIdx]
-                  ?.variant_name?.message
-              }
+              // error={
+              //   errors?.addon?.length > 0 &&
+              //   errors?.addon[addonIdx]?.addon_variants?.length > 0 &&
+              //   !!errors?.addon[addonIdx]?.addon_variants[variantIdx]
+              //     ?.variant_name
+              // }
+              // helperText={
+              //   errors?.addon &&
+              //   errors?.addon[addonIdx]?.addon_variants[variantIdx]
+              //     ?.variant_name?.message
+              // }
             />
           </div>
           <div className="w-1/2">

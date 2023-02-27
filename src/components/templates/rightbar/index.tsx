@@ -638,8 +638,8 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           borderRadius: 0,
         }}
       >
-        <section className="flex h-full gap-6 bg-neutral-20">
-          <div className="w-2/3 flex-1 rounded-r-2xl bg-neutral-10 p-6">
+        <section className="flex h-full w-full gap-6">
+          <div className="w-1/2 rounded-r-2xl bg-neutral-10 p-6 lg:w-3/5 xl:w-2/3">
             <section id="filter" className="flex items-center justify-between">
               <div className="flex items-center gap-[10px]">
                 <IoMdArrowBack
@@ -679,7 +679,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                         {menu.product_name}
                       </p>
                       <div className="my-2 border-b border-neutral-40" />
-                      <div className="flex items-center justify-center gap-1">
+                      <div className="flex flex-col items-center justify-center gap-1">
                         <p className="text-m-regular text-neutral-90">
                           {toRupiah(
                             menu.price_after_discount ||
@@ -699,114 +699,120 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             </section>
           </div>
 
-          <div className="relative flex w-60 flex-col gap-4 rounded-l-2xl bg-neutral-10 md:w-72 lg:w-96 xl:w-[500px]">
-            <aside className="w-full px-6 pt-6">
-              <div className="flex flex-col items-start">
-                <p className="mb-2 text-xxl-bold">Your Order</p>
-                <p className="text-l-semibold">Trx ID: O150123002</p>
-                <p className="text-m-semibold">Trx time: 09:45</p>
-              </div>
+          <div className="relative flex w-[500px] flex-1 flex-col rounded-l-2xl bg-neutral-10">
+            <div className="w-full px-6 pt-6">
+              <p className="text-xxl-bold">Your Order</p>
+              <p className="mt-1 text-l-semibold">ID: O150123002</p>
               <div className="my-2 border-b border-neutral-30" />
-              <div className="flex gap-2">
-                <div className="w-2/3">
-                  <div>
-                    <p className="text-s-regular">Customer name</p>
-                    <p className="text-l-semibold line-clamp-1">
-                      Henderson Moraes
-                    </p>
+            </div>
+
+            <section className="h-4/5 overflow-y-auto pb-20">
+              <aside className="px-6">
+                <div className="grid grid-cols-5 gap-4">
+                  <div className="col-span-3">
+                    <div>
+                      <p className="text-s-regular">Customer name</p>
+                      <p className="text-l-semibold line-clamp-1">
+                        Henderson Moraes
+                      </p>
+                    </div>
+                    <div className="mt-4">
+                      <p className="text-s-regular">Type of transaction</p>
+                      <p className="text-l-semibold">Dine in</p>
+                    </div>
                   </div>
-                  <div className="mt-4">
-                    <p className="text-s-regular">Type of transaction</p>
-                    <p className="text-l-semibold">Dine in</p>
+                  <div className="col-span-2">
+                    <div>
+                      <p className="text-s-regular">Total pax</p>
+                      <p className="text-l-semibold">4</p>
+                    </div>
+                    <div className="mt-4">
+                      <p className="text-s-regular">Table number</p>
+                      <p className="text-l-semibold">20</p>
+                    </div>
                   </div>
                 </div>
-                <div className="w-1/3">
-                  <div>
-                    <p className="text-s-regular">Total pax</p>
-                    <p className="text-l-semibold">4</p>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-s-regular">Table number</p>
-                    <p className="text-l-semibold">20</p>
+                <div className="my-2 border-b border-neutral-30" />
+              </aside>
+              {order.length === 0 && (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                  <div className="-mt-24">
+                    <NoOrderIcon />
+                    <p className="text-l-medium">There’s no order yet</p>
                   </div>
                 </div>
-              </div>
-              <div className="my-2 border-b border-neutral-30" />
-            </aside>
+              )}
 
-            {order.length === 0 && (
-              <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-                <div className="-mt-24">
-                  <NoOrderIcon />
-                  <p className="text-l-medium">There’s no order yet</p>
-                </div>
-              </div>
-            )}
-
-            {order.length > 0 && (
-              <div className="px-6">
-                {order.map((item) => (
-                  <aside key={item.order_uuid} className="pb-4">
-                    <div id="product-info" className="grid grid-cols-10 gap-2">
-                      <div className="w-fit">
-                        <p className="text-l-medium">x{item.quantity}</p>
-                      </div>
-
-                      <div className="col-span-5 flex items-start">
-                        <div>
-                          <div className="line-clamp-1">
-                            <p className=" text-l-medium">
-                              {item.product.product_name}
+              {order.length > 0 && (
+                <div className="px-6">
+                  {order.map((item) => (
+                    <aside key={item.order_uuid} className="pb-4">
+                      <div
+                        id="product-info"
+                        className="grid grid-cols-10 gap-1"
+                      >
+                        <div className="cols-span-2">
+                          <p className="text-l-medium">x{item.quantity}</p>
+                        </div>
+                        <div className="col-span-5 flex items-start">
+                          <div>
+                            <div className="line-clamp-1">
+                              <p className=" text-l-medium">
+                                {item.product.product_name}
+                              </p>
+                            </div>
+                            <p className="text-m-regular">
+                              {item.addOnVariant
+                                .map((variant) => variant.variant_name)
+                                .join(', ')}
                             </p>
                           </div>
-                          <p className="text-m-regular">
-                            {item.addOnVariant
-                              .map((variant) => variant.variant_name)
-                              .join(', ')}
-                          </p>
                         </div>
-                      </div>
 
-                      <div className="col-span-3 flex flex-col items-start">
-                        <div>
-                          <p className="text-l-medium">
-                            {item.product.price_after_discount
-                              ? toRupiah(calculateOrder(item) || 0)
-                              : toRupiah(
-                                  calculateOrderBeforeDiscount(item) || 0,
-                                )}
-                          </p>
-                          {item.product.price_after_discount && (
-                            <p className="text-m-regular text-neutral-60 line-through">
-                              {toRupiah(
-                                calculateOrderBeforeDiscount(item) || 0,
+                        <div className="col-span-4 ml-2 flex flex-wrap items-start justify-between">
+                          <div className="flex flex-col items-center">
+                            <div>
+                              <p className="text-l-medium">
+                                {item.product.price_after_discount
+                                  ? toRupiah(calculateOrder(item) || 0)
+                                  : toRupiah(
+                                      calculateOrderBeforeDiscount(item) || 0,
+                                    )}
+                              </p>
+                              {item.product.price_after_discount && (
+                                <p className="text-m-regular text-neutral-60 line-through">
+                                  {toRupiah(
+                                    calculateOrderBeforeDiscount(item) || 0,
+                                  )}
+                                </p>
                               )}
-                            </p>
-                          )}
+                            </div>
+                          </div>
+                          <div className="mt-0.5 flex justify-end">
+                            <CgTrash
+                              className="cursor-pointer text-neutral-70 hover:opacity-80"
+                              size={20}
+                              onClick={() =>
+                                openDeleteNewOrder(item.order_uuid)
+                              }
+                            />
+                          </div>
                         </div>
                       </div>
 
-                      <div className="mt-0.5 flex justify-end">
-                        <CgTrash
-                          className="cursor-pointer text-neutral-70 hover:opacity-80"
-                          size={20}
-                          onClick={() => openDeleteNewOrder(item.order_uuid)}
-                        />
+                      <div id="notes" className="ml-10 mt-0.5">
+                        <p className="text-s-regular text-neutral-70">
+                          <span className="text-s-semibold">Notes:</span>{' '}
+                          {item.notes || '-'}
+                        </p>
                       </div>
-                    </div>
-                    {/* 
-                    <div id="notes" className="ml-7 mt-0.5">
-                      <p className="text-s-regular text-neutral-70">
-                        <span className="text-s-semibold">Notes:</span>{' '}
-                        {item.notes || '-'}
-                      </p>
-                    </div> */}
 
-                    <div className="mt-4 border-t border-neutral-30" />
-                  </aside>
-                ))}
-              </div>
-            )}
+                      <div className="mt-4 border-t border-neutral-30" />
+                    </aside>
+                  ))}
+                </div>
+              )}
+            </section>
 
             <section className="absolute bottom-0 w-full rounded-bl-2xl bg-neutral-10 p-6 shadow-basic">
               <Button variant="primary" onClick={onSubmitOrder} fullWidth>

@@ -37,7 +37,7 @@ const ModalWrapper = () => {
           await dispatch(closeModal({})).unwrap()
         }}
       >
-        {React.cloneElement(component, {})}
+        {component}
       </Modal>
     )
   }

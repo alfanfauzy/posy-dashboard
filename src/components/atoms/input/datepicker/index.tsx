@@ -93,7 +93,6 @@ const Datepicker: React.FC<DatepickerProps> = ({
 
       <Modal
         overflow={false}
-        className="w-3/4"
         open={isOpen}
         handleClose={close}
         confirmButton={
