@@ -4,6 +4,7 @@ import React, { useRef } from 'react'
 import useViewportListener from '@/hooks/useViewportListener'
 import ContentTransaction from '@/organisms/content/transaction'
 import { useAppSelector } from '@/store/hooks'
+import ViewTransactionPage from '@/view/transaction/pages'
 
 const TemplatesRightBar = dynamic(() => import('@/templates/rightbar'), {
   loading: () => <div />,
@@ -359,6 +360,7 @@ const PagesTransaction = () => {
 
   return (
     <main className="flex h-full gap-4 overflow-hidden">
+      <ViewTransactionPage />
       <ContentTransaction componentRef={componentRef} data={data} />
       {width > 1200 && <TemplatesRightBar qrRef={componentRef} />}
       {width <= 1200 && !showSidebar && (

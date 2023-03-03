@@ -42,7 +42,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
   return (
     <ProSidebarProvider>
       <main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30 py-4">
-        <section className="flex h-full w-full gap-4">
+        <section className="flex h-full w-full">
           <Sidebar />
           <div className="h-full flex-1 overflow-y-scroll">
             <Transition asPath={router.asPath}>{children}</Transition>

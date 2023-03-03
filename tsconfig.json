@@ -33,7 +33,10 @@
       "@/constants/*": ["src/constants/*"],
       "@/types/*": ["src/types/*"],
       "@/hooks/*": ["src/hooks/*"],
-      "@/schemas/*": ["src/schemas/*"]
+      "@/schemas/*": ["src/schemas/*"],
+      "@/domain/*": ["core/domain/*"],
+      "@/data/*": ["core/data/*"],
+      "@/view/*": ["core/view/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

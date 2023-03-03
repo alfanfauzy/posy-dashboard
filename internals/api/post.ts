@@ -2,7 +2,7 @@ import axios from '.'
 
 interface Post {
   endpoint: string
-  data: { [key: string]: any }
+  data: any
   baseURL?: string
   headers?: { [key: string]: string }
   isAuth?: boolean
