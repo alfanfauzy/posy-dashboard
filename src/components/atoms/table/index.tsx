@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 
 import Select from '@/atoms/input/select'
 
-interface AtomsTableProps extends TableProps<any> {
+interface AtomsTableProps<TData> extends TableProps<TData> {
   className?: string
 }
 
@@ -29,13 +29,13 @@ const Pagination = ({ onChange }: PaginationProps) => (
   </div>
 )
 
-const AtomsTable = ({
+const AtomsTable = <TData extends object>({
   columns,
   dataSource,
   className,
   loading,
   ...tableProps
-}: AtomsTableProps) => {
+}: AtomsTableProps<TData>) => {
   const [limit, setLimit] = useState(10)
 
   const onChangeLimit = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -44,7 +44,7 @@ const AtomsTable = ({
 
   return (
     <div className="w-full overflow-auto">
-      <Table
+      <Table<TData>
         loading={loading}
         className={className}
         columns={columns}

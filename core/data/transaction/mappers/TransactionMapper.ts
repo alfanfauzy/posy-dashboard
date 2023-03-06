@@ -8,7 +8,8 @@ export const mapToTransactionsModel = (
 ): Transaction[] =>
   datas.map((data) => ({
     uuid: data.uuid,
-    created_at: data.created_at,
+    seconds: data.created_at.seconds,
+    nanos: data.created_at.nanos,
     customer_name: data.customer_name,
     is_open: data.is_open,
     is_order: data.is_order,

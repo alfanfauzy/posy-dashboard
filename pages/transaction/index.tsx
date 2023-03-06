@@ -2,6 +2,7 @@ import { SEO } from '@/constants/seo'
 import ContainerTransaction from '@/containers/transaction'
 import MetaHeader from '@/molecules/meta-header'
 import type { NextPageWithLayout } from '@/types/index'
+import ViewTransactionPage from '@/view/transaction/pages'
 
 const Page: NextPageWithLayout = () => (
   <>
@@ -11,7 +12,8 @@ const Page: NextPageWithLayout = () => (
       keywords={SEO.keywords}
       image={SEO.image}
     />
-    <ContainerTransaction />
+    {/* <ContainerTransaction /> */}
+    <ViewTransactionPage />
   </>
 )
 

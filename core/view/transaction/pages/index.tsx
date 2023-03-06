@@ -1,19 +1,24 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
-import { useGetTransactionsViewModel } from '../view-models/GetTransactionsViewModel'
+import useViewportListener from '@/hooks/useViewportListener'
+import OrganismsContentsTransaction from '@/organisms/content/transaction'
+import { useAppSelector } from '@/store/hooks'
+import TemplatesRightBar from '@/templates/rightbar'
 
 const ViewTransactionPage = () => {
-  const { data, pagination } = useGetTransactionsViewModel({
-    limit: 10,
-    page: 2,
-    // search: [],
-    // sort: {},
-  })
+  const componentRef = useRef<any>()
+  const { width } = useViewportListener()
+  const { showSidebar } = useAppSelector((state) => state.auth)
+  return (
+    <main className="flex h-full gap-4 overflow-hidden">
+      <OrganismsContentsTransaction componentRef={componentRef} />
 
-  console.log(data, '<<')
-  console.log(pagination, '<<')
-
-  return <div>{JSON.stringify(data)}</div>
+      {width > 1200 && <TemplatesRightBar qrRef={componentRef} />}
+      {width <= 1200 && !showSidebar && (
+        <TemplatesRightBar qrRef={componentRef} />
+      )}
+    </main>
+  )
 }
 
 export default ViewTransactionPage

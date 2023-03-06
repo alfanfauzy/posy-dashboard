@@ -8,21 +8,42 @@ export enum TransactionStatus {
 
 export interface GetTransactionsDataResponse {
   uuid: string
-  transaction_code: string
-  table_uuid: string
-  table_number: string
+  restaurant_outlet_uuid: string
+  restaurant_outlet_table_uuid: string
   total_pax: number
   total_order: number
+  price_base: number
+  price_tax: number
+  price_discount: number
+  price_after_discount: number
+  price_final: number
   status: TransactionStatus
-  is_open: boolean
-  is_order: boolean
-  is_paid: boolean
+  transaction_code: string
+  session_suffix: string
+  transaction_category: string
+  customer_name: string
+  customer_phone: string
+  customer_email: string
   created_at: {
     seconds: number
     nanos: number
   }
-  customer_name: string
+  updated_at: {
+    seconds: number
+    nanos: number
+  }
+  first_order_at: {
+    seconds: number
+  }
+  paid_at: {
+    seconds: number
+  }
+  is_open: boolean
+  is_order: boolean
+  is_paid: boolean
   staff: string
+  table_number: string
+  table_uuid: string
 }
 
 export interface GetTransactionDataResponse

@@ -6,10 +6,10 @@ import React, { useState } from 'react'
 
 import InputSearch from '@/atoms/input/search'
 import Table from '@/atoms/table'
+import { Transaction, TransactionStatus } from '@/domain/transaction/models'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useAppDispatch } from '@/store/hooks'
 import { openModal } from '@/store/slices/modal'
-import { type Transaction, TransactionStatus } from '@/types/transaction'
 import { toRupiah } from '@/utils/common'
 import { defineds } from '@/utils/date'
 
@@ -30,10 +30,8 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
+    seconds: 1673889919,
+    nanos: 92881211,
     customer_name: 'Andi',
   },
   {
@@ -48,10 +46,8 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
+    seconds: 1673889919,
+    nanos: 92881211,
     customer_name: 'Andi 2',
   },
   {
@@ -66,10 +62,8 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
+    seconds: 1673889919,
+    nanos: 92881211,
     customer_name: 'Andi 3',
   },
   {
@@ -84,10 +78,8 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
+    seconds: 1673889919,
+    nanos: 92881211,
     customer_name: 'Andi 4',
   },
   {
@@ -102,10 +94,8 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
+    seconds: 1673889919,
+    nanos: 92881211,
     customer_name: 'Andi 5',
   },
   {
@@ -120,10 +110,8 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
+    seconds: 1673889919,
+    nanos: 92881211,
     customer_name: 'Andi 6',
   },
   {
@@ -138,10 +126,8 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
+    seconds: 1673889919,
+    nanos: 92881211,
     customer_name: 'Andi 7',
   },
   {
@@ -156,227 +142,9 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
+    seconds: 1673889919,
+    nanos: 92881211,
     customer_name: 'Andi 8',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a6432-dc111ef6ad6e',
-    transaction_code: 'O150123-008',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '9',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 9',
-  },
-  {
-    uuid: '76915a37-188c-465a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-009',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '10',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 10',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-6dc111ef6ad6e',
-    transaction_code: 'O150123-010',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '11',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 11',
-  },
-  {
-    uuid: '76915a37-2188c-46a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-011',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '12',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 12',
-  },
-  {
-    uuid: '76915a37-188c-4633a8-a432-dc111ef63ad6e',
-    transaction_code: 'O150123-012',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '13',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 13',
-  },
-  {
-    uuid: '76915a37-188c-4633a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-013',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '14',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 14',
-  },
-  {
-    uuid: '76915a37-188c-12146a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-014',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '15',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 15',
-  },
-  {
-    uuid: '76915a42137-188c-46a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-015',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '16',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 16',
-  },
-  {
-    uuid: '76915a37-188c-4641a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-016',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '17',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_PAYMENT,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 17',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-dc125111ef6ad6e',
-    transaction_code: 'O150123-017',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '18',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_PAYMENT,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 18',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-dc152111ef6ad6e',
-    transaction_code: 'O150123-018',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '19',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_PAYMENT,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 19',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-dc55111ef6ad6e',
-    transaction_code: 'O150123-019',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '20',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_PAYMENT,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: {
-      seconds: 1673889919,
-      nanos: 92881211,
-    },
-    customer_name: 'Andi 20',
   },
 ]
 
@@ -421,7 +189,7 @@ const columns = ({
     key: 'date',
     render: (_, record) => (
       <p className="whitespace-nowrap text-m-regular">
-        {moment(record.created_at.seconds).format('ll, hh:mm')}
+        {moment(record.seconds).format('ll, hh:mm')}
       </p>
     ),
   },
@@ -523,7 +291,7 @@ const PagesTransaction = () => {
             <aside className="grid grid-cols-4 gap-6 border-b border-neutral-40 py-4">
               <div>
                 <p className="text-l-bold">
-                  {moment(record.created_at.seconds).format('ll, hh:mm')}
+                  {moment(record.seconds).format('ll, hh:mm')}
                 </p>
               </div>
               <div>

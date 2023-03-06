@@ -20,7 +20,7 @@ export const GetTransactions = async (
   const response = await Post({
     endpoint: `/api/fnb-order-service/transaction/get-list`,
     headers: {
-      token: 'ddb4a0da9c6bcc05a64a67a6e5a6994f728945851da6fc127a97e29669b5db78',
+      token: '992e3572261a99e4968059e84ac4fded3ed29992ac5e798a3fe087d749a4ba82',
     },
     data: input,
   })

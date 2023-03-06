@@ -1,6 +1,5 @@
-/* eslint-disable no-shadow */
 import Image from 'next/image'
-import { Button } from 'posy-fnb-core'
+import { Button, Loading } from 'posy-fnb-core'
 import React, { useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { useMutateCreateTransaction } from 'src/apis/transaction'
@@ -9,6 +8,7 @@ import PlusCircleIcon from 'src/assets/icons/plusCircle'
 
 import FilterChip from '@/atoms/chips/filter-chip'
 import InputSearch from '@/atoms/input/search'
+import { TransactionStatus } from '@/domain/transaction/models'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
@@ -16,19 +16,13 @@ import {
   onChangeSelectedTrxId,
   onClearSearch,
 } from '@/store/slices/transaction'
-
-enum STATUS {
-  WAITING_ORDER = 'WAITING_ORDER',
-  WAITING_PAYMENT = 'WAITING_PAYMENT',
-}
+import { useGetTransactionsViewModel } from '@/view/transaction/view-models/GetTransactionsViewModel'
 
 interface OrganismsContentsTransactionProps {
-  data: any[]
   componentRef: React.RefObject<HTMLInputElement>
 }
 
 const OrganismsContentsTransaction = ({
-  data,
   componentRef,
 }: OrganismsContentsTransactionProps) => {
   const dispatch = useAppDispatch()
@@ -38,7 +32,12 @@ const OrganismsContentsTransaction = ({
 
   const { mutate, isLoading } = useMutateCreateTransaction()
 
-  const [dataTransaction, setDataTransaction] = useState(data)
+  const { data, isLoading: loadData } = useGetTransactionsViewModel({
+    limit: 100,
+    page: 1,
+    // search: [],
+    // sort: {},
+  })
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -50,13 +49,16 @@ const OrganismsContentsTransaction = ({
   }
 
   const calculateWaitingOrder = () => {
-    const temp = data.filter((el) => el.status === STATUS.WAITING_ORDER)
-    return temp.length
+    const temp =
+      data && data.filter((el) => el.status === TransactionStatus.WAITING_ORDER)
+    return temp?.length || 0
   }
 
   const calculateWaitingPayment = () => {
-    const temp = data.filter((el) => el.status === STATUS.WAITING_PAYMENT)
-    return temp.length
+    const temp =
+      data &&
+      data.filter((el) => el.status === TransactionStatus.WAITING_PAYMENT)
+    return temp?.length || 0
   }
 
   const generateBorderColor = (
@@ -80,23 +82,24 @@ const OrganismsContentsTransaction = ({
   ) => {
     if (status === statusParams) {
       setStatus('')
-      setDataTransaction(data)
+      // setDataTransaction(data)
     } else {
       setStatus(statusParams)
-      const newData = data.filter((el) => el.status === statusParams)
-      setDataTransaction(newData)
+      const newData = data && data.filter((el) => el.status === statusParams)
+      // setDataTransaction(newData)
     }
   }
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = new RegExp(e.target.value, 'i')
-    const newData = data.filter(({ name }) => name.match(regex))
-    setDataTransaction(newData)
+    const newData =
+      data && data.filter(({ customer_name }) => customer_name.match(regex))
+    // setDataTransaction(newData)
     dispatch(onChangeSearch({ search: e.target.value }))
   }
   const onClear = () => {
     dispatch(onClearSearch())
-    setDataTransaction(data)
+    // setDataTransaction(data)
     close()
   }
 
@@ -162,40 +165,47 @@ const OrganismsContentsTransaction = ({
       </article>
 
       <article className="h-[80%] w-full overflow-y-auto py-4">
-        <article
-          className={`${
-            data.length === 0
-              ? 'flex items-center justify-center bg-neutral-20'
-              : 'grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-          }`}
-        >
-          {data.length === 0 && <PlusCircleIcon />}
-          {data.length > 0 &&
-            dataTransaction.map((el) => (
-              <aside
-                key={el.uuid}
-                onClick={() => handleSelectTrx(el.transaction_code)}
-                role="presentation"
-                className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
-                  status,
-                  el.transaction_code,
-                  selectedTrxId,
-                )}`}
-              >
-                <div className="flex justify-center border-b pb-2">
-                  <p className="text-4xl font-normal text-neutral-70">
-                    {el.table_number}
-                  </p>
-                </div>
-                <div className="mt-2">
-                  <p className="text-s-semibold text-neutral-90">Name</p>
-                  <p className="text-m-regular text-neutral-90 line-clamp-1">
-                    {el.name}
-                  </p>
-                </div>
-              </aside>
-            ))}
-        </article>
+        {loadData && (
+          <article className="flex h-full items-center justify-center">
+            <Loading size={90} />
+          </article>
+        )}
+        {data && (
+          <article
+            className={`${
+              data.length === 0
+                ? 'flex items-center justify-center bg-neutral-20'
+                : 'grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+            }`}
+          >
+            {data.length === 0 && <PlusCircleIcon />}
+            {data.length > 0 &&
+              data.map((el) => (
+                <aside
+                  key={el.uuid}
+                  onClick={() => handleSelectTrx(el.transaction_code)}
+                  role="presentation"
+                  className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
+                    status,
+                    el.transaction_code,
+                    selectedTrxId,
+                  )}`}
+                >
+                  <div className="flex justify-center border-b pb-2">
+                    <p className="text-4xl font-normal text-neutral-70">
+                      {el.table_number || 'n/a'}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-s-semibold text-neutral-90">Name</p>
+                    <p className="text-m-regular text-neutral-90 line-clamp-1">
+                      {el.customer_name || 'n/a'}
+                    </p>
+                  </div>
+                </aside>
+              ))}
+          </article>
+        )}
       </article>
 
       <article className="absolute bottom-0 mb-5 flex w-full gap-4">
