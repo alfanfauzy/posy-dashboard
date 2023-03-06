@@ -85,15 +85,15 @@ const OrganismsContentsTransaction = ({
       // setDataTransaction(data)
     } else {
       setStatus(statusParams)
-      const newData = data && data.filter((el) => el.status === statusParams)
+      // const newData = data && data.filter((el) => el.status === statusParams)
       // setDataTransaction(newData)
     }
   }
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = new RegExp(e.target.value, 'i')
-    const newData =
-      data && data.filter(({ customer_name }) => customer_name.match(regex))
+    // const regex = new RegExp(e.target.value, 'i')
+    // const newData =
+    // data && data.filter(({ customer_name }) => customer_name.match(regex))
     // setDataTransaction(newData)
     dispatch(onChangeSearch({ search: e.target.value }))
   }
@@ -170,6 +170,14 @@ const OrganismsContentsTransaction = ({
             <Loading size={90} />
           </article>
         )}
+        {data && data.length === 0 && (
+          <article className="flex h-full items-center justify-center">
+            <PlusCircleIcon
+              onClick={handleGenerateQr}
+              className="cursor-pointer transition-all duration-300 ease-in-out hover:opacity-60"
+            />
+          </article>
+        )}
         {data && (
           <article
             className={`${
@@ -178,7 +186,6 @@ const OrganismsContentsTransaction = ({
                 : 'grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
             }`}
           >
-            {data.length === 0 && <PlusCircleIcon />}
             {data.length > 0 &&
               data.map((el) => (
                 <aside

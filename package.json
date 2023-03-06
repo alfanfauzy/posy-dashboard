@@ -13,7 +13,8 @@
     "type:check": "tsc --noEmit --pretty --incremental false",
     "format": "prettier --write \"*/.{js,jsx,ts,tsx,css,json,md\"",
     "prepare": "husky install",
-    "vercel": "npx vercel build --prod --token=WJqtant93wzvrdrmfrRQ3fjd && npx vercel deploy --prebuilt --prod --token=WJqtant93wzvrdrmfrRQ3fjd"
+    "vercel": "npx vercel build --prod --token=WJqtant93wzvrdrmfrRQ3fjd && npx vercel deploy --prebuilt --prod --token=WJqtant93wzvrdrmfrRQ3fjd",
+    "push:prod": "git push && npm run vercel"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
