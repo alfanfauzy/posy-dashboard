@@ -1,4 +1,5 @@
 import React from 'react'
+import { DebounceInput } from 'react-debounce-input'
 import { FiSearch } from 'react-icons/fi'
 import { MdCancel } from 'react-icons/md'
 
@@ -28,16 +29,18 @@ const AtomsInputSearch = ({
     >
       <span className="relative flex h-full items-center justify-start">
         <div className="absolute left-3">
-          <FiSearch size={16} className="stroke-neutral-90" onClick={open} />
+          <FiSearch size={16} className="stroke-neutral-90" />
         </div>
-        <input
+        <DebounceInput
           onFocus={open}
           onBlur={
             onClearSearch && search.length === 0
               ? () => setTimeout(() => onClearSearch(), 100)
               : () => undefined
           }
-          onChange={onSearch}
+          minLength={2}
+          debounceTimeout={300}
+          onChange={onSearch ? (e) => onSearch(e) : () => undefined}
           value={search}
           type="text"
           placeholder={placeholder || ''}

@@ -12,8 +12,10 @@ export const mapToTransactionsModel = (
 ): Transactions =>
   datas.map((data) => ({
     uuid: data.uuid,
-    seconds: data.created_at.seconds,
-    nanos: data.created_at.nanos,
+    created_at: data.created_at.seconds,
+    paid_at: data.paid_at.seconds,
+    first_order_at: data.first_order_at.seconds,
+    updated_at: data.updated_at.seconds,
     customer_name: data.customer_name,
     is_open: data.is_open,
     is_order: data.is_order,

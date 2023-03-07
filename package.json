@@ -36,6 +36,7 @@
     "posy-fnb-core": "^1.0.48",
     "react": "18.2.0",
     "react-date-range": "^1.4.0",
+    "react-debounce-input": "^3.3.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.0",
     "react-icons": "^4.7.1",

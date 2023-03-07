@@ -18,8 +18,10 @@ export interface TransactionBased {
   is_open: boolean
   is_order: boolean
   is_paid: boolean
-  seconds: number
-  nanos: number
+  created_at: number
+  updated_at: number
+  first_order_at: number
+  paid_at: number
   customer_name: string
   staff: string
 }

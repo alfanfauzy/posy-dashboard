@@ -10,7 +10,7 @@ import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'
 
 export type GetTransactionsInput = InputVariables<
   keyof Transaction,
-  keyof Pick<Transaction, 'customer_name' | 'transaction_code'>
+  keyof Pick<Transaction, 'customer_name' | 'status' | 'transaction_code'>
 >
 
 export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {

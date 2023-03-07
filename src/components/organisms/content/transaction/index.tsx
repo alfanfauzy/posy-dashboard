@@ -29,7 +29,7 @@ const OrganismsContentsTransaction = ({
 }: OrganismsContentsTransactionProps) => {
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
-  const { selectedTrxId } = useAppSelector((state) => state.transaction)
+  const { selectedTrxId, search } = useAppSelector((state) => state.transaction)
   const [openSearch, { open, close }] = useDisclosure({ initialState: false })
   const [status, setStatus] = useState('')
 
@@ -38,14 +38,26 @@ const OrganismsContentsTransaction = ({
     createTransaction,
     data: dataCreate,
   } = useCreateTransactionViewModel({
-    onSuccess: () => queryClient.invalidateQueries(GetTransactionsQueryKey),
+    onSuccess: () => queryClient.invalidateQueries(GetTransactionsQueryKey()),
   })
 
   const { data, isLoading: loadData } = useGetTransactionsViewModel({
     limit: 100,
     page: 1,
-    // search: [],
-    // sort: {},
+    search: [
+      {
+        field: 'status',
+        value: status,
+      },
+      {
+        field: 'customer_name',
+        value: search,
+      },
+      {
+        field: 'transaction_code',
+        value: search,
+      },
+    ],
   })
 
   // const handlePrint = useReactToPrint({
@@ -86,24 +98,17 @@ const OrganismsContentsTransaction = ({
   ) => {
     if (status === statusParams) {
       setStatus('')
-      // setDataTransaction(data)
     } else {
       setStatus(statusParams)
-      // const newData = data && data.filter((el) => el.status === statusParams)
-      // setDataTransaction(newData)
     }
   }
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const regex = new RegExp(e.target.value, 'i')
-    // const newData =
-    // data && data.filter(({ customer_name }) => customer_name.match(regex))
-    // setDataTransaction(newData)
     dispatch(onChangeSearch({ search: e.target.value }))
   }
+
   const onClear = () => {
     dispatch(onClearSearch())
-    // setDataTransaction(data)
     close()
   }
 
@@ -128,9 +133,11 @@ const OrganismsContentsTransaction = ({
             <FilterChip
               label={`Waiting Order: ${calculateWaitingOrder()}`}
               openSearch={openSearch}
-              onClick={(e) => handleSetStatus(e, 'WAITING_ORDER')}
+              onClick={(e) =>
+                handleSetStatus(e, TransactionStatus.WAITING_ORDER)
+              }
               className={`${
-                status === 'WAITING_ORDER'
+                status === TransactionStatus.WAITING_ORDER
                   ? 'border-2 border-blue-success'
                   : 'border-neutral-50 '
               }`}
@@ -138,9 +145,11 @@ const OrganismsContentsTransaction = ({
             <FilterChip
               label={`Waiting Payment: ${calculateWaitingPayment()}`}
               openSearch={openSearch}
-              onClick={(e) => handleSetStatus(e, 'WAITING_PAYMENT')}
+              onClick={(e) =>
+                handleSetStatus(e, TransactionStatus.WAITING_PAYMENT)
+              }
               className={`${
-                status === 'WAITING_PAYMENT'
+                status === TransactionStatus.WAITING_PAYMENT
                   ? 'border-2 border-green-success'
                   : 'border-neutral-50 '
               }`}
