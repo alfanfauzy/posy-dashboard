@@ -46,7 +46,15 @@ export interface GetTransactionsDataResponse {
   table_uuid: string
 }
 
-export interface GetTransactionDataResponse
-  extends GetTransactionsDataResponse {
-  test: string
+export interface CreateTransactionDataResponse {
+  uuid: string
+  qrcode: {
+    base64_qrcode: string
+    qrcode_url: string
+    transaction_code: string
+  }
+  created_at: {
+    seconds: number
+    nanos: number
+  }
 }

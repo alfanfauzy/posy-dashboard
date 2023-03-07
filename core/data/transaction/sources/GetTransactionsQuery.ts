@@ -20,7 +20,7 @@ export const GetTransactions = async (
   const response = await Post({
     endpoint: `/api/fnb-order-service/transaction/get-list`,
     headers: {
-      token: '992e3572261a99e4968059e84ac4fded3ed29992ac5e798a3fe087d749a4ba82',
+      token: process.env.NEXT_PUBLIC_TOKEN || '',
     },
     data: input,
   })
@@ -29,7 +29,7 @@ export const GetTransactions = async (
     code: response?.code,
     data: response?.data as any,
     message: response?.message,
-    more_info: 'Success',
+    more_info: response?.more_info,
   }
 }
 

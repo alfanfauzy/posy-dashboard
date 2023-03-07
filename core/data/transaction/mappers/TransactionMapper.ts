@@ -1,11 +1,15 @@
-import { Transaction } from '@/domain/transaction/models'
+import { QrCode } from '@/domain/qr-code/models'
+import { Transactions } from '@/domain/transaction/models'
 
-import { GetTransactionsDataResponse } from '../types'
+import {
+  CreateTransactionDataResponse,
+  GetTransactionsDataResponse,
+} from '../types'
 
 // map server data to own model
 export const mapToTransactionsModel = (
   datas: GetTransactionsDataResponse[],
-): Transaction[] =>
+): Transactions =>
   datas.map((data) => ({
     uuid: data.uuid,
     seconds: data.created_at.seconds,
@@ -23,9 +27,13 @@ export const mapToTransactionsModel = (
     transaction_code: data.transaction_code,
   }))
 
-// export const mapToTransactionModel = (
-//   data: GetTransactionDataResponse,
-// ): GetTransactionDataResponse => ({
-//   ...mapToTransactionsModel(data),
-//   test: data.test,
-// })
+export const mapToCreateTransactionModel = (
+  data: CreateTransactionDataResponse,
+): QrCode => ({
+  uuid: data.uuid,
+  base64_qrcode: data.qrcode.base64_qrcode,
+  qrcode_url: data.qrcode.qrcode_url,
+  transaction_code: data.qrcode.transaction_code,
+  nanos: data.created_at.nanos,
+  seconds: data.created_at.seconds,
+})

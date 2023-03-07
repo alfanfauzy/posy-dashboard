@@ -1,6 +1,8 @@
-import { Transaction } from '@/domain/transaction/models'
+import { QrCode } from '@/domain/qr-code/models'
+import { Transaction, Transactions } from '@/domain/transaction/models'
 import { InputVariables } from '@/domain/vo/BaseInput'
-import { Result } from '@/domain/vo/BaseResponse'
+import { Pagination } from '@/domain/vo/BasePagination'
+import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'
 
 /**
  * GET
@@ -11,33 +13,20 @@ export type GetTransactionsInput = InputVariables<
   keyof Pick<Transaction, 'customer_name' | 'transaction_code'>
 >
 
-type Pagination = {
-  curr_page: number
-  total_page: number
-  total_objs: number
-  per_page: number
-}
-
-export type GetTransactionsResult = Result<Transaction[] | undefined> & {
+export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {
   pagination: Pagination | undefined
 }
 
-export type GetTransactionResult = Result<Transaction>
+export type GetTransactionResult = ResultQuery<Transaction>
 
 /**
  * CREATE
  */
 
-export type CreateTransactionInput = {
-  id: string
-}
+export type CreateTransactionResult = ResultMutation<QrCode | undefined>
 
-export type CreateTransactionResult = Result<Transaction>
-
-export interface CreateTransactionRepository {
-  createTransaction(
-    input: CreateTransactionInput,
-  ): Promise<CreateTransactionResult>
+export interface CreateTransactionRepository extends CreateTransactionResult {
+  createTransaction(): void
 }
 
 /**
@@ -48,7 +37,7 @@ export type DeleteTransactionInput = {
   id: string
 }
 
-export type DeleteTransactionResult = Result<Transaction>
+export type DeleteTransactionResult = ResultMutation<Transaction>
 
 export interface DeleteTransactionRepository {
   deleteTransaction(

@@ -1,4 +1,4 @@
-import { UseQueryResult } from '@tanstack/react-query'
+import { UseMutationResult, UseQueryResult } from '@tanstack/react-query'
 
 export type Response<TData = unknown> = {
   code: number
@@ -7,9 +7,20 @@ export type Response<TData = unknown> = {
   more_info: string
 }
 
-export type Result<TData = unknown, TError = unknown> = Omit<
+export type ResultQuery<TData = unknown, TError = unknown> = Omit<
   UseQueryResult<unknown, TError>,
   'data'
+> & {
+  data: TData
+}
+
+export type ResultMutation<
+  TData = unknown,
+  TError = unknown,
+  TVariables = unknown,
+> = Omit<
+  UseMutationResult<unknown, TError, TVariables>,
+  'data' | 'mutate' | 'mutateAsync'
 > & {
   data: TData
 }

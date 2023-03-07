@@ -16,24 +16,3 @@ export interface InputVariables<TSort = unknown, TSearch = unknown> {
   limit?: number
   page?: number
 }
-
-// export type TransactionDataResponse = {
-//   transaction_code: string
-//   transaction_name: string
-// }
-
-// // use case
-// export type TransactionDataSearchKey = keyof TransactionDataResponse
-// export type TransactionDataSortKey = keyof Pick<
-//   TransactionDataResponse,
-//   'transaction_name'
-// >
-
-// const input: InputVariables<TransactionDataSortKey, TransactionDataSearchKey> =
-//   {
-//     search: [{ field: 'transaction_name', value: 'test' }],
-//     sort: {
-//       field: 'transaction_name',
-//       value: 'asc',
-//     },
-//   }

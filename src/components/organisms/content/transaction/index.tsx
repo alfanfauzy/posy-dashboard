@@ -1,13 +1,14 @@
+import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { Button, Loading } from 'posy-fnb-core'
 import React, { useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
-import { useMutateCreateTransaction } from 'src/apis/transaction'
 import NotificationIcon from 'src/assets/icons/notification'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
 
 import FilterChip from '@/atoms/chips/filter-chip'
 import InputSearch from '@/atoms/input/search'
+import { GetTransactionsQueryKey } from '@/data/transaction/sources/GetTransactionsQuery'
 import { TransactionStatus } from '@/domain/transaction/models'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
@@ -16,6 +17,7 @@ import {
   onChangeSelectedTrxId,
   onClearSearch,
 } from '@/store/slices/transaction'
+import { useCreateTransactionViewModel } from '@/view/transaction/view-models/CreateTransactionViewModel'
 import { useGetTransactionsViewModel } from '@/view/transaction/view-models/GetTransactionsViewModel'
 
 interface OrganismsContentsTransactionProps {
@@ -26,11 +28,18 @@ const OrganismsContentsTransaction = ({
   componentRef,
 }: OrganismsContentsTransactionProps) => {
   const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
   const [openSearch, { open, close }] = useDisclosure({ initialState: false })
   const [status, setStatus] = useState('')
 
-  const { mutate, isLoading } = useMutateCreateTransaction()
+  const {
+    isLoading,
+    createTransaction,
+    data: dataCreate,
+  } = useCreateTransactionViewModel({
+    onSuccess: () => queryClient.invalidateQueries(GetTransactionsQueryKey),
+  })
 
   const { data, isLoading: loadData } = useGetTransactionsViewModel({
     limit: 100,
@@ -39,14 +48,9 @@ const OrganismsContentsTransaction = ({
     // sort: {},
   })
 
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  })
-
-  const handleGenerateQr = () => {
-    mutate()
-    handlePrint()
-  }
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  // })
 
   const calculateWaitingOrder = () => {
     const temp =
@@ -152,7 +156,7 @@ const OrganismsContentsTransaction = ({
 
           <div className="w-1/4">
             <Button
-              onClick={handleGenerateQr}
+              onClick={createTransaction}
               size="m"
               fullWidth
               variant="primary"
@@ -173,7 +177,7 @@ const OrganismsContentsTransaction = ({
         {data && data.length === 0 && (
           <article className="flex h-full items-center justify-center">
             <PlusCircleIcon
-              onClick={handleGenerateQr}
+              onClick={!isLoading ? createTransaction : () => undefined}
               className="cursor-pointer transition-all duration-300 ease-in-out hover:opacity-60"
             />
           </article>
