@@ -12,7 +12,7 @@ export const useGetTransactionsUsecase = (
   const { data, ...rest } = useGetTransactionsQuery(input)
 
   if (data?.data?.objs) {
-    const dataMapper = mapToTransactionsModel(data.data?.objs)
+    const dataMapper = mapToTransactionsModel(data.data.objs)
 
     return {
       data: dataMapper,

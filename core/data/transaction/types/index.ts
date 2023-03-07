@@ -6,7 +6,7 @@ export enum TransactionStatus {
   CANCELLED = 'CANCELLED',
 }
 
-export interface GetTransactionsDataResponse {
+export interface GetTransactionsDataResponseBased {
   uuid: string
   restaurant_outlet_uuid: string
   restaurant_outlet_table_uuid: string
@@ -44,6 +44,13 @@ export interface GetTransactionsDataResponse {
   staff: string
   table_number: string
   table_uuid: string
+}
+
+export type GetTransactionsDataResponse = GetTransactionsDataResponseBased
+
+export interface GetTransactionDataResponse
+  extends GetTransactionsDataResponseBased {
+  orders?: any[]
 }
 
 export interface CreateTransactionDataResponse {

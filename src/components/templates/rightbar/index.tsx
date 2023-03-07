@@ -26,6 +26,7 @@ import {
   calculateOrderBeforeDiscount,
   toRupiah,
 } from '@/utils/common'
+import { useGetTransactionViewModel } from '@/view/transaction/view-models/GetTransactionViewModel'
 
 import {
   listCancelReason,
@@ -55,6 +56,9 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const dispatch = useAppDispatch()
   const kitchenRef = useRef<any>()
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
+
+  const { data: dataTransaction, isLoading: loadTransaction } =
+    useGetTransactionViewModel({ transaction_uuid: selectedTrxId })
 
   const [tabValueorder, setTabValueOrder] = useState(0)
   const [tabValueMenu, setTabValueMenu] = useState(0)

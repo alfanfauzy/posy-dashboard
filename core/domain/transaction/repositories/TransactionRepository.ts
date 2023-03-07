@@ -17,7 +17,8 @@ export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {
   pagination: Pagination | undefined
 }
 
-export type GetTransactionResult = ResultQuery<Transaction>
+export type GetTransactionInput = { transaction_uuid: string }
+export type GetTransactionResult = ResultQuery<Transaction | undefined>
 
 /**
  * CREATE

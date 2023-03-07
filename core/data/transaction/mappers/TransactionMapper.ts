@@ -1,8 +1,9 @@
 import { QrCode } from '@/domain/qr-code/models'
-import { Transactions } from '@/domain/transaction/models'
+import { Transaction, Transactions } from '@/domain/transaction/models'
 
 import {
   CreateTransactionDataResponse,
+  GetTransactionDataResponse,
   GetTransactionsDataResponse,
 } from '../types'
 
@@ -28,6 +29,27 @@ export const mapToTransactionsModel = (
     total_pax: data.total_pax,
     transaction_code: data.transaction_code,
   }))
+
+export const mapToTransactionModel = (
+  data: GetTransactionDataResponse,
+): Transaction => ({
+  uuid: data.uuid,
+  created_at: data.created_at.seconds,
+  paid_at: data.paid_at.seconds,
+  first_order_at: data.first_order_at.seconds,
+  updated_at: data.updated_at.seconds,
+  customer_name: data.customer_name,
+  is_open: data.is_open,
+  is_order: data.is_order,
+  is_paid: data.is_paid,
+  staff: data.staff,
+  status: data.status,
+  table_number: data.table_number,
+  table_uuid: data.table_uuid,
+  total_order: data.total_order,
+  total_pax: data.total_pax,
+  transaction_code: data.transaction_code,
+})
 
 export const mapToCreateTransactionModel = (
   data: CreateTransactionDataResponse,
