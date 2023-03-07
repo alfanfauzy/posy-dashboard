@@ -17,7 +17,7 @@ const Datepicker = dynamic(() => import('@/atoms/input/datepicker'), {
   loading: () => <div />,
 })
 
-const data: Transaction[] = [
+const data: Partial<Transaction>[] = [
   {
     uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
     transaction_code: 'O150123-000',
@@ -30,8 +30,7 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    seconds: 1673889919,
-    nanos: 92881211,
+    created_at: 1673889919,
     customer_name: 'Andi',
   },
   {
@@ -46,8 +45,7 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    seconds: 1673889919,
-    nanos: 92881211,
+    created_at: 1673889919,
     customer_name: 'Andi 2',
   },
   {
@@ -62,8 +60,7 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    seconds: 1673889919,
-    nanos: 92881211,
+    created_at: 1673889919,
     customer_name: 'Andi 3',
   },
   {
@@ -78,8 +75,7 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    seconds: 1673889919,
-    nanos: 92881211,
+    created_at: 1673889919,
     customer_name: 'Andi 4',
   },
   {
@@ -94,8 +90,7 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    seconds: 1673889919,
-    nanos: 92881211,
+    created_at: 1673889919,
     customer_name: 'Andi 5',
   },
   {
@@ -110,8 +105,7 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    seconds: 1673889919,
-    nanos: 92881211,
+    created_at: 1673889919,
     customer_name: 'Andi 6',
   },
   {
@@ -126,8 +120,7 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    seconds: 1673889919,
-    nanos: 92881211,
+    created_at: 1673889919,
     customer_name: 'Andi 7',
   },
   {
@@ -142,8 +135,7 @@ const data: Transaction[] = [
     is_order: false,
     is_paid: false,
     staff: 'jack',
-    seconds: 1673889919,
-    nanos: 92881211,
+    created_at: 1673889919,
     customer_name: 'Andi 8',
   },
 ]
@@ -174,7 +166,7 @@ interface ColumnsProps {
 
 const columns = ({
   handleOpenDetails,
-}: ColumnsProps): ColumnsType<Transaction> => [
+}: ColumnsProps): ColumnsType<Partial<Transaction>> => [
   {
     title: 'Trx ID',
     dataIndex: 'transaction_code',
@@ -189,7 +181,7 @@ const columns = ({
     key: 'date',
     render: (_, record) => (
       <p className="whitespace-nowrap text-m-regular">
-        {moment(record.seconds).format('ll, hh:mm')}
+        {moment(record.created_at).format('ll, hh:mm')}
       </p>
     ),
   },
@@ -242,7 +234,7 @@ const columns = ({
     render: (_, record) => (
       <div
         role="presentation"
-        onClick={() => handleOpenDetails(record)}
+        onClick={() => handleOpenDetails(record as any)}
         // href={`history/${record.transaction_code}`}
         className="cursor-pointer whitespace-nowrap text-s-regular transition-all duration-300 ease-in-out hover:text-neutral-100 hover:text-opacity-50"
       >
@@ -291,7 +283,7 @@ const PagesTransaction = () => {
             <aside className="grid grid-cols-4 gap-6 border-b border-neutral-40 py-4">
               <div>
                 <p className="text-l-bold">
-                  {moment(record.seconds).format('ll, hh:mm')}
+                  {moment(record.created_at).format('ll, hh:mm')}
                 </p>
               </div>
               <div>
