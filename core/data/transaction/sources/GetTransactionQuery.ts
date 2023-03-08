@@ -7,17 +7,16 @@ import { Response } from '@/domain/vo/BaseResponse'
 import { GetTransactionDataResponse } from '../types'
 
 export const GetTransactionQueryKey = (input?: GetTransactionInput) =>
-  [`transactions/detail/${input}`] as const
+  ['transactions/detail', input] as const
 
 export const GetTransaction = async (
   input?: GetTransactionInput,
 ): Promise<Response<GetTransactionDataResponse>> => {
   const response = await Get({
-    endpoint: `/api/fnb-order-service/transaction/get-list`,
+    endpoint: `/api/fnb-order-service/transaction/get-detail/${input?.transaction_uuid}`,
     headers: {
       token: process.env.NEXT_PUBLIC_TOKEN || '',
     },
-    params: input,
   })
 
   return {

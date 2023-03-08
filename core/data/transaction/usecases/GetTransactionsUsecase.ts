@@ -1,15 +1,20 @@
+import { UseQueryOptions } from '@tanstack/react-query'
+
 import {
   GetTransactionsInput,
   GetTransactionsResult,
 } from '@/domain/transaction/repositories/TransactionRepository'
+import { DataList, Response } from '@/domain/vo/BaseResponse'
 
 import { mapToTransactionsModel } from '../mappers/TransactionMapper'
 import { useGetTransactionsQuery } from '../sources/GetTransactionsQuery'
+import { GetTransactionsDataResponse } from '../types'
 
 export const useGetTransactionsUsecase = (
   input?: GetTransactionsInput,
+  options?: UseQueryOptions<Response<DataList<GetTransactionsDataResponse>>>,
 ): GetTransactionsResult => {
-  const { data, ...rest } = useGetTransactionsQuery(input)
+  const { data, ...rest } = useGetTransactionsQuery(input, options)
 
   if (data?.data?.objs) {
     const dataMapper = mapToTransactionsModel(data.data.objs)

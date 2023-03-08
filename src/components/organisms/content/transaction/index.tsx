@@ -203,7 +203,7 @@ const OrganismsContentsTransaction = ({
               data.map((el) => (
                 <aside
                   key={el.uuid}
-                  onClick={() => handleSelectTrx(el.transaction_code)}
+                  onClick={() => handleSelectTrx(el.uuid)}
                   role="presentation"
                   className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
                     status,

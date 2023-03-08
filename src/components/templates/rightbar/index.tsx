@@ -58,7 +58,10 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
 
   const { data: dataTransaction, isLoading: loadTransaction } =
-    useGetTransactionViewModel({ transaction_uuid: selectedTrxId })
+    useGetTransactionViewModel(
+      { transaction_uuid: selectedTrxId },
+      { enabled: !!selectedTrxId },
+    )
 
   const [tabValueorder, setTabValueOrder] = useState(0)
   const [tabValueMenu, setTabValueMenu] = useState(0)

@@ -9,6 +9,7 @@ const ViewTransactionPage = () => {
   const componentRef = useRef<any>()
   const { width } = useViewportListener()
   const { showSidebar } = useAppSelector((state) => state.auth)
+
   return (
     <main className="flex h-full gap-4 overflow-hidden">
       <OrganismsContentsTransaction componentRef={componentRef} />
