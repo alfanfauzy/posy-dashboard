@@ -1,5 +1,14 @@
+import { useQueryClient } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
-import { Button, Checkbox, Input, Select, Tabs, Textarea } from 'posy-fnb-core'
+import {
+  Button,
+  Checkbox,
+  Input,
+  Loading,
+  Select,
+  Tabs,
+  Textarea,
+} from 'posy-fnb-core'
 import React, { useCallback, useRef, useState } from 'react'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { CgTrash } from 'react-icons/cg'
@@ -7,6 +16,8 @@ import { IoMdArrowBack } from 'react-icons/io'
 import { useReactToPrint } from 'react-to-print'
 
 import InputSearch from '@/atoms/input/search'
+import { GetOrdersQueryKey } from '@/data/order/sources/GetOrdersQuery'
+import { AddonVariant } from '@/domain/addon/model'
 import { Product } from '@/domain/product/model'
 import useDisclosure from '@/hooks/useDisclosure'
 import NoOrderIcon from '@/icons/noOrder'
@@ -18,6 +29,7 @@ import {
   onChangeNotes,
   onChangeProduct,
   onChangeQuantity,
+  onClearOrder,
   onCloseOrderModal,
   onDropOrder,
 } from '@/store/slices/order'
@@ -26,13 +38,15 @@ import {
   calculateOrderBeforeDiscount,
   toRupiah,
 } from '@/utils/common'
+import { useGetCategoriesViewModel } from '@/view/category/view-models/GetCategoriesViewModel'
+import { useCreateOrderManualViewModel } from '@/view/order/view-models/CreateOrderManualViewModel'
 import { useGetOrdersViewModel } from '@/view/order/view-models/GetOrdersViewModel'
 import { useGetProductsViewModel } from '@/view/product/view-models/GetProductsViewModel'
+import { useGetProductViewModel } from '@/view/product/view-models/GetProductViewModel'
 import { useGetTransactionViewModel } from '@/view/transaction/view-models/GetTransactionViewModel'
 
 import {
   listCancelReason,
-  listMenuTabs,
   listOrderTabs,
   orderType,
   tableNumber,
@@ -56,11 +70,30 @@ interface TemplatesRightBarProps {
 const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const dispatch = useAppDispatch()
   const kitchenRef = useRef<any>()
+  const queryClient = useQueryClient()
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
+
+  const { quantity, product, notes, addOnVariant } = useAppSelector(
+    (state) => state.order.orderForm,
+  )
+
+  const { order } = useAppSelector((state) => state.order)
 
   const [
     isOpenCreateOrder,
     { open: openCreateOrder, close: closeCreateOrder },
+  ] = useDisclosure({ initialState: false })
+
+  const [
+    showDeleteOrder,
+    { toggle: toggleShowDeleteOrder, close: closeDeleteOrder },
+  ] = useDisclosure({
+    initialState: false,
+  })
+
+  const [
+    isOpenAddVariantOrder,
+    { open: openAddVariantOrder, close: closeAddVariantOrder },
   ] = useDisclosure({ initialState: false })
 
   const { data: dataTransaction, isLoading: loadTransaction } =
@@ -82,6 +115,28 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     { enabled: !!isOpenCreateOrder },
   )
 
+  const { data: dataProductDetail, isLoading: loadProductDetail } =
+    useGetProductViewModel(
+      {
+        product_uuid: product?.uuid || '',
+      },
+      { enabled: !!(isOpenAddVariantOrder && product?.uuid) },
+    )
+
+  const { data: dataCategory, isLoading: loadCategory } =
+    useGetCategoriesViewModel(
+      {
+        limit: 100,
+        page: 1,
+        sort: {
+          field: 'category_name',
+          value: 'desc',
+        },
+        search: [],
+      },
+      { enabled: !!isOpenCreateOrder },
+    )
+
   const { data: dataOrder, isLoading: loadOrder } = useGetOrdersViewModel(
     {
       transaction_uuid: dataTransaction?.uuid || '',
@@ -89,25 +144,24 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     { enabled: !!dataTransaction?.uuid },
   )
 
-  console.log(dataOrder, ',')
+  const { createOrderManual, isLoading: loadCreateOrderManual } =
+    useCreateOrderManualViewModel({
+      onSuccess: () => {
+        closeCreateOrder()
+        dispatch(onClearOrder())
+        queryClient.invalidateQueries(
+          GetOrdersQueryKey({ transaction_uuid: dataTransaction?.uuid || '' }),
+        )
+      },
+    })
+
   const [tabValueorder, setTabValueOrder] = useState(0)
   const [tabValueMenu, setTabValueMenu] = useState(0)
-
-  const [
-    showDeleteOrder,
-    { toggle: toggleShowDeleteOrder, close: closeDeleteOrder },
-  ] = useDisclosure({
-    initialState: false,
-  })
-
-  const [
-    isOpenAddVariantOrder,
-    { open: openAddVariantOrder, close: closeAddVariantOrder },
-  ] = useDisclosure({ initialState: false })
 
   const handlePrintQr = useReactToPrint({
     content: () => qrRef.current,
   })
+
   const handlePrintToKitchen = useReactToPrint({
     content: () => kitchenRef.current,
   })
@@ -136,11 +190,6 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     dispatch(onCloseOrderModal())
   }
 
-  const { quantity, product, notes, addOnVariant } = useAppSelector(
-    (state) => state.order.orderForm,
-  )
-  const { order } = useAppSelector((state) => state.order)
-
   const handleIncreamentQuantity = useCallback(
     () => dispatch(onChangeQuantity({ operator: 'plus', value: 1 })),
     [dispatch],
@@ -153,7 +202,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
 
   const handleChangeAddon = (
     type: 'radio' | 'checkbox',
-    variant: any,
+    variant: AddonVariant,
     addOn: { addOnName: string; addOnUuid: string },
   ) =>
     dispatch(
@@ -211,15 +260,19 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
       })
 
       return {
-        product_uuid: el.product.uuid,
+        product_uuid: el.product?.uuid,
         qty: el.quantity,
         order_note: el.notes,
         addon: tempAddOn,
       }
     })
 
-    console.log(order, 'order')
-    console.log(payload, 'submit order')
+    if (dataTransaction && payload) {
+      createOrderManual({
+        transaction_uuid: dataTransaction?.uuid,
+        order: payload,
+      })
+    }
   }
 
   const openCancelTransaction = () => {
@@ -672,33 +725,39 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             </section>
 
             <section id="menus" className="mt-6 h-full w-full">
-              <Tabs
-                scrollable
-                items={listMenuTabs}
-                value={tabValueMenu}
-                onChange={(e) => setTabValueMenu(e)}
-              />
+              {dataCategory && (
+                <Tabs
+                  scrollable
+                  items={dataCategory?.map((el) => ({
+                    label: el.category_name,
+                    value: el.uuid,
+                  }))}
+                  value={tabValueMenu}
+                  onChange={(e) => setTabValueMenu(e)}
+                  fullWidth
+                />
+              )}
               <article className="my-6 h-4/5 overflow-y-auto">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {dataProduct &&
-                    dataProduct.map((menu) => (
+                    dataProduct.map((product) => (
                       <div
                         role="presentation"
-                        onClick={() => onOpenAddVariantOrder(menu)}
-                        key={menu.product_name}
+                        onClick={() => onOpenAddVariantOrder(product)}
+                        key={product.product_name}
                         className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
                       >
                         <p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
-                          {menu.product_name}
+                          {product.product_name}
                         </p>
                         <div className="my-2 border-b border-neutral-40" />
                         <div className="flex flex-col items-center justify-center gap-1">
                           <p className="text-m-regular text-neutral-90">
-                            {toRupiah(menu.price_final)}
+                            {toRupiah(product.price_final)}
                           </p>
-                          {menu.price_discount > 0 && (
+                          {product.price_discount > 0 && (
                             <p className="text-xs line-through">
-                              {toRupiah(menu.price)}
+                              {toRupiah(product.price)}
                             </p>
                           )}
                         </div>
@@ -821,7 +880,12 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             </section>
 
             <section className="absolute bottom-0 w-full rounded-bl-2xl bg-neutral-10 p-6 shadow-basic">
-              <Button variant="primary" onClick={onSubmitOrder} fullWidth>
+              <Button
+                variant="primary"
+                isLoading={loadCreateOrderManual}
+                onClick={onSubmitOrder}
+                fullWidth
+              >
                 Submit Order
               </Button>
             </section>
@@ -853,103 +917,116 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             }
           >
             <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
-              {product && (
-                <aside>
-                  <p className="text-heading-s-semibold">
-                    {product.product_name}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <p className="text-xxl-medium">
-                      {toRupiah(product.price_final)}
-                    </p>
-                    {product.price_discount > 0 && (
-                      <div>
-                        <p className="text-xxl-medium text-neutral-80 line-through">
-                          {toRupiah(product.price)}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </aside>
+              {loadProductDetail && (
+                <div className="mt-48 flex w-full items-center justify-center">
+                  <Loading size={90} />
+                </div>
               )}
-
-              <aside className="mt-4 flex items-center gap-10">
-                <div className="flex-1 border-b border-neutral-40">
-                  <p className="text-xxl-semibold">Item Quantity</p>
-                </div>
-                <div className="flex items-center justify-center gap-6">
-                  <div
-                    role="presentation"
-                    onClick={
-                      quantity === 0
-                        ? () => undefined
-                        : handleDecreamentQuantity
-                    }
-                    className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
-                  >
-                    -
-                  </div>
-                  <div className="text-heading-s-semibold">{quantity}</div>
-                  <div
-                    role="presentation"
-                    onClick={handleIncreamentQuantity}
-                    className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
-                  >
-                    +
-                  </div>
-                </div>
-              </aside>
-
-              {/* {product.addon &&
-                product.addon.map((addon) => (
-                  <aside key={addon.addon_uuid} className="mt-6">
-                    <div className="flex items-center gap-4">
-                      <p className="text-xxl-semibold">{addon.addon_name}</p>
-                      <div className="text-m-regular">Required | select 1</div>
-                    </div>
-
-                    <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
-                      {addon.variant.map((variant) => (
-                        <div
-                          key={variant.variant_uuid}
-                          className="flex flex-col items-center"
-                        >
-                          <div
-                            role="presentation"
-                            onClick={() =>
-                              handleChangeAddon(
-                                addon.is_multiple ? 'checkbox' : 'radio',
-                                variant,
-                                {
-                                  addOnName: addon.addon_name,
-                                  addOnUuid: addon.addon_uuid,
-                                },
-                              )
-                            }
-                            className={`flex cursor-pointer items-center justify-center rounded-3xl border  py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-[#F2F1F9] hover:bg-opacity-80 ${generateBgColor(
-                              variant.variant_uuid,
-                            )}`}
-                          >
-                            {variant.variant_name}
-                          </div>
-                          <div className="mt-1 text-m-regular">
-                            + {toRupiah(variant.price)}
-                          </div>
+              {product && dataProductDetail && (
+                <div>
+                  <aside>
+                    <p className="text-heading-s-semibold">
+                      {product.product_name}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-xxl-medium">
+                        {toRupiah(product.price_final)}
+                      </p>
+                      {product.price_discount > 0 && (
+                        <div>
+                          <p className="text-xxl-medium text-neutral-80 line-through">
+                            {toRupiah(product.price)}
+                          </p>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </aside>
-                ))} */}
 
-              <aside className="mt-6">
-                <p className="text-xxl-semibold">Notes</p>
-                <Textarea
-                  className="mt-2 h-32"
-                  placeholder="Example: no onion, please"
-                  value={notes}
-                  onChange={(e) => dispatch(onChangeNotes(e.target.value))}
-                />
-              </aside>
+                  <aside className="mt-4 flex items-center gap-10">
+                    <div className="flex-1 border-b border-neutral-40">
+                      <p className="text-xxl-semibold">Item Quantity</p>
+                    </div>
+                    <div className="flex items-center justify-center gap-6">
+                      <div
+                        role="presentation"
+                        onClick={
+                          quantity === 0
+                            ? () => undefined
+                            : handleDecreamentQuantity
+                        }
+                        className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
+                      >
+                        -
+                      </div>
+                      <div className="text-heading-s-semibold">{quantity}</div>
+                      <div
+                        role="presentation"
+                        onClick={handleIncreamentQuantity}
+                        className="flex cursor-pointer items-center justify-center rounded-3xl border border-neutral-100 px-9 text-heading-s-semibold transition-all duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-80"
+                      >
+                        +
+                      </div>
+                    </div>
+                  </aside>
+
+                  {dataProductDetail.addons &&
+                    dataProductDetail.addons.map((addon) => (
+                      <aside key={addon.uuid} className="mt-6">
+                        <div className="flex items-center gap-4">
+                          <p className="text-xxl-semibold">
+                            {addon.addon_name}
+                          </p>
+                          <div className="text-m-regular">
+                            Required | select 1
+                          </div>
+                        </div>
+
+                        <div className="mt-4 flex items-center justify-start gap-6 overflow-x-auto whitespace-nowrap">
+                          {addon.variants.map((variant) => (
+                            <div
+                              key={variant.variant_uuid}
+                              className="flex flex-col items-center"
+                            >
+                              <div
+                                role="presentation"
+                                onClick={() =>
+                                  handleChangeAddon(
+                                    addon.can_choose_multiple
+                                      ? 'checkbox'
+                                      : 'radio',
+                                    variant,
+                                    {
+                                      addOnName: addon.addon_name,
+                                      addOnUuid: addon.uuid,
+                                    },
+                                  )
+                                }
+                                className={`flex cursor-pointer items-center justify-center rounded-3xl border  py-1.5 px-7 text-m-semibold transition-all duration-300 ease-in-out hover:bg-[#F2F1F9] hover:bg-opacity-80 ${generateBgColor(
+                                  variant.variant_uuid,
+                                )}`}
+                              >
+                                {variant.variant_name}
+                              </div>
+                              <div className="mt-1 text-m-regular">
+                                + {toRupiah(variant.variant_price || 0)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </aside>
+                    ))}
+
+                  <aside className="mt-6">
+                    <p className="text-xxl-semibold">Notes</p>
+                    <Textarea
+                      className="mt-2 h-32"
+                      placeholder="Example: no onion, please"
+                      value={notes}
+                      onChange={(e) => dispatch(onChangeNotes(e.target.value))}
+                    />
+                  </aside>
+                </div>
+              )}
             </section>
           </Modal>
         )}

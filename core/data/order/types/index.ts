@@ -43,7 +43,7 @@ interface GetOrdersDataResponseBased {
 
 export type GetOrdersDataResponse = GetOrdersDataResponseBased
 
-export interface CreateTransactionDataResponse {
+export interface CreateOrderManualDataResponse {
   uuid: string
   metadata: Metadata
 }

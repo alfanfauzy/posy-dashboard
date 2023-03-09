@@ -1,15 +1,11 @@
+import { Addons } from '@/domain/addon/model'
 import { Categories } from '@/domain/category/model'
-import { Metadata } from '@/domain/vo/BaseMetadata'
 
 interface ProductBased {
   uuid: string
-  restaurant_uuid: string
   product_name: string
   product_description: string
-  product_image: string
   product_image_url: string
-  categories: Categories
-  is_show: boolean
   is_available: boolean
   is_discount: boolean
   is_favourite: boolean
@@ -19,9 +15,11 @@ interface ProductBased {
   price_discount_percentage: number
   price_final: number
   cooking_duration: number
-  metadata: Metadata
+  categories: Categories | null
 }
 
-export type Product = ProductBased
+export interface Product extends ProductBased {
+  addons?: Addons
+}
 
 export type Products = ProductBased[]

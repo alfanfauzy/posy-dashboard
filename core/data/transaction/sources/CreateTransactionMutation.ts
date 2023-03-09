@@ -6,7 +6,7 @@ import { Response } from '@/domain/vo/BaseResponse'
 
 import { CreateTransactionDataResponse } from '../types'
 
-export const CreateTransaction = async (): Promise<
+const CreateTransaction = async (): Promise<
   Response<CreateTransactionDataResponse>
 > => {
   const response = await Post({

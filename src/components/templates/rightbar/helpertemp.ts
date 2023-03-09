@@ -57,25 +57,25 @@ export const tableNumber = [
 
 export const listOrderTabs = [{ label: 'Order' }, { label: 'Payment' }]
 
-export const listMenuTabs = [
-  { label: 'All' },
-  { label: 'Food' },
-  { label: 'Beverages' },
-  { label: 'Recommendation' },
-  { label: 'Other' },
-  { label: 'Recommendation' },
-  { label: 'Other' },
-  { label: 'Recommendation' },
-  { label: 'Other' },
-  { label: 'Recommendation' },
-  { label: 'Other' },
-  { label: 'Recommendation' },
-  { label: 'Other' },
-  { label: 'Recommendation' },
-  { label: 'Other' },
-  { label: 'Recommendation' },
-  { label: 'Other' },
-]
+// export const listMenuTabs = [
+//   { label: 'All' },
+//   { label: 'Food' },
+//   { label: 'Beverages' },
+//   { label: 'Recommendation' },
+//   { label: 'Other' },
+//   { label: 'Recommendation' },
+//   { label: 'Other' },
+//   { label: 'Recommendation' },
+//   { label: 'Other' },
+//   { label: 'Recommendation' },
+//   { label: 'Other' },
+//   { label: 'Recommendation' },
+//   { label: 'Other' },
+//   { label: 'Recommendation' },
+//   { label: 'Other' },
+//   { label: 'Recommendation' },
+//   { label: 'Other' },
+// ]
 
 export const listMenus = [
   {

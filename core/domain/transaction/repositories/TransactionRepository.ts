@@ -34,14 +34,14 @@ export interface CreateTransactionRepository extends CreateTransactionResult {
  * DELETE
  */
 
-export type DeleteTransactionInput = {
-  id: string
-}
+// export type DeleteTransactionInput = {
+//   id: string
+// }
 
-export type DeleteTransactionResult = ResultMutation<Transaction>
+// export type DeleteTransactionResult = ResultMutation<Transaction>
 
-export interface DeleteTransactionRepository {
-  deleteTransaction(
-    input: DeleteTransactionInput,
-  ): Promise<DeleteTransactionResult>
-}
+// export interface DeleteTransactionRepository {
+//   deleteTransaction(
+//     input: DeleteTransactionInput,
+//   ): Promise<DeleteTransactionResult>
+// }

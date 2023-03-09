@@ -6,10 +6,10 @@ import { DataList, Response } from '@/domain/vo/BaseResponse'
 
 import { GetOrdersDataResponse } from '../types'
 
-export const GetOrdersQueryKey = (input?: GetOrdersInput) =>
+export const GetOrdersQueryKey = (input: GetOrdersInput) =>
   ['Orders/list', input] as const
 
-export const GetOrders = async (
+const GetOrders = async (
   input: GetOrdersInput,
 ): Promise<Response<DataList<GetOrdersDataResponse>>> => {
   const response = await Get({

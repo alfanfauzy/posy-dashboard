@@ -9,7 +9,7 @@ import { GetTransactionDataResponse } from '../types'
 export const GetTransactionQueryKey = (input?: GetTransactionInput) =>
   ['transactions/detail', input] as const
 
-export const GetTransaction = async (
+const GetTransaction = async (
   input?: GetTransactionInput,
 ): Promise<Response<GetTransactionDataResponse>> => {
   const response = await Get({

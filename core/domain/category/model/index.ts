@@ -1,7 +1,6 @@
-export interface CategoryBased {
+interface CategoryBased {
   uuid: string
   category_name: string
-  is_active: boolean
   category_image?: string
   restaurant_uuid?: string
 }

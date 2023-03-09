@@ -1,4 +1,5 @@
-import { Order, Orders } from '@/domain/order/model'
+import { Orders } from '@/domain/order/model'
+import { Metadata } from '@/domain/vo/BaseMetadata'
 import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'
 
 /**
@@ -16,8 +17,26 @@ export type GetOrdersResult = ResultQuery<Orders | undefined>
  * CREATE
  */
 
-export type CreateOrderManualResult = ResultMutation<Order | undefined>
+type AddOnInput = {
+  uuid: string
+}
+
+type Orderinput = {
+  product_uuid: string
+  qty: number
+  order_note?: string
+  addon?: AddOnInput[]
+}
+
+export type CreateOrderManualInput = {
+  transaction_uuid: string
+  order: Orderinput[]
+}
+
+export type CreateOrderManualResult = ResultMutation<
+  { uuid: string; metadata: Metadata } | undefined
+>
 
 export interface CreateOrderManualRepository extends CreateOrderManualResult {
-  createOrderManual(): void
+  createOrderManual(input: CreateOrderManualInput): void
 }

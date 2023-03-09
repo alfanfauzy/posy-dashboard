@@ -12,7 +12,6 @@ export type AddOnVariant = {
   addOnUuid: string
   variant_name: string
   variant_uuid: string
-  price: number
 }
 
 export interface OrderItem {
@@ -126,6 +125,9 @@ export const OrderSlice = createSlice({
       )
       state.order = filteredOrder
     },
+    onClearOrder: (state) => {
+      state.order = []
+    },
   },
 })
 
@@ -138,6 +140,7 @@ export const {
   onChangeAddOn,
   onAddOrder,
   onDropOrder,
+  onClearOrder,
 } = OrderSlice.actions
 
 export default OrderSlice.reducer

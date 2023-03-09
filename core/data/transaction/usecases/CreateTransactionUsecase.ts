@@ -5,7 +5,7 @@ import { mapToCreateTransactionModel } from '../mappers/TransactionMapper'
 import { useCreateTransactionMutation } from '../sources/CreateTransactionMutation'
 import { CreateTransactionDataResponse } from '../types'
 
-export const useCreateTransaction = (
+export const useCreateTransactionUsecase = (
   options?: MutationOptions<CreateTransactionDataResponse>,
 ): CreateTransactionRepository => {
   const { mutate, data, ...rest } = useCreateTransactionMutation(options)

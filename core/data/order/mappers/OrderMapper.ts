@@ -1,6 +1,7 @@
 import { Orders } from '@/domain/order/model'
+import { Metadata } from '@/domain/vo/BaseMetadata'
 
-import { GetOrdersDataResponse } from '../types'
+import { CreateOrderManualDataResponse, GetOrdersDataResponse } from '../types'
 
 // map server data to own model
 export const mapToOrdersModel = (datas: GetOrdersDataResponse[]): Orders =>
@@ -23,3 +24,12 @@ export const mapToOrdersModel = (datas: GetOrdersDataResponse[]): Orders =>
     },
     order_detail: data.order_detail,
   }))
+
+export const mapToCreateOrderManualModel = (
+  data: CreateOrderManualDataResponse,
+): { uuid: string; metadata: Metadata } => ({
+  uuid: data.uuid,
+  metadata: {
+    created_at: data.metadata.created_at.seconds,
+  },
+})

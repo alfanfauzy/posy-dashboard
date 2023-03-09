@@ -11,7 +11,9 @@ export const toRupiah = (number: number | bigint | string) =>
     .replaceAll('IDR', 'Rp')
 
 export const calculateAddOn = (arr: any[]) =>
-  [...arr].map((el) => el.price).reduce((prev, current) => prev + current, 0)
+  [...arr]
+    .map((el) => el.variant_price)
+    .reduce((prev, current) => prev + current, 0)
 
 export const calculateTotal = (arr: OrderItem[]) =>
   [...arr]

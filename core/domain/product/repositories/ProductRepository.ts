@@ -18,6 +18,7 @@ export type GetProductsResult = ResultQuery<Products | undefined> & {
 }
 
 export type GetProductInput = { product_uuid: string }
+
 export type GetProductResult = ResultQuery<Product | undefined>
 
 /**

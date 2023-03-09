@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
-import Post from 'api/post'
+import Get from 'api/get'
 
 import { GetProductsInput } from '@/domain/product/repositories/ProductRepository'
 import { DataList, Response } from '@/domain/vo/BaseResponse'
@@ -9,15 +9,16 @@ import { GetProductsDataResponse } from '../types'
 export const GetProductsQueryKey = (input?: GetProductsInput) =>
   ['Products/list', input] as const
 
-export const GetProducts = async (
+const GetProducts = async (
   input?: GetProductsInput,
 ): Promise<Response<DataList<GetProductsDataResponse>>> => {
-  const response = await Post({
-    endpoint: `/api/fnb-product-service/product-outlet/get-list`,
+  const response = await Get({
+    endpoint: `/api/fnb-product-service/menu/get-product-list`,
     headers: {
       token: process.env.NEXT_PUBLIC_TOKEN || '',
+      'X-Transaction-Uuid': '6361d2ec-6ebf-4910-bee0-3732c266286f',
     },
-    data: input,
+    // data: input,
   })
 
   return {
