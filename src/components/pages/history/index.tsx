@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 
 import InputSearch from '@/atoms/input/search'
 import Table from '@/atoms/table'
-import { Transaction, TransactionStatus } from '@/domain/transaction/models'
+import { Transaction, TransactionStatus } from '@/domain/transaction/model'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useAppDispatch } from '@/store/hooks'
 import { openModal } from '@/store/slices/modal'

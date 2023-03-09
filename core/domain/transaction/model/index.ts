@@ -7,7 +7,12 @@ export enum TransactionStatus {
   CANCELLED = 'CANCELLED',
 }
 
-export interface TransactionBased {
+export enum TransactionCategory {
+  DINE_IN = 'DINE_IN',
+  TAKE_AWAY = 'TAKE_AWAY',
+}
+
+interface TransactionBased {
   uuid: string
   transaction_code: string
   table_uuid: string

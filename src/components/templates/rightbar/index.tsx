@@ -7,6 +7,7 @@ import { IoMdArrowBack } from 'react-icons/io'
 import { useReactToPrint } from 'react-to-print'
 
 import InputSearch from '@/atoms/input/search'
+import { Product } from '@/domain/product/model'
 import useDisclosure from '@/hooks/useDisclosure'
 import NoOrderIcon from '@/icons/noOrder'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
@@ -20,17 +21,17 @@ import {
   onCloseOrderModal,
   onDropOrder,
 } from '@/store/slices/order'
-import type { Product } from '@/types/product'
 import {
   calculateOrder,
   calculateOrderBeforeDiscount,
   toRupiah,
 } from '@/utils/common'
+import { useGetOrdersViewModel } from '@/view/order/view-models/GetOrdersViewModel'
+import { useGetProductsViewModel } from '@/view/product/view-models/GetProductsViewModel'
 import { useGetTransactionViewModel } from '@/view/transaction/view-models/GetTransactionViewModel'
 
 import {
   listCancelReason,
-  listMenus,
   listMenuTabs,
   listOrderTabs,
   orderType,
@@ -57,12 +58,38 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const kitchenRef = useRef<any>()
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
 
+  const [
+    isOpenCreateOrder,
+    { open: openCreateOrder, close: closeCreateOrder },
+  ] = useDisclosure({ initialState: false })
+
   const { data: dataTransaction, isLoading: loadTransaction } =
     useGetTransactionViewModel(
       { transaction_uuid: selectedTrxId },
       { enabled: !!selectedTrxId },
     )
 
+  const { data: dataProduct, isLoading: loadProduct } = useGetProductsViewModel(
+    {
+      limit: 100,
+      page: 1,
+      sort: {
+        field: 'created_at',
+        value: 'desc',
+      },
+      search: [],
+    },
+    { enabled: !!isOpenCreateOrder },
+  )
+
+  const { data: dataOrder, isLoading: loadOrder } = useGetOrdersViewModel(
+    {
+      transaction_uuid: dataTransaction?.uuid || '',
+    },
+    { enabled: !!dataTransaction?.uuid },
+  )
+
+  console.log(dataOrder, ',')
   const [tabValueorder, setTabValueOrder] = useState(0)
   const [tabValueMenu, setTabValueMenu] = useState(0)
 
@@ -72,11 +99,6 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   ] = useDisclosure({
     initialState: false,
   })
-
-  const [
-    isOpenCreateOrder,
-    { open: openCreateOrder, close: closeCreateOrder },
-  ] = useDisclosure({ initialState: false })
 
   const [
     isOpenAddVariantOrder,
@@ -103,7 +125,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     // closeSearch()
   }
 
-  const onOpenAddVariantOrder = (product: Partial<Product>) => {
+  const onOpenAddVariantOrder = (product: Product) => {
     openAddVariantOrder()
     dispatch(onChangeProduct({ product }))
     dispatch(onChangeQuantity({ operator: 'plus', value: 1 }))
@@ -155,15 +177,17 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   }
 
   const handleAddOrder = () => {
-    dispatch(
-      onAddOrder({
-        quantity,
-        product,
-        addOnVariant,
-        notes,
-        order_uuid: Math.floor(Math.random() * Date.now()),
-      }),
-    )
+    if (product) {
+      dispatch(
+        onAddOrder({
+          quantity,
+          product,
+          addOnVariant,
+          notes,
+          order_uuid: Math.floor(Math.random() * Date.now()),
+        }),
+      )
+    }
     onCloseAddVariantOrder()
   }
 
@@ -187,7 +211,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
       })
 
       return {
-        product_uuid: el.product.product_uuid,
+        product_uuid: el.product.uuid,
         qty: el.quantity,
         order_note: el.notes,
         addon: tempAddOn,
@@ -449,82 +473,63 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                       Order time: 10:00
                       <AiOutlineInfoCircle />
                     </div>
-                    {!showDeleteOrder && (
-                      <div className="w-full">
-                        <div className="flex items-center justify-between text-s-bold">
-                          <p>Order 1</p>
-                          <p className="text-neutral-50">Processed</p>
+                    {!showDeleteOrder &&
+                      dataOrder &&
+                      dataOrder.map((order, idx) => (
+                        <div key={order.uuid} className="my-4 w-full">
+                          <div className="flex items-center justify-between text-s-bold">
+                            <p>{`Order ${idx + 1}`}</p>
+                            <p className="text-neutral-50">{order.status}</p>
+                          </div>
+                          <div className="mt-2 w-full">
+                            {order.order_detail.map((orderDetail) => (
+                              <Checkbox
+                                key={orderDetail.uuid}
+                                title={orderDetail.product_name}
+                                onChange={() => undefined}
+                                size="m"
+                                // disabled
+                              />
+                            ))}
+                          </div>
                         </div>
-                        <div className="mt-2 w-full">
-                          <Checkbox
-                            title="Fried kwetiau x1"
-                            onChange={() => undefined}
-                            size="m"
-                            disabled
-                          />
-                          <Checkbox
-                            title="Fried kwetiau x1"
-                            onChange={() => undefined}
-                            size="m"
-                          />
-                          <Checkbox
-                            title="Fried kwetiau x3"
-                            onChange={() => undefined}
-                            size="m"
-                          />
-                          <Checkbox
-                            title="Fried kwetiau x4"
-                            onChange={() => undefined}
-                            size="m"
-                          />
-                        </div>
-                      </div>
-                    )}
+                      ))}
 
-                    {showDeleteOrder && (
-                      <div className="mt-4 w-full">
-                        <div className="flex items-center justify-between text-s-bold">
-                          <p>Order 1</p>
-                          <div
-                            className="cursor-pointer text-red-accent duration-150"
-                            role="presentation"
-                            onClick={openCancelAllOrder}
-                          >
-                            Cancel Order
-                          </div>
-                        </div>
-                        <div className="mt-2 w-full">
-                          <div className="my-2 flex items-center justify-between">
-                            <p className="text-m-regular">Fried Kwetiau</p>
-                            <p
+                    {showDeleteOrder &&
+                      dataOrder &&
+                      dataOrder.map((order, idx) => (
+                        <div key={order.uuid} className="my-4 w-full">
+                          <div className="flex items-center justify-between text-s-bold">
+                            <p>{`Order ${idx + 1}`}</p>
+                            <div
+                              className="cursor-pointer text-red-accent duration-150"
                               role="presentation"
-                              onClick={openCancelOrder}
-                              className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75"
+                              onClick={openCancelAllOrder}
                             >
-                              Cancel
-                            </p>
+                              Cancel Order
+                            </div>
                           </div>
-                          <div className="my-2 flex items-center justify-between">
-                            <p className="text-m-regular">Fried Kwetiau</p>
-                            <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
-                              Cancel
-                            </p>
-                          </div>
-                          <div className="my-2 flex items-center justify-between">
-                            <p className="text-m-regular">Fried Kwetiau</p>
-                            <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
-                              Cancel
-                            </p>
-                          </div>
-                          <div className="my-2 flex items-center justify-between">
-                            <p className="text-m-regular">Fried Kwetiau</p>
-                            <p className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75">
-                              Cancel
-                            </p>
+                          <div className="mt-2 w-full">
+                            {order.order_detail.map((orderDetail) => (
+                              <div
+                                key={orderDetail.uuid}
+                                className="my-2 flex items-center justify-between"
+                              >
+                                <p className="text-m-regular">
+                                  {orderDetail.product_name}
+                                </p>
+                                <p
+                                  role="presentation"
+                                  onClick={openCancelOrder}
+                                  className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75"
+                                >
+                                  Cancel
+                                </p>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                      </div>
-                    )}
+                      ))}
                     <Button
                       variant="secondary"
                       fullWidth
@@ -675,32 +680,30 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
               />
               <article className="my-6 h-4/5 overflow-y-auto">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                  {listMenus.map((menu) => (
-                    <div
-                      role="presentation"
-                      onClick={() => onOpenAddVariantOrder(menu)}
-                      key={menu.product_name}
-                      className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
-                    >
-                      <p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
-                        {menu.product_name}
-                      </p>
-                      <div className="my-2 border-b border-neutral-40" />
-                      <div className="flex flex-col items-center justify-center gap-1">
-                        <p className="text-m-regular text-neutral-90">
-                          {toRupiah(
-                            menu.price_after_discount ||
-                              menu.price_before_discount,
-                          )}
+                  {dataProduct &&
+                    dataProduct.map((menu) => (
+                      <div
+                        role="presentation"
+                        onClick={() => onOpenAddVariantOrder(menu)}
+                        key={menu.product_name}
+                        className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
+                      >
+                        <p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
+                          {menu.product_name}
                         </p>
-                        {menu.price_after_discount && (
-                          <p className="text-xs line-through">
-                            {toRupiah(menu.price_before_discount)}
+                        <div className="my-2 border-b border-neutral-40" />
+                        <div className="flex flex-col items-center justify-center gap-1">
+                          <p className="text-m-regular text-neutral-90">
+                            {toRupiah(menu.price_final)}
                           </p>
-                        )}
+                          {menu.price_discount > 0 && (
+                            <p className="text-xs line-through">
+                              {toRupiah(menu.price)}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </article>
             </section>
@@ -780,13 +783,9 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                           <div className="flex flex-col items-center">
                             <div>
                               <p className="text-l-medium">
-                                {item.product.price_after_discount
-                                  ? toRupiah(calculateOrder(item) || 0)
-                                  : toRupiah(
-                                      calculateOrderBeforeDiscount(item) || 0,
-                                    )}
+                                {toRupiah(calculateOrder(item) || 0)}
                               </p>
-                              {item.product.price_after_discount && (
+                              {item.product.price_discount > 0 && (
                                 <p className="text-m-regular text-neutral-60 line-through">
                                   {toRupiah(
                                     calculateOrderBeforeDiscount(item) || 0,
@@ -854,18 +853,25 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             }
           >
             <section className="px-12 pt-8 pb-32 md:px-20 lg:px-28">
-              <aside>
-                <p className="text-heading-s-semibold">
-                  {product.product_name}
-                </p>
-                {product.price_after_discount && (
-                  <div>
+              {product && (
+                <aside>
+                  <p className="text-heading-s-semibold">
+                    {product.product_name}
+                  </p>
+                  <div className="flex items-center gap-2">
                     <p className="text-xxl-medium">
-                      {toRupiah(product.price_after_discount)}
+                      {toRupiah(product.price_final)}
                     </p>
+                    {product.price_discount > 0 && (
+                      <div>
+                        <p className="text-xxl-medium text-neutral-80 line-through">
+                          {toRupiah(product.price)}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                )}
-              </aside>
+                </aside>
+              )}
 
               <aside className="mt-4 flex items-center gap-10">
                 <div className="flex-1 border-b border-neutral-40">
@@ -894,7 +900,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 </div>
               </aside>
 
-              {product.addon &&
+              {/* {product.addon &&
                 product.addon.map((addon) => (
                   <aside key={addon.addon_uuid} className="mt-6">
                     <div className="flex items-center gap-4">
@@ -933,7 +939,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                       ))}
                     </div>
                   </aside>
-                ))}
+                ))} */}
 
               <aside className="mt-6">
                 <p className="text-xxl-semibold">Notes</p>

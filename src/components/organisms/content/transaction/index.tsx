@@ -9,7 +9,7 @@ import PlusCircleIcon from 'src/assets/icons/plusCircle'
 import FilterChip from '@/atoms/chips/filter-chip'
 import InputSearch from '@/atoms/input/search'
 import { GetTransactionsQueryKey } from '@/data/transaction/sources/GetTransactionsQuery'
-import { TransactionStatus } from '@/domain/transaction/models'
+import { TransactionStatus } from '@/domain/transaction/model'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {

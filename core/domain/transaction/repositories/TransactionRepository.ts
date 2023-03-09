@@ -1,5 +1,5 @@
-import { QrCode } from '@/domain/qr-code/models'
-import { Transaction, Transactions } from '@/domain/transaction/models'
+import { QrCode } from '@/domain/qr-code/model'
+import { Transaction, Transactions } from '@/domain/transaction/model'
 import { InputVariables } from '@/domain/vo/BaseInput'
 import { Pagination } from '@/domain/vo/BasePagination'
 import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'

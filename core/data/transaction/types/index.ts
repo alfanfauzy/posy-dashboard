@@ -6,7 +6,7 @@ export enum TransactionStatus {
   CANCELLED = 'CANCELLED',
 }
 
-export interface GetTransactionsDataResponseBased {
+interface GetTransactionsDataResponseBased {
   uuid: string
   restaurant_outlet_uuid: string
   restaurant_outlet_table_uuid: string

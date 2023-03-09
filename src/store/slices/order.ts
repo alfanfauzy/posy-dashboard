@@ -5,7 +5,7 @@
  */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { Product } from '@/types/product'
+import { Product } from '@/domain/product/model'
 
 export type AddOnVariant = {
   addOnName: string
@@ -17,7 +17,7 @@ export type AddOnVariant = {
 
 export interface OrderItem {
   order_uuid: number
-  product: Partial<Product>
+  product: Product
   quantity: number
   addOnVariant: AddOnVariant[]
   notes?: string
@@ -25,7 +25,7 @@ export interface OrderItem {
 
 export interface OrderState {
   orderForm: {
-    product: Partial<Product>
+    product: Product | null
     quantity: number
     addOnVariant: AddOnVariant[]
     notes?: string
@@ -35,7 +35,7 @@ export interface OrderState {
 
 const initialState: OrderState = {
   orderForm: {
-    product: {},
+    product: null,
     quantity: 0,
     addOnVariant: [],
   },
@@ -46,10 +46,7 @@ export const OrderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    onChangeProduct: (
-      state,
-      action: PayloadAction<{ product: Partial<Product> }>,
-    ) => {
+    onChangeProduct: (state, action: PayloadAction<{ product: Product }>) => {
       state.orderForm.product = action.payload.product
     },
     onChangeNotes: (state, action: PayloadAction<string>) => {
@@ -74,7 +71,7 @@ export const OrderSlice = createSlice({
       state.orderForm.quantity = 0
       state.orderForm.notes = ''
       state.orderForm.addOnVariant = []
-      state.orderForm.product = {}
+      state.orderForm.product = null
     },
     onChangeAddOn: (
       state,
