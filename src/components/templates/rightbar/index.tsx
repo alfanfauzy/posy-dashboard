@@ -11,7 +11,7 @@ import {
   Textarea,
 } from 'posy-fnb-core'
 import React, { useCallback, useRef, useState } from 'react'
-import { AiOutlineInfoCircle } from 'react-icons/ai'
+import { AiOutlineInfoCircle, AiOutlinePercentage } from 'react-icons/ai'
 import { CgTrash } from 'react-icons/cg'
 import { IoMdArrowBack } from 'react-icons/io'
 import { useReactToPrint } from 'react-to-print'
@@ -229,7 +229,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
       (el) => el.variant_uuid === variant_uuid,
     )
 
-    if (selected) return 'bg-[#F2F1F9] border-[#654DE4]'
+    if (selected) return 'bg-[#F2F1F9] border-secondary-main'
     return 'bg-neutral-10 border-neutral-100'
   }
 
@@ -620,15 +620,17 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                             </div>
                           ))}
 
-                        <Button
-                          variant="secondary"
-                          fullWidth
-                          size="l"
-                          className="my-2"
-                          onClick={openCreateOrder}
-                        >
-                          Add New Order
-                        </Button>
+                        {!showDeleteOrder && (
+                          <Button
+                            variant="secondary"
+                            fullWidth
+                            size="l"
+                            className="my-2"
+                            onClick={openCreateOrder}
+                          >
+                            Add New Order
+                          </Button>
+                        )}
 
                         <article className="hidden">
                           <section ref={kitchenRef} className="p-6">
@@ -721,7 +723,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 </p>
               </Button>
             )}
-            {!showDeleteOrder && (
+            {!showDeleteOrder && tabValueorder === 0 && (
               <div className="flex gap-2">
                 <Button variant="secondary" onClick={handlePrintQr}>
                   <p className="whitespace-nowrap text-m-semibold">
@@ -735,6 +737,23 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                   className="whitespace-nowrap text-m-semibold"
                 >
                   Print to Kitchen
+                </Button>
+              </div>
+            )}
+            {!showDeleteOrder && tabValueorder === 1 && (
+              <div className="flex gap-2">
+                <Button variant="secondary" onClick={handlePrintQr}>
+                  <div className="rounded-full border-[1.5px] border-neutral-90 p-0.5">
+                    <AiOutlinePercentage />
+                  </div>
+                </Button>
+                <Button
+                  variant="primary"
+                  fullWidth
+                  onClick={handlePrintToKitchen}
+                  className="whitespace-nowrap text-m-semibold"
+                >
+                  Payment
                 </Button>
               </div>
             )}

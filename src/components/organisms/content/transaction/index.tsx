@@ -124,7 +124,11 @@ const OrganismsContentsTransaction = ({
         </aside>
 
         <aside className="mt-4 flex gap-2">
-          <div className="flex flex-1 gap-2 overflow-x-auto transition-all duration-500 ease-in-out">
+          <div
+            className={`flex flex-1 overflow-x-auto transition-all duration-500 ease-in-out ${
+              openSearch ? '' : 'gap-2'
+            }`}
+          >
             <FilterChip
               label={`Waiting Order: ${calculateWaitingOrder()}`}
               openSearch={openSearch}
