@@ -49,7 +49,7 @@ export const mapToProductModel = (data: GetProductDataResponse): Product => ({
       variant_uuid: variant.uuid,
       variant_name: variant.variant_name,
       variant_priority: variant.variant_priority,
-      variant_price: variant.variant_price,
+      variant_price: variant?.variant_price || 0,
     })),
   })),
 })

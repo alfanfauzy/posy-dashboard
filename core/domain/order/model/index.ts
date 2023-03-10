@@ -1,5 +1,12 @@
 import { Metadata } from '@/domain/vo/BaseMetadata'
 
+enum OrderStatus {
+  ORDER_RECEIVED = 'Received',
+  ORDER_PROCESS = 'Processed',
+  ORDER_SERVED = 'served',
+  ORDER_CANCELLED = 'Cancelled',
+}
+
 interface OrderDetail {
   uuid: string
   product_uuid: string
@@ -16,7 +23,7 @@ interface OrderDetail {
   price_subtotal: number
   addon_information: []
   order_note: string
-  status: string // currently string but will be convert to enum later
+  status: OrderStatus
   cancel_reason: string
 }
 
@@ -26,7 +33,7 @@ interface OrderBased {
   price_discount: number
   price_after_discount: number
   price_final: number
-  status: string // currently string but will be convert to enum later
+  status: OrderStatus
   total_product: number
   is_printed: boolean
   total_print_kitchen: number

@@ -2,8 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { Button, Loading } from 'posy-fnb-core'
 import React, { useState } from 'react'
-import { useReactToPrint } from 'react-to-print'
-import NotificationIcon from 'src/assets/icons/notification'
+// import { useReactToPrint } from 'react-to-print'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
 
 import FilterChip from '@/atoms/chips/filter-chip'
@@ -33,11 +32,7 @@ const OrganismsContentsTransaction = ({
   const [openSearch, { open, close }] = useDisclosure({ initialState: false })
   const [status, setStatus] = useState('')
 
-  const {
-    isLoading,
-    createTransaction,
-    data: dataCreate,
-  } = useCreateTransactionViewModel({
+  const { isLoading, createTransaction } = useCreateTransactionViewModel({
     onSuccess: () => queryClient.invalidateQueries(GetTransactionsQueryKey()),
   })
 
@@ -123,9 +118,9 @@ const OrganismsContentsTransaction = ({
           <p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
             Restaurant Transaction
           </p>
-          <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-70 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
+          {/* <div className="flex w-fit cursor-pointer items-center justify-center rounded-3xl border border-neutral-70 px-[18px] py-2 transition-all duration-500 ease-in-out hover:bg-neutral-20">
             <NotificationIcon />
-          </div>
+          </div> */}
         </aside>
 
         <aside className="mt-4 flex gap-2">

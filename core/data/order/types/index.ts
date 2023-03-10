@@ -1,5 +1,12 @@
 import { Metadata } from '@/data/common/types/metadata'
 
+enum OrderStatus {
+  ORDER_RECEIVED = 'ORDER_RECEIVED',
+  ORDER_PROCESS = 'ORDER_PROCESS',
+  ORDER_SERVED = 'ORDER_SERVED',
+  ORDER_CANCELLED = 'ORDER_CANCELLED',
+}
+
 interface OrderDetail {
   uuid: string
   product_uuid: string
@@ -16,7 +23,7 @@ interface OrderDetail {
   price_subtotal: number
   addon_information: []
   order_note: string
-  status: string
+  status: OrderStatus
   cancel_reason: string
 }
 
@@ -27,7 +34,7 @@ interface GetOrdersDataResponseBased {
   price_discount: number
   price_after_discount: number
   price_final: number
-  status: string
+  status: OrderStatus
   total_product: number
   is_printed: false
   total_print_kitchen: number

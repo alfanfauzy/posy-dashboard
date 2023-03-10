@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
+import moment from 'moment'
 import dynamic from 'next/dynamic'
 import {
   Button,
@@ -15,8 +16,10 @@ import { CgTrash } from 'react-icons/cg'
 import { IoMdArrowBack } from 'react-icons/io'
 import { useReactToPrint } from 'react-to-print'
 
+import CountUpTimer from '@/atoms/countup'
 import InputSearch from '@/atoms/input/search'
 import { GetOrdersQueryKey } from '@/data/order/sources/GetOrdersQuery'
+import { GetTransactionQueryKey } from '@/data/transaction/sources/GetTransactionQuery'
 import { AddonVariant } from '@/domain/addon/model'
 import { Product } from '@/domain/product/model'
 import useDisclosure from '@/hooks/useDisclosure'
@@ -151,6 +154,11 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
         dispatch(onClearOrder())
         queryClient.invalidateQueries(
           GetOrdersQueryKey({ transaction_uuid: dataTransaction?.uuid || '' }),
+        )
+        queryClient.invalidateQueries(
+          GetTransactionQueryKey({
+            transaction_uuid: dataTransaction?.uuid || '',
+          }),
         )
       },
     })
@@ -446,7 +454,13 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           </div>
         </div>
       )}
-      {selectedTrxId && (
+      {loadTransaction && (
+        <div className="-mt-10 flex h-full w-full items-center justify-center">
+          <Loading size={75} />
+        </div>
+      )}
+
+      {dataTransaction && (
         <article className="flex h-full flex-col">
           <section className="h-full px-4 py-6">
             <aside>
@@ -460,8 +474,14 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
               </div>
 
               <div className="mt-2 flex items-center justify-between">
-                <p className="text-l-semibold">ID: O150123002</p>
-                <p className="text-l-semibold">Time: 09:45</p>
+                <p className="text-l-semibold">
+                  ID: {`${dataTransaction?.transaction_code}`}
+                </p>
+                <p className="text-l-semibold">
+                  Time:
+                  {dataTransaction &&
+                    moment.unix(dataTransaction?.created_at).format('HH:mm')}
+                </p>
               </div>
               <div className="my-2 border-b border-neutral-30" />
             </aside>
@@ -522,142 +542,171 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
 
                 {tabValueorder === 0 && (
                   <div className="pb-10">
-                    <div className="my-4 flex w-full items-center justify-center gap-1 rounded-lg border border-neutral-40 py-2 text-m-semibold">
-                      Order time: 10:00
-                      <AiOutlineInfoCircle />
-                    </div>
-                    {!showDeleteOrder &&
-                      dataOrder &&
-                      dataOrder.map((order, idx) => (
-                        <div key={order.uuid} className="my-4 w-full">
-                          <div className="flex items-center justify-between text-s-bold">
-                            <p>{`Order ${idx + 1}`}</p>
-                            <p className="text-neutral-50">{order.status}</p>
-                          </div>
-                          <div className="mt-2 w-full">
-                            {order.order_detail.map((orderDetail) => (
-                              <Checkbox
-                                key={orderDetail.uuid}
-                                title={orderDetail.product_name}
-                                onChange={() => undefined}
-                                size="m"
-                                // disabled
-                              />
-                            ))}
-                          </div>
+                    {loadOrder ? (
+                      <div className="mt-20 flex w-full items-center justify-center">
+                        <Loading size={60} />
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="my-4 flex w-full items-center justify-center gap-1 rounded-lg border border-neutral-40 py-2 text-m-semibold">
+                          Order time:
+                          {dataTransaction &&
+                          dataTransaction?.first_order_at > 0 ? (
+                            <CountUpTimer
+                              startTime={dataTransaction?.first_order_at}
+                            />
+                          ) : (
+                            <div className="mx-0.5">-</div>
+                          )}
+                          <AiOutlineInfoCircle />
                         </div>
-                      ))}
-
-                    {showDeleteOrder &&
-                      dataOrder &&
-                      dataOrder.map((order, idx) => (
-                        <div key={order.uuid} className="my-4 w-full">
-                          <div className="flex items-center justify-between text-s-bold">
-                            <p>{`Order ${idx + 1}`}</p>
-                            <div
-                              className="cursor-pointer text-red-accent duration-150"
-                              role="presentation"
-                              onClick={openCancelAllOrder}
-                            >
-                              Cancel Order
-                            </div>
-                          </div>
-                          <div className="mt-2 w-full">
-                            {order.order_detail.map((orderDetail) => (
-                              <div
-                                key={orderDetail.uuid}
-                                className="my-2 flex items-center justify-between"
-                              >
-                                <p className="text-m-regular">
-                                  {orderDetail.product_name}
-                                </p>
-                                <p
-                                  role="presentation"
-                                  onClick={openCancelOrder}
-                                  className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75"
-                                >
-                                  Cancel
+                        {!showDeleteOrder &&
+                          dataOrder &&
+                          dataOrder.map((order, idx) => (
+                            <div key={order.uuid} className="my-4 w-full">
+                              <div className="flex items-center justify-between text-s-bold">
+                                <p>{`Order ${idx + 1}`}</p>
+                                <p className="lowercase text-neutral-50 first-letter:uppercase">
+                                  {order.status.split('_')[1]}
                                 </p>
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    <Button
-                      variant="secondary"
-                      fullWidth
-                      size="l"
-                      className="my-2"
-                      onClick={openCreateOrder}
-                    >
-                      Add New Order
-                    </Button>
+                              <div className="mt-2 w-full">
+                                {order.order_detail.map((orderDetail) => (
+                                  <Checkbox
+                                    key={orderDetail.uuid}
+                                    title={orderDetail.product_name}
+                                    onChange={() => undefined}
+                                    size="m"
+                                    // disabled
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          ))}
 
-                    <article className="hidden">
-                      <section ref={kitchenRef} className="p-6">
-                        <div className="flex items-center justify-between">
-                          <p className="text-xl-semibold">Dine in</p>
-                          <p className="text-xl-semibold">Print x1</p>
-                        </div>
-                        <div className="mt-4">
-                          <div className="flex items-center justify-between">
-                            <p className="text-m-semibold">Trx ID</p>
-                            <p className="text-m-semibold">O150123002</p>
-                          </div>
-                          <div className="mt-2 flex items-center justify-between">
-                            <p className="text-m-semibold">Henderson</p>
-                            <p className="text-m-semibold">Table 01</p>
-                          </div>
-                        </div>
-                        <div className="mt-4 border-b border-dotted border-neutral-40" />
+                        {showDeleteOrder &&
+                          dataOrder &&
+                          dataOrder.map((order, idx) => (
+                            <div key={order.uuid} className="my-4 w-full">
+                              <div className="flex items-center justify-between text-s-bold">
+                                <p>{`Order ${idx + 1}`}</p>
+                                <div
+                                  className="cursor-pointer text-red-accent duration-150"
+                                  role="presentation"
+                                  onClick={openCancelAllOrder}
+                                >
+                                  Cancel Order
+                                </div>
+                              </div>
+                              <div className="mt-2 w-full">
+                                {order.order_detail.map((orderDetail) => (
+                                  <div
+                                    key={orderDetail.uuid}
+                                    className="my-2 flex items-center justify-between"
+                                  >
+                                    <p className="text-m-regular">
+                                      {orderDetail.product_name}
+                                    </p>
+                                    <p
+                                      role="presentation"
+                                      onClick={openCancelOrder}
+                                      className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75"
+                                    >
+                                      Cancel
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
 
-                        <div className="mt-4 flex flex-col items-start">
-                          <p className="text-xl-semibold">Order 1</p>
-                          <div className="mt-5">
-                            <p className="text-xxl-bold">Fried Kwetiau x1</p>
-                            <p className="mt-2 text-l-regular">
-                              Spicy lv 1, Extra Mushroom, Extra Eggs, Extra
-                              Baso, Extra Sausages
-                            </p>
-                            <p className="mt-2 text-l-regular">
-                              <b className="mr-1">Notes:</b>I want to make this
-                              food is super spicy without any other ingredients
-                            </p>
-                          </div>
-                          <div className="mt-5">
-                            <p className="text-xxl-bold">Fried Capcay x1</p>
-                            <p className="mt-2 text-l-regular">Spicy lv 3</p>
-                          </div>
-                          <div className="mt-5">
-                            <p className="text-xxl-bold">Orange Juice x1</p>
-                          </div>
-                        </div>
-                        <div className="mt-4 border-b border-dotted border-neutral-40" />
+                        <Button
+                          variant="secondary"
+                          fullWidth
+                          size="l"
+                          className="my-2"
+                          onClick={openCreateOrder}
+                        >
+                          Add New Order
+                        </Button>
 
-                        <div className="mt-4 flex flex-col items-start">
-                          <p className="text-xl-semibold">Order 2</p>
-                          <div className="mt-5">
-                            <p className="text-xxl-bold">Fried Kwetiau x1</p>
-                            <p className="mt-2 text-l-regular">
-                              Spicy lv 1, Extra Mushroom, Extra Eggs, Extra
-                              Baso, Extra Sausages
-                            </p>
-                            <p className="mt-2 text-l-regular">
-                              <b className="mr-1">Notes:</b>I want to make this
-                              food is super spicy without any other ingredients
-                            </p>
-                          </div>
-                          <div className="mt-5">
-                            <p className="text-xxl-bold">Fried Capcay x1</p>
-                            <p className="mt-2 text-l-regular">Spicy lv 3</p>
-                          </div>
-                          <div className="mt-5">
-                            <p className="text-xxl-bold">Orange Juice x1</p>
-                          </div>
-                        </div>
-                        <div className="mt-4 border-b border-dotted border-neutral-40" />
-                      </section>
-                    </article>
+                        <article className="hidden">
+                          <section ref={kitchenRef} className="p-6">
+                            <div className="flex items-center justify-between">
+                              <p className="text-xl-semibold">Dine in</p>
+                              <p className="text-xl-semibold">Print x1</p>
+                            </div>
+                            <div className="mt-4">
+                              <div className="flex items-center justify-between">
+                                <p className="text-m-semibold">Trx ID</p>
+                                <p className="text-m-semibold">O150123002</p>
+                              </div>
+                              <div className="mt-2 flex items-center justify-between">
+                                <p className="text-m-semibold">Henderson</p>
+                                <p className="text-m-semibold">Table 01</p>
+                              </div>
+                            </div>
+                            <div className="mt-4 border-b border-dotted border-neutral-40" />
+
+                            <div className="mt-4 flex flex-col items-start">
+                              <p className="text-xl-semibold">Order 1</p>
+                              <div className="mt-5">
+                                <p className="text-xxl-bold">
+                                  Fried Kwetiau x1
+                                </p>
+                                <p className="mt-2 text-l-regular">
+                                  Spicy lv 1, Extra Mushroom, Extra Eggs, Extra
+                                  Baso, Extra Sausages
+                                </p>
+                                <p className="mt-2 text-l-regular">
+                                  <b className="mr-1">Notes:</b>I want to make
+                                  this food is super spicy without any other
+                                  ingredients
+                                </p>
+                              </div>
+                              <div className="mt-5">
+                                <p className="text-xxl-bold">Fried Capcay x1</p>
+                                <p className="mt-2 text-l-regular">
+                                  Spicy lv 3
+                                </p>
+                              </div>
+                              <div className="mt-5">
+                                <p className="text-xxl-bold">Orange Juice x1</p>
+                              </div>
+                            </div>
+                            <div className="mt-4 border-b border-dotted border-neutral-40" />
+
+                            <div className="mt-4 flex flex-col items-start">
+                              <p className="text-xl-semibold">Order 2</p>
+                              <div className="mt-5">
+                                <p className="text-xxl-bold">
+                                  Fried Kwetiau x1
+                                </p>
+                                <p className="mt-2 text-l-regular">
+                                  Spicy lv 1, Extra Mushroom, Extra Eggs, Extra
+                                  Baso, Extra Sausages
+                                </p>
+                                <p className="mt-2 text-l-regular">
+                                  <b className="mr-1">Notes:</b>I want to make
+                                  this food is super spicy without any other
+                                  ingredients
+                                </p>
+                              </div>
+                              <div className="mt-5">
+                                <p className="text-xxl-bold">Fried Capcay x1</p>
+                                <p className="mt-2 text-l-regular">
+                                  Spicy lv 3
+                                </p>
+                              </div>
+                              <div className="mt-5">
+                                <p className="text-xxl-bold">Orange Juice x1</p>
+                              </div>
+                            </div>
+                            <div className="mt-4 border-b border-dotted border-neutral-40" />
+                          </section>
+                        </article>
+                      </div>
+                    )}
                   </div>
                 )}
               </aside>
@@ -842,13 +891,11 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                           <div className="flex flex-col items-center">
                             <div>
                               <p className="text-l-medium">
-                                {toRupiah(calculateOrder(item) || 0)}
+                                {toRupiah(calculateOrder(item))}
                               </p>
                               {item.product.price_discount > 0 && (
                                 <p className="text-m-regular text-neutral-60 line-through">
-                                  {toRupiah(
-                                    calculateOrderBeforeDiscount(item) || 0,
-                                  )}
+                                  {toRupiah(calculateOrderBeforeDiscount(item))}
                                 </p>
                               )}
                             </div>
