@@ -5,19 +5,11 @@
  */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface AuthData {
-  uuid: string
-  token: string
-  refresh_token: string
-  expired_at: {
-    seconds: number
-    nanos: number
-  }
-}
+import { Login } from '@/domain/auth/model'
 
 export interface AuthState {
   isLoggedIn: boolean
-  authData: AuthData
+  authData: Login
   showSidebar: boolean
 }
 
@@ -27,10 +19,7 @@ const initialState: AuthState = {
     uuid: '',
     token: '',
     refresh_token: '',
-    expired_at: {
-      seconds: 0,
-      nanos: 0,
-    },
+    expired_at: 0,
   },
   showSidebar: false,
 }
@@ -39,7 +28,7 @@ export const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    authSuccess: (state: AuthState, action: PayloadAction<AuthData>) => {
+    onLoginSuccess: (state: AuthState, action: PayloadAction<Login>) => {
       state.isLoggedIn = true
       state.authData = action.payload
     },
@@ -49,10 +38,7 @@ export const AuthSlice = createSlice({
         uuid: '',
         token: '',
         refresh_token: '',
-        expired_at: {
-          seconds: 0,
-          nanos: 0,
-        },
+        expired_at: 0,
       }
     },
     setShowSidebar: (state: AuthState, action: PayloadAction<boolean>) => {
@@ -62,6 +48,6 @@ export const AuthSlice = createSlice({
 })
 
 // export the action from the slice
-export const { authSuccess, onLogout, setShowSidebar } = AuthSlice.actions
+export const { onLoginSuccess, onLogout, setShowSidebar } = AuthSlice.actions
 
 export default AuthSlice.reducer

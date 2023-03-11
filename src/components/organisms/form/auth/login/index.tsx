@@ -9,15 +9,26 @@ import {
 } from 'src/schemas/auth'
 
 import Logo from '@/atoms/logo'
+import { mapToLoginModel } from '@/data/auth/mappers/LoginMapper'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useForm } from '@/hooks/useForm'
 import { useAppDispatch } from '@/store/hooks'
-import { authSuccess } from '@/store/slices/auth'
+import { onLoginSuccess } from '@/store/slices/auth'
+import { useLoginViewModel } from '@/view/auth/view-models/LoginViewModel'
 
 const OrganismsFormLogin = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const [showPassword, { toggle }] = useDisclosure({ initialState: false })
+
+  const { login, isLoading: loadLogin } = useLoginViewModel({
+    onSuccess: (data) => {
+      if (data?.data) {
+        dispatch(onLoginSuccess(mapToLoginModel(data?.data)))
+        router.push('/transaction')
+      }
+    },
+  })
 
   const {
     register,
@@ -27,22 +38,10 @@ const OrganismsFormLogin = () => {
     schema: validationSchemaLogin,
   })
 
-  const goDashboard = () => router.push('/transaction')
-  const onSubmit: reactHookForm.SubmitHandler<
-    ValidationSchemaLoginType
-  > = () => {
-    dispatch(
-      authSuccess({
-        expired_at: {
-          nanos: 3353,
-          seconds: 124412,
-        },
-        refresh_token: '214412',
-        token: '314133',
-        uuid: '14143',
-      }),
-    )
-    goDashboard()
+  const onSubmit: reactHookForm.SubmitHandler<ValidationSchemaLoginType> = (
+    form,
+  ) => {
+    login(form)
   }
 
   return (
@@ -86,6 +85,7 @@ const OrganismsFormLogin = () => {
           </p>
         </div>
         <Button
+          isLoading={loadLogin}
           variant="primary"
           size="l"
           fullWidth

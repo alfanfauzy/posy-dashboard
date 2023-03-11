@@ -17,6 +17,7 @@ const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
             <Image
               src={bgImage}
               alt="img"
+              priority
               style={{ objectFit: 'cover', objectPosition: 'top' }}
             />
           </div>
