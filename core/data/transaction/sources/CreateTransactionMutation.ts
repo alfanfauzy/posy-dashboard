@@ -11,9 +11,6 @@ const CreateTransaction = async (): Promise<
 > => {
   const response = await Post({
     endpoint: `/api/fnb-order-service/transaction/create`,
-    headers: {
-      token: process.env.NEXT_PUBLIC_TOKEN || '',
-    },
     data: {},
   })
 

@@ -14,9 +14,6 @@ const GetOrders = async (
 ): Promise<Response<DataList<GetOrdersDataResponse>>> => {
   const response = await Get({
     endpoint: `/api/fnb-order-service/order/get-list/${input.transaction_uuid}`,
-    headers: {
-      token: process.env.NEXT_PUBLIC_TOKEN || '',
-    },
   })
 
   return {

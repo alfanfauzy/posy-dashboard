@@ -14,9 +14,6 @@ const GetTransaction = async (
 ): Promise<Response<GetTransactionDataResponse>> => {
   const response = await Get({
     endpoint: `/api/fnb-order-service/transaction/get-detail/${input?.transaction_uuid}`,
-    headers: {
-      token: process.env.NEXT_PUBLIC_TOKEN || '',
-    },
   })
 
   return {

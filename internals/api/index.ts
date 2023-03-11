@@ -1,7 +1,16 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
 
+import { store } from '@/store/index'
+
 // Set config defaults when creating the instance
-const instance = axios.create()
+
+const { token } = store.getState().auth.authData
+
+const instance = axios.create({
+  headers: {
+    token,
+  },
+})
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => response,

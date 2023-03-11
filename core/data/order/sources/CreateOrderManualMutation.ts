@@ -12,9 +12,6 @@ const CreateOrderManual = async (
 ): Promise<Response<CreateOrderManualDataResponse>> => {
   const response = await Post({
     endpoint: `/api/fnb-order-service/order/create`,
-    headers: {
-      token: process.env.NEXT_PUBLIC_TOKEN || '',
-    },
     data: input,
   })
 

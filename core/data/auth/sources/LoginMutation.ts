@@ -12,9 +12,6 @@ const Login = async (
 ): Promise<Response<LoginDataResponse>> => {
   const response = await Post({
     endpoint: `/api/fnb-user-service/v1/user/login`,
-    headers: {
-      token: process.env.NEXT_PUBLIC_TOKEN || '',
-    },
     data: input,
   })
 

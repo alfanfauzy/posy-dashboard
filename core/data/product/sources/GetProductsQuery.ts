@@ -15,7 +15,6 @@ const GetProducts = async (
   const response = await Get({
     endpoint: `/api/fnb-product-service/menu/get-product-list`,
     headers: {
-      token: process.env.NEXT_PUBLIC_TOKEN || '',
       'X-Transaction-Uuid': '6361d2ec-6ebf-4910-bee0-3732c266286f',
     },
     // data: input,

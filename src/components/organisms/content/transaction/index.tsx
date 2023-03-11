@@ -74,10 +74,10 @@ const OrganismsContentsTransaction = ({
 
   const generateBorderColor = (
     status: string,
-    code: string,
-    selectedCode: string,
+    trxId: string,
+    selectedTrxId: string,
   ) => {
-    if (code === selectedCode) {
+    if (trxId === selectedTrxId) {
       return 'border-2 border-neutral-100'
     }
     const borderColor: { [key: string]: string } = {
@@ -107,8 +107,8 @@ const OrganismsContentsTransaction = ({
     close()
   }
 
-  const handleSelectTrx = (id: string) => {
-    dispatch(onChangeSelectedTrxId({ id }))
+  const handleSelectTrx = (trxId: string) => {
+    dispatch(onChangeSelectedTrxId({ id: trxId }))
   }
 
   return (
@@ -206,7 +206,7 @@ const OrganismsContentsTransaction = ({
                   role="presentation"
                   className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
                     status,
-                    el.transaction_code,
+                    el.uuid,
                     selectedTrxId,
                   )}`}
                 >
