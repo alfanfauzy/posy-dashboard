@@ -112,9 +112,15 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     isOpenCreatePayment,
     { open: openCreatePayment, close: closeCreatePayment },
   ] = useDisclosure({ initialState: false })
+
   const [
     isOpenPaymentConfirmation,
     { open: openPaymentConfirmation, close: closePaymentConfirmation },
+  ] = useDisclosure({ initialState: false })
+
+  const [
+    isOpenApplyDiscount,
+    { open: openApplyDiscount, close: closeApplyDiscount },
   ] = useDisclosure({ initialState: false })
 
   const [selectedPayment, setSelectedPayment] = useState('cash')
@@ -804,7 +810,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             )}
             {!showDeleteOrder && tabValueorder === 1 && (
               <div className="flex gap-2">
-                <Button variant="secondary" onClick={handlePrintQr}>
+                <Button variant="secondary" onClick={openApplyDiscount}>
                   <div className="rounded-full border-[1.5px] border-neutral-90 p-0.5">
                     <AiOutlinePercentage />
                   </div>
@@ -1008,6 +1014,53 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 onClick={closePaymentConfirmation}
               >
                 Print Receipt
+              </Button>
+            </div>
+          </section>
+        </Modal>
+      )}
+
+      {isOpenApplyDiscount && (
+        <Modal
+          closeOverlay
+          open={isOpenApplyDiscount}
+          handleClose={closeApplyDiscount}
+          className="min-w-[340px] p-8"
+        >
+          <section>
+            <aside>
+              <p className="mb-2 text-l-semibold">Discount</p>
+              <Input labelText="Price" disabled value={toRupiah(200000)} />
+              <div className="mt-2 flex gap-4">
+                <div className="w-2/5">
+                  <Input
+                    fullwidth
+                    labelText="Discount (%)"
+                    placeholder="0"
+                    type="number"
+                  />
+                </div>
+                <div className="w-3/5">
+                  <Input
+                    fullwidth
+                    labelText="Discount (Rp)"
+                    placeholder="0"
+                    type="number"
+                  />
+                </div>
+              </div>
+            </aside>
+
+            <div className="mt-10 flex items-center justify-center gap-4">
+              <Button
+                variant="secondary"
+                className="w-1/2"
+                onClick={closeApplyDiscount}
+              >
+                Close
+              </Button>
+              <Button className="w-1/2" onClick={closeApplyDiscount}>
+                Apply
               </Button>
             </div>
           </section>
