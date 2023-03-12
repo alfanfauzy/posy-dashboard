@@ -33,7 +33,7 @@
     "next": "13.1.2",
     "next-redux-wrapper": "^8.1.0",
     "node-thermal-printer": "^4.2.0",
-    "posy-fnb-core": "^1.0.54",
+    "posy-fnb-core": "^1.0.55",
     "react": "18.2.0",
     "react-date-range": "^1.4.0",
     "react-debounce-input": "^3.3.0",
