@@ -13,11 +13,13 @@ interface MoleculesMenuProps {
 }
 
 const MoleculesMenu = ({ item, collapse }: MoleculesMenuProps) => {
-  const { pathname, push } = useRouter()
+  const { pathname, push, asPath } = useRouter()
 
   const linkTo = (path: string) => {
     push(`/${path}`)
   }
+
+  const firstPath = asPath.split('/')[1]
 
   return (
     <Menu
@@ -29,6 +31,7 @@ const MoleculesMenu = ({ item, collapse }: MoleculesMenuProps) => {
           label={item.title}
           icon={item.icon}
           className="pl-0.5 text-xxl-semibold"
+          defaultOpen={firstPath === item.title.toLocaleLowerCase()}
         >
           {item.subMenu.map((el) => (
             <MenuItem
