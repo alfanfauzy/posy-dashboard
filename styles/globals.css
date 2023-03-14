@@ -23,9 +23,19 @@ body {
 
 .ps-sidebar-container {
   border-radius: 16px;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
 }
 
 .ps-menu-button:hover {
+  background-color: unset !important;
+}
+
+.ps-submenu-content > ul > li > .ps-menu-button {
+  padding-left: 28px !important;
+}
+
+.ps-submenu-content {
   background-color: unset !important;
 }
 

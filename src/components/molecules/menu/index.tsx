@@ -20,15 +20,28 @@ const MoleculesMenu = ({ item, collapse }: MoleculesMenuProps) => {
   }
 
   return (
-    <Menu key={item.path} className={`w-full py-1 ${!collapse ? 'px-6' : ''}`}>
+    <Menu
+      key={item.path}
+      className={`w-full py-1.5 ${!collapse ? 'px-6' : ''}`}
+    >
       {Array.isArray(item.subMenu) && item.subMenu.length > 0 && (
         <SubMenu
           label={item.title}
           icon={item.icon}
-          className="-mt-3 py-1 pl-0.5 font-semibold"
+          className="pl-0.5 text-xxl-semibold"
         >
           {item.subMenu.map((el) => (
-            <MenuItem key={el.title}>{el.title}</MenuItem>
+            <MenuItem
+              key={el.title}
+              onClick={() => linkTo(el.path)}
+              className={`my-1 text-l-regular transition-all duration-300 ease-in-out first:mt-2 ${
+                pathname.indexOf(el.path) !== -1
+                  ? 'rounded-lg bg-neutral-20'
+                  : 'hover:rounded-lg hover:bg-neutral-20'
+              }`}
+            >
+              <p>{el.title}</p>
+            </MenuItem>
           ))}
         </SubMenu>
       )}

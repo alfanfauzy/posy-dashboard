@@ -30,12 +30,12 @@ const TemplatesSidebar = () => {
   return (
     <Sidebar
       defaultCollapsed={width < 1200}
-      className="z-0 h-full rounded-r-2xl bg-neutral-10"
+      className="z-0 h-full overflow-hidden rounded-r-2xl bg-neutral-10"
       width="250px"
     >
       <aside
-        className={`flex w-full items-center pt-6 transition-all duration-300 ease-in-out sm:justify-start ${
-          collapsed ? 'px-6' : 'pl-12'
+        className={`flex h-[12%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
+          collapsed ? 'px-6' : 'pl-12 pt-2'
         }`}
       >
         {!collapsed ? (
@@ -49,33 +49,39 @@ const TemplatesSidebar = () => {
         )}
       </aside>
 
-      <aside className="my-6">
+      <aside className="h-[75%] overflow-y-auto">
         {links.map((item) => (
           <Menu key={item.title} item={item} collapse={collapsed} />
         ))}
       </aside>
 
-      <aside className="absolute bottom-6 w-[90%] rounded-r-2xl bg-neutral-30 py-6">
-        <div
-          className={`flex gap-2 ${
-            collapsed ? 'justify-center' : 'ml-7 justify-start'
-          }`}
+      <aside className="h-[13%]">
+        <aside
+          className={`${
+            collapsed ? 'w-[85%]' : 'w-[90%]'
+          } flex h-3/4 items-center justify-center rounded-r-2xl bg-neutral-30`}
         >
-          <div>
-            <PersonIcon height={24} width={24} />
-          </div>
-          {!collapsed && (
-            <div
-              role="button"
-              onClick={handleLogout}
-              onKeyDown={handleLogout}
-              tabIndex={0}
-              className="text-m-semibold line-clamp-1"
-            >
-              Cyntia Simmon junior junior
+          <div
+            className={`flex items-center gap-2 ${
+              collapsed ? '-ml-1.5 justify-center' : 'ml-5 justify-start'
+            }`}
+          >
+            <div>
+              <PersonIcon height={24} width={24} />
             </div>
-          )}
-        </div>
+            {!collapsed && (
+              <div
+                role="button"
+                onClick={handleLogout}
+                onKeyDown={handleLogout}
+                tabIndex={0}
+                className="text-m-semibold line-clamp-1"
+              >
+                Cyntia Simmon junior junior
+              </div>
+            )}
+          </div>
+        </aside>
       </aside>
     </Sidebar>
   )
