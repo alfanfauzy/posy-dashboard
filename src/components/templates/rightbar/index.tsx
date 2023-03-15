@@ -880,8 +880,16 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 </div>
                 {selectedPayment === 'cash' && (
                   <>
-                    <div className="grid w-full grid-cols-3 gap-4">
-                      <div
+                    <div className="mt-4">
+                      <p className="text-xl-semibold">Input Payment Received</p>
+                      <input
+                        className="mt-2 flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 p-4 text-center transition-all duration-300 ease-in-out focus:outline-none"
+                        placeholder="Input custom amount"
+                        value="Rp 510.000"
+                      />
+                    </div>
+                    <div className="mt-6 grid w-full grid-cols-2 gap-4">
+                      {/* <div
                         role="presentation"
                         // onClick={() => setSelectedPayment(el.value)}
                         // key={el.label}
@@ -892,7 +900,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                         }`}
                       >
                         <p className="text-l-medium">{toRupiah(510000)}</p>
-                      </div>
+                      </div> */}
                       <div
                         role="presentation"
                         // onClick={() => setSelectedPayment(el.value)}
@@ -918,13 +926,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                         <p className="text-l-medium">{toRupiah(600000)}</p>
                       </div>
                     </div>
-                    <div className="mt-4">
-                      <p className="text-xl-semibold">Input Payment Received</p>
-                      <input
-                        className="mt-2 flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 p-4 text-center transition-all duration-300 ease-in-out focus:outline-none"
-                        placeholder="Input custom amount"
-                      />
-                    </div>
+
                     <div className="mt-4">
                       <p className="text-xl-semibold">Change (auto filled)</p>
                       <input

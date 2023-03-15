@@ -1,9 +1,14 @@
+import { checkSubscription } from 'pages/api/middleware'
+
 import { SEO } from '@/constants/seo'
 import MetaHeader from '@/molecules/meta-header'
-import type { NextPageWithLayout } from '@/types/index'
-import ViewTransactionPage from '@/view/transaction/pages'
+import ViewSubscriptionPage from '@/view/settings/subscription/components/pages'
 
-const Page: NextPageWithLayout = () => (
+interface Props {
+  isSubscription: boolean
+}
+
+const Page = ({ isSubscription }: Props) => (
   <>
     <MetaHeader
       title="Posy Resto - Subscription"
@@ -11,8 +16,18 @@ const Page: NextPageWithLayout = () => (
       keywords={SEO.keywords}
       image={SEO.image}
     />
-    <div>subs</div>
+    <ViewSubscriptionPage isSubscription={isSubscription} />
   </>
 )
+
+export async function getServerSideProps() {
+  const res = await checkSubscription()
+
+  return {
+    props: {
+      isSubscription: res.props.isSubscription,
+    },
+  }
+}
 
 export default Page

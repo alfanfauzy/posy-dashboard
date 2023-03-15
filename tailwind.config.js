@@ -5,6 +5,7 @@ module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}',
+    './core/view/**/*.{js,ts,jsx,tsx}',
   ],
   presets: [preset],
   theme: {

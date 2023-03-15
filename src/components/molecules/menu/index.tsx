@@ -22,10 +22,7 @@ const MoleculesMenu = ({ item, collapse }: MoleculesMenuProps) => {
   const firstPath = asPath.split('/')[1]
 
   return (
-    <Menu
-      key={item.path}
-      className={`w-full py-1.5 ${!collapse ? 'px-6' : ''}`}
-    >
+    <Menu key={item.path} className={`w-full py-1 ${!collapse ? 'px-6' : ''}`}>
       {Array.isArray(item.subMenu) && item.subMenu.length > 0 && (
         <SubMenu
           label={item.title}
@@ -50,7 +47,7 @@ const MoleculesMenu = ({ item, collapse }: MoleculesMenuProps) => {
       )}
       {!Array.isArray(item.subMenu) && (
         <MenuItem
-          className={`py-1.5 text-xxl-semibold transition-all duration-300 ease-in-out ${
+          className={`py-1 text-xxl-semibold transition-all duration-300 ease-in-out ${
             pathname.indexOf(item.path) !== -1
               ? 'rounded-lg bg-neutral-20'
               : 'hover:rounded-lg hover:bg-neutral-20'

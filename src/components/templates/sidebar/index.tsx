@@ -1,3 +1,4 @@
+import { Select } from 'antd'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { BsList } from 'react-icons/bs'
@@ -27,10 +28,12 @@ const TemplatesSidebar = () => {
     collapseSidebar()
   }
 
+  const outletOptions = [{ label: 'Select outlet: all', value: 'all' }]
+
   return (
     <Sidebar
       defaultCollapsed={width < 1200}
-      className="z-0 h-full overflow-hidden rounded-r-2xl bg-neutral-10"
+      className="relative z-0 h-full overflow-hidden rounded-r-2xl bg-neutral-10"
       width="250px"
     >
       <aside
@@ -49,21 +52,21 @@ const TemplatesSidebar = () => {
         )}
       </aside>
 
-      <aside className="h-[75%] overflow-y-auto">
+      <aside className="h-[70%] overflow-y-auto pb-6">
         {links.map((item) => (
           <Menu key={item.title} item={item} collapse={collapsed} />
         ))}
       </aside>
 
-      <aside className="h-[13%]">
+      <aside className="absolute bottom-0 w-full items-center">
         <aside
-          className={`${
-            collapsed ? 'w-[85%]' : 'w-[90%]'
-          } flex h-3/4 items-center justify-center rounded-r-2xl bg-neutral-30`}
+          className={`w-full ${
+            collapsed ? 'items-center' : 'items-start'
+          } flex h-[112px] flex-col justify-start rounded-t-2xl bg-[#F2F1F9] p-6`}
         >
           <div
             className={`flex items-center gap-2 ${
-              collapsed ? '-ml-1.5 justify-center' : 'ml-5 justify-start'
+              collapsed ? '-ml-1.5 justify-center' : 'justify-start'
             }`}
           >
             <div>
@@ -77,10 +80,16 @@ const TemplatesSidebar = () => {
                 tabIndex={0}
                 className="text-m-semibold line-clamp-1"
               >
-                Cyntia Simmon junior junior
+                Cyntia Simmons
               </div>
             )}
           </div>
+          <Select
+            className={`mt-2.5 -ml-1.5 ${collapsed ? 'w-16' : '!w-[164px]'}`}
+            options={outletOptions}
+            value={outletOptions[0]}
+            // onChange={onChange}
+          />
         </aside>
       </aside>
     </Sidebar>

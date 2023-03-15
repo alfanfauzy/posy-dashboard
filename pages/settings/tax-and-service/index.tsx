@@ -1,7 +1,7 @@
 import { SEO } from '@/constants/seo'
 import MetaHeader from '@/molecules/meta-header'
 import type { NextPageWithLayout } from '@/types/index'
-import ViewTransactionPage from '@/view/transaction/pages'
+import ViewTaxAndServicePage from '@/view/settings/tax-and-service/components/pages'
 
 const Page: NextPageWithLayout = () => (
   <>
@@ -11,7 +11,7 @@ const Page: NextPageWithLayout = () => (
       keywords={SEO.keywords}
       image={SEO.image}
     />
-    <div>tax</div>
+    <ViewTaxAndServicePage />
   </>
 )
 
