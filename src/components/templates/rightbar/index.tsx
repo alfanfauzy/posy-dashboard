@@ -468,6 +468,9 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     )
   }
 
+  console.log(showDeleteOrder)
+  console.log(dataOrder)
+
   return (
     <main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
       {!selectedTrxId && (
@@ -572,20 +575,23 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                   </div>
                 )}
 
-                {tabValueorder === 0 && !showDeleteOrder && !loadOrder && (
+                {tabValueorder === 0 && !loadOrder && (
                   <div className="pb-10">
-                    <div className="my-4 flex w-full items-center justify-center gap-1 rounded-lg border border-neutral-40 py-2 text-m-semibold">
-                      Order time:
-                      {dataTransaction &&
-                      dataTransaction?.first_order_at > 0 ? (
-                        <CountUpTimer
-                          startTime={dataTransaction?.first_order_at}
-                        />
-                      ) : (
-                        <div className="mx-0.5">-</div>
-                      )}
-                      <AiOutlineInfoCircle />
-                    </div>
+                    {!showDeleteOrder && (
+                      <div className="my-4 flex w-full items-center justify-center gap-1 rounded-lg border border-neutral-40 py-2 text-m-semibold">
+                        Order time:
+                        {dataTransaction &&
+                        dataTransaction?.first_order_at > 0 ? (
+                          <CountUpTimer
+                            startTime={dataTransaction?.first_order_at}
+                          />
+                        ) : (
+                          <div className="mx-0.5">-</div>
+                        )}
+                        <AiOutlineInfoCircle />
+                      </div>
+                    )}
+
                     {!showDeleteOrder &&
                       dataOrder &&
                       dataOrder.map((order, idx) => (
@@ -614,7 +620,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                       dataOrder &&
                       dataOrder.map((order, idx) => (
                         <div key={order.uuid} className="my-4 w-full">
-                          <div className="flex items-center justify-between text-s-bold">
+                          <div className="flex items-center justify-between text-m-semibold">
                             <p>{`Order ${idx + 1}`}</p>
                             <div
                               className="cursor-pointer text-red-accent duration-150"

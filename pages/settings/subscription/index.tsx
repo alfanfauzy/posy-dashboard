@@ -1,14 +1,14 @@
-import { checkSubscription } from 'pages/api/middleware'
-
 import { SEO } from '@/constants/seo'
+import { SubscriptionSection } from '@/domain/subscription/model'
 import MetaHeader from '@/molecules/meta-header'
 import ViewSubscriptionPage from '@/view/settings/subscription/components/pages'
+import { GetSubscriptionSectionServerViewModel } from '@/view/subscription/view-models/GetSubscriptionSectionViewModel'
 
 interface Props {
-  isSubscription: boolean
+  data: SubscriptionSection
 }
 
-const Page = ({ isSubscription }: Props) => (
+const Page = ({ data }: Props) => (
   <>
     <MetaHeader
       title="Posy Resto - Subscription"
@@ -16,16 +16,16 @@ const Page = ({ isSubscription }: Props) => (
       keywords={SEO.keywords}
       image={SEO.image}
     />
-    <ViewSubscriptionPage isSubscription={isSubscription} />
+    <ViewSubscriptionPage data={data} />
   </>
 )
 
 export async function getServerSideProps() {
-  const res = await checkSubscription()
+  const data = await GetSubscriptionSectionServerViewModel()
 
   return {
     props: {
-      isSubscription: res.props.isSubscription,
+      data,
     },
   }
 }

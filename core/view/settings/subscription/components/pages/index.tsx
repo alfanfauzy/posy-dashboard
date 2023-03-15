@@ -1,19 +1,23 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { Button, Modal } from 'posy-fnb-core'
 import RenewSubs from 'public/images/renew-subscription.png'
 import subsNeeded from 'public/images/subscription-needed.png'
 import React from 'react'
 
+import { SubscriptionSection } from '@/domain/subscription/model'
 import useDisclosure from '@/hooks/useDisclosure'
+import { formatDate } from '@/utils/date'
 
 interface ViewSubscriptionPageProps {
-  isSubscription: boolean
+  data: SubscriptionSection
 }
 
-const ViewSubscriptionPage = ({
-  isSubscription,
-}: ViewSubscriptionPageProps) => {
-  const [isOpen, { close }] = useDisclosure({ initialState: !isSubscription })
+const ViewSubscriptionPage = ({ data }: ViewSubscriptionPageProps) => {
+  const { isSubscription, end_date, status, subscription_name } = data
+  const [isOpen, { close }] = useDisclosure({
+    initialState: !isSubscription,
+  })
 
   return (
     <main className="flex h-full w-full">
@@ -29,26 +33,30 @@ const ViewSubscriptionPage = ({
             <div>
               <p className="text-l-semibold">Subscription Status</p>
               <p
-                className={`text-l-semibold ${
+                className={`mt-0.5 text-l-semibold ${
                   isSubscription ? 'text-green-success' : 'text-red-caution'
                 }`}
               >
-                {isSubscription ? 'Active' : 'Inactive'}
+                {status}
               </p>
             </div>
-            <div className="mt-3 border border-neutral-30" />
+            <div className="mt-3 border-b border-neutral-30" />
             <div className="mt-3">
               <p className="text-m-semibold">Subscription Plan</p>
-              <p className="text-m-regular">Basic</p>
+              <p className="mt-0.5 text-m-regular">{subscription_name}</p>
             </div>
             <div className="mt-3">
               <p className="text-m-semibold">Expired Date</p>
               <p
-                className={`text-m-regular ${
+                className={`mt-0.5 text-m-regular ${
                   isSubscription ? 'text-green-success' : 'text-red-caution'
                 }`}
               >
-                March 07, 2023
+                {formatDate({
+                  date: end_date,
+                  format: 'DD MMMM YYYY',
+                  type: 'unix',
+                })}
               </p>
             </div>
           </aside>
@@ -69,9 +77,15 @@ const ViewSubscriptionPage = ({
                   food and beverage business? Our subscription service has got
                   you covered!
                 </p>
-                <Button className="mt-10" fullWidth>
-                  Renew Subscription
-                </Button>
+                <Link
+                  passHref
+                  target="_blank"
+                  href="https://api.whatsapp.com/send/?phone=6282125270900"
+                >
+                  <Button className="mt-10" fullWidth>
+                    Renew Subscription
+                  </Button>
+                </Link>
               </div>
             </div>
           </aside>
@@ -93,9 +107,15 @@ const ViewSubscriptionPage = ({
               We’re sorry that you need to subscribe to access the application.
               Please renew the subscription first.
             </p>
-            <Button className="mt-10" fullWidth>
-              Renew Subscription
-            </Button>
+            <Link
+              passHref
+              target="_blank"
+              href="https://api.whatsapp.com/send/?phone=6282125270900"
+            >
+              <Button className="mt-10" fullWidth>
+                Renew Subscription
+              </Button>
+            </Link>
           </div>
           <div className="w-1/2">
             <Image priority src={subsNeeded} alt="subscription-needed" />

@@ -127,15 +127,18 @@ interface FormatDateProps {
     | 'lll'
     | 'DD MMMM YYYY'
     | 'DD MMM YYYY'
-  isIso?: boolean
+  type?: 'default' | 'iso' | 'unix'
 }
 export const formatDate = ({
   date,
   format = 'YYYY-MM-DD',
-  isIso,
+  type = 'default',
 }: FormatDateProps) => {
-  if (isIso) {
+  if (type === 'iso') {
     return moment(date).toISOString()
+  }
+  if (type === 'unix') {
+    return moment.unix(date).format(format)
   }
   return moment(date).format(format)
 }

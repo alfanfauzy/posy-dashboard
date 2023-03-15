@@ -32,11 +32,11 @@ export const links = [
     subMenu: [
       {
         title: 'Tax & Service',
-        path: '/settings/tax-and-service',
+        path: 'settings/tax-and-service',
       },
       {
         title: 'Subscription',
-        path: '/settings/subscription',
+        path: 'settings/subscription',
       },
     ],
   },

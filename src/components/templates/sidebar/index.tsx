@@ -28,7 +28,11 @@ const TemplatesSidebar = () => {
     collapseSidebar()
   }
 
-  const outletOptions = [{ label: 'Select outlet: all', value: 'all' }]
+  const outletOptions = [
+    { label: 'Select outlet: A', value: 'A' },
+    { label: 'Select outlet: B', value: 'B' },
+    { label: 'Select outlet: C', value: 'C' },
+  ]
 
   return (
     <Sidebar
