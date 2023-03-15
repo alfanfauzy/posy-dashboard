@@ -14,6 +14,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
 import ModalWrapper from '@/atoms/modal'
+import { UNPROTECT_ROUTES } from '@/config/link'
 import { persistor, wrapper } from '@/store/index'
 import Layout from '@/templates/layout'
 import type { NextPageWithLayout } from '@/types/index'
@@ -26,11 +27,12 @@ type AppPropsWithLayout = AppProps & {
 const App = ({ Component, pageProps, ...rest }: AppPropsWithLayout) => {
   const [queryClient] = useState(new QueryClient())
   const { store } = wrapper.useWrappedStore(rest)
-  const { replace, asPath } = useRouter()
+  const { push, asPath } = useRouter()
 
   useEffect(() => {
-    if (!pageProps.isSubscription && asPath !== '/settings/subscription')
-      replace('/settings/subscription')
+    if (!pageProps.isSubscription && !UNPROTECT_ROUTES.includes(asPath)) {
+      push('/settings/subscription')
+    }
   }, [pageProps])
 
   const getLayout =
@@ -55,7 +57,6 @@ const App = ({ Component, pageProps, ...rest }: AppPropsWithLayout) => {
 }
 
 App.getInitialProps = async () => {
-  // const { isSubscription } = await CheckSubscription()
   const data = await GetSubscriptionSectionServerViewModel()
 
   return {

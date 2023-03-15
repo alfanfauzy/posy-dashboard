@@ -4,7 +4,7 @@ import ReportIcon from 'src/assets/icons/report'
 import SettinsIcon from 'src/assets/icons/settings'
 import TransactionIcon from 'src/assets/icons/transaction'
 
-export const links = [
+export const PROTECT_ROUTES = [
   {
     title: 'Transaction',
     path: 'transaction',
@@ -40,4 +40,12 @@ export const links = [
       },
     ],
   },
+]
+
+export const UNPROTECT_ROUTES = [
+  '/settings/subscription',
+  '/auth/login',
+  '/auth/forget-password',
+  '/auth/create-new-password',
+  '/auth/verify-account',
 ]

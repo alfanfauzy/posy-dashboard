@@ -5,7 +5,7 @@ import { BsList } from 'react-icons/bs'
 import { Sidebar, useProSidebar } from 'react-pro-sidebar'
 
 import Logo from '@/atoms/logo'
-import { links } from '@/config/link'
+import { PROTECT_ROUTES } from '@/config/link'
 import useViewportListener from '@/hooks/useViewportListener'
 import PersonIcon from '@/icons/person'
 import Menu from '@/molecules/menu'
@@ -57,8 +57,8 @@ const TemplatesSidebar = () => {
       </aside>
 
       <aside className="h-[70%] overflow-y-auto pb-6">
-        {links.map((item) => (
-          <Menu key={item.title} item={item} collapse={collapsed} />
+        {PROTECT_ROUTES.map((route) => (
+          <Menu key={route.title} item={route} collapse={collapsed} />
         ))}
       </aside>
 
