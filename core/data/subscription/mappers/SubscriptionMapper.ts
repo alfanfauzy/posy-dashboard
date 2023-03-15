@@ -9,7 +9,7 @@ import { GetSubscriptionSectionDataResponse } from '../types'
 export const mapToSubscriptionSectionModel = (
   data: GetSubscriptionSectionDataResponse,
 ): SubscriptionSection => ({
-  isSubscription: data.status === SubscriptionStatus.INACTIVE,
+  isSubscription: data.status === SubscriptionStatus.ACTIVE,
   status: data.status,
   subscription_name: data.subscription_name,
   end_date: data.end_date,

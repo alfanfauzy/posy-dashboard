@@ -4,32 +4,56 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import { ProSidebarProvider } from 'react-pro-sidebar'
 
 import Transition from '@/atoms/animations/transition'
+import { UNPROTECT_ROUTES } from '@/config/link'
 import { useAppSelector } from '@/store/hooks'
 import Sidebar from '@/templates/sidebar'
 
 interface OrganismsLayoutProps {
   children: ReactNode
+  isSubscription: boolean
 }
 
-const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
-  const router = useRouter()
+const OrganismsLayout = ({
+  children,
+  isSubscription,
+}: OrganismsLayoutProps) => {
+  const { replace, asPath } = useRouter()
   const { isLoggedIn } = useAppSelector((state) => state.auth)
   const [loading, setLoading] = useState(true)
   // const [firstRender, setFirstRender] = useState(true)
 
+  // useEffect(() => {
+  //   // if (!firstRender) {
+  //   if (!isLoggedIn) router.replace('/auth/login')
+  //   else if (router.asPath === '/') {
+  //     router.replace('/transaction')
+  //     setLoading(false)
+  //   } else {
+  //     setLoading(false)
+  //   }
+  //   // } else {
+  //   //   setFirstRender(false)
+  //   // }
+  // }, [isLoggedIn, router])
+
   useEffect(() => {
-    // if (!firstRender) {
-    if (!isLoggedIn) router.replace('/auth/login')
-    else if (router.asPath === '/') {
-      router.replace('/transaction')
-      setLoading(false)
+    if (!isLoggedIn) replace('/auth/login')
+    else if (isSubscription && asPath === '/') {
+      replace('/transaction')
+      setTimeout(() => {
+        setLoading(false)
+      }, 500)
+    } else if (!isSubscription && !UNPROTECT_ROUTES.includes(asPath)) {
+      replace('/settings/subscription')
+      setTimeout(() => {
+        setLoading(false)
+      }, 500)
     } else {
-      setLoading(false)
+      setTimeout(() => {
+        setLoading(false)
+      }, 500)
     }
-    // } else {
-    //   setFirstRender(false)
-    // }
-  }, [isLoggedIn, router])
+  }, [asPath, isLoggedIn, isSubscription, replace])
 
   if (loading) {
     return (
@@ -45,7 +69,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
         <section className="flex h-full w-full gap-4">
           <Sidebar />
           <div className="h-full flex-1 overflow-y-scroll">
-            <Transition asPath={router.asPath}>{children}</Transition>
+            <Transition asPath={asPath}>{children}</Transition>
           </div>
         </section>
       </main>

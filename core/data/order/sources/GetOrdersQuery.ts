@@ -3,17 +3,23 @@ import Get from 'api/get'
 
 import { GetOrdersInput } from '@/domain/order/repositories/OrderRepository'
 import { DataList, Response } from '@/domain/vo/BaseResponse'
+import { store } from '@/store/index'
 
 import { GetOrdersDataResponse } from '../types'
 
 export const GetOrdersQueryKey = (input: GetOrdersInput) =>
   ['Orders/list', input] as const
 
+const { token } = store.getState().auth.authData
+
 const GetOrders = async (
   input: GetOrdersInput,
 ): Promise<Response<DataList<GetOrdersDataResponse>>> => {
   const response = await Get({
     endpoint: `/api/fnb-order-service/order/get-list/${input.transaction_uuid}`,
+    headers: {
+      token,
+    },
   })
 
   return {
