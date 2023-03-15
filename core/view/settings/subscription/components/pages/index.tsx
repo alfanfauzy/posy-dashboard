@@ -5,18 +5,15 @@ import RenewSubs from 'public/images/renew-subscription.png'
 import subsNeeded from 'public/images/subscription-needed.png'
 import React from 'react'
 
-import { SubscriptionSection } from '@/domain/subscription/model'
 import useDisclosure from '@/hooks/useDisclosure'
 import { formatDate } from '@/utils/date'
+import { useGetSubscriptionSectionViewModel } from '@/view/subscription/view-models/GetSubscriptionSectionViewModel'
 
-interface ViewSubscriptionPageProps {
-  data: SubscriptionSection
-}
+const ViewSubscriptionPage = () => {
+  const { data } = useGetSubscriptionSectionViewModel()
 
-const ViewSubscriptionPage = ({ data }: ViewSubscriptionPageProps) => {
-  const { isSubscription, end_date, status, subscription_name } = data
   const [isOpen, { close }] = useDisclosure({
-    initialState: !isSubscription,
+    initialState: !data?.isSubscription,
   })
 
   return (
@@ -34,26 +31,30 @@ const ViewSubscriptionPage = ({ data }: ViewSubscriptionPageProps) => {
               <p className="text-l-semibold">Subscription Status</p>
               <p
                 className={`mt-0.5 text-l-semibold ${
-                  isSubscription ? 'text-green-success' : 'text-red-caution'
+                  data?.isSubscription
+                    ? 'text-green-success'
+                    : 'text-red-caution'
                 }`}
               >
-                {status}
+                {data?.status}
               </p>
             </div>
             <div className="mt-3 border-b border-neutral-30" />
             <div className="mt-3">
               <p className="text-m-semibold">Subscription Plan</p>
-              <p className="mt-0.5 text-m-regular">{subscription_name}</p>
+              <p className="mt-0.5 text-m-regular">{data?.subscription_name}</p>
             </div>
             <div className="mt-3">
               <p className="text-m-semibold">Expired Date</p>
               <p
                 className={`mt-0.5 text-m-regular ${
-                  isSubscription ? 'text-green-success' : 'text-red-caution'
+                  data?.isSubscription
+                    ? 'text-green-success'
+                    : 'text-red-caution'
                 }`}
               >
                 {formatDate({
-                  date: end_date,
+                  date: data?.end_date,
                   format: 'DD MMMM YYYY',
                   type: 'unix',
                 })}

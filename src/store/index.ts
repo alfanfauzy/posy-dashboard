@@ -24,7 +24,7 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
 })
 
-const persistor = persistStore(store)
+const persistor = persistStore(store, null, () => store.getState())
 
 const makeStore = () => store
 const wrapper = createWrapper(makeStore)

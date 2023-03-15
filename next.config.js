@@ -12,16 +12,16 @@ const nextConfig = {
         destination: `${process.env.NEXT_PUBLIC_API}/fnb-user-service/:path*`,
       },
       {
+        source: '/settings/api/fnb-user-service/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API}/fnb-user-service/:path*`,
+      },
+      {
         source: '/api/fnb-product-service/:path*',
         destination: `${process.env.NEXT_PUBLIC_API}/fnb-product-service/:path*`,
       },
     ]
   },
-
   swcMinify: true,
-  images: {
-    domains: ['s3.ap-southeast-1.amazonaws.com'],
-  },
 }
 
 module.exports = nextConfig

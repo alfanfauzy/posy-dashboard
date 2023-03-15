@@ -15,7 +15,6 @@ import ModalWrapper from '@/atoms/modal'
 import { persistor, wrapper } from '@/store/index'
 import Layout from '@/templates/layout'
 import type { NextPageWithLayout } from '@/types/index'
-import { GetSubscriptionSectionServerViewModel } from '@/view/subscription/view-models/GetSubscriptionSectionViewModel'
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
@@ -29,7 +28,7 @@ const App = ({ Component, pageProps, ...rest }: AppPropsWithLayout) => {
     Component.getLayout ??
     ((page) => (
       <Suspense fallback={page}>
-        <Layout isSubscription={pageProps?.isSubscription}>{page}</Layout>
+        <Layout>{page}</Layout>
       </Suspense>
     ))
 
@@ -44,16 +43,6 @@ const App = ({ Component, pageProps, ...rest }: AppPropsWithLayout) => {
       <ReactQueryDevtools />
     </QueryClientProvider>
   )
-}
-
-App.getInitialProps = async () => {
-  const data = await GetSubscriptionSectionServerViewModel()
-
-  return {
-    pageProps: {
-      ...data,
-    },
-  }
 }
 
 export default App

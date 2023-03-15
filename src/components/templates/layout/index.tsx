@@ -7,19 +7,20 @@ import Transition from '@/atoms/animations/transition'
 import { UNPROTECT_ROUTES } from '@/config/link'
 import { useAppSelector } from '@/store/hooks'
 import Sidebar from '@/templates/sidebar'
+import { useGetSubscriptionSectionViewModel } from '@/view/subscription/view-models/GetSubscriptionSectionViewModel'
 
 interface OrganismsLayoutProps {
   children: ReactNode
-  isSubscription: boolean
 }
 
-const OrganismsLayout = ({
-  children,
-  isSubscription,
-}: OrganismsLayoutProps) => {
+const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
   const { replace, asPath } = useRouter()
   const { isLoggedIn } = useAppSelector((state) => state.auth)
   const [loading, setLoading] = useState(true)
+
+  const { data } = useGetSubscriptionSectionViewModel({
+    queryKey: [asPath],
+  })
   // const [firstRender, setFirstRender] = useState(true)
 
   // useEffect(() => {
@@ -38,12 +39,16 @@ const OrganismsLayout = ({
 
   useEffect(() => {
     if (!isLoggedIn) replace('/auth/login')
-    else if (isSubscription && asPath === '/') {
+    else if (data && data.isSubscription && asPath === '/') {
       replace('/transaction')
       setTimeout(() => {
         setLoading(false)
       }, 500)
-    } else if (!isSubscription && !UNPROTECT_ROUTES.includes(asPath)) {
+    } else if (
+      data &&
+      !data.isSubscription &&
+      !UNPROTECT_ROUTES.includes(asPath)
+    ) {
       replace('/settings/subscription')
       setTimeout(() => {
         setLoading(false)
@@ -53,7 +58,7 @@ const OrganismsLayout = ({
         setLoading(false)
       }, 500)
     }
-  }, [asPath, isLoggedIn, isSubscription, replace])
+  }, [asPath, isLoggedIn, data, replace])
 
   if (loading) {
     return (
