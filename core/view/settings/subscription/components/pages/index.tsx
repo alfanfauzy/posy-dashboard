@@ -3,18 +3,23 @@ import Link from 'next/link'
 import { Button, Modal } from 'posy-fnb-core'
 import RenewSubs from 'public/images/renew-subscription.png'
 import subsNeeded from 'public/images/subscription-needed.png'
-import React from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 
-import useDisclosure from '@/hooks/useDisclosure'
 import { formatDate } from '@/utils/date'
 import { useGetSubscriptionSectionViewModel } from '@/view/subscription/view-models/GetSubscriptionSectionViewModel'
 
 const ViewSubscriptionPage = () => {
   const { data } = useGetSubscriptionSectionViewModel()
 
-  const [isOpen, { close }] = useDisclosure({
-    initialState: !data?.isSubscription,
-  })
+  const [isOpen, setIsOpen] = useState(false)
+  const [isFirstRender, setIsFirstRender] = useState(true)
+
+  useLayoutEffect(() => {
+    if (isFirstRender && data && !data?.isSubscription) {
+      setIsOpen(true)
+      setIsFirstRender(false)
+    }
+  }, [data, isFirstRender])
 
   return (
     <main className="flex h-full w-full">
@@ -96,7 +101,7 @@ const ViewSubscriptionPage = () => {
       <Modal
         closeOverlay
         open={isOpen}
-        handleClose={close}
+        handleClose={() => setIsOpen(false)}
         className="!w-1/2 !p-12"
       >
         <section className="flex w-full items-center justify-center gap-4">
