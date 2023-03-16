@@ -29,12 +29,17 @@ const OrganismsContentsTransaction = ({
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const { selectedTrxId, search } = useAppSelector((state) => state.transaction)
+  const { outletId } = useAppSelector((state) => state.auth)
   const [openSearch, { open, close }] = useDisclosure({ initialState: false })
   const [status, setStatus] = useState('')
 
   const { isLoading, createTransaction } = useCreateTransactionViewModel({
-    onSuccess: () => queryClient.invalidateQueries(GetTransactionsQueryKey()),
+    onSuccess: () => queryClient.invalidateQueries([GetTransactionsQueryKey]),
   })
+
+  const handleCreateTransaction = (restaurantOutletId: string) => {
+    createTransaction({ restaurant_outlet_uuid: restaurantOutletId })
+  }
 
   const { data, isLoading: loadData } = useGetTransactionsViewModel({
     limit: 100,
@@ -53,6 +58,7 @@ const OrganismsContentsTransaction = ({
         value: search,
       },
     ],
+    restaurant_outlet_uuid: outletId,
   })
 
   // const handlePrint = useReactToPrint({
@@ -164,7 +170,7 @@ const OrganismsContentsTransaction = ({
 
           <div className="w-1/4">
             <Button
-              onClick={createTransaction}
+              onClick={() => handleCreateTransaction(outletId)}
               size="m"
               fullWidth
               variant="primary"
@@ -183,11 +189,21 @@ const OrganismsContentsTransaction = ({
           </article>
         )}
         {data && data.length === 0 && (
-          <article className="flex h-full items-center justify-center">
-            <PlusCircleIcon
-              onClick={!isLoading ? createTransaction : () => undefined}
-              className="cursor-pointer transition-all duration-300 ease-in-out hover:opacity-60"
-            />
+          <article className="flex h-full items-center justify-center rounded-md bg-neutral-20">
+            <div
+              role="presentation"
+              onClick={
+                !isLoading
+                  ? () => handleCreateTransaction(outletId)
+                  : () => undefined
+              }
+              className="flex flex-col items-center gap-3"
+            >
+              <PlusCircleIcon className="cursor-pointer transition-all duration-300 ease-in-out hover:opacity-60" />
+              <p className="cursor-pointer text-l-medium text-neutral-60 transition-all duration-300 ease-in-out hover:opacity-60">
+                Create New Transaction
+              </p>
+            </div>
           </article>
         )}
         {data && (

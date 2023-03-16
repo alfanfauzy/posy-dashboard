@@ -1,5 +1,8 @@
 import { MutationOptions } from '@/data/common/types'
-import { CreateTransactionRepository } from '@/domain/transaction/repositories/TransactionRepository'
+import {
+  CreateTransactionInput,
+  CreateTransactionRepository,
+} from '@/domain/transaction/repositories/TransactionRepository'
 
 import { mapToCreateTransactionModel } from '../mappers/TransactionMapper'
 import { useCreateTransactionMutation } from '../sources/CreateTransactionMutation'
@@ -10,8 +13,8 @@ export const useCreateTransactionUsecase = (
 ): CreateTransactionRepository => {
   const { mutate, data, ...rest } = useCreateTransactionMutation(options)
 
-  const createTransaction = () => {
-    mutate({})
+  const createTransaction = (input: CreateTransactionInput) => {
+    mutate(input)
   }
 
   if (data?.data) {

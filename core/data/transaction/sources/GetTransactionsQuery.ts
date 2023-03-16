@@ -7,8 +7,7 @@ import { store } from '@/store/index'
 
 import { GetTransactionsDataResponse } from '../types'
 
-export const GetTransactionsQueryKey = (input?: GetTransactionsInput) =>
-  ['transactions/list', input] as const
+export const GetTransactionsQueryKey = 'transactions/list' as const
 
 const { token } = store.getState().auth.authData
 
@@ -36,7 +35,7 @@ export const useGetTransactionsQuery = (
   options?: UseQueryOptions<Response<DataList<GetTransactionsDataResponse>>>,
 ) =>
   useQuery<Response<DataList<GetTransactionsDataResponse>>>(
-    GetTransactionsQueryKey(input),
+    [GetTransactionsQueryKey, input],
     () => GetTransactions(input),
     {
       refetchOnWindowFocus: false,

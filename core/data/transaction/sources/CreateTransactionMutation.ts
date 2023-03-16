@@ -1,17 +1,26 @@
 import { useMutation } from '@tanstack/react-query'
-import Post from 'api/post'
 
 import { MutationOptions } from '@/data/common/types'
+import { CreateTransactionInput } from '@/domain/transaction/repositories/TransactionRepository'
 import { Response } from '@/domain/vo/BaseResponse'
+import { store } from '@/store/index'
 
+import Post from '../../../../internals/api/post'
 import { CreateTransactionDataResponse } from '../types'
 
-const CreateTransaction = async (): Promise<
-  Response<CreateTransactionDataResponse>
-> => {
+const { token } = store.getState().auth.authData
+
+const CreateTransaction = async (
+  input: CreateTransactionInput,
+): Promise<Response<CreateTransactionDataResponse>> => {
   const response = await Post({
     endpoint: `/api/fnb-order-service/transaction/create`,
-    data: {},
+    data: {
+      ...input,
+    },
+    headers: {
+      token,
+    },
   })
 
   return {
@@ -26,6 +35,6 @@ export const useCreateTransactionMutation = (
   options?: MutationOptions<CreateTransactionDataResponse>,
 ) =>
   useMutation({
-    mutationFn: CreateTransaction,
+    mutationFn: (input: CreateTransactionInput) => CreateTransaction(input),
     ...options,
   })

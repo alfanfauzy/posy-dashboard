@@ -468,9 +468,6 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     )
   }
 
-  console.log(showDeleteOrder)
-  console.log(dataOrder)
-
   return (
     <main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
       {!selectedTrxId && (

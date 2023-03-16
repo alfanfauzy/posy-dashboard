@@ -11,7 +11,7 @@ import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'
 export type GetTransactionsInput = InputVariables<
   keyof Transaction,
   keyof Pick<Transaction, 'customer_name' | 'status' | 'transaction_code'>
->
+> & { restaurant_outlet_uuid: string }
 
 export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {
   pagination: Pagination | undefined
@@ -24,10 +24,12 @@ export type GetTransactionResult = ResultQuery<Transaction | undefined>
  * CREATE
  */
 
+export type CreateTransactionInput = { restaurant_outlet_uuid: string }
+
 export type CreateTransactionResult = ResultMutation<QrCode | undefined>
 
 export interface CreateTransactionRepository extends CreateTransactionResult {
-  createTransaction(): void
+  createTransaction(input: CreateTransactionInput): void
 }
 
 /**
