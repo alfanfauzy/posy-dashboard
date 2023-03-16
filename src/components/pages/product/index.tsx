@@ -234,7 +234,7 @@ const PagesTransaction = () => {
 
       {isOpenEditProduct && (
         <Modal
-          className="w-3/4 lg:w-1/2"
+          className="!p-0"
           isForm
           handleSubmit={methods.handleSubmit(onSubmit)}
           showCloseButton
@@ -249,131 +249,133 @@ const PagesTransaction = () => {
           }
         >
           <FormProvider {...methods}>
-            <aside className="flex gap-6">
-              <div>
-                <Image
-                  src="/images/logo.png"
-                  alt="product image"
-                  width={142}
-                  height={142}
-                />
-              </div>
-
-              <div className="flex-1">
+            <div className="px-6 py-4">
+              <aside className="flex gap-6">
                 <div>
-                  <Input
-                    fullwidth
-                    labelText="Product Name"
-                    {...methods.register('product_name')}
-                    error={!!errors?.product_name}
-                    helperText={errors?.product_name?.message}
+                  <Image
+                    src="/images/logo.png"
+                    alt="product image"
+                    width={142}
+                    height={142}
                   />
                 </div>
-                <div className="mt-4">
-                  <Input fullwidth labelText="Category" />
+
+                <div className="flex-1">
+                  <div>
+                    <Input
+                      fullwidth
+                      labelText="Product Name"
+                      {...methods.register('product_name')}
+                      error={!!errors?.product_name}
+                      helperText={errors?.product_name?.message}
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <Input fullwidth labelText="Category" />
+                  </div>
                 </div>
-              </div>
-            </aside>
-            <aside className="mt-6">
-              <div>
-                <Input labelText="Price" />
-              </div>
-            </aside>
+              </aside>
+              <aside className="mt-6">
+                <div>
+                  <Input labelText="Price" />
+                </div>
+              </aside>
 
-            <aside className="mt-6 grid grid-cols-3 gap-6">
-              <div>
-                <p className="mb-4">Activate Discount</p>
-                <Toggle value onChange={() => undefined} />
-              </div>
-              <div>
-                <Input labelText="Discount (%)" />
-              </div>
-              <div>
-                <Input labelText="Price after discount" />
-              </div>
-            </aside>
-
-            <aside className="mt-6">
-              <Textarea labelText="Description" />
-            </aside>
-
-            <aside className="mt-6 border-b-2 border-b-neutral-30 pb-6">
-              <div className="text-l-semibold">View setup</div>
               <aside className="mt-6 grid grid-cols-3 gap-6">
                 <div>
                   <p className="mb-4">Activate Discount</p>
                   <Toggle value onChange={() => undefined} />
                 </div>
                 <div>
-                  <p className="mb-4">Product Available</p>
-                  <Toggle value onChange={() => undefined} />
+                  <Input labelText="Discount (%)" />
                 </div>
                 <div>
-                  <p className="mb-4">Recommendation</p>
-                  <Toggle value onChange={() => undefined} />
+                  <Input labelText="Price after discount" />
                 </div>
               </aside>
-            </aside>
 
-            {/* {product.addon?.map((addon, addonIdx) => ( */}
-            {fields.map((addon, addonIdx) => (
-              <aside key={addon.id} className="mt-6">
-                <div className="flex items-center justify-between text-l-semibold">
-                  Add on details
-                  {/* <CgTrash
+              <aside className="mt-6">
+                <Textarea labelText="Description" />
+              </aside>
+
+              <aside className="mt-6 border-b-2 border-b-neutral-30 pb-6">
+                <div className="text-l-semibold">View setup</div>
+                <aside className="mt-6 grid grid-cols-3 gap-6">
+                  <div>
+                    <p className="mb-4">Activate Discount</p>
+                    <Toggle value onChange={() => undefined} />
+                  </div>
+                  <div>
+                    <p className="mb-4">Product Available</p>
+                    <Toggle value onChange={() => undefined} />
+                  </div>
+                  <div>
+                    <p className="mb-4">Recommendation</p>
+                    <Toggle value onChange={() => undefined} />
+                  </div>
+                </aside>
+              </aside>
+
+              {/* {product.addon?.map((addon, addonIdx) => ( */}
+              {fields.map((addon, addonIdx) => (
+                <aside key={addon.id} className="mt-6">
+                  <div className="flex items-center justify-between text-l-semibold">
+                    Add on details
+                    {/* <CgTrash
                   className="cursor-pointer text-neutral-70"
                   size={20}
                   onClick={handleDeleteAddOn}
                 /> */}
-                </div>
-                <div className="mt-6">
-                  <Input
-                    labelText="Addon name"
-                    {...methods.register(`addon.${addonIdx}.addon_name`)}
-                    error={
-                      errors?.addon && !!errors?.addon[addonIdx]?.addon_name
-                    }
-                    helperText={
-                      errors?.addon &&
-                      errors?.addon[addonIdx]?.addon_name?.message
-                    }
-                  />
-                </div>
-                <aside className="mt-6 grid grid-cols-3 gap-6">
-                  <div>
-                    <p className="mb-4">Required</p>
-                    <Toggle value onChange={() => undefined} />
                   </div>
-                  <div>
-                    <p className="mb-4">Choose multiple</p>
-                    <Toggle value onChange={() => undefined} />
+                  <div className="mt-6">
+                    <Input
+                      labelText="Addon name"
+                      {...methods.register(`addon.${addonIdx}.addon_name`)}
+                      error={
+                        errors?.addon && !!errors?.addon[addonIdx]?.addon_name
+                      }
+                      helperText={
+                        errors?.addon &&
+                        errors?.addon[addonIdx]?.addon_name?.message
+                      }
+                    />
                   </div>
+                  <aside className="mt-6 grid grid-cols-3 gap-6">
+                    <div>
+                      <p className="mb-4">Required</p>
+                      <Toggle value onChange={() => undefined} />
+                    </div>
+                    <div>
+                      <p className="mb-4">Choose multiple</p>
+                      <Toggle value onChange={() => undefined} />
+                    </div>
+                  </aside>
+
+                  <VariantTemp addonIdx={addonIdx} errors={errors} />
                 </aside>
+              ))}
 
-                <VariantTemp addonIdx={addonIdx} errors={errors} />
+              <aside className="mt-6 flex items-center justify-center ">
+                <p
+                  role="presentation"
+                  // onClick={handleAddAddOn}
+                  onClick={() =>
+                    append({
+                      addon_name: '',
+                      addon_variants: [
+                        {
+                          variant_name: '',
+                          variant_price: '',
+                        },
+                      ],
+                    })
+                  }
+                  className="cursor-pointer text-l-semibold text-secondary-main hover:opacity-70"
+                >
+                  + Add addon
+                </p>
               </aside>
-            ))}
-
-            <aside className="mt-6 flex items-center justify-center ">
-              <p
-                role="presentation"
-                // onClick={handleAddAddOn}
-                onClick={() =>
-                  append({
-                    addon_name: '',
-                    addon_variants: [
-                      {
-                        variant_name: '',
-                        variant_price: '',
-                      },
-                    ],
-                  })
-                }
-                className="cursor-pointer text-l-semibold text-secondary-main hover:opacity-70"
-              >
-                + Add addon
-              </p>
-            </aside>
+            </div>
           </FormProvider>
         </Modal>
       )}

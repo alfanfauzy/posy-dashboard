@@ -92,11 +92,12 @@ const Datepicker: React.FC<DatepickerProps> = ({
       </div>
 
       <Modal
+        className="!h-fit !p-0"
         overflow={false}
         open={isOpen}
         handleClose={close}
         confirmButton={
-          <div className="flex w-full max-w-[80%] items-center justify-center gap-4">
+          <div className="mx-4 flex w-full items-center justify-center gap-4">
             <Button variant="secondary" onClick={onCancel} fullWidth>
               Cancel
             </Button>
@@ -106,7 +107,7 @@ const Datepicker: React.FC<DatepickerProps> = ({
           </div>
         }
       >
-        <section className="p-4 text-primary-main">
+        <section className="p-10 text-primary-main">
           <DateRangePicker
             className="w-full"
             data-testid="content-input"
