@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
 import { Loading } from 'posy-fnb-core'
 import React, { ReactNode, useEffect, useState } from 'react'
@@ -5,8 +6,10 @@ import { ProSidebarProvider } from 'react-pro-sidebar'
 
 import Transition from '@/atoms/animations/transition'
 import { UNPROTECT_ROUTES } from '@/config/link'
-import { useAppSelector } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { setIsSubscription } from '@/store/slices/auth'
 import Sidebar from '@/templates/sidebar'
+import { useGetOutletSelectionViewModel } from '@/view/outlet/GetOutletSelectionViewModel'
 import { useGetSubscriptionSectionViewModel } from '@/view/subscription/view-models/GetSubscriptionSectionViewModel'
 
 interface OrganismsLayoutProps {
@@ -14,13 +17,21 @@ interface OrganismsLayoutProps {
 }
 
 const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
+  const dispatch = useAppDispatch()
   const { replace, asPath } = useRouter()
-  const { isLoggedIn } = useAppSelector((state) => state.auth)
+  const { isLoggedIn, isSubscription } = useAppSelector((state) => state.auth)
   const [loading, setLoading] = useState(true)
 
-  const { data } = useGetSubscriptionSectionViewModel({
-    queryKey: [asPath],
+  const { data: dataSubscription, isLoading: loadDataSubscription } =
+    useGetSubscriptionSectionViewModel({
+      queryKey: [asPath],
+      enabled: isLoggedIn,
+    })
+
+  const { data: dataOutletSelection } = useGetOutletSelectionViewModel({
+    enabled: isLoggedIn && isSubscription,
   })
+
   // const [firstRender, setFirstRender] = useState(true)
 
   // useEffect(() => {
@@ -39,14 +50,18 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
 
   useEffect(() => {
     if (!isLoggedIn) replace('/auth/login')
-    else if (data && data.isSubscription && asPath === '/') {
+    else if (
+      dataSubscription &&
+      dataSubscription.isSubscription &&
+      asPath === '/'
+    ) {
       replace('/transaction')
       setTimeout(() => {
         setLoading(false)
       }, 500)
     } else if (
-      data &&
-      !data.isSubscription &&
+      dataSubscription &&
+      !dataSubscription.isSubscription &&
       !UNPROTECT_ROUTES.includes(asPath)
     ) {
       replace('/settings/subscription')
@@ -58,9 +73,15 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
         setLoading(false)
       }, 500)
     }
-  }, [asPath, isLoggedIn, data, replace])
+  }, [asPath, isLoggedIn, dataSubscription])
 
-  if (loading) {
+  useEffect(() => {
+    if (dataSubscription) {
+      dispatch(setIsSubscription(dataSubscription.isSubscription))
+    }
+  }, [dataSubscription])
+
+  if (loading || loadDataSubscription) {
     return (
       <main className="flex h-screen w-full items-center justify-center">
         <Loading backgroundColor="#2F265B" color="#2F265B" size={100} />
@@ -72,7 +93,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
     <ProSidebarProvider>
       <main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30 py-4">
         <section className="flex h-full w-full gap-4">
-          <Sidebar />
+          <Sidebar dataOutletSelection={dataOutletSelection || undefined} />
           <div className="h-full flex-1 overflow-y-scroll">
             <Transition asPath={asPath}>{children}</Transition>
           </div>

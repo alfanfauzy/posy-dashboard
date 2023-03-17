@@ -29,7 +29,9 @@ const OrganismsContentsTransaction = ({
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const { selectedTrxId, search } = useAppSelector((state) => state.transaction)
-  const { outletId } = useAppSelector((state) => state.auth)
+  const { outletId, isSubscription, isLoggedIn } = useAppSelector(
+    (state) => state.auth,
+  )
   const [openSearch, { open, close }] = useDisclosure({ initialState: false })
   const [status, setStatus] = useState('')
 
@@ -40,27 +42,31 @@ const OrganismsContentsTransaction = ({
   const handleCreateTransaction = (restaurantOutletId: string) => {
     createTransaction({ restaurant_outlet_uuid: restaurantOutletId })
   }
-  console.log({ outletId })
 
-  const { data, isLoading: loadData } = useGetTransactionsViewModel({
-    limit: 100,
-    page: 1,
-    search: [
-      {
-        field: 'status',
-        value: status,
-      },
-      {
-        field: 'customer_name',
-        value: search,
-      },
-      {
-        field: 'transaction_code',
-        value: search,
-      },
-    ],
-    restaurant_outlet_uuid: outletId,
-  })
+  const { data, isLoading: loadData } = useGetTransactionsViewModel(
+    {
+      limit: 100,
+      page: 1,
+      search: [
+        {
+          field: 'status',
+          value: status,
+        },
+        {
+          field: 'customer_name',
+          value: search,
+        },
+        {
+          field: 'transaction_code',
+          value: search,
+        },
+      ],
+      restaurant_outlet_uuid: outletId,
+    },
+    {
+      enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+    },
+  )
 
   // const handlePrint = useReactToPrint({
   //   content: () => componentRef.current,

@@ -1,38 +1,64 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Select } from 'antd'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsList } from 'react-icons/bs'
 import { Sidebar, useProSidebar } from 'react-pro-sidebar'
 
 import Logo from '@/atoms/logo'
 import { PROTECT_ROUTES } from '@/config/link'
+import { OutletSelection } from '@/domain/outlet/models'
 import useViewportListener from '@/hooks/useViewportListener'
 import PersonIcon from '@/icons/person'
 import Menu from '@/molecules/menu'
-import { useAppDispatch } from '@/store/hooks'
-import { onLogout, setShowSidebar } from '@/store/slices/auth'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import {
+  onLogout,
+  setRestaurantOutletId,
+  setShowSidebar,
+} from '@/store/slices/auth'
 
-const TemplatesSidebar = () => {
+interface TemplatesSidebarProps {
+  dataOutletSelection: OutletSelection | undefined
+}
+
+const TemplatesSidebar = ({ dataOutletSelection }: TemplatesSidebarProps) => {
+  const router = useRouter()
   const { width } = useViewportListener()
   const { collapseSidebar, collapsed } = useProSidebar()
   const dispatch = useAppDispatch()
-  const router = useRouter()
+  const { outletId, isSubscription } = useAppSelector((state) => state.auth)
 
-  const handleLogout = () => {
-    dispatch(onLogout())
-    router.replace('/auth/login')
-  }
+  const [outletOpt, setOutletOpt] = useState<
+    { label: string; value: string }[]
+  >([])
+
+  useEffect(() => {
+    if (dataOutletSelection) {
+      const opts = dataOutletSelection.map((item) => ({
+        value: item.uuid,
+        label: item.outlet_name,
+      }))
+      setOutletOpt(opts)
+      if (outletId.length === 0) {
+        dispatch(setRestaurantOutletId(dataOutletSelection[0].uuid))
+      }
+    }
+  }, [dataOutletSelection, outletId.length])
 
   const onCollapse = () => {
     dispatch(setShowSidebar(collapsed))
     collapseSidebar()
   }
 
-  const outletOptions = [
-    { label: 'Select outlet: A', value: 'A' },
-    { label: 'Select outlet: B', value: 'B' },
-    { label: 'Select outlet: C', value: 'C' },
-  ]
+  const onChangeOutlet = (e: string) => {
+    dispatch(setRestaurantOutletId(e))
+  }
+
+  const handleLogout = () => {
+    router.push('auth/login')
+    dispatch(onLogout())
+  }
 
   return (
     <Sidebar
@@ -88,12 +114,15 @@ const TemplatesSidebar = () => {
               </div>
             )}
           </div>
-          <Select
-            className={`mt-2.5 -ml-1.5 ${collapsed ? 'w-16' : '!w-[164px]'}`}
-            options={outletOptions}
-            value={outletOptions[0]}
-            // onChange={onChange}
-          />
+          {dataOutletSelection && (
+            <Select
+              className={`mt-2.5 -ml-1.5 ${collapsed ? 'w-16' : '!w-[164px]'}`}
+              options={outletOpt}
+              value={outletId}
+              onChange={onChangeOutlet}
+              disabled={!isSubscription}
+            />
+          )}
         </aside>
       </aside>
     </Sidebar>

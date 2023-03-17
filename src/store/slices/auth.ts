@@ -9,6 +9,7 @@ import { Login } from '@/domain/auth/model'
 
 export interface AuthState {
   isLoggedIn: boolean
+  isSubscription: boolean
   authData: Login
   showSidebar: boolean
   outletId: string
@@ -24,6 +25,7 @@ const initialState: AuthState = {
   },
   showSidebar: false,
   outletId: '',
+  isSubscription: false,
 }
 
 export const AuthSlice = createSlice({
@@ -33,7 +35,6 @@ export const AuthSlice = createSlice({
     onLoginSuccess: (state: AuthState, action: PayloadAction<Login>) => {
       state.isLoggedIn = true
       state.authData = action.payload
-      state.outletId = '53a90755-fb5b-4b32-94c6-d478782aa431'
     },
     onLogout: (state: AuthState) => {
       state.isLoggedIn = false
@@ -44,6 +45,7 @@ export const AuthSlice = createSlice({
         expired_at: 0,
       }
       state.outletId = ''
+      state.isSubscription = false
     },
     setShowSidebar: (state: AuthState, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload
@@ -54,6 +56,9 @@ export const AuthSlice = createSlice({
     ) => {
       state.outletId = action.payload
     },
+    setIsSubscription: (state: AuthState, action: PayloadAction<boolean>) => {
+      state.isSubscription = action.payload
+    },
   },
 })
 
@@ -63,6 +68,7 @@ export const {
   onLogout,
   setShowSidebar,
   setRestaurantOutletId,
+  setIsSubscription,
 } = AuthSlice.actions
 
 export default AuthSlice.reducer
