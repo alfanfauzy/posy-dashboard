@@ -6,6 +6,7 @@ interface Get {
   params?: { [key: string]: any }
   headers?: { [key: string]: string }
   isAuth?: boolean
+  data?: any
 }
 
 /**
@@ -18,12 +19,13 @@ interface Get {
  *  endpoint: '/internal/v1/profile',
  * });
  */
-const Get = async ({ baseURL, endpoint, params, headers = {} }: Get) => {
+const Get = async ({ baseURL, endpoint, data, params, headers = {} }: Get) => {
   const { status, ...response } =
-    (await axios.get(endpoint, {
+    (await axios().get(endpoint, {
       headers: headers || {},
       params,
       baseURL,
+      data,
     })) || {}
 
   return {

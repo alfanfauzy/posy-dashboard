@@ -11,7 +11,7 @@ import { useGetTransactionQuery } from '../sources/GetTransactionQuery'
 import { GetTransactionDataResponse } from '../types'
 
 export const useGetTransactionUsecase = (
-  input?: GetTransactionInput,
+  input: GetTransactionInput,
   options?: UseQueryOptions<Response<GetTransactionDataResponse>>,
 ): GetTransactionResult => {
   const { data, ...rest } = useGetTransactionQuery(input, options)

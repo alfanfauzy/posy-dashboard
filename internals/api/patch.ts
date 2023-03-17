@@ -24,7 +24,7 @@ interface Patch {
  */
 const Patch = async ({ baseURL, endpoint, data, headers = {} }: Patch) => {
   const { status, ...response } =
-    (await axios.patch(endpoint, data, {
+    (await axios().patch(endpoint, data, {
       headers: headers || {},
       baseURL,
     })) || {}

@@ -21,7 +21,7 @@ interface Delete {
  */
 const Delete = async ({ baseURL, endpoint, params, headers = {} }: Delete) => {
   const { status, ...response } =
-    (await axios.delete(endpoint, {
+    (await axios().delete(endpoint, {
       headers: headers || {},
       params,
       baseURL,

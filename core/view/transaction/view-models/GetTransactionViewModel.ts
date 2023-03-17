@@ -9,7 +9,7 @@ import {
 import { Response } from '@/domain/vo/BaseResponse'
 
 export const useGetTransactionViewModel = (
-  input?: GetTransactionInput,
+  input: GetTransactionInput,
   options?: UseQueryOptions<Response<GetTransactionDataResponse>>,
 ): GetTransactionResult => {
   const result = useGetTransactionUsecase(input, options)

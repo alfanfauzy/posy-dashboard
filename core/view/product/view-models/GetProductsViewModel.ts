@@ -9,7 +9,7 @@ import {
 import { DataList, Response } from '@/domain/vo/BaseResponse'
 
 export const useGetProductsViewModel = (
-  input?: GetProductsInput,
+  input: GetProductsInput,
   options?: UseQueryOptions<Response<DataList<GetProductsDataResponse>>>,
 ): GetProductsResult => {
   const result = useGetProductsUsecase(input, options)

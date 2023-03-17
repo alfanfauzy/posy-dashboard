@@ -11,7 +11,7 @@ import { useGetProductsQuery } from '../sources/GetProductsQuery'
 import { GetProductsDataResponse } from '../types'
 
 export const useGetProductsUsecase = (
-  input?: GetProductsInput,
+  input: GetProductsInput,
   options?: UseQueryOptions<Response<DataList<GetProductsDataResponse>>>,
 ): GetProductsResult => {
   const { data, ...rest } = useGetProductsQuery(input, options)

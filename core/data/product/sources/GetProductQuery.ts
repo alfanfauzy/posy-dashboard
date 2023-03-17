@@ -13,10 +13,7 @@ const GetProduct = async (
   input: GetProductInput,
 ): Promise<Response<GetProductDataResponse>> => {
   const response = await Get({
-    endpoint: `/api/fnb-product-service/menu/get-product-detail/${input?.product_uuid}`,
-    headers: {
-      'X-Transaction-Uuid': '6361d2ec-6ebf-4910-bee0-3732c266286f',
-    },
+    endpoint: `/api/fnb-product-service/product/get-menu-product-detail/${input?.product_uuid}`,
   })
 
   return {

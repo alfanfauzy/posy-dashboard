@@ -23,7 +23,7 @@ const initialState: AuthState = {
     expired_at: 0,
   },
   showSidebar: false,
-  outletId: '53a90755-fb5b-4b32-94c6-d478782aa431',
+  outletId: '',
 }
 
 export const AuthSlice = createSlice({
@@ -33,6 +33,7 @@ export const AuthSlice = createSlice({
     onLoginSuccess: (state: AuthState, action: PayloadAction<Login>) => {
       state.isLoggedIn = true
       state.authData = action.payload
+      state.outletId = '53a90755-fb5b-4b32-94c6-d478782aa431'
     },
     onLogout: (state: AuthState) => {
       state.isLoggedIn = false

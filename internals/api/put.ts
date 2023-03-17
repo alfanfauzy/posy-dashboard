@@ -24,7 +24,7 @@ interface Put {
  */
 const Put = async ({ baseURL, endpoint, data, headers = {} }: Put) => {
   const { status, ...response } =
-    (await axios.put(endpoint, data, {
+    (await axios().put(endpoint, data, {
       headers: headers || {},
       baseURL,
     })) || {}

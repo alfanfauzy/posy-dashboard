@@ -1,12 +1,18 @@
-import 'regenerator-runtime/runtime.js'
-
 import axios, { AxiosError, AxiosResponse } from 'axios'
 
-// Set config defaults when creating the instance
+import { store } from '@/store/index'
 
-const instance = axios.create()
+const instance = () => {
+  const { token } = store.getState().auth.authData
 
-instance.interceptors.response.use(
+  return axios.create({
+    headers: {
+      token,
+    },
+  })
+}
+
+instance().interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => error.response,
 )

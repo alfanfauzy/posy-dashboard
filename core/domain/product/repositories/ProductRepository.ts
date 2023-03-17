@@ -11,7 +11,7 @@ import { ResultQuery } from '@/domain/vo/BaseResponse'
 export type GetProductsInput = InputVariables<
   keyof Metadata,
   keyof Pick<Product, 'product_name'>
->
+> & { restaurant_outlet_uuid: string }
 
 export type GetProductsResult = ResultQuery<Products | undefined> & {
   pagination: Pagination | undefined

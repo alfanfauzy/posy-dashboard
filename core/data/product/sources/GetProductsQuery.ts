@@ -10,14 +10,11 @@ export const GetProductsQueryKey = (input?: GetProductsInput) =>
   ['Products/list', input] as const
 
 const GetProducts = async (
-  input?: GetProductsInput,
+  input: GetProductsInput,
 ): Promise<Response<DataList<GetProductsDataResponse>>> => {
   const response = await Get({
-    endpoint: `/api/fnb-product-service/menu/get-product-list`,
-    headers: {
-      'X-Transaction-Uuid': '6361d2ec-6ebf-4910-bee0-3732c266286f',
-    },
-    // data: input,
+    endpoint: `/api/fnb-product-service/product/get-menu-product-list`,
+    data: input,
   })
 
   return {
@@ -29,7 +26,7 @@ const GetProducts = async (
 }
 
 export const useGetProductsQuery = (
-  input?: GetProductsInput,
+  input: GetProductsInput,
   options?: UseQueryOptions<Response<DataList<GetProductsDataResponse>>>,
 ) =>
   useQuery<Response<DataList<GetProductsDataResponse>>>(

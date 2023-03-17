@@ -40,6 +40,7 @@ const OrganismsContentsTransaction = ({
   const handleCreateTransaction = (restaurantOutletId: string) => {
     createTransaction({ restaurant_outlet_uuid: restaurantOutletId })
   }
+  console.log({ outletId })
 
   const { data, isLoading: loadData } = useGetTransactionsViewModel({
     limit: 100,

@@ -84,6 +84,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
   const kitchenRef = useRef<any>()
   const queryClient = useQueryClient()
   const { selectedTrxId } = useAppSelector((state) => state.transaction)
+  const { outletId } = useAppSelector((state) => state.auth)
 
   const { quantity, product, notes, addOnVariant } = useAppSelector(
     (state) => state.order.orderForm,
@@ -140,6 +141,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
         value: 'desc',
       },
       search: [],
+      restaurant_outlet_uuid: outletId,
     },
     { enabled: !!isOpenCreateOrder },
   )
@@ -152,19 +154,18 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
       { enabled: !!(isOpenAddVariantOrder && product?.uuid) },
     )
 
-  const { data: dataCategory, isLoading: loadCategory } =
-    useGetCategoriesViewModel(
-      {
-        limit: 100,
-        page: 1,
-        sort: {
-          field: 'category_name',
-          value: 'desc',
-        },
-        search: [],
+  const { data: dataCategory } = useGetCategoriesViewModel(
+    {
+      limit: 100,
+      page: 1,
+      sort: {
+        field: 'category_name',
+        value: 'desc',
       },
-      { enabled: !!isOpenCreateOrder },
-    )
+      search: [],
+    },
+    { enabled: !!isOpenCreateOrder },
+  )
 
   const { data: dataOrder, isLoading: loadOrder } = useGetOrdersViewModel(
     {
@@ -303,6 +304,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
 
     if (dataTransaction && payload) {
       createOrderManual({
+        restaurant_outlet_uuid: outletId,
         transaction_uuid: dataTransaction?.uuid,
         order: payload,
       })
@@ -1117,9 +1119,14 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 />
               )}
               <article className="my-6 h-4/5 overflow-y-auto">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                  {dataProduct &&
-                    dataProduct.map((product) => (
+                {loadProduct && (
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Loading size={75} />
+                  </div>
+                )}
+                {!loadProduct && dataProduct && (
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {dataProduct.map((product) => (
                       <div
                         role="presentation"
                         onClick={() => onOpenAddVariantOrder(product)}
@@ -1142,7 +1149,8 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                         </div>
                       </div>
                     ))}
-                </div>
+                  </div>
+                )}
               </article>
             </section>
           </div>

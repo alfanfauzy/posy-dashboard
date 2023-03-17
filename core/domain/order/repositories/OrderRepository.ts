@@ -30,6 +30,7 @@ type Orderinput = {
 
 export type CreateOrderManualInput = {
   transaction_uuid: string
+  restaurant_outlet_uuid: string
   order: Orderinput[]
 }
 
