@@ -8,25 +8,24 @@ import { ResultQuery } from '@/domain/vo/BaseResponse'
  * GET
  */
 
-export type GetProductsInput = InputVariables<
+export type GetMenuProductsInput = InputVariables<
   keyof Metadata,
   keyof Pick<Product, 'product_name'>
 > & { restaurant_outlet_uuid: string }
 
-export type GetProductsResult = ResultQuery<Products | undefined> & {
+export type GetMenuProductsResult = ResultQuery<Products | undefined> & {
   pagination: Pagination | undefined
 }
 
-export type GetProductInput = { product_uuid: string }
+export type GetOutletProductsInput = InputVariables<
+  keyof Metadata,
+  keyof Pick<Product, 'product_name'>
+> & { restaurant_outlet_uuid: string }
 
-export type GetProductResult = ResultQuery<Product | undefined>
+export type GetOutletProductsResult = ResultQuery<Products | undefined> & {
+  pagination: Pagination | undefined
+}
 
-/**
- * CREATE
- */
+export type GetMenuProductInput = { product_uuid: string }
 
-// export type CreateTransactionResult = ResultMutation<QrCode | undefined>
-
-// export interface CreateTransactionRepository extends CreateTransactionResult {
-//   createTransaction(): void
-// }
+export type GetMenuProductResult = ResultQuery<Product | undefined>

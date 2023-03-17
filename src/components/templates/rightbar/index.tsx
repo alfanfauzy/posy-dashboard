@@ -46,8 +46,8 @@ import {
 import { useGetCategoriesViewModel } from '@/view/category/view-models/GetCategoriesViewModel'
 import { useCreateOrderManualViewModel } from '@/view/order/view-models/CreateOrderManualViewModel'
 import { useGetOrdersViewModel } from '@/view/order/view-models/GetOrdersViewModel'
-import { useGetProductsViewModel } from '@/view/product/view-models/GetProductsViewModel'
-import { useGetProductViewModel } from '@/view/product/view-models/GetProductViewModel'
+import { useGetMenuProductsViewModel } from '@/view/product/view-models/GetMenuProductsViewModel'
+import { useGetMenuProductViewModel } from '@/view/product/view-models/GetMenuProductViewModel'
 import { useGetTransactionViewModel } from '@/view/transaction/view-models/GetTransactionViewModel'
 
 import {
@@ -132,22 +132,23 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
       { enabled: !!selectedTrxId },
     )
 
-  const { data: dataProduct, isLoading: loadProduct } = useGetProductsViewModel(
-    {
-      limit: 100,
-      page: 1,
-      sort: {
-        field: 'created_at',
-        value: 'desc',
+  const { data: dataProduct, isLoading: loadProduct } =
+    useGetMenuProductsViewModel(
+      {
+        limit: 100,
+        page: 1,
+        sort: {
+          field: 'created_at',
+          value: 'desc',
+        },
+        search: [],
+        restaurant_outlet_uuid: outletId,
       },
-      search: [],
-      restaurant_outlet_uuid: outletId,
-    },
-    { enabled: !!isOpenCreateOrder },
-  )
+      { enabled: !!isOpenCreateOrder },
+    )
 
   const { data: dataProductDetail, isLoading: loadProductDetail } =
-    useGetProductViewModel(
+    useGetMenuProductViewModel(
       {
         product_uuid: product?.uuid || '',
       },

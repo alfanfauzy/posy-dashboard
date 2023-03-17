@@ -2,11 +2,14 @@
 /* eslint-disable guard-for-in */
 import { Product, Products } from '@/domain/product/model'
 
-import { GetProductDataResponse, GetProductsDataResponse } from '../types'
+import {
+  GetMenuProductDataResponse,
+  GetMenuProductsDataResponse,
+} from '../types'
 
 // map server data to own model
-export const mapToProductsModel = (
-  datas: GetProductsDataResponse[],
+export const mapToMenuProductsModel = (
+  datas: GetMenuProductsDataResponse[],
 ): Products => {
   const newData: Products = []
   datas.forEach((el) => {
@@ -23,7 +26,9 @@ export const mapToProductsModel = (
   return newData
 }
 
-export const mapToProductModel = (data: GetProductDataResponse): Product => ({
+export const mapToMenuProductModel = (
+  data: GetMenuProductDataResponse,
+): Product => ({
   uuid: data.detail.product.uuid,
   product_name: data.detail.product.product_name,
   product_image_url: data.detail.product.product_image_url,

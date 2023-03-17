@@ -38,15 +38,15 @@ interface ProductResponse {
   categories: Category[] | null
 }
 
-interface GetProductsDataResponseBased {
+interface GetMenuProductDataResponseBased {
   category_uuid: string
   category_name: string
   products: ProductResponse[]
 }
 
-export type GetProductsDataResponse = GetProductsDataResponseBased
+export type GetMenuProductsDataResponse = GetMenuProductDataResponseBased
 
-export type GetProductDataResponse = {
+export type GetMenuProductDataResponse = {
   detail: {
     is_show: boolean
     is_available: boolean
