@@ -1,11 +1,16 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 import { Product, Products } from '@/domain/product/model'
+import { Metadata } from '@/domain/vo/BaseMetadata'
 
 import {
   GetMenuProductDataResponse,
   GetMenuProductsDataResponse,
-} from '../types'
+} from '../types/MenuProduct'
+import {
+  GetOutletProductsDataResponse,
+  UpdateOutletProductStatusDataResponse,
+} from '../types/OutletProduct'
 
 // map server data to own model
 export const mapToMenuProductsModel = (
@@ -57,4 +62,38 @@ export const mapToMenuProductModel = (
       variant_price: variant?.variant_price || 0,
     })),
   })),
+  is_show: data.detail.is_show,
+})
+
+export const mapToOutletProductsModel = (
+  datas: GetOutletProductsDataResponse[],
+): Products =>
+  datas.map((data) => ({
+    uuid: data.product.uuid,
+    product_name: data.product.product_name,
+    product_image_url: data.product.product_image_url,
+    product_description: data.product.product_description,
+    price_final: data.price_final,
+    price_discount_percentage: data.price_discount_percentage,
+    price_after_discount: data.price_after_discount,
+    price_discount: data.price_discount,
+    price: data.price,
+    is_favourite: data.is_favourite,
+    is_discount: data.is_discount,
+    is_available: data.is_available,
+    cooking_duration: data.cooking_duration,
+    categories: data.product.categories,
+    is_show: data.is_show,
+  }))
+
+export const mapToUpdateOutletProductStatusModel = (
+  data: UpdateOutletProductStatusDataResponse,
+): {
+  success: boolean
+  metadata: Metadata
+} => ({
+  success: data.success,
+  metadata: {
+    updated_at: data.metadata.updated_at.seconds,
+  },
 })

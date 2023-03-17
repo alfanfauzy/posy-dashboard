@@ -1,6 +1,6 @@
 import { UseQueryOptions } from '@tanstack/react-query'
 
-import { GetMenuProductsDataResponse } from '@/data/product/types'
+import { GetMenuProductsDataResponse } from '@/data/product/types/MenuProduct'
 import { useGetMenuProductsUsecase } from '@/data/product/usecases/GetMenuProductsUsecase'
 import {
   GetMenuProductsInput,

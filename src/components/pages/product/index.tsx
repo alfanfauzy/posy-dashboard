@@ -7,17 +7,23 @@ import { FormProvider, useFieldArray } from 'react-hook-form'
 import InputSearch from '@/atoms/input/search'
 import Select from '@/atoms/input/select'
 import Table from '@/atoms/table'
+import { Product } from '@/domain/product/model'
+import { UpdateOutletProductStatusInput } from '@/domain/product/repositories/ProductRepository'
 import useDisclosure from '@/hooks/useDisclosure'
 import { useForm } from '@/hooks/useForm'
 import { validationSchemaProduct } from '@/schemas/product'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { onChangeProductId } from '@/store/slices/product'
-import { listMenus } from '@/templates/rightbar/helpertemp'
-import type { Product } from '@/types/product'
+import { toRupiah } from '@/utils/common'
+import { useGetOutletProductsViewModel } from '@/view/product/view-models/GetOutletProductsViewModel'
+import { useUpdateOutletProductStatusViewModel } from '@/view/product/view-models/UpdateOutletProductStatusViewModel'
 
 import VariantTemp from './VariantTemp'
 
-const columns: ColumnsType<Product> = [
+const columns = (
+  updateOutletProductStatus: (input: UpdateOutletProductStatusInput) => void,
+  restaurant_outlet_uuid: string,
+): ColumnsType<Product> => [
   {
     title: 'Product name',
     dataIndex: 'product_name',
@@ -28,44 +34,71 @@ const columns: ColumnsType<Product> = [
   },
   {
     title: 'Category',
-    dataIndex: 'category',
+    dataIndex: 'categories',
     key: 'category',
     width: '125px',
-    render: () => <p className="whitespace-nowrap">Beverages</p>,
+    render: (text) => (
+      <p className="whitespace-nowrap">
+        {text
+          .map((el: { category_name: string }) => el.category_name)
+          .join(', ')}
+      </p>
+    ),
   },
   {
     title: (
       <p className="flex justify-center whitespace-nowrap">Selling price</p>
     ),
     dataIndex: 'price',
-    key: 'price',
+    key: 'price_final',
     width: '118px',
+    align: 'center',
     render: (text) => (
-      <p className="whitespace-nowrap text-m-regular">{text}</p>
+      <p className="whitespace-nowrap text-m-regular">{toRupiah(text)}</p>
     ),
   },
 
   {
     align: 'center',
     title: <p className="whitespace-nowrap">Show product</p>,
-    dataIndex: 'is_available',
-    key: 'is_available',
+    dataIndex: 'is_show',
+    key: 'is_show',
     width: '128px',
-    render: () => (
+    render: (val, record) => (
       <div className="flex items-center justify-center">
-        <Toggle value onChange={() => undefined} />
+        <Toggle
+          value={val}
+          onChange={() =>
+            updateOutletProductStatus({
+              flag: !val,
+              restaurant_outlet_uuid,
+              status: 'is_show',
+              product_uuids: [record.uuid],
+            })
+          }
+        />
       </div>
     ),
   },
   {
     align: 'center',
     title: <p className="whitespace-nowrap">Product available</p>,
-    dataIndex: 'stock_available',
-    key: 'stock_available',
+    dataIndex: 'is_available',
+    key: 'is_available',
     width: '135px',
-    render: () => (
+    render: (val, record) => (
       <div className="flex items-center justify-center">
-        <Toggle value onChange={() => undefined} />
+        <Toggle
+          value={val}
+          onChange={() =>
+            updateOutletProductStatus({
+              flag: !val,
+              restaurant_outlet_uuid,
+              status: 'is_available',
+              product_uuids: [record.uuid],
+            })
+          }
+        />
       </div>
     ),
   },
@@ -102,6 +135,18 @@ const PagesTransaction = () => {
     isOpenEditProduct,
     { open: openEditProduct, close: closeEditProduct },
   ] = useDisclosure({ initialState: false })
+  const { outletId } = useAppSelector((state) => state.auth)
+
+  const { data: dataProduct, isLoading: loadProduct } =
+    useGetOutletProductsViewModel({
+      restaurant_outlet_uuid: outletId,
+      sort: { field: 'created_at', value: 'desc' },
+      // search: [],
+      // page: 1,
+      // limit: 5,
+    })
+
+  const { updateOutletProductStatus } = useUpdateOutletProductStatusViewModel()
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys)
@@ -220,14 +265,15 @@ const PagesTransaction = () => {
 
       <article className="mt-6">
         <Table
-          onRow={(record) => ({
-            onClick: () => onOpenEditProduct(record.product_uuid),
-          })}
-          columns={columns}
-          dataSource={listMenus}
+          // onRow={(record) => ({
+          //   onClick: () => onOpenEditProduct(record.uuid),
+          // })}
+          columns={columns(updateOutletProductStatus, outletId)}
+          dataSource={dataProduct}
           rowKey="product_uuid"
           rowSelection={rowSelection}
           scroll={{ y: '54vh', x: 1100 }}
+          loading={loadProduct}
         />
       </article>
 

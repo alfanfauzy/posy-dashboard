@@ -8,7 +8,7 @@ import { Response } from '@/domain/vo/BaseResponse'
 
 import { mapToMenuProductModel } from '../mappers/ProductMapper'
 import { useGetMenuProductQuery } from '../sources/GetMenuProductQuery'
-import { GetMenuProductDataResponse } from '../types'
+import { GetMenuProductDataResponse } from '../types/MenuProduct'
 
 export const useGetMenuProductUsecase = (
   input: GetMenuProductInput,

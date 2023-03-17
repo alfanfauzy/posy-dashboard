@@ -8,7 +8,7 @@ import { DataList, Response } from '@/domain/vo/BaseResponse'
 
 import { mapToMenuProductsModel } from '../mappers/ProductMapper'
 import { useGetMenuProductsQuery } from '../sources/GetMenuProductsQuery'
-import { GetMenuProductsDataResponse } from '../types'
+import { GetMenuProductsDataResponse } from '../types/MenuProduct'
 
 export const useGetMenuProductsUsecase = (
   input: GetMenuProductsInput,

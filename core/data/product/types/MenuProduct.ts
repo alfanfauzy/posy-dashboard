@@ -21,7 +21,7 @@ interface Addon {
   variants: AddonVariant[]
 }
 
-interface ProductResponse {
+interface MenuProductResponse {
   uuid: string
   product_name: string
   product_description: string
@@ -29,6 +29,7 @@ interface ProductResponse {
   is_favourite: boolean
   is_discount: boolean
   is_available: boolean
+  is_show: boolean
   price: number
   price_discount: number
   price_after_discount: number
@@ -41,7 +42,7 @@ interface ProductResponse {
 interface GetMenuProductDataResponseBased {
   category_uuid: string
   category_name: string
-  products: ProductResponse[]
+  products: MenuProductResponse[]
 }
 
 export type GetMenuProductsDataResponse = GetMenuProductDataResponseBased
@@ -58,7 +59,7 @@ export type GetMenuProductDataResponse = {
     price_discount_percentage: number
     price_final: number
     cooking_duration: number
-    product: ProductResponse
+    product: MenuProductResponse
   }
   addons: Addon[]
 }

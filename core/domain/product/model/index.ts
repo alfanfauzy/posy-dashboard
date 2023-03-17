@@ -6,9 +6,6 @@ interface ProductBased {
   product_name: string
   product_description: string
   product_image_url: string
-  is_available: boolean
-  is_discount: boolean
-  is_favourite: boolean
   price: number
   price_discount: number
   price_after_discount: number
@@ -16,6 +13,10 @@ interface ProductBased {
   price_final: number
   cooking_duration: number
   categories: Categories | null
+  is_available: boolean
+  is_discount: boolean
+  is_favourite: boolean
+  is_show: boolean
 }
 
 export interface Product extends ProductBased {

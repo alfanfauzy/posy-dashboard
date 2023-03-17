@@ -4,7 +4,7 @@ import Post from 'api/post'
 import { GetMenuProductInput } from '@/domain/product/repositories/ProductRepository'
 import { Response } from '@/domain/vo/BaseResponse'
 
-import { GetMenuProductDataResponse } from '../types'
+import { GetMenuProductDataResponse } from '../types/MenuProduct'
 
 export const GetMenuProductQueryKey = (input?: GetMenuProductInput) =>
   ['Products/detail', input] as const
