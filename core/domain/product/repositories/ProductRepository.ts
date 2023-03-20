@@ -26,7 +26,10 @@ export type GetOutletProductsResult = ResultQuery<Products | undefined> & {
   pagination: Pagination | undefined
 }
 
-export type GetMenuProductInput = { product_uuid: string }
+export type GetMenuProductInput = {
+  product_uuid: string
+  restaurant_outlet_uuid: string
+}
 
 export type GetMenuProductResult = ResultQuery<Product | undefined>
 

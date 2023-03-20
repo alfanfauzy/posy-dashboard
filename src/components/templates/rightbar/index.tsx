@@ -151,6 +151,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     useGetMenuProductViewModel(
       {
         product_uuid: product?.uuid || '',
+        restaurant_outlet_uuid: outletId,
       },
       { enabled: !!(isOpenAddVariantOrder && product?.uuid) },
     )

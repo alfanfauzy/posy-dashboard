@@ -14,7 +14,9 @@ const GetMenuProduct = async (
 ): Promise<Response<GetMenuProductDataResponse>> => {
   const response = await Post({
     endpoint: `/api/fnb-product-service/product/get-menu-product-detail/${input?.product_uuid}`,
-    data: {},
+    data: {
+      restaurant_outlet_uuid: input.restaurant_outlet_uuid,
+    },
   })
 
   return {

@@ -6,8 +6,7 @@ import { DataList, Response } from '@/domain/vo/BaseResponse'
 
 import { GetOutletProductsDataResponse } from '../types/OutletProduct'
 
-export const GetOutletProductsQueryKey = (input?: GetOutletProductsInput) =>
-  ['Outlet-products/list', input] as const
+export const GetOutletProductsQueryKey = 'Outlet-products/list' as const
 
 const GetOutletProducts = async (
   input: GetOutletProductsInput,
@@ -30,7 +29,7 @@ export const useGetOutletProductsQuery = (
   options?: UseQueryOptions<Response<DataList<GetOutletProductsDataResponse>>>,
 ) =>
   useQuery<Response<DataList<GetOutletProductsDataResponse>>>(
-    GetOutletProductsQueryKey(input),
+    [GetOutletProductsQueryKey, input],
     () => GetOutletProducts(input),
     {
       refetchOnWindowFocus: false,

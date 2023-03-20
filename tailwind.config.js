@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        modal: ' 0px -6px 24px rgba(0, 0, 0, 0.15);',
+        modal: '0px -6px 24px rgba(0, 0, 0, 0.15);',
       },
     },
   },

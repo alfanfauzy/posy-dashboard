@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import type { ColumnsType } from 'antd/es/table'
 import Image from 'next/image'
 import { Button, Input, Modal, Textarea, Toggle } from 'posy-fnb-core'
@@ -7,6 +8,7 @@ import { FormProvider, useFieldArray } from 'react-hook-form'
 import InputSearch from '@/atoms/input/search'
 import Select from '@/atoms/input/select'
 import Table from '@/atoms/table'
+import { GetOutletProductsQueryKey } from '@/data/product/sources/GetOutletProductsQuery'
 import { Product } from '@/domain/product/model'
 import { UpdateOutletProductStatusInput } from '@/domain/product/repositories/ProductRepository'
 import useDisclosure from '@/hooks/useDisclosure'
@@ -130,6 +132,7 @@ const columns = (
 
 const PagesTransaction = () => {
   const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [
     isOpenEditProduct,
@@ -141,12 +144,11 @@ const PagesTransaction = () => {
     useGetOutletProductsViewModel({
       restaurant_outlet_uuid: outletId,
       sort: { field: 'created_at', value: 'desc' },
-      // search: [],
-      // page: 1,
-      // limit: 5,
     })
 
-  const { updateOutletProductStatus } = useUpdateOutletProductStatusViewModel()
+  const { updateOutletProductStatus } = useUpdateOutletProductStatusViewModel({
+    onSuccess: () => queryClient.invalidateQueries([GetOutletProductsQueryKey]),
+  })
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys)
