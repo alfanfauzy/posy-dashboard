@@ -8,7 +8,7 @@ import { ResultQuery } from '@/domain/vo/BaseResponse'
 
 export type GetCategoriesInput = InputVariables<
   keyof Category,
-  keyof Pick<Category, 'category_name'>
+  keyof Pick<Category, 'uuid'>
 >
 
 export type GetCategoriesResult = ResultQuery<Categories | undefined>

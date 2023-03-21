@@ -13,7 +13,7 @@ const GetTransaction = async (
   input: GetTransactionInput,
 ): Promise<Response<GetTransactionDataResponse>> => {
   const response = await Get({
-    endpoint: `/api/fnb-order-service/transaction/get-detail/${input.transaction_uuid}`,
+    endpoint: `/order-service/transaction/get-detail/${input.transaction_uuid}`,
   })
 
   return {

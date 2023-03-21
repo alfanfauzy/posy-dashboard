@@ -11,7 +11,7 @@ const CreateTransaction = async (
   input: CreateTransactionInput,
 ): Promise<Response<CreateTransactionDataResponse>> => {
   const response = await Post({
-    endpoint: `/api/fnb-order-service/transaction/create`,
+    endpoint: `/order-service/transaction/create`,
     data: {
       ...input,
     },

@@ -11,7 +11,7 @@ const Login = async (
   input: LoginInput,
 ): Promise<Response<LoginDataResponse>> => {
   const response = await Post({
-    endpoint: `/api/fnb-user-service/v1/user/login`,
+    endpoint: `/user-service/v1/user/login`,
     data: input,
   })
 

@@ -12,7 +12,7 @@ const GetOutletProducts = async (
   input: GetOutletProductsInput,
 ): Promise<Response<DataList<GetOutletProductsDataResponse>>> => {
   const response = await Post({
-    endpoint: `/api/fnb-product-service/product-outlet/get-list`,
+    endpoint: `/product-service/product-outlet/get-list`,
     data: input,
   })
 

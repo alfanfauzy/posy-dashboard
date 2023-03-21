@@ -13,7 +13,7 @@ const GetOrders = async (
   input: GetOrdersInput,
 ): Promise<Response<DataList<GetOrdersDataResponse>>> => {
   const response = await Get({
-    endpoint: `/api/fnb-order-service/order/get-list/${input.transaction_uuid}`,
+    endpoint: `/order-service/order/get-list/${input.transaction_uuid}`,
   })
 
   return {

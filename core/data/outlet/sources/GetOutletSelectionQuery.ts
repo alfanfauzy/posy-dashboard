@@ -11,7 +11,7 @@ const GetOutletSelection = async (): Promise<
   Response<DataList<GetOutletSelectionDataResponse>>
 > => {
   const response = await Get({
-    endpoint: '/api/fnb-user-service/outlet/get-outlet-selection',
+    endpoint: '/user-service/outlet/get-outlet-selection',
   })
 
   return {

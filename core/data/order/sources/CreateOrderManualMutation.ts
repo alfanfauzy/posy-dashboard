@@ -11,7 +11,7 @@ const CreateOrderManual = async (
   input: CreateOrderManualInput,
 ): Promise<Response<CreateOrderManualDataResponse>> => {
   const response = await Post({
-    endpoint: `/api/fnb-order-service/order/create`,
+    endpoint: `/order-service/order/create`,
     data: input,
   })
 

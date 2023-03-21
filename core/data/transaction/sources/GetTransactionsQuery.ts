@@ -12,7 +12,7 @@ const GetTransactions = async (
   input?: GetTransactionsInput,
 ): Promise<Response<DataList<GetTransactionsDataResponse>>> => {
   const response = await Post({
-    endpoint: `/api/fnb-order-service/transaction/get-list`,
+    endpoint: `/order-service/transaction/get-list`,
     data: input,
   })
 

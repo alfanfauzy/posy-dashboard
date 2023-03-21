@@ -11,7 +11,7 @@ const UpdateOutletProductStatus = async (
   input: UpdateOutletProductStatusInput,
 ): Promise<Response<UpdateOutletProductStatusDataResponse>> => {
   const response = await Post({
-    endpoint: `/api/fnb-product-service/product-outlet/update-status`,
+    endpoint: `/product-service/product-outlet/update-status`,
     data: {
       ...input,
     },

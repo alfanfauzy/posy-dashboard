@@ -1,5 +1,5 @@
 import { Product, Products } from '@/domain/product/model'
-import { InputVariables } from '@/domain/vo/BaseInput'
+import { FilterBased, InputVariables } from '@/domain/vo/BaseInput'
 import { Metadata } from '@/domain/vo/BaseMetadata'
 import { Pagination } from '@/domain/vo/BasePagination'
 import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'
@@ -19,8 +19,8 @@ export type GetMenuProductsResult = ResultQuery<Products | undefined> & {
 
 export type GetOutletProductsInput = InputVariables<
   keyof Metadata,
-  keyof Pick<Product, 'product_name'>
-> & { restaurant_outlet_uuid: string }
+  keyof Pick<Product, 'product_name'> | keyof FilterBased
+>
 
 export type GetOutletProductsResult = ResultQuery<Products | undefined> & {
   pagination: Pagination | undefined

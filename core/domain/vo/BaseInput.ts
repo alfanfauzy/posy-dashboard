@@ -1,5 +1,10 @@
 export type SortingType = 'desc' | 'asc'
 
+export type FilterBased = {
+  keyword: string
+  restaurant_outlet_uuid: string
+}
+
 export type Sort<TField = unknown> = {
   field: TField
   value: SortingType

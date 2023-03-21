@@ -12,10 +12,7 @@ const GetCategories = async (
   input?: GetCategoriesInput,
 ): Promise<Response<GetCategoriesDataResponse[]>> => {
   const response = await Get({
-    endpoint: `/api/fnb-product-service/menu/get-category-list`,
-    headers: {
-      'X-Transaction-Uuid': '6361d2ec-6ebf-4910-bee0-3732c266286f',
-    },
+    endpoint: `/product-service/category/get-list`,
   })
 
   return {

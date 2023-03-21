@@ -13,8 +13,7 @@ export const GetSubscriptionSection = async (): Promise<
   Response<GetSubscriptionSectionDataResponse>
 > => {
   const response = await Get({
-    endpoint:
-      'api/fnb-user-service/outlet/setting/restaurant/subscription-section',
+    endpoint: '/user-service/outlet/setting/restaurant/subscription-section',
     headers: {
       token: store.getState().auth.authData.token,
     },

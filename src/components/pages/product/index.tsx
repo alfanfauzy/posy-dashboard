@@ -152,7 +152,16 @@ const PagesTransaction = () => {
   } = useGetOutletProductsViewModel({
     limit: Number(query.limit) || 10,
     page: Number(query.page) || 1,
-    restaurant_outlet_uuid: outletId,
+    search: [
+      {
+        field: 'keyword',
+        value: (query.search as string) || '',
+      },
+      {
+        field: 'restaurant_outlet_uuid',
+        value: outletId,
+      },
+    ],
     sort: { field: 'created_at', value: 'desc' },
   })
 

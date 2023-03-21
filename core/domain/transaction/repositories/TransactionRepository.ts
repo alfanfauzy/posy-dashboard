@@ -1,6 +1,6 @@
 import { QrCode } from '@/domain/qr-code/model'
 import { Transaction, Transactions } from '@/domain/transaction/model'
-import { InputVariables } from '@/domain/vo/BaseInput'
+import { FilterBased, InputVariables } from '@/domain/vo/BaseInput'
 import { Pagination } from '@/domain/vo/BasePagination'
 import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'
 
@@ -8,18 +8,13 @@ import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'
  * GET
  */
 
-type Filter = {
-  keyword: string
-  restaurant_outlet_uuid: string
-}
-
 export type GetTransactionsInput = InputVariables<
   keyof Transaction,
   | keyof Pick<
       Transaction,
       'customer_name' | 'status' | 'transaction_code' | 'created_at'
     >
-  | keyof Filter
+  | keyof FilterBased
 >
 
 export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {
