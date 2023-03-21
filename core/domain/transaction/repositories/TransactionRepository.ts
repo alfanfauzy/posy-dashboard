@@ -8,10 +8,19 @@ import { ResultMutation, ResultQuery } from '@/domain/vo/BaseResponse'
  * GET
  */
 
+type Filter = {
+  keyword: string
+  restaurant_outlet_uuid: string
+}
+
 export type GetTransactionsInput = InputVariables<
   keyof Transaction,
-  keyof Pick<Transaction, 'customer_name' | 'status' | 'transaction_code'>
-> & { restaurant_outlet_uuid: string }
+  | keyof Pick<
+      Transaction,
+      'customer_name' | 'status' | 'transaction_code' | 'created_at'
+    >
+  | keyof Filter
+>
 
 export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {
   pagination: Pagination | undefined

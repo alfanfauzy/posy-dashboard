@@ -1,16 +1,20 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { Table } from 'antd'
 import type { TableProps } from 'antd/es/table'
-import React, { useState } from 'react'
+import React from 'react'
 
 import Select from '@/atoms/input/select'
+import { type Pagination } from '@/domain/vo/BasePagination'
+import { onChangeQueryParams } from '@/utils/UtilsChangeQueryParams'
 
 interface AtomsTableProps<TData> extends TableProps<TData> {
   className?: string
+  paginationData?: Pagination
 }
 
 interface PaginationProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  value: string
 }
 
 const paginationOptions = [
@@ -19,12 +23,13 @@ const paginationOptions = [
   { label: 'Select Row: 50', value: '50' },
 ]
 
-const Pagination = ({ onChange }: PaginationProps) => (
-  <div className="absolute left-0 flex w-fit items-center">
+const Pagination = ({ onChange, value }: PaginationProps) => (
+  <div className="absolute left-0 flex items-center">
     <Select
       className="!w-[164px]"
       options={paginationOptions}
       onChange={onChange}
+      defaultValue={value}
     />
   </div>
 )
@@ -34,12 +39,12 @@ const AtomsTable = <TData extends object>({
   dataSource,
   className,
   loading,
+  paginationData,
   ...tableProps
 }: AtomsTableProps<TData>) => {
-  const [limit, setLimit] = useState(10)
-
   const onChangeLimit = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLimit(+e.target.value)
+    onChangeQueryParams('limit', e.target.value)
+    onChangeQueryParams('page', '1')
   }
 
   return (
@@ -50,10 +55,19 @@ const AtomsTable = <TData extends object>({
         columns={columns}
         dataSource={dataSource}
         pagination={{
-          defaultPageSize: limit,
-          pageSize: limit,
-          total: dataSource?.length,
-          showTotal: () => <Pagination onChange={onChangeLimit} />,
+          current: paginationData?.curr_page,
+          position: ['bottomRight'],
+          pageSize: paginationData?.per_page,
+          total: paginationData?.total_page,
+          showTotal: () => (
+            <Pagination
+              onChange={onChangeLimit}
+              value={paginationData?.per_page.toString() || '10'}
+            />
+          ),
+          onChange(page) {
+            onChangeQueryParams('page', page.toString() || '')
+          },
         }}
         {...tableProps}
       />

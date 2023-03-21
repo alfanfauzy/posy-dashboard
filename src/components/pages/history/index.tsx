@@ -1,144 +1,27 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable react/no-unstable-nested-components */
 import type { ColumnsType } from 'antd/es/table'
 import moment from 'moment'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
 import InputSearch from '@/atoms/input/search'
 import Table from '@/atoms/table'
 import { Transaction, TransactionStatus } from '@/domain/transaction/model'
 import useDisclosure from '@/hooks/useDisclosure'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { openModal } from '@/store/slices/modal'
 import { toRupiah } from '@/utils/common'
 import { defineds } from '@/utils/date'
+import dateFormatter, { toUnix } from '@/utils/dateFormatter'
+import { onChangeQueryParams } from '@/utils/UtilsChangeQueryParams'
+import { useGetTransactionsViewModel } from '@/view/transaction/view-models/GetTransactionsViewModel'
 
 const Datepicker = dynamic(() => import('@/atoms/input/datepicker'), {
   loading: () => <div />,
 })
-
-const data: Partial<Transaction>[] = [
-  {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-000',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '1',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: 1673889919,
-    customer_name: 'Andi',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-214241124214',
-    transaction_code: 'O150123-001',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '2',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: 1673889919,
-    customer_name: 'Andi 2',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-dc111ef6ad26e',
-    transaction_code: 'O150123-002',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '3',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: 1673889919,
-    customer_name: 'Andi 3',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-dc1131ef6ad6e',
-    transaction_code: 'O150123-003',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '4',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: 1673889919,
-    customer_name: 'Andi 4',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-d4c111ef6ad6e',
-    transaction_code: 'O150123-004',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '5',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: 1673889919,
-    customer_name: 'Andi 5',
-  },
-  {
-    uuid: '76915a37-188c-46a8-a432-dc5111ef6ad6e',
-    transaction_code: 'O150123-005',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '6',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: 1673889919,
-    customer_name: 'Andi 6',
-  },
-  {
-    uuid: '76915a37-188c-46a8-6a432-dc111ef6ad6e',
-    transaction_code: 'O150123-006',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '7',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: 1673889919,
-    customer_name: 'Andi 7',
-  },
-  {
-    uuid: '76915a37-188c-466a8-a432-dc111ef6ad6e',
-    transaction_code: 'O150123-007',
-    table_uuid: '959b7485-08e1-46c2-b1be-296aa64efb05',
-    table_number: '8',
-    total_pax: 5,
-    total_order: 3,
-    status: TransactionStatus.WAITING_ORDER,
-    is_open: true,
-    is_order: false,
-    is_paid: false,
-    staff: 'jack',
-    created_at: 1673889919,
-    customer_name: 'Andi 8',
-  },
-]
 
 const generateStatus = (status: TransactionStatus) => {
   const statusColor = {
@@ -171,9 +54,8 @@ const columns = ({
     title: 'Trx ID',
     dataIndex: 'transaction_code',
     key: 'transaction_code',
-    render: (text) => (
-      <p className="whitespace-nowrap text-m-semibold">{text}</p>
-    ),
+    width: 215,
+    render: (text) => <p className="text-m-semibold">{text}</p>,
   },
   {
     title: 'Date',
@@ -181,7 +63,7 @@ const columns = ({
     key: 'date',
     render: (_, record) => (
       <p className="whitespace-nowrap text-m-regular">
-        {moment(record.created_at).format('ll, hh:mm')}
+        {dateFormatter(record.created_at || 0, 'dd MMM, HH:mm')}
       </p>
     ),
   },
@@ -205,8 +87,10 @@ const columns = ({
     title: <p className="whitespace-nowrap">Payment method</p>,
     dataIndex: 'payment_method',
     key: 'payment_method',
+    width: 150,
     render: (text) => (
-      <p className="whitespace-nowrap text-m-regular">{text}</p>
+      // <p className="whitespace-nowrap text-m-regular">{text}</p>
+      <p className="whitespace-nowrap text-m-regular">QRIS</p>
     ),
   },
   {
@@ -231,6 +115,7 @@ const columns = ({
   {
     title: ' ',
     key: 'action',
+    align: 'center',
     render: (_, record) => (
       <div
         role="presentation"
@@ -245,7 +130,12 @@ const columns = ({
 ]
 
 const PagesTransaction = () => {
+  const { query } = useRouter()
   const dispatch = useAppDispatch()
+  const { outletId, isSubscription, isLoggedIn } = useAppSelector(
+    (state) => state.auth,
+  )
+
   const [isOpenFilterDate, { open: openFilterDate, close: closeFilterDate }] =
     useDisclosure({ initialState: false })
 
@@ -256,6 +146,34 @@ const PagesTransaction = () => {
       key: 'selection',
     },
   ])
+
+  const { data, isLoading: loadDataHistory } = useGetTransactionsViewModel(
+    {
+      limit: Number(query.limit) || 1,
+      page: Number(query.page) || 1,
+      search: [
+        {
+          field: 'status',
+          value: 'PAID|CANCELLED',
+        },
+        {
+          field: 'keyword',
+          value: (query.search as string) || '',
+        },
+        {
+          field: 'created_at',
+          value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
+        },
+        {
+          field: 'restaurant_outlet_uuid',
+          value: outletId,
+        },
+      ],
+    },
+    {
+      enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+    },
+  )
 
   const handleOpenDetails = (record: Transaction) => {
     dispatch(
@@ -423,7 +341,13 @@ const PagesTransaction = () => {
               handleChange={(item: any) => setDate([item])}
             />
             <div className="flex w-1/2 items-center lg:w-1/4">
-              <InputSearch placeholder="Search Transaction" isOpen />
+              <InputSearch
+                isOpen
+                placeholder="Search Transaction"
+                search={(query.search as string) || ''}
+                onSearch={(e) => onChangeQueryParams('search', e.target.value)}
+                onClearSearch={() => onChangeQueryParams('search', '')}
+              />
             </div>
           </div>
         </aside>
@@ -433,7 +357,12 @@ const PagesTransaction = () => {
         <Table
           columns={columns({ handleOpenDetails })}
           dataSource={data}
+          onChange={(pagination) => {
+            console.log('ada')
+            onChangeQueryParams('page', pagination.current?.toString() || '')
+          }}
           scroll={{ y: '54vh', x: 1100 }}
+          loading={loadDataHistory}
         />
       </article>
     </main>

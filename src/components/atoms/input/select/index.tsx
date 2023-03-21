@@ -8,8 +8,10 @@ const AtomsInputSelect = ({
   onChange,
   options,
   className,
+  ...props
 }: AtomsInputSelect) => (
   <select
+    {...props}
     onChange={onChange}
     className={`${
       className || ''

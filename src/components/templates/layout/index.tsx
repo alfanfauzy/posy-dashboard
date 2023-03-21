@@ -18,15 +18,14 @@ interface OrganismsLayoutProps {
 
 const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
   const dispatch = useAppDispatch()
-  const { replace, asPath } = useRouter()
+  const { replace, asPath, pathname } = useRouter()
   const { isLoggedIn, isSubscription } = useAppSelector((state) => state.auth)
   const [loading, setLoading] = useState(true)
 
-  const { data: dataSubscription, isLoading: loadDataSubscription } =
-    useGetSubscriptionSectionViewModel({
-      queryKey: [asPath],
-      enabled: isLoggedIn,
-    })
+  const { data: dataSubscription } = useGetSubscriptionSectionViewModel({
+    queryKey: [pathname],
+    enabled: isLoggedIn,
+  })
 
   const { data: dataOutletSelection } = useGetOutletSelectionViewModel({
     enabled: isLoggedIn && isSubscription,
@@ -81,7 +80,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
     }
   }, [dataSubscription])
 
-  if (loading || loadDataSubscription) {
+  if (loading) {
     return (
       <main className="flex h-screen w-full items-center justify-center">
         <Loading backgroundColor="#2F265B" color="#2F265B" size={100} />
@@ -95,7 +94,7 @@ const OrganismsLayout = ({ children }: OrganismsLayoutProps) => {
         <section className="flex h-full w-full gap-4">
           <Sidebar dataOutletSelection={dataOutletSelection || undefined} />
           <div className="h-full flex-1 overflow-y-scroll">
-            <Transition asPath={asPath}>{children}</Transition>
+            <Transition asPath={pathname}>{children}</Transition>
           </div>
         </section>
       </main>

@@ -53,15 +53,14 @@ const OrganismsContentsTransaction = ({
           value: status,
         },
         {
-          field: 'customer_name',
+          field: 'keyword',
           value: search,
         },
         {
-          field: 'transaction_code',
-          value: search,
+          field: 'restaurant_outlet_uuid',
+          value: outletId,
         },
       ],
-      restaurant_outlet_uuid: outletId,
     },
     {
       enabled: outletId.length > 0 && isSubscription && isLoggedIn,
@@ -172,6 +171,7 @@ const OrganismsContentsTransaction = ({
               open={open}
               onSearch={onSearch}
               onClearSearch={onClear}
+              search={search}
             />
           </div>
 

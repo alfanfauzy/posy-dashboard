@@ -12,7 +12,6 @@ import {
   startOfWeek,
   startOfYear,
 } from 'date-fns'
-import moment from 'moment'
 
 export const defineds = {
   startOfDay: startOfDay(new Date()),
@@ -112,33 +111,3 @@ export const defaultStaticRanges = createStaticRanges([
     }),
   },
 ])
-
-interface FormatDateProps {
-  date: Date | string | any
-  format?:
-    | 'YYYY-MM-DD'
-    | 'DD/MM/YYYY'
-    | 'YYYY'
-    | 'MM'
-    | 'DD'
-    | 'LLLL'
-    | 'llll'
-    | 'LLL'
-    | 'lll'
-    | 'DD MMMM YYYY'
-    | 'DD MMM YYYY'
-  type?: 'default' | 'iso' | 'unix'
-}
-export const formatDate = ({
-  date,
-  format = 'YYYY-MM-DD',
-  type = 'default',
-}: FormatDateProps) => {
-  if (type === 'iso') {
-    return moment(date).toISOString()
-  }
-  if (type === 'unix') {
-    return moment.unix(date).format(format)
-  }
-  return moment(date).format(format)
-}

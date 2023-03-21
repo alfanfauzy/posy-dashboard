@@ -6,7 +6,8 @@ import React, { useEffect, useState } from 'react'
 import { DateRangePicker, Range } from 'react-date-range'
 
 import ArrowDownIcon from '@/icons/arrowDown'
-import { defaultStaticRanges, formatDate } from '@/utils/date'
+import { defaultStaticRanges } from '@/utils/date'
+import dateFormatter from '@/utils/dateFormatter'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,
@@ -16,13 +17,10 @@ export const checkLabelColor = (date: Range) => {
   const element = document.getElementsByClassName('rdrStaticRange')
   defaultStaticRanges.filter((el, idx) =>
     isEqual(
-      formatDate({ date: date.startDate }),
-      formatDate({ date: el.range().startDate }),
+      dateFormatter(date.startDate || 0),
+      dateFormatter(el.range().startDate),
     ) &&
-    isEqual(
-      formatDate({ date: date.endDate }),
-      formatDate({ date: el.range().endDate }),
-    )
+    isEqual(dateFormatter(date.endDate || 0), dateFormatter(el.range().endDate))
       ? element[idx]?.classList?.add('text-s-semibold')
       : element[idx]?.classList?.remove('text-s-semibold'),
   )
@@ -73,20 +71,13 @@ const Datepicker: React.FC<DatepickerProps> = ({
       >
         <p>
           {isEqual(
-            formatDate({ date: dateProps[0].startDate, format: 'DD/MM/YYYY' }),
-            formatDate({ date: dateProps[0].endDate, format: 'DD/MM/YYYY' }),
+            dateFormatter(dateProps[0].startDate || 0),
+            dateFormatter(dateProps[0].endDate || 0),
           )
-            ? formatDate({
-                date: dateProps[0].startDate,
-                format: 'DD MMM YYYY',
-              })
-            : `${formatDate({
-                date: dateProps[0].startDate,
-                format: 'DD MMM YYYY',
-              })} - ${formatDate({
-                date: dateProps[0].endDate,
-                format: 'DD MMM YYYY',
-              })}`}
+            ? dateFormatter(dateProps[0].startDate || 0)
+            : `${dateFormatter(dateProps[0].startDate || 0)} - ${dateFormatter(
+                dateProps[0].endDate || 0,
+              )}`}
         </p>
         <ArrowDownIcon />
       </div>

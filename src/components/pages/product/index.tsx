@@ -1,6 +1,9 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-prototype-builtins */
 import { useQueryClient } from '@tanstack/react-query'
 import type { ColumnsType } from 'antd/es/table'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { Button, Input, Modal, Textarea, Toggle } from 'posy-fnb-core'
 import React, { useState } from 'react'
 import { FormProvider, useFieldArray } from 'react-hook-form'
@@ -17,6 +20,7 @@ import { validationSchemaProduct } from '@/schemas/product'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { onChangeProductId } from '@/store/slices/product'
 import { toRupiah } from '@/utils/common'
+import { onChangeQueryParams } from '@/utils/UtilsChangeQueryParams'
 import { useGetOutletProductsViewModel } from '@/view/product/view-models/GetOutletProductsViewModel'
 import { useUpdateOutletProductStatusViewModel } from '@/view/product/view-models/UpdateOutletProductStatusViewModel'
 
@@ -38,9 +42,9 @@ const columns = (
     title: 'Category',
     dataIndex: 'categories',
     key: 'category',
-    width: '125px',
+    width: '100px',
     render: (text) => (
-      <p className="whitespace-nowrap">
+      <p className="truncate">
         {text
           .map((el: { category_name: string }) => el.category_name)
           .join(', ')}
@@ -131,6 +135,7 @@ const columns = (
 ]
 
 const PagesTransaction = () => {
+  const { query } = useRouter()
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -140,11 +145,16 @@ const PagesTransaction = () => {
   ] = useDisclosure({ initialState: false })
   const { outletId } = useAppSelector((state) => state.auth)
 
-  const { data: dataProduct, isLoading: loadProduct } =
-    useGetOutletProductsViewModel({
-      restaurant_outlet_uuid: outletId,
-      sort: { field: 'created_at', value: 'desc' },
-    })
+  const {
+    data: dataProduct,
+    pagination,
+    isLoading: loadProduct,
+  } = useGetOutletProductsViewModel({
+    limit: Number(query.limit) || 10,
+    page: Number(query.page) || 1,
+    restaurant_outlet_uuid: outletId,
+    sort: { field: 'created_at', value: 'desc' },
+  })
 
   const { updateOutletProductStatus } = useUpdateOutletProductStatusViewModel({
     onSuccess: () => queryClient.invalidateQueries([GetOutletProductsQueryKey]),
@@ -168,41 +178,6 @@ const PagesTransaction = () => {
     closeEditProduct()
     dispatch(onChangeProductId(''))
   }
-
-  // const handleAddAddOn = () => {
-  //   const addonTemp = {
-  //     addon_uuid: '',
-  //     addon_name: '',
-  //     is_multiple: false,
-  //     variant: [
-  //       {
-  //         variant_uuid: '',
-  //         variant_name: '',
-  //         price: 0,
-  //       },
-  //     ],
-  //   }
-  //   setProduct({ ...product, addon: product.addon?.concat(addonTemp) })
-  // }
-
-  // const handleAddAddOnVariant = (addonIdx: number) => {
-  //   const variantTemp = {
-  //     variant_uuid: '',
-  //     variant_name: '',
-  //     price: 0,
-  //   }
-  //   if (product.addon) {
-  //     const selectedAddon = product.addon[addonIdx]
-  //     const newVariant = [...selectedAddon.variant].concat(variantTemp)
-
-  //     selectedAddon.variant = newVariant
-
-  //     const prevAddon = product.addon
-  //     prevAddon[addonIdx] = selectedAddon
-
-  //     setProduct({ ...product, addon: prevAddon })
-  //   }
-  // }
 
   const methods = useForm({ schema: validationSchemaProduct })
   const {
@@ -257,9 +232,21 @@ const PagesTransaction = () => {
                 onChange={handleChangeRowAction}
               />
             )}
-            <Select options={categoryOptions} />
+            <Select
+              options={categoryOptions}
+              onChange={(e) =>
+                onChangeQueryParams('category', e.currentTarget.value)
+              }
+              defaultValue={query.category as string}
+            />
             <div className="flex w-1/2 items-center lg:w-1/4">
-              <InputSearch placeholder="Search Product" isOpen />
+              <InputSearch
+                placeholder="Search Product"
+                isOpen
+                search={(query.search as string) || ''}
+                onSearch={(e) => onChangeQueryParams('search', e.target.value)}
+                onClearSearch={() => onChangeQueryParams('search', '')}
+              />
             </div>
           </div>
         </aside>
@@ -272,6 +259,7 @@ const PagesTransaction = () => {
           // })}
           columns={columns(updateOutletProductStatus, outletId)}
           dataSource={dataProduct}
+          paginationData={pagination}
           rowKey="product_uuid"
           rowSelection={rowSelection}
           scroll={{ y: '54vh', x: 1100 }}
