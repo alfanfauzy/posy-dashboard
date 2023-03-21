@@ -1,4 +1,4 @@
-import dateFormatter from '@/views/common/utils/dateFormatter'
+import dateFormatter from '@/utils/dateFormatter'
 
 describe('dateFormatter', () => {
   test('valid', () => {

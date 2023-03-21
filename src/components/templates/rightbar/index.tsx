@@ -1103,6 +1103,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                   isOpen
                   onSearch={onSearch}
                   onClearSearch={onClear}
+                  search=""
                 />
               </div>
             </section>

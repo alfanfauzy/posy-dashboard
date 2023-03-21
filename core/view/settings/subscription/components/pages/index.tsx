@@ -5,7 +5,7 @@ import RenewSubs from 'public/images/renew-subscription.png'
 import subsNeeded from 'public/images/subscription-needed.png'
 import React, { useLayoutEffect, useState } from 'react'
 
-import { formatDate } from '@/utils/date'
+import dateFormatter from '@/utils/dateFormatter'
 import { useGetSubscriptionSectionViewModel } from '@/view/subscription/view-models/GetSubscriptionSectionViewModel'
 
 const ViewSubscriptionPage = () => {
@@ -58,11 +58,7 @@ const ViewSubscriptionPage = () => {
                     : 'text-red-caution'
                 }`}
               >
-                {formatDate({
-                  date: data?.end_date,
-                  format: 'DD MMMM YYYY',
-                  type: 'unix',
-                })}
+                {data?.end_date && dateFormatter(data.end_date)}
               </p>
             </div>
           </aside>
