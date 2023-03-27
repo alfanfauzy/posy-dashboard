@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Skeleton } from 'antd'
 import { Button, Input, Toggle } from 'posy-fnb-core'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Controller } from 'react-hook-form'
 import * as reactHookForm from 'react-hook-form'
 
@@ -33,7 +33,6 @@ const ViewTaxAndServicePage = () => {
     mode: 'onChange',
     schema: validationSchemaUpdateTax,
     defaultValues: {
-      restaurant_outlet_uuid: outletId,
       tax_type: 'TAX_AFTER_DISCOUNT',
       is_service_charge_taxable: true,
     },
@@ -65,6 +64,10 @@ const ViewTaxAndServicePage = () => {
     const mappedForm = mapToUpdateTaxPayload(form)
     updateTax(mappedForm)
   }
+
+  useEffect(() => {
+    setValue('restaurant_outlet_uuid', outletId)
+  }, [outletId])
 
   return (
     <main className="flex h-full gap-4 overflow-hidden">
