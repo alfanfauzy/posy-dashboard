@@ -1,8 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { Skeleton } from 'antd'
 import Image from 'next/image'
 import { Button, Loading } from 'posy-fnb-core'
 import React, { useState } from 'react'
-// import { useReactToPrint } from 'react-to-print'
+import { useReactToPrint } from 'react-to-print'
 import PlusCircleIcon from 'src/assets/icons/plusCircle'
 
 import FilterChip from '@/atoms/chips/filter-chip'
@@ -17,7 +18,23 @@ import {
   onClearSearch,
 } from '@/store/slices/transaction'
 import { useCreateTransactionViewModel } from '@/view/transaction/view-models/CreateTransactionViewModel'
+import { useGetTransactionSummaryViewModel } from '@/view/transaction/view-models/GetTransactionSummaryViewModel'
 import { useGetTransactionsViewModel } from '@/view/transaction/view-models/GetTransactionsViewModel'
+
+const generateBorderColor = (
+  status: string,
+  trxId: string,
+  selectedTrxId: string,
+) => {
+  if (trxId === selectedTrxId) {
+    return 'border-2 border-neutral-100'
+  }
+  const borderColor: { [key: string]: string } = {
+    WAITING_ORDER: 'border-2 border-blue-success',
+    WAITING_PAYMENT: 'border-2 border-green-success',
+  }
+  return borderColor[status]
+}
 
 interface OrganismsContentsTransactionProps {
   componentRef: React.RefObject<HTMLInputElement>
@@ -35,9 +52,17 @@ const OrganismsContentsTransaction = ({
   const [openSearch, { open, close }] = useDisclosure({ initialState: false })
   const [status, setStatus] = useState('')
 
-  const { isLoading, createTransaction } = useCreateTransactionViewModel({
-    onSuccess: () => queryClient.invalidateQueries([GetTransactionsQueryKey]),
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
   })
+
+  const { createTransaction, isLoading: loadCreateTransaction } =
+    useCreateTransactionViewModel({
+      onSuccess: () => {
+        queryClient.invalidateQueries([GetTransactionsQueryKey])
+        handlePrint()
+      },
+    })
 
   const handleCreateTransaction = (restaurantOutletId: string) => {
     createTransaction({ restaurant_outlet_uuid: restaurantOutletId })
@@ -67,37 +92,15 @@ const OrganismsContentsTransaction = ({
     },
   )
 
-  // const handlePrint = useReactToPrint({
-  //   content: () => componentRef.current,
-  // })
-
-  const calculateWaitingOrder = () => {
-    const temp =
-      data && data.filter((el) => el.status === TransactionStatus.WAITING_ORDER)
-    return temp?.length || 0
-  }
-
-  const calculateWaitingPayment = () => {
-    const temp =
-      data &&
-      data.filter((el) => el.status === TransactionStatus.WAITING_PAYMENT)
-    return temp?.length || 0
-  }
-
-  const generateBorderColor = (
-    status: string,
-    trxId: string,
-    selectedTrxId: string,
-  ) => {
-    if (trxId === selectedTrxId) {
-      return 'border-2 border-neutral-100'
-    }
-    const borderColor: { [key: string]: string } = {
-      WAITING_ORDER: 'border-2 border-blue-success',
-      WAITING_PAYMENT: 'border-2 border-green-success',
-    }
-    return borderColor[status]
-  }
+  const { data: dataSummary, isLoading: loadSummary } =
+    useGetTransactionSummaryViewModel({
+      search: [
+        {
+          field: 'restaurant_outlet_uuid',
+          value: outletId,
+        },
+      ],
+    })
 
   const handleSetStatus = (
     e: React.MouseEvent<HTMLElement>,
@@ -135,58 +138,68 @@ const OrganismsContentsTransaction = ({
           </div> */}
         </aside>
 
-        <aside className="mt-4 flex gap-2">
-          <div
-            className={`flex flex-1 overflow-x-auto transition-all duration-500 ease-in-out ${
-              openSearch ? '' : 'gap-2'
-            }`}
-          >
-            <FilterChip
-              label={`Waiting Order: ${calculateWaitingOrder()}`}
-              openSearch={openSearch}
-              onClick={(e) =>
-                handleSetStatus(e, TransactionStatus.WAITING_ORDER)
-              }
-              className={`${
-                status === TransactionStatus.WAITING_ORDER
-                  ? 'border-2 border-blue-success'
-                  : 'border-neutral-50 '
-              }`}
-            />
-            <FilterChip
-              label={`Waiting Payment: ${calculateWaitingPayment()}`}
-              openSearch={openSearch}
-              onClick={(e) =>
-                handleSetStatus(e, TransactionStatus.WAITING_PAYMENT)
-              }
-              className={`${
-                status === TransactionStatus.WAITING_PAYMENT
-                  ? 'border-2 border-green-success'
-                  : 'border-neutral-50 '
-              }`}
-            />
-            <FilterChip label="Table Capacity: 10" openSearch={openSearch} />
-            <InputSearch
-              isOpen={openSearch}
-              open={open}
-              onSearch={onSearch}
-              onClearSearch={onClear}
-              search={search}
-            />
+        {loadSummary && (
+          <div className="mt-2">
+            <Skeleton paragraph={{ rows: 1, width: '100%' }} title={false} />
           </div>
-
-          <div className="w-1/4">
-            <Button
-              onClick={() => handleCreateTransaction(outletId)}
-              size="m"
-              fullWidth
-              variant="primary"
-              isLoading={isLoading}
+        )}
+        {dataSummary && (
+          <aside className="mt-4 flex gap-2">
+            <div
+              className={`flex flex-1 overflow-x-auto transition-all duration-500 ease-in-out ${
+                openSearch ? '' : 'gap-2'
+              }`}
             >
-              <p className="whitespace-nowrap">+ New Trx</p>
-            </Button>
-          </div>
-        </aside>
+              <FilterChip
+                label={`Waiting Order: ${dataSummary?.waiting_order}`}
+                openSearch={openSearch}
+                onClick={(e) =>
+                  handleSetStatus(e, TransactionStatus.WAITING_ORDER)
+                }
+                className={`${
+                  status === TransactionStatus.WAITING_ORDER
+                    ? 'border-2 border-blue-success'
+                    : 'border-neutral-50 '
+                }`}
+              />
+              <FilterChip
+                label={`Waiting Payment: ${dataSummary?.waiting_payment}`}
+                openSearch={openSearch}
+                onClick={(e) =>
+                  handleSetStatus(e, TransactionStatus.WAITING_PAYMENT)
+                }
+                className={`${
+                  status === TransactionStatus.WAITING_PAYMENT
+                    ? 'border-2 border-green-success'
+                    : 'border-neutral-50 '
+                }`}
+              />
+              <FilterChip
+                label={`Table Capacity: ${dataSummary.available_capacity}/${dataSummary.table_capacity}`}
+                openSearch={openSearch}
+              />
+              <InputSearch
+                isOpen={openSearch}
+                open={open}
+                onSearch={onSearch}
+                onClearSearch={onClear}
+                search={search}
+              />
+            </div>
+
+            <div className="w-1/4">
+              <Button
+                onClick={() => handleCreateTransaction(outletId)}
+                size="m"
+                fullWidth
+                variant="primary"
+                isLoading={loadCreateTransaction}
+              >
+                <p className="whitespace-nowrap">+ New Trx</p>
+              </Button>
+            </div>
+          </aside>
+        )}
       </article>
 
       <article className="h-[80%] w-full overflow-y-auto py-4">
@@ -200,7 +213,7 @@ const OrganismsContentsTransaction = ({
             <div
               role="presentation"
               onClick={
-                !isLoading
+                !loadCreateTransaction
                   ? () => handleCreateTransaction(outletId)
                   : () => undefined
               }

@@ -1,8 +1,8 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
-import Get from 'api/get'
+import Post from 'api/post'
 
 import { GetCategoriesInput } from '@/domain/category/repositories/CategoryRepository'
-import { Response } from '@/domain/vo/BaseResponse'
+import { DataList, Response } from '@/domain/vo/BaseResponse'
 
 import { GetCategoriesDataResponse } from '../types'
 
@@ -10,9 +10,10 @@ export const GetCategoriesQueryKey = () => ['Categories/list'] as const
 
 const GetCategories = async (
   input?: GetCategoriesInput,
-): Promise<Response<GetCategoriesDataResponse[]>> => {
-  const response = await Get({
+): Promise<Response<DataList<GetCategoriesDataResponse>>> => {
+  const response = await Post({
     endpoint: `/product-service/category/get-list`,
+    data: input,
   })
 
   return {
@@ -25,9 +26,9 @@ const GetCategories = async (
 
 export const useGetCategoriesQuery = (
   input?: GetCategoriesInput,
-  options?: UseQueryOptions<Response<GetCategoriesDataResponse[]>>,
+  options?: UseQueryOptions<Response<DataList<GetCategoriesDataResponse>>>,
 ) =>
-  useQuery<Response<GetCategoriesDataResponse[]>>(
+  useQuery<Response<DataList<GetCategoriesDataResponse>>>(
     GetCategoriesQueryKey(),
     () => GetCategories(input),
     {

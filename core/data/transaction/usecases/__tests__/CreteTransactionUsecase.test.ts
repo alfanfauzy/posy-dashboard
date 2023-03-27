@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks'
 import fetch from 'jest-fetch-mock'
 
-import { useCreateTransactionUsecase } from './CreateTransactionUsecase'
+import { useCreateTransactionUsecase } from '../CreateTransactionUsecase'
 
 // Mock the useCreateTransactionMutation hook
 jest.mock('../sources/CreateTransactionMutation', () => ({

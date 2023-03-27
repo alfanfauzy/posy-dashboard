@@ -34,3 +34,10 @@ interface TransactionBased {
 export type Transaction = TransactionBased
 
 export type Transactions = TransactionBased[]
+
+export type TransactionSummary = {
+  waiting_order: number
+  waiting_payment: number
+  table_capacity: number
+  available_capacity: number
+}

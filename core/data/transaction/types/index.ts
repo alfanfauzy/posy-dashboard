@@ -1,3 +1,5 @@
+import { Order } from '@/domain/order/model'
+
 export enum TransactionStatus {
   WAITING_ORDER = 'WAITING_ORDER',
   WAITING_PAYMENT = 'WAITING_PAYMENT',
@@ -50,7 +52,7 @@ export type GetTransactionsDataResponse = GetTransactionsDataResponseBased
 
 export interface GetTransactionDataResponse
   extends GetTransactionsDataResponseBased {
-  orders?: any[]
+  orders?: Order[]
 }
 
 export interface CreateTransactionDataResponse {
@@ -64,4 +66,11 @@ export interface CreateTransactionDataResponse {
     seconds: number
     nanos: number
   }
+}
+
+export interface GetTransactionSummaryDataResponse {
+  waiting_order: number
+  waiting_payment: number
+  table_capacity: number
+  available_capacity: number
 }

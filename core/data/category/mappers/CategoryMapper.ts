@@ -9,4 +9,6 @@ export const mapToCategoriesModel = (
   datas.map((data) => ({
     uuid: data.uuid,
     category_name: data.category_name,
+    is_active: data.is_active,
+    restaurant_uuid: data.restaurant_uuid,
   }))

@@ -5,7 +5,7 @@ import {
   GetCategoriesInput,
   GetCategoriesResult,
 } from '@/domain/category/repositories/CategoryRepository'
-import { Response } from '@/domain/vo/BaseResponse'
+import { DataList, Response } from '@/domain/vo/BaseResponse'
 
 import { mapToCategoriesModel } from '../mappers/CategoryMapper'
 import { useGetCategoriesQuery } from '../sources/GetCategoriesQuery'
@@ -13,14 +13,14 @@ import { GetCategoriesDataResponse } from '../types'
 
 export const useGetCategoriesUsecase = (
   input?: GetCategoriesInput,
-  options?: UseQueryOptions<Response<GetCategoriesDataResponse[]>>,
+  options?: UseQueryOptions<Response<DataList<GetCategoriesDataResponse>>>,
 ): GetCategoriesResult => {
   const { data, ...rest } = useGetCategoriesQuery(input, options)
 
-  if (data?.data) {
+  if (data?.data?.objs) {
     const defaultData = [
-      { uuid: '', category_name: 'All', is_active: true },
-      ...data?.data,
+      { uuid: '', category_name: 'All', is_active: true, restaurant_uuid: '' },
+      ...data?.data.objs,
     ]
 
     const dataMapper = mapToCategoriesModel(defaultData)

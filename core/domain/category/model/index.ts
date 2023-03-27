@@ -1,8 +1,8 @@
 interface CategoryBased {
   uuid: string
   category_name: string
-  category_image?: string
-  restaurant_uuid?: string
+  restaurant_uuid: string
+  is_active: boolean
 }
 
 export type Category = CategoryBased
