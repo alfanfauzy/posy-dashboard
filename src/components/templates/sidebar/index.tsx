@@ -3,6 +3,7 @@ import { Select } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { BsList } from 'react-icons/bs'
+import { FiLogOut } from 'react-icons/fi'
 import { Sidebar, useProSidebar } from 'react-pro-sidebar'
 
 import Logo from '@/atoms/logo'
@@ -108,7 +109,7 @@ const TemplatesSidebar = ({ dataOutletSelection }: TemplatesSidebarProps) => {
         <aside
           className={`w-full ${
             collapsed ? 'items-center' : 'items-start'
-          } flex h-[112px] flex-col justify-start rounded-t-2xl bg-[#F2F1F9] p-6`}
+          } flex h-[140px] flex-col justify-start rounded-t-2xl bg-[#F2F1F9] p-6`}
         >
           <div
             className={`flex items-center gap-2 ${
@@ -119,26 +120,28 @@ const TemplatesSidebar = ({ dataOutletSelection }: TemplatesSidebarProps) => {
               <PersonIcon height={24} width={24} />
             </div>
             {!collapsed && (
-              <div
-                role="button"
-                onClick={handleLogout}
-                onKeyDown={handleLogout}
-                tabIndex={0}
-                className="text-m-semibold line-clamp-1"
-              >
-                Cyntia Simmons
-              </div>
+              <div className="text-m-semibold line-clamp-1">Cyntia Simmons</div>
             )}
           </div>
           {dataOutletSelection && (
             <Select
-              className={`mt-2.5 -ml-1.5 ${collapsed ? 'w-16' : '!w-[164px]'}`}
+              className={`mt-2.5 ${collapsed ? 'w-16' : '!w-[164px]'}`}
               options={outletOpt}
               value={outletId}
               onChange={onChangeOutlet}
               disabled={!isSubscription}
             />
           )}
+          <div
+            role="button"
+            onClick={handleLogout}
+            onKeyDown={handleLogout}
+            tabIndex={0}
+            className="mt-2.5 flex cursor-pointer gap-4 hover:opacity-70"
+          >
+            <FiLogOut className="text-neutral-90" size={20} />
+            {!collapsed && <p className="text-m-regular">Logout</p>}
+          </div>
         </aside>
       </aside>
     </Sidebar>
