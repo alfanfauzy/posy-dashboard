@@ -6,11 +6,11 @@ import {
   GetCategoriesInput,
   GetCategoriesResult,
 } from '@/domain/category/repositories/CategoryRepository'
-import { Response } from '@/domain/vo/BaseResponse'
+import { DataList, Response } from '@/domain/vo/BaseResponse'
 
 export const useGetCategoriesViewModel = (
   input?: GetCategoriesInput,
-  options?: UseQueryOptions<Response<GetCategoriesDataResponse[]>>,
+  options?: UseQueryOptions<Response<DataList<GetCategoriesDataResponse>>>,
 ): GetCategoriesResult => {
   const result = useGetCategoriesUsecase(input, options)
 

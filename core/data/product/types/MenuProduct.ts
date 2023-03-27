@@ -2,6 +2,7 @@ interface Category {
   uuid: string
   category_name: string
   is_active: boolean
+  restaurant_uuid: string
 }
 
 interface AddonVariant {

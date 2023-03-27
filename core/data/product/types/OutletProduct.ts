@@ -1,10 +1,5 @@
 import { Metadata, UpdatedAt } from '@/data/common/types/metadata'
-
-export interface Category {
-  uuid: string
-  category_name: string
-  is_active: boolean
-}
+import { Category } from '@/domain/category/model'
 
 export interface Product {
   uuid: string
