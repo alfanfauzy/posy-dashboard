@@ -11,3 +11,8 @@ interface SubscriptionSectionBased {
 }
 
 export type SubscriptionSection = SubscriptionSectionBased
+
+export type SubscriptionReminder = {
+  is_show: boolean
+  end_date: number
+}

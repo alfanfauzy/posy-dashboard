@@ -10,6 +10,10 @@ module.exports = {
   presets: [preset],
   theme: {
     extend: {
+      colors: {
+        error: '#CB3A31',
+        'secondary-border': '#CCC4F6',
+      },
       boxShadow: {
         modal: '0px -6px 24px rgba(0, 0, 0, 0.15);',
       },

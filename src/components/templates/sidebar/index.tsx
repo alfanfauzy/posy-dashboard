@@ -11,12 +11,14 @@ import { OutletSelection } from '@/domain/outlet/models'
 import useViewportListener from '@/hooks/useViewportListener'
 import PersonIcon from '@/icons/person'
 import Menu from '@/molecules/menu'
+import SubscriptionReminder from '@/molecules/subscription-reminder'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   onLogout,
   setRestaurantOutletId,
   setShowSidebar,
 } from '@/store/slices/auth'
+import { useGetSubscriptionReminderViewModel } from '@/view/subscription/view-models/GetSubscriptionReminderViewModel'
 
 interface TemplatesSidebarProps {
   dataOutletSelection: OutletSelection | undefined
@@ -27,11 +29,18 @@ const TemplatesSidebar = ({ dataOutletSelection }: TemplatesSidebarProps) => {
   const { width } = useViewportListener()
   const { collapseSidebar, collapsed } = useProSidebar()
   const dispatch = useAppDispatch()
-  const { outletId, isSubscription } = useAppSelector((state) => state.auth)
+  const { outletId, isSubscription, isLoggedIn } = useAppSelector(
+    (state) => state.auth,
+  )
 
   const [outletOpt, setOutletOpt] = useState<
     { label: string; value: string }[]
   >([])
+
+  const { data: dataSubscriptionReminder } =
+    useGetSubscriptionReminderViewModel({
+      enabled: isLoggedIn,
+    })
 
   useEffect(() => {
     if (dataOutletSelection) {
@@ -82,13 +91,20 @@ const TemplatesSidebar = ({ dataOutletSelection }: TemplatesSidebarProps) => {
         )}
       </aside>
 
-      <aside className="h-[70%] overflow-y-auto pb-6">
+      <aside
+        className={`${
+          dataSubscriptionReminder?.is_show ? 'h-[65%]' : 'h-[70%]'
+        } overflow-y-auto pb-6`}
+      >
         {PROTECT_ROUTES.map((route) => (
           <Menu key={route.title} item={route} collapse={collapsed} />
         ))}
       </aside>
 
       <aside className="absolute bottom-0 w-full items-center">
+        {dataSubscriptionReminder?.is_show && (
+          <SubscriptionReminder end_date={dataSubscriptionReminder?.end_date} />
+        )}
         <aside
           className={`w-full ${
             collapsed ? 'items-center' : 'items-start'

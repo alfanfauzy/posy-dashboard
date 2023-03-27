@@ -2,7 +2,6 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import Get from 'api/get'
 
 import { Response } from '@/domain/vo/BaseResponse'
-import { store } from '@/store/index'
 
 import { GetSubscriptionSectionDataResponse } from '../types'
 
@@ -14,14 +13,11 @@ export const GetSubscriptionSection = async (): Promise<
 > => {
   const response = await Get({
     endpoint: '/user-service/outlet/setting/restaurant/subscription-section',
-    headers: {
-      token: store.getState().auth.authData.token,
-    },
   })
 
   return {
     code: response?.code,
-    data: response?.data as any,
+    data: response?.data,
     message: response?.message,
     more_info: response?.more_info,
   }

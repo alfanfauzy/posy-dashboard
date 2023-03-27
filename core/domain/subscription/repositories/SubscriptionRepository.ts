@@ -2,7 +2,10 @@
  * GET
  */
 
-import { SubscriptionSection } from '@/domain/subscription/model'
+import {
+  SubscriptionReminder,
+  SubscriptionSection,
+} from '@/domain/subscription/model'
 import { ResultQuery } from '@/domain/vo/BaseResponse'
 
 export type GetSubscriptionSectionResult = ResultQuery<
@@ -10,5 +13,5 @@ export type GetSubscriptionSectionResult = ResultQuery<
 >
 
 export type GetSubscriptionReminderResult = ResultQuery<
-  SubscriptionSection | undefined
+  SubscriptionReminder | undefined
 >

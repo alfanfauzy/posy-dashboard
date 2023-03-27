@@ -11,3 +11,8 @@ interface GetSubscriptionSectionDataResponseBased {
 
 export type GetSubscriptionSectionDataResponse =
   GetSubscriptionSectionDataResponseBased
+
+export type GetSubscriptionReminderDataResponse = {
+  is_show: boolean
+  end_date: number
+}
