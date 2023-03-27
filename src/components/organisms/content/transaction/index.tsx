@@ -94,12 +94,7 @@ const OrganismsContentsTransaction = ({
 
   const { data: dataSummary, isLoading: loadSummary } =
     useGetTransactionSummaryViewModel({
-      search: [
-        {
-          field: 'restaurant_outlet_uuid',
-          value: outletId,
-        },
-      ],
+      restaurant_outlet_uuid: outletId,
     })
 
   const handleSetStatus = (

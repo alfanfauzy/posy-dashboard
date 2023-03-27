@@ -12,7 +12,7 @@ const GetTransactionSummary = async (
   input?: GetTransactionSummaryInput,
 ): Promise<Response<GetTransactionSummaryDataResponse>> => {
   const response = await Post({
-    endpoint: `/order-service/status/transaction/summary`,
+    endpoint: `/order-service/transaction/count/status`,
     data: input,
   })
 

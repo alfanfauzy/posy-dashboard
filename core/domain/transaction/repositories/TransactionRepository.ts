@@ -28,11 +28,7 @@ export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {
 export type GetTransactionInput = { transaction_uuid: string }
 export type GetTransactionResult = ResultQuery<Transaction | undefined>
 
-export type GetTransactionSummaryInput = InputVariables<
-  unknown,
-  keyof Pick<FilterBased, 'restaurant_outlet_uuid'>
->
-
+export type GetTransactionSummaryInput = { restaurant_outlet_uuid: string }
 export type GetTransactionSummaryResult = ResultQuery<
   TransactionSummary | undefined
 >

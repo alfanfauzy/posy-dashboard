@@ -472,6 +472,11 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     )
   }
 
+  const generateTransactionCode = (code: string) => {
+    const codeArr = code.slice(code.length - 12)
+    return codeArr
+  }
+
   return (
     <main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
       {!selectedTrxId && (
@@ -505,7 +510,10 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
 
               <div className="mt-2 flex items-center justify-between">
                 <p className="text-l-semibold">
-                  ID: {`${dataTransaction?.transaction_code}`}
+                  ID:{' '}
+                  {`${generateTransactionCode(
+                    dataTransaction?.transaction_code,
+                  )}`}
                 </p>
                 <p className="text-l-semibold">
                   Time:
