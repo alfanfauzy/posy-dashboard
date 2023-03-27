@@ -1,6 +1,6 @@
 import { SEO } from '@/constants/seo'
 import MetaHeader from '@/molecules/meta-header'
-import ViewSubscriptionPage from '@/view/settings/subscription/components/pages'
+import ViewSubscriptionPage from '@/view/subscription/components/pages'
 
 const Page = () => (
   <>

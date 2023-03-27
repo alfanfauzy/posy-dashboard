@@ -1,7 +1,4 @@
-export enum SubscriptionStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-}
+export type TaxType = 'TAX_AFTER_DISCOUNT' | 'TAX_INCLUDE_PRICE'
 
 interface TaxBased {
   is_tax: boolean
@@ -9,7 +6,7 @@ interface TaxBased {
   is_service_charge_taxable: boolean
   tax_percentage: number
   service_charge_percentage: number
-  // tax_type: ''
+  tax_type: TaxType
   updated_at: number | null
   updated_by: string
 }
