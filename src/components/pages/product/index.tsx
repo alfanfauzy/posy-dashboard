@@ -199,17 +199,16 @@ const PagesTransaction = () => {
     name: 'addon',
   })
 
-  const onSubmit = (e: any) => {
-    console.log(e, 'data')
+  const onSubmit = () => {
+    // console.log(e, 'data')
   }
 
   const actionOptions = (length: number) => [
     {
       label: `Selected ${length} ${length === 1 ? 'item' : 'items'}`,
       value: '',
-      hide: true,
     },
-    { label: 'Mark as shown', value: 'is_active' },
+    { label: 'Mark as shown', value: 'is_show' },
     { label: 'Mark as available', value: 'is_available' },
   ]
 
@@ -221,7 +220,13 @@ const PagesTransaction = () => {
     { label: 'Category: Desserts', value: 'desserts' },
   ]
 
-  const handleChangeRowAction = () => {
+  const handleChangeRowAction = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    updateOutletProductStatus({
+      flag: true,
+      restaurant_outlet_uuid: outletId,
+      status: e.currentTarget.value as 'is_show' | 'is_available',
+      product_uuids: selectedRowKeys as string[],
+    })
     setSelectedRowKeys([])
   }
 
@@ -269,7 +274,7 @@ const PagesTransaction = () => {
           columns={columns(updateOutletProductStatus, outletId)}
           dataSource={dataProduct}
           paginationData={pagination}
-          rowKey="product_uuid"
+          rowKey={(record) => record.uuid}
           rowSelection={rowSelection}
           scroll={{ y: '54vh', x: 1100 }}
           loading={loadProduct}
