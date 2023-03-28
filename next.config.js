@@ -19,6 +19,29 @@ const nextConfig = {
 		];
 	},
 	swcMinify: true,
+	webpack: (config, {isServer}) => {
+		config.module.rules.push({
+			test: /\.(png|jpe?g|gif|svg)$/i,
+			use: [
+				{
+					loader: 'file-loader',
+					options: {
+						publicPath: '/_next',
+						name: 'static/images/[hash].[ext]',
+					},
+				},
+			],
+		});
+
+		if (!isServer) {
+			config.resolve.fallback = {
+				fs: false,
+				module: false,
+			};
+		}
+
+		return config;
+	},
 };
 
 module.exports = nextConfig;

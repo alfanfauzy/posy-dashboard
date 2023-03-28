@@ -16,8 +16,7 @@
 		"incremental": true,
 		"baseUrl": ".",
 		"paths": {
-			"/*": ["."],
-			"public/*": ["public/*"],
+			"public/*": ["next/public/*"],
 			"pages/*": ["pages/*"],
 			"api/*": ["internals/api/*"],
 			"@/services/*": ["src/services/*"],
