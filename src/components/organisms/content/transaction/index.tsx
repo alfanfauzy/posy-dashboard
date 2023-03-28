@@ -93,9 +93,14 @@ const OrganismsContentsTransaction = ({
   )
 
   const { data: dataSummary, isLoading: loadSummary } =
-    useGetTransactionSummaryViewModel({
-      restaurant_outlet_uuid: outletId,
-    })
+    useGetTransactionSummaryViewModel(
+      {
+        restaurant_outlet_uuid: outletId,
+      },
+      {
+        enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+      },
+    )
 
   const handleSetStatus = (
     e: React.MouseEvent<HTMLElement>,

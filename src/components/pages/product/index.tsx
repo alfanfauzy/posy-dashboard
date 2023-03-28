@@ -268,9 +268,9 @@ const PagesTransaction = () => {
 
       <article className="mt-6">
         <Table
-          // onRow={(record) => ({
-          //   onClick: () => onOpenEditProduct(record.uuid),
-          // })}
+          onRow={(record) => ({
+            onClick: () => onOpenEditProduct(record.uuid),
+          })}
           columns={columns(updateOutletProductStatus, outletId)}
           dataSource={dataProduct}
           paginationData={pagination}

@@ -67,7 +67,9 @@ const TemplatesSidebar = ({ dataOutletSelection }: TemplatesSidebarProps) => {
 
   const handleLogout = () => {
     router.push('auth/login')
-    dispatch(onLogout())
+    setTimeout(() => {
+      dispatch(onLogout())
+    }, 500)
   }
 
   return (

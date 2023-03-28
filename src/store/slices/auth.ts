@@ -17,15 +17,15 @@ export interface AuthState {
 
 const initialState: AuthState = {
   isLoggedIn: false,
+  isSubscription: false,
+  showSidebar: false,
+  outletId: '',
   authData: {
     uuid: '',
     token: '',
     refresh_token: '',
     expired_at: 0,
   },
-  showSidebar: false,
-  outletId: '',
-  isSubscription: false,
 }
 
 export const AuthSlice = createSlice({
@@ -37,15 +37,15 @@ export const AuthSlice = createSlice({
       state.authData = action.payload
     },
     onLogout: (state: AuthState) => {
+      state.isSubscription = false
       state.isLoggedIn = false
+      state.outletId = ''
       state.authData = {
         uuid: '',
         token: '',
         refresh_token: '',
         expired_at: 0,
       }
-      state.outletId = ''
-      state.isSubscription = false
     },
     setShowSidebar: (state: AuthState, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload
@@ -62,10 +62,9 @@ export const AuthSlice = createSlice({
   },
 })
 
-// export the action from the slice
 export const {
-  onLoginSuccess,
   onLogout,
+  onLoginSuccess,
   setShowSidebar,
   setRestaurantOutletId,
   setIsSubscription,
