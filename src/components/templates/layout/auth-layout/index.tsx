@@ -1,8 +1,9 @@
 import Transition from '@/atoms/animations/transition';
 import Image from 'next/image';
 import {useRouter} from 'next/router';
-import bgImage from 'public/images/auth-bg.png';
 import {FC, ReactNode} from 'react';
+
+import bgImage from '/images/auth-bg.png';
 
 const AuthLayout: FC<{children: ReactNode}> = ({children}) => {
 	const {asPath} = useRouter();
