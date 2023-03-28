@@ -48,14 +48,10 @@ import { useCreateOrderManualViewModel } from '@/view/order/view-models/CreateOr
 import { useGetOrdersViewModel } from '@/view/order/view-models/GetOrdersViewModel'
 import { useGetMenuProductsViewModel } from '@/view/product/view-models/GetMenuProductsViewModel'
 import { useGetMenuProductViewModel } from '@/view/product/view-models/GetMenuProductViewModel'
+import { useGetTablesViewModel } from '@/view/table/view-models/GetTransactionsViewModel'
 import { useGetTransactionViewModel } from '@/view/transaction/view-models/GetTransactionViewModel'
 
-import {
-  listCancelReason,
-  listOrderTabs,
-  orderType,
-  tableNumber,
-} from './helpertemp'
+import { listCancelReason, listOrderTabs, orderType } from './helpertemp'
 
 const Modal = dynamic(() => import('posy-fnb-core').then((el) => el.Modal), {
   loading: () => <div />,
@@ -131,6 +127,23 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
       { transaction_uuid: selectedTrxId },
       { enabled: !!selectedTrxId },
     )
+
+  const { data: dataTable, isLoading: loadTable } = useGetTablesViewModel(
+    {
+      limit: 100,
+      sort: {
+        field: 'priority',
+        value: 'asc',
+      },
+      search: [
+        {
+          field: 'restaurant_outlet_uuid',
+          value: outletId,
+        },
+      ],
+    },
+    { enabled: !!selectedTrxId },
+  )
 
   const { data: dataProduct, isLoading: loadProduct } =
     useGetMenuProductsViewModel(
@@ -489,7 +502,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
           </div>
         </div>
       )}
-      {loadTransaction && (
+      {(loadTransaction || loadTable) && (
         <div className="-mt-10 flex h-full w-full items-center justify-center">
           <Loading size={75} />
         </div>
@@ -544,14 +557,19 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                     <div>
                       <Input size="m" labelText="Pax" />
                     </div>
-                    <div className="mt-3">
-                      <Select
-                        size="m"
-                        labelText="Table"
-                        options={tableNumber}
-                        placeholder="table"
-                      />
-                    </div>
+                    {dataTable && (
+                      <div className="mt-3">
+                        <Select
+                          size="m"
+                          labelText="Table"
+                          options={dataTable.map((el) => ({
+                            label: el.table_number,
+                            value: el.uuid,
+                          }))}
+                          placeholder="table"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <Button size="l" variant="secondary" fullWidth className="mt-4">
