@@ -1,33 +1,32 @@
-import { UseQueryOptions } from '@tanstack/react-query'
-
 import {
-  GetTransactionSummaryInput,
-  GetTransactionSummaryResult,
-} from '@/domain/transaction/repositories/TransactionRepository'
-import { Response } from '@/domain/vo/BaseResponse'
+	GetTransactionSummaryInput,
+	GetTransactionSummaryResult,
+} from '@/domain/transaction/repositories/TransactionRepository';
+import {Response} from '@/domain/vo/BaseResponse';
+import {UseQueryOptions} from '@tanstack/react-query';
 
-import { mapToTransactionSummaryModel } from '../mappers/TransactionMapper'
-import { useGetTransactionSummaryQuery } from '../sources/GetTransactionSummaryQuery'
-import { GetTransactionSummaryDataResponse } from '../types'
+import {mapToTransactionSummaryModel} from '../mappers/TransactionMapper';
+import {useGetTransactionSummaryQuery} from '../sources/GetTransactionSummaryQuery';
+import {GetTransactionSummaryDataResponse} from '../types';
 
 export const useGetTransactionSummaryUsecase = (
-  input?: GetTransactionSummaryInput,
-  options?: UseQueryOptions<Response<GetTransactionSummaryDataResponse>>,
+	input?: GetTransactionSummaryInput,
+	options?: UseQueryOptions<Response<GetTransactionSummaryDataResponse>>,
 ): GetTransactionSummaryResult => {
-  const { data, ...rest } = useGetTransactionSummaryQuery(input, options)
+	const {data, ...rest} = useGetTransactionSummaryQuery(input, options);
 
-  if (data?.data) {
-    const dataMapper = mapToTransactionSummaryModel(data.data)
+	if (data?.data) {
+		const dataMapper = mapToTransactionSummaryModel(data.data);
 
-    return {
-      data: dataMapper,
-      ...rest,
-    }
-  }
+		return {
+			data: dataMapper,
+			...rest,
+		};
+	}
 
-  return {
-    data: undefined,
+	return {
+		data: undefined,
 
-    ...rest,
-  }
-}
+		...rest,
+	};
+};

@@ -1,12 +1,12 @@
-import axios from '.'
+import axios from '.';
 
-interface Post {
-  endpoint: string
-  data: any
-  baseURL?: string
-  headers?: { [key: string]: string }
-  isAuth?: boolean
-}
+type Post = {
+	endpoint: string;
+	data: any;
+	baseURL?: string;
+	headers?: Record<string, string>;
+	isAuth?: boolean;
+};
 
 /**
  * @function Post
@@ -22,26 +22,26 @@ interface Post {
  * });
  */
 
-const Post = async ({ baseURL, endpoint, data, headers = {} }: Post) => {
-  const { status, ...response } =
-    (await axios().post(endpoint, data, {
-      headers: {
-        ...headers,
-      },
-      baseURL,
-    })) || {}
+const Post = async ({baseURL, endpoint, data, headers = {}}: Post) => {
+	const {status, ...response} =
+		(await axios().post(endpoint, data, {
+			headers: {
+				...headers,
+			},
+			baseURL,
+		})) || {};
 
-  const isSuccess = status === 200 && response.data === 2200
+	const isSuccess = status === 200 && response.data === 2200;
 
-  if (isSuccess) {
-    return response.data
-  }
+	if (isSuccess) {
+		return response.data;
+	}
 
-  return {
-    code: status || 2200,
-    message: response.data?.message || '',
-    ...response.data,
-  }
-}
+	return {
+		code: status || 2200,
+		message: response.data?.message || '',
+		...response.data,
+	};
+};
 
-export default Post
+export default Post;

@@ -4,10 +4,9 @@
  *
  */
 
-import React from 'react'
+import PagesProduct from '@/pages/product';
+import React from 'react';
 
-import PagesProduct from '@/pages/product'
+const ContainerProduct: React.FC = () => <PagesProduct />;
 
-const ContainerProduct: React.FC = () => <PagesProduct />
-
-export default ContainerProduct
+export default ContainerProduct;

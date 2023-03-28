@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  posy-dashboard:
+    container_name: posy-dashboard
+    image: posy-dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: $APP_NAME
+        NEXT_PUBLIC_API_ENDPOINT: $NEXT_PUBLIC_API
+    env_file:
+      - .env
+    ports:
+      - '3300:3000'

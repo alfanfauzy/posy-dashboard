@@ -1,18 +1,17 @@
-import { UseQueryOptions } from '@tanstack/react-query'
-
-import { GetTransactionsDataResponse } from '@/data/transaction/types'
-import { useGetTransactionsUsecase } from '@/data/transaction/usecases/GetTransactionsUsecase'
+import {GetTransactionsDataResponse} from '@/data/transaction/types';
+import {useGetTransactionsUsecase} from '@/data/transaction/usecases/GetTransactionsUsecase';
 import {
-  GetTransactionsInput,
-  GetTransactionsResult,
-} from '@/domain/transaction/repositories/TransactionRepository'
-import { DataList, Response } from '@/domain/vo/BaseResponse'
+	GetTransactionsInput,
+	GetTransactionsResult,
+} from '@/domain/transaction/repositories/TransactionRepository';
+import {DataList, Response} from '@/domain/vo/BaseResponse';
+import {UseQueryOptions} from '@tanstack/react-query';
 
 export const useGetTransactionsViewModel = (
-  input?: GetTransactionsInput,
-  options?: UseQueryOptions<Response<DataList<GetTransactionsDataResponse>>>,
+	input?: GetTransactionsInput,
+	options?: UseQueryOptions<Response<DataList<GetTransactionsDataResponse>>>,
 ): GetTransactionsResult => {
-  const result = useGetTransactionsUsecase(input, options)
+	const result = useGetTransactionsUsecase(input, options);
 
-  return result
-}
+	return result;
+};

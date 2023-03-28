@@ -1,61 +1,61 @@
 export const listCancelReason = [
-  {
-    label: 'Out of stock',
-    value: 'Out of stock',
-  },
-  {
-    label: 'Customer cancellation',
-    value: 'Customer cancellation',
-  },
-  {
-    label: 'Long waiting time',
-    value: 'Long waiting time',
-  },
-  {
-    label: 'Wrong order',
-    value: 'Wrong order',
-  },
-  {
-    label: 'Others',
-    value: 'Others',
-  },
-]
+	{
+		label: 'Out of stock',
+		value: 'Out of stock',
+	},
+	{
+		label: 'Customer cancellation',
+		value: 'Customer cancellation',
+	},
+	{
+		label: 'Long waiting time',
+		value: 'Long waiting time',
+	},
+	{
+		label: 'Wrong order',
+		value: 'Wrong order',
+	},
+	{
+		label: 'Others',
+		value: 'Others',
+	},
+];
 
 export const orderType = [
-  {
-    label: 'Dine in',
-    value: 'dine_in',
-  },
-  {
-    label: 'Take away',
-    value: 'take_away',
-  },
-]
+	{
+		label: 'Dine in',
+		value: 'dine_in',
+	},
+	{
+		label: 'Take away',
+		value: 'take_away',
+	},
+];
 
 export const tableNumber = [
-  {
-    label: '1',
-    value: 1,
-  },
-  {
-    label: '2',
-    value: 2,
-  },
-  {
-    label: '3',
-    value: 3,
-  },
-  {
-    label: '4',
-    value: 4,
-  },
-  {
-    label: '5',
-    value: 5,
-  },
-]
+	{
+		label: '1',
+		value: 1,
+	},
+	{
+		label: '2',
+		value: 2,
+	},
+	{
+		label: '3',
+		value: 3,
+	},
+	{
+		label: '4',
+		value: 4,
+	},
+	{
+		label: '5',
+		value: 5,
+	},
+];
 
-export const listOrderTabs = [{ label: 'Order' }, { label: 'Payment' }]
+export const listOrderTabs = [{label: 'Order'}, {label: 'Payment'}];
 
 // export const listMenuTabs = [
 //   { label: 'All' },

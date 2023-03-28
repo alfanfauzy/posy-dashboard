@@ -1,28 +1,28 @@
-import React from 'react'
+import React from 'react';
 
-interface AtomsInputSelect extends React.HTMLAttributes<HTMLSelectElement> {
-  options: { label: string; value: string | number; hide?: boolean }[]
-}
+type AtomsInputSelect = {
+	options: Array<{label: string; value: string | number; hide?: boolean}>;
+} & React.HTMLAttributes<HTMLSelectElement>;
 
 const AtomsInputSelect = ({
-  onChange,
-  options,
-  className,
-  ...props
+	onChange,
+	options,
+	className,
+	...props
 }: AtomsInputSelect) => (
-  <select
-    {...props}
-    onChange={onChange}
-    className={`${
-      className || ''
-    } h-8 w-[200px] rounded-full border border-neutral-40 px-3 text-m-medium placeholder:text-neutral-80 hover:border-neutral-100 focus:outline-none`}
-  >
-    {options.map((option) => (
-      <option key={option.value} value={option.value} hidden={option.hide}>
-        {option.label}
-      </option>
-    ))}
-  </select>
-)
+	<select
+		{...props}
+		onChange={onChange}
+		className={`${
+			className || ''
+		} h-8 w-[200px] rounded-full border border-neutral-40 px-3 text-m-medium placeholder:text-neutral-80 hover:border-neutral-100 focus:outline-none`}
+	>
+		{options.map(option => (
+			<option key={option.value} value={option.value} hidden={option.hide}>
+				{option.label}
+			</option>
+		))}
+	</select>
+);
 
-export default AtomsInputSelect
+export default AtomsInputSelect;

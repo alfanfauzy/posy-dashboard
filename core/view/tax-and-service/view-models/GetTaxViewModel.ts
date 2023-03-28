@@ -1,18 +1,17 @@
-import { UseQueryOptions } from '@tanstack/react-query'
-
-import { GetTaxDataResponse } from '@/data/tax/types'
-import { useGetTaxUsecase } from '@/data/tax/usecases/GetTaxUsecase'
+import {GetTaxDataResponse} from '@/data/tax/types';
+import {useGetTaxUsecase} from '@/data/tax/usecases/GetTaxUsecase';
 import {
-  GetTaxInput,
-  GetTaxResult,
-} from '@/domain/tax/repositories/TaxRepository'
-import { Response } from '@/domain/vo/BaseResponse'
+	GetTaxInput,
+	GetTaxResult,
+} from '@/domain/tax/repositories/TaxRepository';
+import {Response} from '@/domain/vo/BaseResponse';
+import {UseQueryOptions} from '@tanstack/react-query';
 
 export const useGetTaxViewModel = (
-  input: GetTaxInput,
-  options?: UseQueryOptions<Response<GetTaxDataResponse>>,
+	input: GetTaxInput,
+	options?: UseQueryOptions<Response<GetTaxDataResponse>>,
 ): GetTaxResult => {
-  const result = useGetTaxUsecase(input, options)
+	const result = useGetTaxUsecase(input, options);
 
-  return result
-}
+	return result;
+};

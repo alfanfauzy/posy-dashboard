@@ -1,36 +1,36 @@
-import { useState } from 'react'
+import {useState} from 'react';
 
-interface UseDisclosureType {
-  initialState: boolean
-  callbacks?: { onOpen?(): void; onClose?(): void }
-}
+type UseDisclosureType = {
+	initialState: boolean;
+	callbacks?: {onOpen?(): void; onClose?(): void};
+};
 
-const useDisclosure = ({ initialState, callbacks }: UseDisclosureType) => {
-  const [isOpen, setIsOpen] = useState(initialState)
+const useDisclosure = ({initialState, callbacks}: UseDisclosureType) => {
+	const [isOpen, setIsOpen] = useState(initialState);
 
-  const open = () => {
-    if (!isOpen) {
-      setIsOpen(true)
-      callbacks?.onOpen?.()
-    }
-  }
+	const open = () => {
+		if (!isOpen) {
+			setIsOpen(true);
+			callbacks?.onOpen?.();
+		}
+	};
 
-  const close = () => {
-    if (isOpen) {
-      setIsOpen(false)
-      callbacks?.onClose?.()
-    }
-  }
+	const close = () => {
+		if (isOpen) {
+			setIsOpen(false);
+			callbacks?.onClose?.();
+		}
+	};
 
-  const toggle = () => {
-    if (isOpen) {
-      close()
-    } else {
-      open()
-    }
-  }
+	const toggle = () => {
+		if (isOpen) {
+			close();
+		} else {
+			open();
+		}
+	};
 
-  return [isOpen, { open, close, toggle }] as const
-}
+	return [isOpen, {open, close, toggle}] as const;
+};
 
-export default useDisclosure
+export default useDisclosure;

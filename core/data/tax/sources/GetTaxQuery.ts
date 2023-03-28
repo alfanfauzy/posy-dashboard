@@ -1,37 +1,36 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query'
-import Get from 'api/get'
+import {GetTaxInput} from '@/domain/tax/repositories/TaxRepository';
+import {Response} from '@/domain/vo/BaseResponse';
+import {useQuery, UseQueryOptions} from '@tanstack/react-query';
+import Get from 'api/get';
 
-import { GetTaxInput } from '@/domain/tax/repositories/TaxRepository'
-import { Response } from '@/domain/vo/BaseResponse'
+import {GetTaxDataResponse} from '../types';
 
-import { GetTaxDataResponse } from '../types'
-
-export const GetTaxQueryKey = 'tax' as const
+export const GetTaxQueryKey = 'tax' as const;
 
 const GetTax = async (
-  input: GetTaxInput,
+	input: GetTaxInput,
 ): Promise<Response<GetTaxDataResponse>> => {
-  const response = await Get({
-    endpoint: `/user-service/outlet/setting/tax/${input.restaurant_outlet_uuid}`,
-  })
+	const response = await Get({
+		endpoint: `/user-service/outlet/setting/tax/${input.restaurant_outlet_uuid}`,
+	});
 
-  return {
-    code: response?.code,
-    data: response?.data,
-    message: response?.message,
-    more_info: response?.more_info,
-  }
-}
+	return {
+		code: response?.code,
+		data: response?.data,
+		message: response?.message,
+		more_info: response?.more_info,
+	};
+};
 
 export const useGetTaxQuery = (
-  input: GetTaxInput,
-  options?: UseQueryOptions<Response<GetTaxDataResponse>>,
+	input: GetTaxInput,
+	options?: UseQueryOptions<Response<GetTaxDataResponse>>,
 ) =>
-  useQuery<Response<GetTaxDataResponse>>(
-    [GetTaxQueryKey, input],
-    () => GetTax(input),
-    {
-      refetchOnWindowFocus: false,
-      ...options,
-    },
-  )
+	useQuery<Response<GetTaxDataResponse>>(
+		[GetTaxQueryKey, input],
+		() => GetTax(input),
+		{
+			refetchOnWindowFocus: false,
+			...options,
+		},
+	);

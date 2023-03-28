@@ -3,146 +3,146 @@
 @tailwind utilities;
 
 html {
-  height: 100%;
-  scroll-behavior: smooth;
+	height: 100%;
+	scroll-behavior: smooth;
 }
 
 body {
-  min-height: 100%;
-  margin: auto;
+	min-height: 100%;
+	margin: auto;
 }
 
 ::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
+	width: 0px;
+	background: transparent;
 }
 
 .ps-sidebar-root {
-  border: unset;
+	border: unset;
 }
 
 .ps-sidebar-container {
-  border-radius: 16px;
-  overflow-x: hidden !important;
-  overflow-y: hidden !important;
+	border-radius: 16px;
+	overflow-x: hidden !important;
+	overflow-y: hidden !important;
 }
 
 .ps-menu-button:hover {
-  background-color: unset !important;
+	background-color: unset !important;
 }
 
 .ps-submenu-content > ul > li > .ps-menu-button {
-  padding-left: 28px !important;
+	padding-left: 28px !important;
 }
 
 .ps-submenu-content {
-  background-color: unset !important;
+	background-color: unset !important;
 }
 
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 
 .ant-table table {
-  color: #0a0a0a;
-  font-family: 'Inter', Sans-serif;
+	color: #0a0a0a;
+	font-family: 'Inter', Sans-serif;
 }
 
 thead > tr > th {
-  background-color: #f7f7f7 !important;
+	background-color: #f7f7f7 !important;
 }
 
 .ant-pagination .ant-pagination-item-active {
-  border-color: #0a0a0a !important;
+	border-color: #0a0a0a !important;
 }
 
 .ant-pagination-item a {
-  color: #0a0a0a !important;
+	color: #0a0a0a !important;
 }
 
 :where(.ant-checkbox-checked .ant-checkbox-inner) {
-  background-color: #404040 !important;
-  border-color: #c2c2c2 !important;
+	background-color: #404040 !important;
+	border-color: #c2c2c2 !important;
 }
 
 :where(
-    .ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover
-      .ant-checkbox-checked:not(.ant-checkbox-disabled)
-  ):after {
-  border-color: #c2c2c2 !important;
+		.ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover
+			.ant-checkbox-checked:not(.ant-checkbox-disabled)
+	):after {
+	border-color: #c2c2c2 !important;
 }
 
 .ant-checkbox-checked:after {
-  border: 2px solid #c2c2c2;
+	border: 2px solid #c2c2c2;
 }
 
 .ant-checkbox-indeterminate .ant-checkbox-inner:after {
-  border: 2px solid #404040;
-  background-color: #404040;
+	border: 2px solid #404040;
+	background-color: #404040;
 }
 
 .ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover
-  .ant-checkbox-inner,
+	.ant-checkbox-inner,
 .ant-checkbox:not(.ant-checkbox-disabled):hover .ant-checkbox-inner {
-  border-color: #c2c2c2;
+	border-color: #c2c2c2;
 }
 
 select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: transparent;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-  background-repeat: no-repeat;
-  background-position-x: 100%;
-  background-position-y: 2px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background: transparent;
+	background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+	background-repeat: no-repeat;
+	background-position-x: 100%;
+	background-position-y: 2px;
 }
 
 .rdrDateRangePickerWrapper {
-  display: flex;
-  gap: 32px;
+	display: flex;
+	gap: 32px;
 }
 
 .rdrCalendarWrapper {
-  border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  padding: 16px 16px 0;
+	border: 1px solid #e0e0e0;
+	border-radius: 16px;
+	padding: 16px 16px 0;
 }
 
 .rdrDefinedRangesWrapper {
-  border: 1px solid #e0e0e0;
-  border-radius: 16px;
+	border: 1px solid #e0e0e0;
+	border-radius: 16px;
 }
 
 .rdrStaticRangeLabel {
-  padding: 14px 20px;
+	padding: 14px 20px;
 }
 
 .rdrStaticRange:hover:first-child .rdrStaticRangeLabel,
 .rdrStaticRange:focus .rdrStaticRangeLabel {
-  border-radius: 16px 16px 0 0;
+	border-radius: 16px 16px 0 0;
 }
 
 .rdrStaticRange:hover .rdrStaticRangeLabel,
 .rdrStaticRange:focus .rdrStaticRangeLabel {
-  background: #e0dbfa;
+	background: #e0dbfa;
 }
 
 .rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
 .rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
 .rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
 .rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
-  color: #2f265b;
+	color: #2f265b;
 }
 
 .rdrWeekDays {
-  margin-top: 8px;
+	margin-top: 8px;
 }
 
 .rdrWeekDay,
 .rdrDayNumber span {
-  color: #2f265b;
+	color: #2f265b;
 }
 
 .rdrMonthName {
-  display: none;
+	display: none;
 }

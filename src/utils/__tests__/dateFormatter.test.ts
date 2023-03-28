@@ -1,13 +1,16 @@
-import dateFormatter from '@/utils/dateFormatter'
+import {dateFormatter} from 'src/utils/dateFormatter';
 
 describe('dateFormatter', () => {
-  test('valid', () => {
-    const test = dateFormatter(586828800)
-    expect(test).toBe('06 August 1988')
-  })
+	test('valid', () => {
+		const test = dateFormatter(new Date('1988-08-06T07:01:31.240937Z'));
+		expect(test).toBe('06 August 1988');
+	});
 
-  test('valid data with date format', () => {
-    const testWithDateFormat = dateFormatter(586828800, 'dd MMM yyyy')
-    expect(testWithDateFormat).toBe('06 Aug 1988')
-  })
-})
+	test('valid data with date format', () => {
+		const testWithDateFormat = dateFormatter(
+			new Date('1988-08-06T07:01:31.240937Z'),
+			'dd MMM yyyy',
+		);
+		expect(testWithDateFormat).toBe('06 Aug 1988');
+	});
+});
