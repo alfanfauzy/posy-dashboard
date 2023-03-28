@@ -12,9 +12,7 @@ const UpdateTax = async (
 ): Promise<Response<UpdateTaxDataResponse>> => {
   const response = await Post({
     endpoint: `/user-service/outlet/setting/tax/update`,
-    data: {
-      ...input,
-    },
+    data: input,
   })
 
   return {

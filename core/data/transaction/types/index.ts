@@ -1,3 +1,4 @@
+import { UpdatedAt } from '@/data/common/types/metadata'
 import { Order } from '@/domain/order/model'
 
 export enum TransactionStatus {
@@ -45,7 +46,6 @@ interface GetTransactionsDataResponseBased {
   is_paid: boolean
   staff: string
   table_number: string
-  table_uuid: string
 }
 
 export type GetTransactionsDataResponse = GetTransactionsDataResponseBased
@@ -73,4 +73,9 @@ export interface GetTransactionSummaryDataResponse {
   waiting_payment: number
   table_capacity: number
   available_capacity: number
+}
+
+export interface UpdateTransactionDataResponse {
+  uuid: string
+  updated_at: UpdatedAt
 }

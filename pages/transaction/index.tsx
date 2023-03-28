@@ -1,7 +1,7 @@
 import { SEO } from '@/constants/seo'
 import MetaHeader from '@/molecules/meta-header'
 import type { NextPageWithLayout } from '@/types/index'
-import ViewTransactionPage from '@/view/transaction/pages'
+import ViewTransactionPage from '@/view/transaction/components/pages'
 
 const Page: NextPageWithLayout = () => (
   <>

@@ -11,6 +11,8 @@ import {
   Textarea,
 } from 'posy-fnb-core'
 import React, { useCallback, useRef, useState } from 'react'
+import * as reactHookForm from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { AiOutlineInfoCircle, AiOutlinePercentage } from 'react-icons/ai'
 import { BsCreditCard, BsFillCheckCircleFill } from 'react-icons/bs'
 import { CgTrash } from 'react-icons/cg'
@@ -21,10 +23,13 @@ import { useReactToPrint } from 'react-to-print'
 import CountUpTimer from '@/atoms/countup'
 import InputSearch from '@/atoms/input/search'
 import { GetOrdersQueryKey } from '@/data/order/sources/GetOrdersQuery'
+import { mapToUpdateTransactionPayload } from '@/data/transaction/mappers/TransactionMapper'
 import { GetTransactionQueryKey } from '@/data/transaction/sources/GetTransactionQuery'
+import { GetTransactionsQueryKey } from '@/data/transaction/sources/GetTransactionsQuery'
 import { AddonVariant } from '@/domain/addon/model'
 import { Product } from '@/domain/product/model'
 import useDisclosure from '@/hooks/useDisclosure'
+import { useForm } from '@/hooks/useForm'
 import NoOrderIcon from '@/icons/noOrder'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { closeModal, openModal } from '@/store/slices/modal'
@@ -48,8 +53,13 @@ import { useCreateOrderManualViewModel } from '@/view/order/view-models/CreateOr
 import { useGetOrdersViewModel } from '@/view/order/view-models/GetOrdersViewModel'
 import { useGetMenuProductsViewModel } from '@/view/product/view-models/GetMenuProductsViewModel'
 import { useGetMenuProductViewModel } from '@/view/product/view-models/GetMenuProductViewModel'
-import { useGetTablesViewModel } from '@/view/table/view-models/GetTransactionsViewModel'
+import { useGetTablesViewModel } from '@/view/table/view-models/GetTablesViewModel'
+import {
+  validationSchemaUpdateTransaction,
+  ValidationSchemaUpdateTransactionType,
+} from '@/view/transaction/schemas/update-transaction'
 import { useGetTransactionViewModel } from '@/view/transaction/view-models/GetTransactionViewModel'
+import { useUpdateTransactionViewModel } from '@/view/transaction/view-models/UpdateTransactionViewModel'
 
 import { listCancelReason, listOrderTabs, orderType } from './helpertemp'
 
@@ -122,10 +132,47 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
 
   const [selectedPayment, setSelectedPayment] = useState('cash')
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onChange',
+    schema: validationSchemaUpdateTransaction,
+  })
+
   const { data: dataTransaction, isLoading: loadTransaction } =
     useGetTransactionViewModel(
       { transaction_uuid: selectedTrxId },
-      { enabled: !!selectedTrxId },
+      {
+        enabled: !!selectedTrxId,
+        onSuccess: (data) => {
+          if (data.message === 'OK') {
+            setValue('customer_name', data?.data?.customer_name)
+            if (data?.data?.restaurant_outlet_table_uuid) {
+              setValue('restaurant_outlet_table_uuid', {
+                label: data?.data?.table_number,
+                value: data?.data?.restaurant_outlet_table_uuid,
+              })
+            }
+            if (data?.data?.total_pax > 0) {
+              setValue('total_pax', data?.data?.total_pax.toString())
+            }
+            if (data?.data?.transaction_category) {
+              setValue('transaction_category', {
+                label:
+                  data?.data?.transaction_category === 'DINE_IN'
+                    ? 'Dine in'
+                    : 'Take away',
+                value: data?.data?.transaction_category === 'DINE_IN' ? 0 : 1,
+              })
+            }
+          }
+        },
+      },
     )
 
   const { data: dataTable, isLoading: loadTable } = useGetTablesViewModel(
@@ -205,6 +252,26 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
       },
     })
 
+  const { updateTransaction, isLoading: loadUpdateTransaction } =
+    useUpdateTransactionViewModel({
+      onSuccess: (data) => {
+        if (data.message === 'OK') {
+          queryClient.invalidateQueries([GetTransactionsQueryKey])
+        }
+      },
+    })
+
+  const onSubmit: reactHookForm.SubmitHandler<
+    ValidationSchemaUpdateTransactionType
+  > = (form) => {
+    const payload = {
+      ...form,
+      transaction_uuid: selectedTrxId,
+    }
+    const mappedPayload = mapToUpdateTransactionPayload(payload)
+    updateTransaction(mappedPayload)
+  }
+
   const [tabValueorder, setTabValueOrder] = useState(0)
   const [tabValueMenu, setTabValueMenu] = useState(0)
 
@@ -216,12 +283,12 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
     content: () => kitchenRef.current,
   })
 
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const regex = new RegExp(e.target.value, 'i')
-    // const newData = data.filter(({ name }) => name.match(regex))
-    // setDataTransaction(newData)
-    // dispatch(onChangeSearch({ search: e.target.value }))
-  }
+  // const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // const regex = new RegExp(e.target.value, 'i')
+  // const newData = data.filter(({ name }) => name.match(regex))
+  // setDataTransaction(newData)
+  // dispatch(onChangeSearch({ search: e.target.value }))
+  // }
 
   const onClear = () => {
     // dispatch(onClearSearch())
@@ -538,44 +605,80 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
             </aside>
 
             <section className="h-4/5 overflow-y-auto">
-              <aside>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex gap-4">
                   <div className="w-2/3">
                     <div>
-                      <Input size="m" labelText="Customer name" />
+                      <Input
+                        size="m"
+                        labelText="Customer name"
+                        {...register('customer_name')}
+                        error={!!errors.customer_name}
+                      />
                     </div>
                     <div className="mt-3">
-                      <Select
-                        size="m"
-                        labelText="Dine in / Take away"
-                        options={orderType}
-                        placeholder="Select Type"
+                      <Controller
+                        control={control}
+                        name="transaction_category"
+                        render={({ field: { onChange } }) => (
+                          <Select
+                            size="m"
+                            labelText="Dine in / Take away"
+                            onChange={onChange}
+                            value={watch('transaction_category')}
+                            options={orderType}
+                            placeholder="Select Type"
+                            error={!!errors.transaction_category}
+                          />
+                        )}
                       />
                     </div>
                   </div>
                   <div className="w-1/3">
                     <div>
-                      <Input size="m" labelText="Pax" />
+                      <Input
+                        size="m"
+                        labelText="Pax"
+                        {...register('total_pax')}
+                        error={!!errors.total_pax}
+                      />
                     </div>
                     {dataTable && (
                       <div className="mt-3">
-                        <Select
-                          size="m"
-                          labelText="Table"
-                          options={dataTable.map((el) => ({
-                            label: el.table_number,
-                            value: el.uuid,
-                          }))}
-                          placeholder="table"
+                        <Controller
+                          control={control}
+                          name="restaurant_outlet_table_uuid"
+                          render={({ field: { onChange } }) => (
+                            <Select
+                              size="m"
+                              labelText="Table"
+                              value={watch('restaurant_outlet_table_uuid')}
+                              onChange={onChange}
+                              options={dataTable.map((el) => ({
+                                label: el.table_number,
+                                value: el.uuid,
+                              }))}
+                              placeholder="table"
+                              error={!!errors.restaurant_outlet_table_uuid}
+                            />
+                          )}
                         />
                       </div>
                     )}
                   </div>
                 </div>
-                <Button size="l" variant="secondary" fullWidth className="mt-4">
+                <Button
+                  type="submit"
+                  disabled={!isValid}
+                  size="l"
+                  variant="secondary"
+                  fullWidth
+                  className="mt-4"
+                  isLoading={loadUpdateTransaction}
+                >
                   Save
                 </Button>
-              </aside>
+              </form>
 
               <aside className={`mt-6 ${tabValueorder === 1 ? 'mb-14' : ''}`}>
                 <div className="flex items-center justify-between">
@@ -1127,7 +1230,7 @@ const TemplatesRightBar = ({ qrRef }: TemplatesRightBarProps) => {
                 <InputSearch
                   placeholder="Search product"
                   isOpen
-                  onSearch={onSearch}
+                  // onSearch={onSearch}
                   onClearSearch={onClear}
                   search=""
                 />

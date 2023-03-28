@@ -12,14 +12,12 @@ const CreateTransaction = async (
 ): Promise<Response<CreateTransactionDataResponse>> => {
   const response = await Post({
     endpoint: `/order-service/transaction/create`,
-    data: {
-      ...input,
-    },
+    data: input,
   })
 
   return {
     code: response?.code,
-    data: response?.data as any,
+    data: response?.data,
     message: response?.message,
     more_info: response?.more_info,
   }

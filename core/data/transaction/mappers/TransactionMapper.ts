@@ -4,12 +4,15 @@ import {
   Transactions,
   TransactionSummary,
 } from '@/domain/transaction/model'
+import { UpdateTransactionInput } from '@/domain/transaction/repositories/TransactionRepository'
+import { ValidationSchemaUpdateTransactionType } from '@/view/transaction/schemas/update-transaction'
 
 import {
   CreateTransactionDataResponse,
   GetTransactionDataResponse,
   GetTransactionsDataResponse,
   GetTransactionSummaryDataResponse,
+  UpdateTransactionDataResponse,
 } from '../types'
 
 // map server data to own model
@@ -29,7 +32,7 @@ export const mapToTransactionsModel = (
     staff: data.staff,
     status: data.status,
     table_number: data.table_number,
-    table_uuid: data.table_uuid,
+    table_uuid: data.restaurant_outlet_table_uuid,
     total_order: data.total_order,
     total_pax: data.total_pax,
     transaction_code: data.transaction_code,
@@ -50,7 +53,7 @@ export const mapToTransactionModel = (
   staff: data.staff,
   status: data.status,
   table_number: data.table_number,
-  table_uuid: data.table_uuid,
+  table_uuid: data.restaurant_outlet_table_uuid,
   total_order: data.total_order,
   total_pax: data.total_pax,
   transaction_code: data.transaction_code,
@@ -74,4 +77,21 @@ export const mapToTransactionSummaryModel = (
   available_capacity: data.available_capacity,
   table_capacity: data.table_capacity,
   waiting_order: data.waiting_order,
+})
+
+export const mapToUpdateTransactionModel = (
+  data: UpdateTransactionDataResponse,
+): { uuid: string; updated_at: number } => ({
+  uuid: data.uuid,
+  updated_at: data.updated_at.seconds,
+})
+
+export const mapToUpdateTransactionPayload = (
+  data: ValidationSchemaUpdateTransactionType & { transaction_uuid: string },
+): UpdateTransactionInput => ({
+  customer_name: data.customer_name,
+  restaurant_outlet_table_uuid: data.restaurant_outlet_table_uuid.value,
+  total_pax: Number(data.total_pax),
+  transaction_category: data.transaction_category.value,
+  transaction_uuid: data.transaction_uuid,
 })

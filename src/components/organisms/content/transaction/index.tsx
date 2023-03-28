@@ -248,13 +248,13 @@ const OrganismsContentsTransaction = ({
                 >
                   <div className="flex justify-center border-b pb-2">
                     <p className="text-4xl font-normal text-neutral-70">
-                      {el.table_number || 'n/a'}
+                      {el.table_number || '-'}
                     </p>
                   </div>
                   <div className="mt-2">
                     <p className="text-s-semibold text-neutral-90">Name</p>
                     <p className="text-m-regular text-neutral-90 line-clamp-1">
-                      {el.customer_name || 'n/a'}
+                      {el.customer_name || '-'}
                     </p>
                   </div>
                 </aside>

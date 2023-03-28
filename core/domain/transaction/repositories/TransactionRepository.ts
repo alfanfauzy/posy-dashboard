@@ -46,17 +46,21 @@ export interface CreateTransactionRepository extends CreateTransactionResult {
 }
 
 /**
- * DELETE
+ * UPDATE
  */
 
-// export type DeleteTransactionInput = {
-//   id: string
-// }
+export type UpdateTransactionInput = {
+  restaurant_outlet_table_uuid: string
+  transaction_category: number
+  total_pax: number
+  customer_name: string
+  transaction_uuid: string
+}
 
-// export type DeleteTransactionResult = ResultMutation<Transaction>
+export type UpdateTransactionResult = ResultMutation<
+  { uuid: string; updated_at: number } | undefined
+>
 
-// export interface DeleteTransactionRepository {
-//   deleteTransaction(
-//     input: DeleteTransactionInput,
-//   ): Promise<DeleteTransactionResult>
-// }
+export interface UpdateTransactionRepository extends UpdateTransactionResult {
+  updateTransaction(input: UpdateTransactionInput): void
+}

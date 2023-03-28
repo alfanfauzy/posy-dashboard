@@ -12,9 +12,7 @@ const UpdateOutletProductStatus = async (
 ): Promise<Response<UpdateOutletProductStatusDataResponse>> => {
   const response = await Post({
     endpoint: `/product-service/product-outlet/update-status`,
-    data: {
-      ...input,
-    },
+    data: input,
   })
 
   return {

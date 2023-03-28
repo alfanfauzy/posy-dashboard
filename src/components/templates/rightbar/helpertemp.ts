@@ -24,11 +24,11 @@ export const listCancelReason = [
 export const orderType = [
   {
     label: 'Dine in',
-    value: 'dine_in',
+    value: 0,
   },
   {
     label: 'Take away',
-    value: 'take_away',
+    value: 1,
   },
 ]
 
