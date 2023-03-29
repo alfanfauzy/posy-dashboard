@@ -27,34 +27,34 @@ variables: &build_variables
   APP_NAME: $APP_NAME
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
 
-# test:
-#   stage: test
-#   image: node:18-alpine
-#   extends: .k8s_docker_runner
-#   tags: ['pvg']
-#   before_script:
-#     - yarn install --frozen-lockfile
-#     - yarn config set cache-folder ~/.cache/yarn
-#   script:
-#     - yarn test:ci
-#     - yarn test:coverage
-#   artifacts:
-#     paths:
-#       - coverage
+test:
+  stage: test
+  image: node:18-alpine
+  extends: .k8s_docker_runner
+  tags: ['pvg']
+  before_script:
+    - yarn install --frozen-lockfile
+    - yarn config set cache-folder ~/.cache/yarn
+  script:
+    - yarn test:ci
+    - yarn test:coverage
+  artifacts:
+    paths:
+      - coverage
 
-# build:
-#   stage: build
-#   image: node:18-alpine
-#   extends: .k8s_docker_runner
-#   tags: ['pvg']
-#   before_script:
-#     - yarn install --frozen-lockfile
-#     - yarn config set cache-folder ~/.cache/yarn
-#   script:
-#     - yarn build
-#   artifacts:
-#     paths:
-#       - .next/
+build:
+  stage: build
+  image: node:18-alpine
+  extends: .k8s_docker_runner
+  tags: ['pvg']
+  before_script:
+    - yarn install --frozen-lockfile
+    - yarn config set cache-folder ~/.cache/yarn
+  script:
+    - yarn build
+  artifacts:
+    paths:
+      - .next/
 
 quality-code:
   stage: quality-code
@@ -65,8 +65,8 @@ quality-code:
     - yarn install --frozen-lockfile
     - yarn config set cache-folder ~/.cache/yarn
   script:
-    # - yarn check:prettier
-    # - yarn check:lint
+    - yarn check:prettier
+    - yarn check:lint
     - yarn check:ts
 
 build_image:
