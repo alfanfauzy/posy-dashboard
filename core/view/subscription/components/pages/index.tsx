@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import {dateFormatter} from '@/utils/dateFormatter';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import Image from 'next/image';
 import Link from 'next/link';
 import {Button, Modal} from 'posy-fnb-core';
-// import RenewSubs from 'public/images/renew-subscription.png';
-// import subsNeeded from 'public/images/subscription-needed.png';
 import React, {useLayoutEffect, useState} from 'react';
 
 const RenewSubs = require('public/images/renew-subscription.png');

@@ -1,10 +1,8 @@
 import Transition from '@/atoms/animations/transition';
 import Image from 'next/image';
 import {useRouter} from 'next/router';
-// import bgImage from 'public/images/auth-bg.png';
 import {FC, ReactNode} from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bgImage = require('public/images/auth-bg.png');
 
 const AuthLayout: FC<{children: ReactNode}> = ({children}) => {
