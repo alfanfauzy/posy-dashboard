@@ -1,15 +1,15 @@
 import Logo from '@/atoms/logo';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useForm} from '@/hooks/useForm';
+import {
+	validationSchemaCreateNewPassword,
+	ValidationSchemaCreateNewPasswordType,
+} from '@/view/auth/schemas';
 import {useRouter} from 'next/router';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import * as reactHookForm from 'react-hook-form';
 import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
-import {
-	validationSchemaCreateNewPassword,
-	ValidationSchemaCreateNewPasswordType,
-} from 'src/schemas/auth';
 
 const OrganismsFormCreateNewPassword = () => {
 	const router = useRouter();

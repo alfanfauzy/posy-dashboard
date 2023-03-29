@@ -239,7 +239,7 @@ const OrganismsContentsTransaction = ({
 									key={el.uuid}
 									onClick={() => handleSelectTrx(el.uuid)}
 									role="presentation"
-									className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-opacity-70 active:shadow-md ${generateBorderColor(
+									className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-primary-main active:shadow-md ${generateBorderColor(
 										status,
 										el.uuid,
 										selectedTrxId,

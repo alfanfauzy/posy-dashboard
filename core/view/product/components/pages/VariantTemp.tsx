@@ -1,14 +1,19 @@
+/* eslint-disable react/jsx-props-no-spreading */
+import {ValidationSchemaProductType} from '@/view/product/schemas/update-product';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import {useFieldArray, useFormContext} from 'react-hook-form';
 
 type VariantTempProps = {
 	addonIdx: number;
-	errors: any;
 };
 
-const VariantTemp = ({addonIdx, errors}: VariantTempProps) => {
-	const {control, register} = useFormContext();
+const VariantTemp = ({addonIdx}: VariantTempProps) => {
+	const {
+		control,
+		register,
+		formState: {errors},
+	} = useFormContext<ValidationSchemaProductType>();
 
 	const {fields, append} = useFieldArray({
 		control,
@@ -26,17 +31,14 @@ const VariantTemp = ({addonIdx, errors}: VariantTempProps) => {
 							{...register(
 								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_name`,
 							)}
-							// error={
-							//   errors?.addon?.length > 0 &&
-							//   errors?.addon[addonIdx]?.addon_variants?.length > 0 &&
-							//   !!errors?.addon[addonIdx]?.addon_variants[variantIdx]
-							//     ?.variant_name
-							// }
-							// helperText={
-							//   errors?.addon &&
-							//   errors?.addon[addonIdx]?.addon_variants[variantIdx]
-							//     ?.variant_name?.message
-							// }
+							error={
+								!!errors.addon?.[addonIdx]?.addon_variants?.[variantIdx]
+									?.variant_name
+							}
+							helperText={
+								errors.addon?.[addonIdx]?.addon_variants?.[variantIdx]
+									?.variant_name?.message
+							}
 						/>
 					</div>
 					<div className="w-1/2">
@@ -45,6 +47,14 @@ const VariantTemp = ({addonIdx, errors}: VariantTempProps) => {
 							{...register(
 								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_price`,
 							)}
+							error={
+								!!errors.addon?.[addonIdx]?.addon_variants?.[variantIdx]
+									?.variant_price
+							}
+							helperText={
+								errors.addon?.[addonIdx]?.addon_variants?.[variantIdx]
+									?.variant_price?.message
+							}
 						/>
 					</div>
 				</aside>

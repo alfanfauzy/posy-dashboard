@@ -14,7 +14,12 @@ export const validationSchemaProduct = z.object({
 					variant_name: z
 						.string()
 						.min(1, {message: 'Variant name must be atleast 1 characters'}),
-					variant_price: z.string(),
+					variant_price: z
+						.string()
+						.regex(/^[0-9+\-()]*$/i, {
+							message: 'Only number characters is allowed',
+						})
+						.min(1, {message: 'Variant price is required'}),
 				})
 				.array(),
 		})

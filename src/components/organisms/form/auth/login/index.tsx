@@ -4,16 +4,16 @@ import useDisclosure from '@/hooks/useDisclosure';
 import {useForm} from '@/hooks/useForm';
 import {useAppDispatch} from '@/store/hooks';
 import {onLoginSuccess} from '@/store/slices/auth';
+import {
+	validationSchemaLogin,
+	ValidationSchemaLoginType,
+} from '@/view/auth/schemas';
 import {useLoginViewModel} from '@/view/auth/view-models/LoginViewModel';
 import {useRouter} from 'next/router';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import * as reactHookForm from 'react-hook-form';
 import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
-import {
-	validationSchemaLogin,
-	ValidationSchemaLoginType,
-} from 'src/schemas/auth';
 
 const OrganismsFormLogin = () => {
 	const router = useRouter();

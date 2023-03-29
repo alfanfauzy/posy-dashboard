@@ -11,7 +11,6 @@ const Page: NextPageWithLayout = () => (
 			keywords={SEO.keywords}
 			image={SEO.image}
 		/>
-		{/* <ContainerTransaction /> */}
 		<ViewTransactionPage />
 	</>
 );

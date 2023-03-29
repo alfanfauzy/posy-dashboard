@@ -1,7 +1,7 @@
 import {SEO} from '@/constants/seo';
-import ContainerProduct from '@/containers/product';
 import MetaHeader from '@/molecules/meta-header';
 import type {NextPageWithLayout} from '@/types/index';
+import ViewProductPage from '@/view/product/components/pages';
 
 const Page: NextPageWithLayout = () => (
 	<>
@@ -11,7 +11,7 @@ const Page: NextPageWithLayout = () => (
 			keywords={SEO.keywords}
 			image={SEO.image}
 		/>
-		<ContainerProduct />
+		<ViewProductPage />
 	</>
 );
 
