@@ -370,8 +370,8 @@
 // }
 
 // export default PagesTransaction
-import React from 'react'
+import React from 'react';
 
-const index = () => <div>insdex</div>
+const index = () => <div>insdex</div>;
 
-export default index
+export default index;

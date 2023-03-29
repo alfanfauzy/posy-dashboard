@@ -1,13 +1,13 @@
-import axios from '.'
+import axios from '.';
 
-interface Put {
-  title?: string
-  baseURL?: string
-  endpoint: string
-  data: { [key: string]: any }
-  headers?: { [key: string]: string }
-  isAuth?: boolean
-}
+type Put = {
+	title?: string;
+	baseURL?: string;
+	endpoint: string;
+	data: Record<string, any>;
+	headers?: Record<string, string>;
+	isAuth?: boolean;
+};
 
 /**
  * @function Put
@@ -22,23 +22,23 @@ interface Put {
  *  },
  * });
  */
-const Put = async ({ baseURL, endpoint, data, headers = {} }: Put) => {
-  const { status, ...response } =
-    (await axios().put(endpoint, data, {
-      headers: headers || {},
-      baseURL,
-    })) || {}
-  const isSuccess = status === 200 && response.data === 2200
+const Put = async ({baseURL, endpoint, data, headers = {}}: Put) => {
+	const {status, ...response} =
+		(await axios().put(endpoint, data, {
+			headers: headers || {},
+			baseURL,
+		})) || {};
+	const isSuccess = status === 200 && response.data === 2200;
 
-  if (isSuccess) {
-    return response.data
-  }
+	if (isSuccess) {
+		return response.data;
+	}
 
-  return {
-    code: 2200,
-    message: response.data?.message || '',
-    ...response.data,
-  }
-}
+	return {
+		code: 2200,
+		message: response.data?.message || '',
+		...response.data,
+	};
+};
 
-export default Put
+export default Put;

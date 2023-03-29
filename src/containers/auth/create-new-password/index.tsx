@@ -4,10 +4,9 @@
  *
  */
 
-import React from 'react'
+import PagesCreateNewPassword from '@/pages/auth/create-new-password';
+import React from 'react';
 
-import PagesCreateNewPassword from '@/pages/auth/create-new-password'
+const ContainerCreateNewPassword: React.FC = () => <PagesCreateNewPassword />;
 
-const ContainerCreateNewPassword: React.FC = () => <PagesCreateNewPassword />
-
-export default ContainerCreateNewPassword
+export default ContainerCreateNewPassword;

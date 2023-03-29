@@ -4,10 +4,9 @@
  *
  */
 
-import React from 'react'
+import PagesForgetPassword from '@/pages/auth/forget-password';
+import React from 'react';
 
-import PagesForgetPassword from '@/pages/auth/forget-password'
+const ContainerForgetPassword: React.FC = () => <PagesForgetPassword />;
 
-const ContainerForgetPassword: React.FC = () => <PagesForgetPassword />
-
-export default ContainerForgetPassword
+export default ContainerForgetPassword;

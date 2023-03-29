@@ -1,14 +1,14 @@
-export interface CreatedAt {
-  seconds: number
-  nanos?: number
-}
+export type CreatedAt = {
+	seconds: number;
+	nanos?: number;
+};
 
-export interface UpdatedAt {
-  seconds: number
-  nanos: number
-}
+export type UpdatedAt = {
+	seconds: number;
+	nanos: number;
+};
 
-export interface Metadata {
-  created_at: CreatedAt
-  updated_at: UpdatedAt
-}
+export type Metadata = {
+	created_at: CreatedAt;
+	updated_at: UpdatedAt;
+};

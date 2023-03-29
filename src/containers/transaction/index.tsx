@@ -4,10 +4,9 @@
  *
  */
 
-import React from 'react'
+import PagesTransaction from '@/pages/transaction';
+import React from 'react';
 
-import PagesTransaction from '@/pages/transaction'
+const ContainerTransaction: React.FC = () => <PagesTransaction />;
 
-const ContainerTransaction: React.FC = () => <PagesTransaction />
-
-export default ContainerTransaction
+export default ContainerTransaction;

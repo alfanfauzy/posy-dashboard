@@ -1,38 +1,37 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query'
-import Post from 'api/post'
+import {GetCategoriesInput} from '@/domain/category/repositories/CategoryRepository';
+import {DataList, Response} from '@/domain/vo/BaseResponse';
+import {useQuery, UseQueryOptions} from '@tanstack/react-query';
+import Post from 'api/post';
 
-import { GetCategoriesInput } from '@/domain/category/repositories/CategoryRepository'
-import { DataList, Response } from '@/domain/vo/BaseResponse'
+import {GetCategoriesDataResponse} from '../types';
 
-import { GetCategoriesDataResponse } from '../types'
-
-export const GetCategoriesQueryKey = () => ['Categories/list'] as const
+export const GetCategoriesQueryKey = () => ['Categories/list'] as const;
 
 const GetCategories = async (
-  input?: GetCategoriesInput,
+	input?: GetCategoriesInput,
 ): Promise<Response<DataList<GetCategoriesDataResponse>>> => {
-  const response = await Post({
-    endpoint: `/product-service/category/get-list`,
-    data: input,
-  })
+	const response = await Post({
+		endpoint: `/product-service/category/get-list`,
+		data: input,
+	});
 
-  return {
-    code: response?.code,
-    data: response?.data as any,
-    message: response?.message,
-    more_info: response?.more_info,
-  }
-}
+	return {
+		code: response?.code,
+		data: response?.data as any,
+		message: response?.message,
+		more_info: response?.more_info,
+	};
+};
 
 export const useGetCategoriesQuery = (
-  input?: GetCategoriesInput,
-  options?: UseQueryOptions<Response<DataList<GetCategoriesDataResponse>>>,
+	input?: GetCategoriesInput,
+	options?: UseQueryOptions<Response<DataList<GetCategoriesDataResponse>>>,
 ) =>
-  useQuery<Response<DataList<GetCategoriesDataResponse>>>(
-    GetCategoriesQueryKey(),
-    () => GetCategories(input),
-    {
-      refetchOnWindowFocus: false,
-      ...options,
-    },
-  )
+	useQuery<Response<DataList<GetCategoriesDataResponse>>>(
+		GetCategoriesQueryKey(),
+		() => GetCategories(input),
+		{
+			refetchOnWindowFocus: false,
+			...options,
+		},
+	);

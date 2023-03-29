@@ -1,18 +1,17 @@
-import { UseQueryOptions } from '@tanstack/react-query'
-
-import { GetOrdersDataResponse } from '@/data/order/types'
-import { useGetOrdersUsecase } from '@/data/order/usecases/GetOrdersUsecase'
+import {GetOrdersDataResponse} from '@/data/order/types';
+import {useGetOrdersUsecase} from '@/data/order/usecases/GetOrdersUsecase';
 import {
-  GetOrdersInput,
-  GetOrdersResult,
-} from '@/domain/order/repositories/OrderRepository'
-import { DataList, Response } from '@/domain/vo/BaseResponse'
+	GetOrdersInput,
+	GetOrdersResult,
+} from '@/domain/order/repositories/OrderRepository';
+import {DataList, Response} from '@/domain/vo/BaseResponse';
+import {UseQueryOptions} from '@tanstack/react-query';
 
 export const useGetOrdersViewModel = (
-  input: GetOrdersInput,
-  options?: UseQueryOptions<Response<DataList<GetOrdersDataResponse>>>,
+	input: GetOrdersInput,
+	options?: UseQueryOptions<Response<DataList<GetOrdersDataResponse>>>,
 ): GetOrdersResult => {
-  const result = useGetOrdersUsecase(input, options)
+	const result = useGetOrdersUsecase(input, options);
 
-  return result
-}
+	return result;
+};

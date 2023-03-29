@@ -4,10 +4,9 @@
  *
  */
 
-import React from 'react'
+import PagesHistory from '@/pages/history';
+import React from 'react';
 
-import PagesHistory from '@/pages/history'
+const ContainerHistory: React.FC = () => <PagesHistory />;
 
-const ContainerHistory: React.FC = () => <PagesHistory />
-
-export default ContainerHistory
+export default ContainerHistory;

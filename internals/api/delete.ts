@@ -1,13 +1,13 @@
-import axios from '.'
+import axios from '.';
 
-interface Delete {
-  title?: string
-  baseURL?: string
-  endpoint: string
-  params?: { [key: string]: any }
-  headers?: { [key: string]: string }
-  isAuth?: boolean
-}
+type Delete = {
+	title?: string;
+	baseURL?: string;
+	endpoint: string;
+	params?: Record<string, any>;
+	headers?: Record<string, string>;
+	isAuth?: boolean;
+};
 
 /**
  * @function Delete
@@ -19,24 +19,24 @@ interface Delete {
  *  endpoint: '/internal/v1/watchlist/:id/delete',
  * });
  */
-const Delete = async ({ baseURL, endpoint, params, headers = {} }: Delete) => {
-  const { status, ...response } =
-    (await axios().delete(endpoint, {
-      headers: headers || {},
-      params,
-      baseURL,
-    })) || {}
-  const isSuccess = status === 200 && response.data === 2200
+const Delete = async ({baseURL, endpoint, params, headers = {}}: Delete) => {
+	const {status, ...response} =
+		(await axios().delete(endpoint, {
+			headers: headers || {},
+			params,
+			baseURL,
+		})) || {};
+	const isSuccess = status === 200 && response.data === 2200;
 
-  if (isSuccess) {
-    return response.data
-  }
+	if (isSuccess) {
+		return response.data;
+	}
 
-  return {
-    code: 2200,
-    message: response.data?.message || '',
-    ...response.data,
-  }
-}
+	return {
+		code: 2200,
+		message: response.data?.message || '',
+		...response.data,
+	};
+};
 
-export default Delete
+export default Delete;

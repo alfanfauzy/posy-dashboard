@@ -1,11 +1,10 @@
-import React from 'react'
-
-import ForgetPasswordForm from '@/organisms/form/auth/forget-password'
+import ForgetPasswordForm from '@/organisms/form/auth/forget-password';
+import React from 'react';
 
 const PagesForgetPassword = () => (
-  <main className="h-full">
-    <ForgetPasswordForm />
-  </main>
-)
+	<main className="h-full">
+		<ForgetPasswordForm />
+	</main>
+);
 
-export default PagesForgetPassword
+export default PagesForgetPassword;

@@ -1,11 +1,10 @@
-import React from 'react'
-
-import VerifyAccountForm from '@/organisms/modal/auth/verify-account'
+import VerifyAccountForm from '@/organisms/modal/auth/verify-account';
+import React from 'react';
 
 const PagesVerifyAccount = () => (
-  <main className="h-full">
-    <VerifyAccountForm />
-  </main>
-)
+	<main className="h-full">
+		<VerifyAccountForm />
+	</main>
+);
 
-export default PagesVerifyAccount
+export default PagesVerifyAccount;

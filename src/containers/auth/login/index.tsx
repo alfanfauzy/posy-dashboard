@@ -4,10 +4,9 @@
  *
  */
 
-import React from 'react'
+import PagesLogin from '@/pages/auth/login';
+import React from 'react';
 
-import PagesLogin from '@/pages/auth/login'
+const ContainerLogin: React.FC = () => <PagesLogin />;
 
-const ContainerLogin: React.FC = () => <PagesLogin />
-
-export default ContainerLogin
+export default ContainerLogin;

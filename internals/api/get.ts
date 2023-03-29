@@ -1,13 +1,13 @@
-import axios from '.'
+import axios from '.';
 
-interface Get {
-  baseURL?: string
-  endpoint: string
-  params?: { [key: string]: any }
-  headers?: { [key: string]: string }
-  isAuth?: boolean
-  data?: any
-}
+type Get = {
+	baseURL?: string;
+	endpoint: string;
+	params?: Record<string, any>;
+	headers?: Record<string, string>;
+	isAuth?: boolean;
+	data?: any;
+};
 
 /**
  * @function Get
@@ -19,20 +19,20 @@ interface Get {
  *  endpoint: '/internal/v1/profile',
  * });
  */
-const Get = async ({ baseURL, endpoint, data, params, headers = {} }: Get) => {
-  const { status, ...response } =
-    (await axios().get(endpoint, {
-      headers: headers || {},
-      params,
-      baseURL,
-      data,
-    })) || {}
+const Get = async ({baseURL, endpoint, data, params, headers = {}}: Get) => {
+	const {status, ...response} =
+		(await axios().get(endpoint, {
+			headers: headers || {},
+			params,
+			baseURL,
+			data,
+		})) || {};
 
-  return {
-    code: status,
-    message: response.data?.message || '',
-    ...response.data,
-  }
-}
+	return {
+		code: status,
+		message: response.data?.message || '',
+		...response.data,
+	};
+};
 
-export default Get
+export default Get;

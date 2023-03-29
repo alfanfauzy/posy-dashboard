@@ -1,11 +1,10 @@
-import React from 'react'
-
-import LoginForm from '@/organisms/form/auth/login'
+import LoginForm from '@/organisms/form/auth/login';
+import React from 'react';
 
 const PagesLogin = () => (
-  <main className="h-full">
-    <LoginForm />
-  </main>
-)
+	<main className="h-full">
+		<LoginForm />
+	</main>
+);
 
-export default PagesLogin
+export default PagesLogin;
