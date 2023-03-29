@@ -39,6 +39,6 @@
 			"@/view/*": ["core/view/*"]
 		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "public/images/**/*"],
 	"exclude": ["node_modules"]
 }
