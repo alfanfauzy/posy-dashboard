@@ -26,7 +26,7 @@ const generateBorderColor = (
 	selectedTrxId: string,
 ) => {
 	if (trxId === selectedTrxId) {
-		return 'border-2 border-neutral-100';
+		return 'border-2 border-primary-main';
 	}
 	const borderColor: Record<string, string> = {
 		WAITING_ORDER: 'border-2 border-blue-success',
@@ -239,7 +239,7 @@ const OrganismsContentsTransaction = ({
 									key={el.uuid}
 									onClick={() => handleSelectTrx(el.uuid)}
 									role="presentation"
-									className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-neutral-70 active:shadow-md ${generateBorderColor(
+									className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-opacity-70 active:shadow-md ${generateBorderColor(
 										status,
 										el.uuid,
 										selectedTrxId,
