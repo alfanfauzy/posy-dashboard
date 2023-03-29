@@ -7,6 +7,9 @@ import Link from 'next/link';
 import {Button, Modal} from 'posy-fnb-core';
 import React, {useLayoutEffect, useState} from 'react';
 
+const RenewSubs = require('public/images/renew-subscription.png');
+const subsNeeded = require('public/images/subscription-needed.png');
+
 const ViewSubscriptionPage = () => {
 	const {data} = useGetSubscriptionSectionViewModel();
 

@@ -4,7 +4,6 @@ import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {mapToUpdateTransactionPayload} from '@/data/transaction/mappers/TransactionMapper';
 import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
-import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {AddonVariant} from '@/domain/addon/model';
 import {Product} from '@/domain/product/model';
 import useDisclosure from '@/hooks/useDisclosure';
@@ -136,7 +135,6 @@ const TemplatesRightBar = ({qrRef}: TemplatesRightBarProps) => {
 		control,
 		setValue,
 		watch,
-		reset,
 		formState: {errors, isValid},
 	} = useForm({
 		mode: 'onChange',
@@ -149,7 +147,7 @@ const TemplatesRightBar = ({qrRef}: TemplatesRightBarProps) => {
 			{
 				enabled: !!selectedTrxId,
 				onSuccess: data => {
-					if (data.message === 'OK' && data.data.table_number) {
+					if (data.message === 'OK') {
 						setValue('customer_name', data?.data?.customer_name);
 						if (data?.data?.restaurant_outlet_table_uuid) {
 							setValue('restaurant_outlet_table_uuid', {
@@ -169,19 +167,10 @@ const TemplatesRightBar = ({qrRef}: TemplatesRightBarProps) => {
 								value: data?.data?.transaction_category === 'DINE_IN' ? 0 : 1,
 							});
 						}
-					} else {
-						reset({
-							customer_name: '',
-							total_pax: '',
-							restaurant_outlet_table_uuid: '' as any,
-							transaction_category: '' as any,
-						});
 					}
 				},
 			},
 		);
-
-	// console.log(watch());
 
 	const {data: dataTable, isLoading: loadTable} = useGetTablesViewModel(
 		{
@@ -265,7 +254,6 @@ const TemplatesRightBar = ({qrRef}: TemplatesRightBarProps) => {
 			onSuccess: data => {
 				if (data.message === 'OK') {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
-					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				}
 			},
 		});
