@@ -1,3 +1,8 @@
+import {
+	removeNumericFormat,
+	type NumericFormatProps,
+} from 'react-number-format';
+
 export const formatCurrency = (
 	amount: number,
 	options: {
@@ -21,3 +26,24 @@ export const formatCurrencyTextInput = (value: string) =>
 		.replace(/^[0]/, '')
 		.replace(/\D/g, '')
 		.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+const defaultFormat: Partial<NumericFormatProps> = {
+	thousandsGroupStyle: 'thousand',
+	thousandSeparator: '.',
+	decimalSeparator: ',',
+	fixedDecimalScale: true,
+	allowNegative: false,
+};
+export const removeFormatRupiah = (value: string) =>
+	removeNumericFormat(
+		value,
+		{
+			from: {start: 0, end: 0},
+			to: {start: 0, end: value.length},
+			lastValue: '',
+		},
+		{
+			prefix: '',
+			...defaultFormat,
+		},
+	);

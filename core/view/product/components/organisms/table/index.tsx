@@ -1,7 +1,7 @@
 import Table from '@/atoms/table';
 import {GetOutletProductsQueryKey} from '@/data/product/sources/GetOutletProductsQuery';
 import {Product} from '@/domain/product/model';
-import {UpdateOutletProductStatusInput} from '@/domain/product/repositories/ProductRepository';
+import {UpdateOutletProductStatusInput} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
 import {useAppDispatch, useAppSelector} from '@/store/hooks';
 import {onChangeProductId} from '@/store/slices/product';
 import {toRupiah} from '@/utils/common';

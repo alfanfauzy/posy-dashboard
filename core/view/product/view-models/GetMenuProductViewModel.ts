@@ -3,7 +3,7 @@ import {useGetMenuProductUsecase} from '@/data/product/usecases/GetMenuProductUs
 import {
 	GetMenuProductInput,
 	GetMenuProductResult,
-} from '@/domain/product/repositories/ProductRepository';
+} from '@/domain/product/repositories/GetMenuProductRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

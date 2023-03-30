@@ -1,4 +1,4 @@
-import {GetOutletProductsInput} from '@/domain/product/repositories/ProductRepository';
+import {GetOutletProductsInput} from '@/domain/product/repositories/GetOutletProductsRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import Post from 'api/post';
@@ -17,7 +17,7 @@ const GetOutletProducts = async (
 
 	return {
 		code: response?.code,
-		data: response?.data as any,
+		data: response?.data,
 		message: response?.message,
 		more_info: response?.more_info,
 	};

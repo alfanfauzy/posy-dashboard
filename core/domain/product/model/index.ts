@@ -12,7 +12,7 @@ type ProductBased = {
 	price_discount_percentage: number;
 	price_final: number;
 	cooking_duration: number;
-	categories: Categories | null;
+	categories: Categories | undefined;
 	is_available: boolean;
 	is_discount: boolean;
 	is_favourite: boolean;

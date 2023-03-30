@@ -37,7 +37,7 @@ type MenuProductResponse = {
 	price_discount_percentage: number;
 	price_final: number;
 	cooking_duration: number;
-	categories: Array<Category> | null;
+	categories: Array<Category> | undefined;
 };
 
 type GetMenuProductDataResponseBased = {

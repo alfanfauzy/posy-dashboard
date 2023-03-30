@@ -1,4 +1,4 @@
-import {GetMenuProductsInput} from '@/domain/product/repositories/ProductRepository';
+import {GetMenuProductsInput} from '@/domain/product/repositories/GetMenuProductsRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import Post from 'api/post';
@@ -18,7 +18,7 @@ const GetMenuProducts = async (
 
 	return {
 		code: response?.code,
-		data: response?.data as any,
+		data: response?.data,
 		message: response?.message,
 		more_info: response?.more_info,
 	};

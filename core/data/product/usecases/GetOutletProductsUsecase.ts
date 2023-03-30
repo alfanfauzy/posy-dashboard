@@ -1,7 +1,7 @@
 import {
 	GetOutletProductsInput,
 	GetOutletProductsResult,
-} from '@/domain/product/repositories/ProductRepository';
+} from '@/domain/product/repositories/GetOutletProductsRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

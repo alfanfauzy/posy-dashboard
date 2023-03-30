@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import {ValidationSchemaProductType} from '@/view/product/schemas/update-product';
+import InputNumeric from '@/view/common/components/atoms/input/InputNumeric';
+import {ValidationSchemaProductOutletType} from '@/view/product/schemas/update-product';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import {useFieldArray, useFormContext} from 'react-hook-form';
+import {CgTrash} from 'react-icons/cg';
 
 type VariantTempProps = {
 	addonIdx: number;
@@ -12,10 +14,11 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 	const {
 		control,
 		register,
+		watch,
 		formState: {errors},
-	} = useFormContext<ValidationSchemaProductType>();
+	} = useFormContext<ValidationSchemaProductOutletType>();
 
-	const {fields, append} = useFieldArray({
+	const {fields, append, remove} = useFieldArray({
 		control,
 		name: `addon.${addonIdx}.addon_variants`,
 	});
@@ -42,7 +45,11 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 						/>
 					</div>
 					<div className="w-1/2">
-						<Input
+						<InputNumeric
+							placeholder="1.000"
+							value={watch(
+								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_price`,
+							)}
 							labelText="Set price"
 							{...register(
 								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_price`,
@@ -57,18 +64,27 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 							}
 						/>
 					</div>
+					<CgTrash
+						size={20}
+						className="mt-5 hover:opacity-70 cursor-pointer"
+						onClick={() => remove(addonIdx)}
+					/>
 				</aside>
 			))}
 			<div className="mt-5 flex justify-end">
 				<Button
 					variant="secondary"
 					size="xs"
-					//   onClick={() => handleAddAddOnVariant(addonIdx)}
 					onClick={() =>
-						append({
-							variant_name: '',
-							variant_price: '',
-						})
+						append(
+							{
+								variant_name: '',
+								variant_price: '',
+							},
+							{
+								shouldFocus: false,
+							},
+						)
 					}
 				>
 					Add variant

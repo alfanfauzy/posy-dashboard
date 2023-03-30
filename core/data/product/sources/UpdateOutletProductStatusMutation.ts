@@ -1,5 +1,5 @@
 import {MutationOptions} from '@/data/common/types';
-import {UpdateOutletProductStatusInput} from '@/domain/product/repositories/ProductRepository';
+import {UpdateOutletProductStatusInput} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
@@ -11,14 +11,12 @@ const UpdateOutletProductStatus = async (
 ): Promise<Response<UpdateOutletProductStatusDataResponse>> => {
 	const response = await Post({
 		endpoint: `/product-service/product-outlet/update-status`,
-		data: {
-			...input,
-		},
+		data: input,
 	});
 
 	return {
 		code: response?.code,
-		data: response?.data as any,
+		data: response?.data,
 		message: response?.message,
 		more_info: response?.more_info,
 	};

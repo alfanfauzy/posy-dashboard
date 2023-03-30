@@ -1,8 +1,8 @@
 type CategoryBased = {
 	uuid: string;
 	category_name: string;
-	restaurant_uuid: string;
 	is_active: boolean;
+	restaurant_uuid?: string;
 };
 
 export type Category = CategoryBased;

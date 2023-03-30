@@ -2,7 +2,7 @@ import {MutationOptions} from '@/data/common/types';
 import {
 	UpdateOutletProductStatusInput,
 	UpdateOutletProductStatusRepository,
-} from '@/domain/product/repositories/ProductRepository';
+} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
 
 import {mapToUpdateOutletProductStatusModel} from '../mappers/ProductMapper';
 import {useUpdateOutletProductStatusMutation} from '../sources/UpdateOutletProductStatusMutation';

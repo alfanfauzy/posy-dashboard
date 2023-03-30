@@ -119,17 +119,17 @@
 		"no-shadow": "off",
 		"no-unreachable": "error",
 		"no-unused-vars": "off",
-		"no-restricted-imports": [
-			"warn",
-			{
-				"patterns": [
-					{
-						"group": ["../*"],
-						"message": "Usage of relative parent imports is not allowed."
-					}
-				]
-			}
-		],
+		// "no-restricted-imports": [
+		// 	"warn",
+		// 	{
+		// 		"patterns": [
+		// 			{
+		// 				"group": ["../*"],
+		// 				"message": "Usage of relative parent imports is not allowed."
+		// 			}
+		// 		]
+		// 	}
+		// ],
 		"react-hooks/exhaustive-deps": "warn",
 		"react-hooks/rules-of-hooks": "error",
 		"react/button-has-type": "off",

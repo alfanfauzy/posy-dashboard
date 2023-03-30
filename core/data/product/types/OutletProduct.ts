@@ -1,14 +1,35 @@
 import {Metadata, UpdatedAt} from '@/data/common/types/metadata';
-import {Category} from '@/domain/category/model';
 
-export type Product = {
+type Category = {
+	uuid: string;
+	category_name: string;
+	is_active: boolean;
+};
+
+type Product = {
 	uuid: string;
 	restaurant_uuid: string;
 	product_name: string;
 	product_description: string;
-	product_image: string;
 	product_image_url: string;
 	categories: Array<Category>;
+};
+
+type Addon = {
+	uuid: string;
+	addon_name: string;
+	is_optional: boolean;
+	can_choose_multiple: boolean;
+	min_variant: number;
+	max_variant: number;
+	variants: Array<Variant>;
+};
+
+type Variant = {
+	uuid: string;
+	variant_name: string;
+	variant_priority: number;
+	variant_price?: number;
 };
 
 type OutletProductBased = {
@@ -28,7 +49,19 @@ type OutletProductBased = {
 
 export type GetOutletProductsDataResponse = OutletProductBased;
 
+export type GetOutletProductDataResponse = {
+	detail: OutletProductBased;
+	addons: Array<Addon>;
+};
+
 export type UpdateOutletProductStatusDataResponse = {
+	success: boolean;
+	metadata: {
+		updated_at: UpdatedAt;
+	};
+};
+
+export type UpdateOutletProductDataResponse = {
 	success: boolean;
 	metadata: {
 		updated_at: UpdatedAt;

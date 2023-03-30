@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-restricted-imports */
 import useDisclosure from '@/hooks/useDisclosure';
 import React, {Key, useState} from 'react';
 
