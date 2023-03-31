@@ -82,7 +82,6 @@ const OrganismsFormEditProduct = ({
 							'price_discount_percentage',
 							mappedData.price_discount_percentage.toString(),
 						);
-						// mappedData.
 						if (mappedData?.addons) {
 							mappedData?.addons.forEach(addon => {
 								append({
@@ -173,6 +172,7 @@ const OrganismsFormEditProduct = ({
 										labelText="Product Name"
 										value={dataProduct.product_name}
 										disabled
+										placeholder="Special Fried Rice"
 									/>
 								</div>
 								<div className="mt-4">
@@ -186,13 +186,25 @@ const OrganismsFormEditProduct = ({
 												.join(', ')
 										}
 										disabled
+										placeholder="Food, Promo"
 									/>
 								</div>
 							</div>
 						</aside>
+
+						<aside className="mt-6">
+							<Textarea
+								labelText="Description"
+								value={dataProduct.product_description}
+								disabled
+								placeholder="This section is for product Fried rice is a dish of cooked rice that has been stir-fried in a wok or a frying pan and is usually mixed with other ingredients such as eggs, vegetables, seafood, or meat."
+							/>
+						</aside>
+
 						<aside className="mt-6">
 							<div>
 								<InputNumeric
+									placeholder="50.000"
 									value={watch('price')}
 									labelText="Price"
 									{...register('price', {
@@ -264,7 +276,7 @@ const OrganismsFormEditProduct = ({
 							</div>
 							<div>
 								<InputNumeric
-									placeholder="1.000"
+									placeholder="45.000"
 									value={watch('price_after_discount')}
 									labelText="Price after discount"
 									{...register('price_after_discount')}
@@ -273,14 +285,6 @@ const OrganismsFormEditProduct = ({
 									disabled
 								/>
 							</div>
-						</aside>
-
-						<aside className="mt-6">
-							<Textarea
-								labelText="Description"
-								value={dataProduct.product_description}
-								disabled
-							/>
 						</aside>
 
 						<aside className="mt-6 border-b-2 border-b-neutral-30 pb-6">
@@ -341,6 +345,7 @@ const OrganismsFormEditProduct = ({
 								</div>
 								<div className="mt-6">
 									<Input
+										placeholder="Spicy level"
 										labelText="Addon name"
 										{...register(`addon.${addonIdx}.addon_name`)}
 										error={

@@ -29,6 +29,7 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 				<aside key={variant.id} className="mt-6 flex w-full items-center gap-6">
 					<div className="w-1/2">
 						<Input
+							placeholder="Level 0"
 							fullwidth
 							labelText="Variant name"
 							{...register(
@@ -46,7 +47,7 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 					</div>
 					<div className="w-1/2">
 						<InputNumeric
-							placeholder="1.000"
+							placeholder="+5.000"
 							value={watch(
 								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_price`,
 							)}
