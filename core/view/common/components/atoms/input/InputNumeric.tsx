@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-definitions */
-/* eslint-disable react/jsx-props-no-spreading */
 import {Input} from 'posy-fnb-core';
 import {type InputProps} from 'posy-fnb-core/dist/core/Input';
 import {forwardRef} from 'react';
@@ -10,11 +8,10 @@ import {
 	useNumericFormat,
 } from 'react-number-format';
 
-interface InputNumericProps
-	extends Omit<InputProps, 'value' | 'defaultValue' | 'type' | 'size'>,
-		NumericFormatProps {
+type InputNumericProps = {
 	valueIsFormatted?: boolean;
-}
+} & Omit<InputProps, 'value' | 'defaultValue' | 'type' | 'size'> &
+	NumericFormatProps;
 
 const defaultFormat: Partial<NumericFormatProps> = {
 	thousandsGroupStyle: 'thousand',

@@ -32,4 +32,7 @@ export const orderType = [
 	},
 ];
 
-export const listOrderTabs = [{label: 'Order'}, {label: 'Payment'}];
+export const listOrderTabs = [
+	{label: 'Order', value: 0},
+	{label: 'Payment', value: 1},
+];

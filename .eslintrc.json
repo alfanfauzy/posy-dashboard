@@ -134,7 +134,7 @@
 		"react-hooks/rules-of-hooks": "error",
 		"react/button-has-type": "off",
 		"react/display-name": "warn",
-		"react/jsx-props-no-spreading": "warn",
+		"react/jsx-props-no-spreading": "off",
 		"react/jsx-boolean-value": "error",
 		"react/jsx-closing-bracket-location": "error",
 		"react/jsx-closing-tag-location": "error",

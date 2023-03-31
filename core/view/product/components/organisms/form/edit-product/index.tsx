@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/jsx-props-no-spreading */
 import {mapToOutletProductModel} from '@/data/product/mappers/ProductMapper';
 import {GetOutletProductsQueryKey} from '@/data/product/sources/GetOutletProductsQuery';
 import {useForm} from '@/hooks/useForm';
