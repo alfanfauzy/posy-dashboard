@@ -33,3 +33,12 @@ export const mapToCreateOrderManualModel = (
 		created_at: data.metadata.created_at.seconds,
 	},
 });
+
+export const mapToCreatePrintOrderToKitchenModel = (
+	data: CreateOrderManualDataResponse,
+): {uuid: string; metadata: Metadata} => ({
+	uuid: data.uuid,
+	metadata: {
+		updated_at: data.metadata.updated_at.seconds,
+	},
+});

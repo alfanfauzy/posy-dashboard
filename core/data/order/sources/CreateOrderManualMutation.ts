@@ -1,5 +1,5 @@
 import {MutationOptions} from '@/data/common/types';
-import {CreateOrderManualInput} from '@/domain/order/repositories/OrderRepository';
+import {CreateOrderManualInput} from '@/domain/order/repositories/CreateOrderManualRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
@@ -16,7 +16,7 @@ const CreateOrderManual = async (
 
 	return {
 		code: response?.code,
-		data: response?.data as any,
+		data: response?.data,
 		message: response?.message,
 		more_info: response?.more_info,
 	};

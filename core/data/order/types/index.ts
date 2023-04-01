@@ -54,3 +54,8 @@ export type CreateOrderManualDataResponse = {
 	uuid: string;
 	metadata: Metadata;
 };
+
+export type CreatePrintOrderToKitchenDataResponse = {
+	uuid: string;
+	metadata: Metadata;
+};

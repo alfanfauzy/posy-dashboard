@@ -1,4 +1,4 @@
-import {GetOrdersInput} from '@/domain/order/repositories/OrderRepository';
+import {GetOrdersInput} from '@/domain/order/repositories/GetOrdersRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import Get from 'api/get';
@@ -17,7 +17,7 @@ const GetOrders = async (
 
 	return {
 		code: response?.code,
-		data: response?.data as any,
+		data: response?.data,
 		message: response?.message,
 		more_info: response?.more_info,
 	};

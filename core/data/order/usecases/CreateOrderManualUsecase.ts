@@ -2,7 +2,7 @@ import {MutationOptions} from '@/data/common/types';
 import {
 	CreateOrderManualInput,
 	CreateOrderManualRepository,
-} from '@/domain/order/repositories/OrderRepository';
+} from '@/domain/order/repositories/CreateOrderManualRepository';
 
 import {mapToCreateOrderManualModel} from '../mappers/OrderMapper';
 import {useCreateOrderManualMutation} from '../sources/CreateOrderManualMutation';

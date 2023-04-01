@@ -215,9 +215,9 @@ const ManualSubmitOrder = ({
 		// closeSearch()
 	};
 
-	const onOpenAddVariantOrder = (product: Product) => {
+	const onOpenAddVariantOrder = (new_product: Product) => {
 		openAddVariantOrder();
-		dispatch(onChangeProduct({product}));
+		dispatch(onChangeProduct({product: new_product}));
 		dispatch(onChangeQuantity({operator: 'plus', value: 1}));
 	};
 

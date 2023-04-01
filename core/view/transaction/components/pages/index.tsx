@@ -1,7 +1,7 @@
 import useViewportListener from '@/hooks/useViewportListener';
-import OrganismsContentsTransaction from '@/organisms/content/transaction';
 import {useAppSelector} from '@/store/hooks';
-import TemplatesRightBar from '@/templates/rightbar';
+import OrganismsContentsTransaction from '@/view/transaction/components/organisms/list';
+import TransactionSidebaBar from '@/view/transaction/components/templates/transaction-sidebar';
 import React, {useRef} from 'react';
 
 const ViewTransactionPage = () => {
@@ -13,9 +13,9 @@ const ViewTransactionPage = () => {
 		<main className="flex h-full gap-4 overflow-hidden">
 			<OrganismsContentsTransaction componentRef={componentRef} />
 
-			{width > 1200 && <TemplatesRightBar qrRef={componentRef} />}
+			{width > 1200 && <TransactionSidebaBar qrRef={componentRef} />}
 			{width <= 1200 && !showSidebar && (
-				<TemplatesRightBar qrRef={componentRef} />
+				<TransactionSidebaBar qrRef={componentRef} />
 			)}
 		</main>
 	);
