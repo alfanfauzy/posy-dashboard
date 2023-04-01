@@ -1,3 +1,4 @@
+import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useForm} from '@/hooks/useForm';
 import NoOrderIcon from '@/icons/noOrder';
@@ -6,6 +7,7 @@ import {useCreatePrintOrderToKitchenViewModel} from '@/view/order/view-models/Cr
 import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
 import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/update-transaction';
 import {useGetTransactionViewModel} from '@/view/transaction/view-models/GetTransactionViewModel';
+import {useQueryClient} from '@tanstack/react-query';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {RefObject, useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
@@ -25,6 +27,7 @@ type TransactionSidebarProps = {
 };
 
 const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
+	const queryClient = useQueryClient();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const printToKitchenRef = useRef<any>();
 	const {selectedTrxId} = useAppSelector(state => state.transaction);
@@ -129,6 +132,7 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 				setTimeout(() => {
 					handlePrintToKitchen();
 				}, 100);
+				queryClient.invalidateQueries([GetOrdersQueryKey]);
 			}
 		},
 	});

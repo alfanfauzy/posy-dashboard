@@ -5,8 +5,7 @@ import Get from 'api/get';
 
 import {GetOrdersDataResponse} from '../types';
 
-export const GetOrdersQueryKey = (input: GetOrdersInput) =>
-	['Orders/list', input] as const;
+export const GetOrdersQueryKey = 'Orders/list' as const;
 
 const GetOrders = async (
 	input: GetOrdersInput,
@@ -28,7 +27,7 @@ export const useGetOrdersQuery = (
 	options?: UseQueryOptions<Response<DataList<GetOrdersDataResponse>>>,
 ) =>
 	useQuery<Response<DataList<GetOrdersDataResponse>>>(
-		GetOrdersQueryKey(input),
+		[GetOrdersQueryKey, input],
 		() => GetOrders(input),
 		{
 			refetchOnWindowFocus: false,

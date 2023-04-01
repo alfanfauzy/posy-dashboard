@@ -94,9 +94,10 @@ const ManualSubmitOrder = ({
 			onSuccess: () => {
 				closeCreateOrder();
 				dispatch(onClearOrder());
-				queryClient.invalidateQueries(
-					GetOrdersQueryKey({transaction_uuid: dataTransaction?.uuid || ''}),
-				);
+				queryClient.invalidateQueries([
+					GetOrdersQueryKey,
+					{transaction_uuid: dataTransaction?.uuid},
+				]);
 				queryClient.invalidateQueries(
 					GetTransactionQueryKey({
 						transaction_uuid: dataTransaction?.uuid || '',
