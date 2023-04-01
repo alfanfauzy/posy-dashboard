@@ -6,7 +6,7 @@ import {
 
 import {mapToCreatePrintOrderToKitchenModel} from '../mappers/OrderMapper';
 import {useCreatePrintOrderToKitchenMutation} from '../sources/CreatePrintOrderToKitchenMutation';
-import {CreatePrintOrderToKitchenDataResponse} from '../types';
+import {CreatePrintOrderToKitchenDataResponse} from '../types/CreatePrintToKitchenType';
 
 export const useCreatePrintOrderToKitchenUsecase = (
 	options?: MutationOptions<CreatePrintOrderToKitchenDataResponse>,

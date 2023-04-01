@@ -12,7 +12,7 @@ const generateTransactionCode = (code: string) => {
 };
 
 type TransactionDetailsProps = {
-	dataTransaction: Transaction;
+	dataTransaction: Transaction | undefined;
 };
 
 const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
@@ -33,17 +33,18 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 					/>
 				</div>
 
-				<div className="mt-2 flex items-center justify-between">
-					<p className="text-l-semibold">
-						ID:{' '}
-						{`${generateTransactionCode(dataTransaction?.transaction_code)}`}
-					</p>
-					<p className="text-l-semibold">
-						Time:
-						{dataTransaction &&
-							moment.unix(dataTransaction?.created_at).format('HH:mm')}
-					</p>
-				</div>
+				{dataTransaction && (
+					<div className="mt-2 flex items-center justify-between">
+						<p className="text-l-semibold">
+							ID:{' '}
+							{`${generateTransactionCode(dataTransaction?.transaction_code)}`}
+						</p>
+						<p className="text-l-semibold">
+							Time:
+							{moment.unix(dataTransaction?.created_at).format('HH:mm')}
+						</p>
+					</div>
+				)}
 				<div className="my-2 border-b border-neutral-30" />
 			</aside>
 

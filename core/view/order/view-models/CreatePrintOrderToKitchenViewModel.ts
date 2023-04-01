@@ -1,5 +1,5 @@
 import {MutationOptions} from '@/data/common/types';
-import {CreatePrintOrderToKitchenDataResponse} from '@/data/order/types';
+import {CreatePrintOrderToKitchenDataResponse} from '@/data/order/types/CreatePrintToKitchenType';
 import {useCreatePrintOrderToKitchenUsecase} from '@/data/order/usecases/CreatePrintOrderToKitchenUsecase';
 import {CreatePrintOrderToKitchenRepository} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 

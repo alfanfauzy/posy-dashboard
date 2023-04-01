@@ -1,13 +1,23 @@
 import {Metadata} from '@/domain/vo/BaseMetadata';
 
-enum OrderStatus {
-	ORDER_RECEIVED = 'Received',
-	ORDER_PROCESS = 'Processed',
-	ORDER_SERVED = 'served',
-	ORDER_CANCELLED = 'Cancelled',
-}
+type OrderStatus =
+	| 'ORDER_RECEIVED'
+	| 'ORDER_PROCESS'
+	| 'ORDER_SERVED'
+	| 'ORDER_CANCELLED';
 
-type OrderDetail = {
+type AddonInformation = {
+	addon_name: string;
+	addon_price: number;
+	addon_variants: Array<AddonVariant>;
+};
+
+type AddonVariant = {
+	variant_name: string;
+	variant_price: number;
+};
+
+export type OrderDetail = {
 	uuid: string;
 	product_uuid: string;
 	product_name: string;
@@ -21,7 +31,7 @@ type OrderDetail = {
 	price_final: number;
 	qty: number;
 	price_subtotal: number;
-	addon_information: [];
+	addon_information: Array<AddonInformation>;
 	order_note: string;
 	status: OrderStatus;
 	cancel_reason: string;

@@ -1,21 +1,37 @@
 import CountUpTimer from '@/atoms/countup';
 import {listOrderTabs} from '@/constants/order';
+import {Orders} from '@/domain/order/model';
 import {Transaction} from '@/domain/transaction/model';
 import useDisclosure from '@/hooks/useDisclosure';
-import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
+import {cva} from 'class-variance-authority';
 import {Button, Checkbox, Loading, Tabs} from 'posy-fnb-core';
-import React, {RefObject} from 'react';
+import React from 'react';
 import {AiOutlineInfoCircle} from 'react-icons/ai';
 import {CgTrash} from 'react-icons/cg';
 
 import CancelOrderModal from '../modal/CancelOrderModal';
 import PaymentSummary from '../payment-summary';
 
+const OrderStatusStyle = cva('lowercase first-letter:uppercase', {
+	variants: {
+		variant: {
+			ORDER_RECEIVED: 'text-blue-success',
+			ORDER_PROCESS: 'text-yellow-500',
+			ORDER_SERVED: 'text-green-success',
+			ORDER_CANCELLED: 'text-red-caution',
+		},
+	},
+	defaultVariants: {
+		variant: 'ORDER_RECEIVED',
+	},
+});
+
 type OrderDetailsProps = {
-	dataTransaction: Transaction;
+	dataTransaction: Transaction | undefined;
+	dataOrder: Orders | undefined;
+	loadOrder: boolean;
 	tabValueOrder: number;
 	setTabValueOrder: (value: number) => void;
-	printToKitchenRef: RefObject<HTMLDivElement>;
 	openCreateOrder: () => void;
 	showDeleteOrder: boolean;
 	toggleShowDeleteOrder: () => void;
@@ -25,20 +41,14 @@ const OrderDetails = ({
 	tabValueOrder,
 	setTabValueOrder,
 	dataTransaction,
-	printToKitchenRef,
 	openCreateOrder,
 	showDeleteOrder,
 	toggleShowDeleteOrder,
+	dataOrder,
+	loadOrder,
 }: OrderDetailsProps) => {
 	const [isOpenCancelOrder, {open: openCancelOrder, close: closeCancelOrder}] =
 		useDisclosure({initialState: false});
-
-	const {data: dataOrder, isLoading: loadOrder} = useGetOrdersViewModel(
-		{
-			transaction_uuid: dataTransaction.uuid || '',
-		},
-		{enabled: !!dataTransaction.uuid},
-	);
 
 	return (
 		<section>
@@ -87,7 +97,11 @@ const OrderDetails = ({
 								<div key={order.uuid} className="my-4 w-full">
 									<div className="flex items-center justify-between text-m-semibold">
 										<p>{`Order ${idx + 1}`}</p>
-										<p className="lowercase text-neutral-50 first-letter:uppercase">
+										<p
+											className={OrderStatusStyle({
+												variant: order.status,
+											})}
+										>
 											{order.status.split('_')[1]}
 										</p>
 									</div>
@@ -152,72 +166,6 @@ const OrderDetails = ({
 								Add New Order
 							</Button>
 						)}
-
-						<article className="hidden">
-							<section ref={printToKitchenRef} className="p-6">
-								<div className="flex items-center justify-between">
-									<p className="text-xl-semibold">Dine in</p>
-									<p className="text-xl-semibold">Print x1</p>
-								</div>
-								<div className="mt-4">
-									<div className="flex items-center justify-between">
-										<p className="text-m-semibold">Trx ID</p>
-										<p className="text-m-semibold">O150123002</p>
-									</div>
-									<div className="mt-2 flex items-center justify-between">
-										<p className="text-m-semibold">Henderson</p>
-										<p className="text-m-semibold">Table 01</p>
-									</div>
-								</div>
-								<div className="mt-4 border-b border-dotted border-neutral-40" />
-
-								<div className="mt-4 flex flex-col items-start">
-									<p className="text-xl-semibold">Order 1</p>
-									<div className="mt-5">
-										<p className="text-xxl-bold">Fried Kwetiau x1</p>
-										<p className="mt-2 text-l-regular">
-											Spicy lv 1, Extra Mushroom, Extra Eggs, Extra Baso, Extra
-											Sausages
-										</p>
-										<p className="mt-2 text-l-regular">
-											<b className="mr-1">Notes:</b>I want to make this food is
-											super spicy without any other ingredients
-										</p>
-									</div>
-									<div className="mt-5">
-										<p className="text-xxl-bold">Fried Capcay x1</p>
-										<p className="mt-2 text-l-regular">Spicy lv 3</p>
-									</div>
-									<div className="mt-5">
-										<p className="text-xxl-bold">Orange Juice x1</p>
-									</div>
-								</div>
-								<div className="mt-4 border-b border-dotted border-neutral-40" />
-
-								<div className="mt-4 flex flex-col items-start">
-									<p className="text-xl-semibold">Order 2</p>
-									<div className="mt-5">
-										<p className="text-xxl-bold">Fried Kwetiau x1</p>
-										<p className="mt-2 text-l-regular">
-											Spicy lv 1, Extra Mushroom, Extra Eggs, Extra Baso, Extra
-											Sausages
-										</p>
-										<p className="mt-2 text-l-regular">
-											<b className="mr-1">Notes:</b>I want to make this food is
-											super spicy without any other ingredients
-										</p>
-									</div>
-									<div className="mt-5">
-										<p className="text-xxl-bold">Fried Capcay x1</p>
-										<p className="mt-2 text-l-regular">Spicy lv 3</p>
-									</div>
-									<div className="mt-5">
-										<p className="text-xxl-bold">Orange Juice x1</p>
-									</div>
-								</div>
-								<div className="mt-4 border-b border-dotted border-neutral-40" />
-							</section>
-						</article>
 					</div>
 				)}
 

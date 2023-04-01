@@ -15,6 +15,7 @@ type AddonVariant = {
 type Addon = {
 	uuid: string;
 	addon_name: string;
+	addon_price: number;
 	is_optional: boolean;
 	can_choose_multiple: boolean;
 	min_variant: number;

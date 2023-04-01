@@ -2,6 +2,8 @@ import useDisclosure from '@/hooks/useDisclosure';
 import {useForm} from '@/hooks/useForm';
 import NoOrderIcon from '@/icons/noOrder';
 import {useAppSelector} from '@/store/hooks';
+import {useCreatePrintOrderToKitchenViewModel} from '@/view/order/view-models/CreatePrintOrderToKitchenViewModel';
+import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
 import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/update-transaction';
 import {useGetTransactionViewModel} from '@/view/transaction/view-models/GetTransactionViewModel';
 import {Button, Loading} from 'posy-fnb-core';
@@ -14,6 +16,7 @@ import ApplyDiscountModal from '../../organisms/modal/ApplyDiscountModal';
 import CreatePaymentModal from '../../organisms/modal/CreatePaymentModal';
 import PaymentConfirmationModal from '../../organisms/modal/PaymentConfirmationModal';
 import OrderDetails from '../../organisms/order-details';
+import PrintToKitchenReceipt from '../../organisms/receipt/PrintToKitchenReceipt';
 import TransactionDetails from '../../organisms/transaction-details';
 import ManualSubmitOrder from '../manual-order';
 
@@ -25,6 +28,7 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const printToKitchenRef = useRef<any>();
 	const {selectedTrxId} = useAppSelector(state => state.transaction);
+	const {outletId} = useAppSelector(state => state.auth);
 
 	const [tabValueorder, setTabValueOrder] = useState(0);
 
@@ -90,13 +94,22 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 						reset({
 							customer_name: '',
 							total_pax: '',
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
 							restaurant_outlet_table_uuid: '' as any,
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
 							transaction_category: '' as any,
 						});
 					}
 				},
 			},
 		);
+
+	const {data: dataOrder, isLoading: loadOrder} = useGetOrdersViewModel(
+		{
+			transaction_uuid: selectedTrxId || '',
+		},
+		{enabled: !!selectedTrxId},
+	);
 
 	const handlePrintQr = useReactToPrint({
 		content: () => qrRef.current,
@@ -105,6 +118,31 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 	const handlePrintToKitchen = useReactToPrint({
 		content: () => printToKitchenRef.current,
 	});
+
+	const {
+		createPrintOrderToKitchen,
+		data: dataPrintToKitchen,
+		isLoading: loadPrintToKitchen,
+	} = useCreatePrintOrderToKitchenViewModel({
+		onSuccess: data => {
+			if (data.message === 'OK') {
+				setTimeout(() => {
+					handlePrintToKitchen();
+				}, 100);
+			}
+		},
+	});
+
+	const onPrintToKitchen = () => {
+		{
+			dataOrder &&
+				createPrintOrderToKitchen({
+					transaction_uuid: selectedTrxId,
+					restaurant_outlet_uuid: outletId,
+					order_uuids: dataOrder.map(order => order.uuid),
+				});
+		}
+	};
 
 	return (
 		<main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
@@ -124,69 +162,69 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 				</div>
 			)}
 
-			{dataTransaction && (
-				<article className="flex h-full flex-col">
-					<section className="h-full px-4 py-6">
-						<TransactionDetails dataTransaction={dataTransaction} />
-						<div className="h-full overflow-y-auto">
-							<EditTransactionForm methods={methods} />
-							<OrderDetails
-								dataTransaction={dataTransaction}
-								printToKitchenRef={printToKitchenRef}
-								setTabValueOrder={setTabValueOrder}
-								tabValueOrder={tabValueorder}
-								openCreateOrder={openCreateOrder}
-								showDeleteOrder={showDeleteOrder}
-								toggleShowDeleteOrder={toggleShowDeleteOrder}
-							/>
-						</div>
-					</section>
+			<article className="flex h-full flex-col">
+				<section className="h-full px-4 py-6">
+					<TransactionDetails dataTransaction={dataTransaction} />
 
-					<section className="absolute bottom-0 w-full rounded-bl-2xl bg-white p-4 shadow-basic">
-						{showDeleteOrder && (
-							<Button variant="secondary" onClick={closeDeleteOrder} fullWidth>
-								<p className="whitespace-nowrap text-m-semibold">
-									Back to order details
-								</p>
+					<div className="h-full overflow-y-auto">
+						<EditTransactionForm methods={methods} />
+
+						<OrderDetails
+							dataTransaction={dataTransaction}
+							setTabValueOrder={setTabValueOrder}
+							tabValueOrder={tabValueorder}
+							openCreateOrder={openCreateOrder}
+							showDeleteOrder={showDeleteOrder}
+							toggleShowDeleteOrder={toggleShowDeleteOrder}
+							dataOrder={dataOrder}
+							loadOrder={loadOrder}
+						/>
+					</div>
+				</section>
+
+				<section className="absolute bottom-0 w-full rounded-bl-2xl bg-white p-4 shadow-basic">
+					{showDeleteOrder && (
+						<Button variant="secondary" onClick={closeDeleteOrder} fullWidth>
+							<p className="whitespace-nowrap text-m-semibold">
+								Back to order details
+							</p>
+						</Button>
+					)}
+					{!showDeleteOrder && tabValueorder === 0 && (
+						<div className="flex gap-2">
+							<Button variant="secondary" onClick={handlePrintQr}>
+								<p className="whitespace-nowrap text-m-semibold">Reprint QR</p>
 							</Button>
-						)}
-						{!showDeleteOrder && tabValueorder === 0 && (
-							<div className="flex gap-2">
-								<Button variant="secondary" onClick={handlePrintQr}>
-									<p className="whitespace-nowrap text-m-semibold">
-										Reprint QR
-									</p>
-								</Button>
-								<Button
-									variant="primary"
-									fullWidth
-									onClick={handlePrintToKitchen}
-									className="whitespace-nowrap text-m-semibold"
-								>
-									Print to Kitchen
-								</Button>
-							</div>
-						)}
-						{!showDeleteOrder && tabValueorder === 1 && (
-							<div className="flex gap-2">
-								<Button variant="secondary" onClick={openApplyDiscount}>
-									<div className="rounded-full border-[1.5px] border-neutral-90 p-0.5">
-										<AiOutlinePercentage />
-									</div>
-								</Button>
-								<Button
-									variant="primary"
-									fullWidth
-									onClick={openCreatePayment}
-									className="whitespace-nowrap text-m-semibold"
-								>
-									Payment
-								</Button>
-							</div>
-						)}
-					</section>
-				</article>
-			)}
+							<Button
+								variant="primary"
+								fullWidth
+								isLoading={loadPrintToKitchen}
+								onClick={onPrintToKitchen}
+								className="whitespace-nowrap text-m-semibold"
+							>
+								Print to Kitchen
+							</Button>
+						</div>
+					)}
+					{!showDeleteOrder && tabValueorder === 1 && (
+						<div className="flex gap-2">
+							<Button variant="secondary" onClick={openApplyDiscount}>
+								<div className="rounded-full border-[1.5px] border-neutral-90 p-0.5">
+									<AiOutlinePercentage />
+								</div>
+							</Button>
+							<Button
+								variant="primary"
+								fullWidth
+								onClick={openCreatePayment}
+								className="whitespace-nowrap text-m-semibold"
+							>
+								Payment
+							</Button>
+						</div>
+					)}
+				</section>
+			</article>
 
 			{isOpenCreatePayment && (
 				<CreatePaymentModal
@@ -215,6 +253,13 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 					closeCreateOrder={closeCreateOrder}
 					isOpenCreateOrder={isOpenCreateOrder}
 					dataTransaction={dataTransaction}
+				/>
+			)}
+
+			{dataPrintToKitchen && (
+				<PrintToKitchenReceipt
+					dataPrintToKitchen={dataPrintToKitchen}
+					printToKitchenRef={printToKitchenRef}
 				/>
 			)}
 		</main>

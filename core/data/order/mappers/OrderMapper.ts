@@ -1,7 +1,9 @@
 import {Orders} from '@/domain/order/model';
+import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {Metadata} from '@/domain/vo/BaseMetadata';
 
 import {CreateOrderManualDataResponse, GetOrdersDataResponse} from '../types';
+import {CreatePrintOrderToKitchenDataResponse} from '../types/CreatePrintToKitchenType';
 
 // map server data to own model
 export const mapToOrdersModel = (datas: Array<GetOrdersDataResponse>): Orders =>
@@ -35,10 +37,11 @@ export const mapToCreateOrderManualModel = (
 });
 
 export const mapToCreatePrintOrderToKitchenModel = (
-	data: CreateOrderManualDataResponse,
-): {uuid: string; metadata: Metadata} => ({
-	uuid: data.uuid,
-	metadata: {
-		updated_at: data.metadata.updated_at.seconds,
-	},
+	data: CreatePrintOrderToKitchenDataResponse,
+): CreatePrintOrderToKitchenModel => ({
+	customer_name: data.customer_name,
+	table_name: data.table_name,
+	transaction_category: data.transaction_category,
+	transaction_code: data.transaction_code,
+	orders: data.orders,
 });

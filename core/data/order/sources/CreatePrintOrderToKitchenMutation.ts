@@ -4,7 +4,7 @@ import {Response} from '@/domain/vo/BaseResponse';
 import {useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
 
-import {CreatePrintOrderToKitchenDataResponse} from '../types';
+import {CreatePrintOrderToKitchenDataResponse} from '../types/CreatePrintToKitchenType';
 
 const CreatePrintOrderToKitchen = async (
 	input: CreatePrintOrderToKitchenInput,

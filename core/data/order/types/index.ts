@@ -1,11 +1,21 @@
 import {Metadata} from '@/data/common/types/metadata';
 
-enum OrderStatus {
-	ORDER_RECEIVED = 'ORDER_RECEIVED',
-	ORDER_PROCESS = 'ORDER_PROCESS',
-	ORDER_SERVED = 'ORDER_SERVED',
-	ORDER_CANCELLED = 'ORDER_CANCELLED',
-}
+type OrderStatus =
+	| 'ORDER_RECEIVED'
+	| 'ORDER_PROCESS'
+	| 'ORDER_SERVED'
+	| 'ORDER_CANCELLED';
+
+type AddonInformation = {
+	addon_name: string;
+	addon_price: number;
+	addon_variants: Array<AddonVariant>;
+};
+
+type AddonVariant = {
+	variant_name: string;
+	variant_price: number;
+};
 
 type OrderDetail = {
 	uuid: string;
@@ -21,7 +31,7 @@ type OrderDetail = {
 	price_final: number;
 	qty: number;
 	price_subtotal: number;
-	addon_information: [];
+	addon_information: Array<AddonInformation>;
 	order_note: string;
 	status: OrderStatus;
 	cancel_reason: string;
@@ -51,11 +61,6 @@ type GetOrdersDataResponseBased = {
 export type GetOrdersDataResponse = GetOrdersDataResponseBased;
 
 export type CreateOrderManualDataResponse = {
-	uuid: string;
-	metadata: Metadata;
-};
-
-export type CreatePrintOrderToKitchenDataResponse = {
 	uuid: string;
 	metadata: Metadata;
 };

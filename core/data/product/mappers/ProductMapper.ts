@@ -55,6 +55,7 @@ export const mapToMenuProductModel = (
 	categories: data.detail.product.categories,
 	addons: data.addons.map(el => ({
 		uuid: el.uuid,
+		addon_price: el.addon_price,
 		addon_name: el.addon_name,
 		can_choose_multiple: el.can_choose_multiple,
 		is_optional: el.is_optional,
@@ -123,6 +124,7 @@ export const mapToOutletProductModel = (
 	addons: data.addons.map(el => ({
 		uuid: el.uuid,
 		addon_name: el.addon_name,
+		addon_price: el.addon_price,
 		can_choose_multiple: el.can_choose_multiple,
 		is_optional: el.is_optional,
 		max_variant: el.max_variant,
