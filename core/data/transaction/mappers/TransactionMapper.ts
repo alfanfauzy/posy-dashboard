@@ -4,9 +4,14 @@ import {
 	Transactions,
 	TransactionSummary,
 } from '@/domain/transaction/model';
+import {
+	CreateApplyDiscountBasedInput,
+	CreateApplyDiscountInput,
+} from '@/domain/transaction/repositories/CreateApplyDiscountRepository';
 import {PaymentSummary} from '@/domain/transaction/repositories/GetPaymentSummaryRepository';
 import {UpdateTransactionInput} from '@/domain/transaction/repositories/TransactionRepository';
 import {Metadata} from '@/domain/vo/BaseMetadata';
+import {ValidationSchemaApplyDiscountType} from '@/view/transaction/schemas/apply-discount';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
 
 import {
@@ -128,4 +133,21 @@ export const mapToPaymentSummaryModel = (
 		service_charge_percentage: data.tax_and_charge.service_charge_percentage,
 		tax_type: data.tax_and_charge.tax_type,
 	},
+});
+
+export const mapToCreateApplyDiscountModel = (
+	data: CreateCancelTransactionDataResponse,
+): {uuid: string; metadata: Metadata} => ({
+	uuid: data.uuid,
+	metadata: {
+		cancel_at: data.cancel_at.seconds,
+	},
+});
+
+export const mapToCreateApplyDiscountPayload = (
+	payload: ValidationSchemaApplyDiscountType & CreateApplyDiscountBasedInput,
+): CreateApplyDiscountInput => ({
+	discount_percentage: Number(payload.discount_percentage),
+	transaction_uuid: payload.transaction_uuid,
+	restaurant_outlet_uuid: payload.restaurant_outlet_uuid,
 });

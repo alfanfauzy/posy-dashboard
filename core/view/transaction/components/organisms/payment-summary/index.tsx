@@ -2,6 +2,7 @@ import {Orders} from '@/domain/order/model';
 import {useAppSelector} from '@/store/hooks';
 import {toRupiah} from '@/utils/common';
 import {useGetPaymentSummaryViewModel} from '@/view/transaction/view-models/GetPaymentSummaryViewModel';
+import {useRouter} from 'next/router';
 import {Loading} from 'posy-fnb-core';
 import React from 'react';
 
@@ -13,13 +14,29 @@ type PaymentSummaryProps = {
 };
 
 const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
+	const router = useRouter();
 	const {outletId} = useAppSelector(state => state.auth);
 
 	const {data: dataPayment, isLoading: loadPayment} =
-		useGetPaymentSummaryViewModel({
-			restaurant_outlet_uuid: outletId,
-			transaction_uuid,
-		});
+		useGetPaymentSummaryViewModel(
+			{
+				restaurant_outlet_uuid: outletId,
+				transaction_uuid,
+			},
+			{
+				onSuccess: data => {
+					if (data.message === 'OK') {
+						router.push({
+							query: {
+								...router.query,
+								subtotal: data.data.subtotal_price,
+								discount_percentage: data.data.discount_general_percentage,
+							},
+						});
+					}
+				},
+			},
+		);
 
 	return (
 		<div className="mb-36">
