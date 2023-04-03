@@ -137,9 +137,13 @@ const PagesTransaction = () => {
 		},
 	]);
 
-	const {data, isLoading: loadDataHistory} = useGetTransactionsViewModel(
+	const {
+		data,
+		isLoading: loadDataHistory,
+		pagination,
+	} = useGetTransactionsViewModel(
 		{
-			limit: Number(query.limit) || 1,
+			limit: Number(query.limit) || 10,
 			page: Number(query.page) || 1,
 			search: [
 				{
@@ -345,12 +349,9 @@ const PagesTransaction = () => {
 
 			<article className="mt-6">
 				<Table
+					paginationData={pagination}
 					columns={columns({handleOpenDetails})}
 					dataSource={data}
-					onChange={pagination => {
-						console.log('ada');
-						onChangeQueryParams('page', pagination.current?.toString() || '');
-					}}
 					scroll={{y: '54vh', x: 1100}}
 					loading={loadDataHistory}
 				/>

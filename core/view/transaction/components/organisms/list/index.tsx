@@ -74,7 +74,7 @@ const OrganismsContentsTransaction = ({
 			search: [
 				{
 					field: 'status',
-					value: status,
+					value: status || 'WAITING_FOOD|WAITING_PAYMENT|WAITING_ORDER',
 				},
 				{
 					field: 'keyword',
