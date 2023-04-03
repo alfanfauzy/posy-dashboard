@@ -5,6 +5,7 @@ import {
 	TransactionSummary,
 } from '@/domain/transaction/model';
 import {UpdateTransactionInput} from '@/domain/transaction/repositories/TransactionRepository';
+import {Metadata} from '@/domain/vo/BaseMetadata';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
 
 import {
@@ -14,6 +15,7 @@ import {
 	GetTransactionSummaryDataResponse,
 	UpdateTransactionDataResponse,
 } from '../types';
+import {CreateCancelTransactionDataResponse} from '../types/CreateCancelTransactionType';
 
 // map server data to own model
 export const mapToTransactionsModel = (
@@ -94,4 +96,13 @@ export const mapToUpdateTransactionPayload = (
 	total_pax: Number(data.total_pax),
 	transaction_category: data.transaction_category.value,
 	transaction_uuid: data.transaction_uuid,
+});
+
+export const mapToCreateCancelTransactionModel = (
+	data: CreateCancelTransactionDataResponse,
+): {uuid: string; metadata: Metadata} => ({
+	uuid: data.uuid,
+	metadata: {
+		cancel_at: data.cancel_at.seconds,
+	},
 });

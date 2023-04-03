@@ -31,8 +31,8 @@ const CancelOrderModal = ({isOpen, close, value}: CancelOrderModalProps) => {
 	const {createCancelOrder, isLoading} = useCreateCancelOrderViewModel({
 		onSuccess: data => {
 			if (data.message === 'OK') {
-				close();
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
+				close();
 			}
 		},
 	});

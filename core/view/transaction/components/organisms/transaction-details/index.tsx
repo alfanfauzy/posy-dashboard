@@ -1,5 +1,7 @@
 import {Transaction} from '@/domain/transaction/model';
+import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import useDisclosure from '@/hooks/useDisclosure';
+import {useAppSelector} from '@/store/hooks';
 import moment from 'moment';
 import React from 'react';
 import {CgTrash} from 'react-icons/cg';
@@ -16,21 +18,38 @@ type TransactionDetailsProps = {
 };
 
 const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
+	const {outletId} = useAppSelector(state => state.auth);
 	const [
 		isOpenCancelTransaction,
 		{open: openCancelTransaction, close: closeCancelTransaction},
-	] = useDisclosure({initialState: false});
+		{valueState, setValueState},
+	] = useDisclosure<CreateCancelTransactionInput>({initialState: false});
+
+	const onOpenCancelTransaction = (payload: CreateCancelTransactionInput) => {
+		setValueState({
+			transaction_uuid: payload.transaction_uuid,
+			restaurant_outlet_uuid: payload.restaurant_outlet_uuid,
+		});
+		openCancelTransaction();
+	};
 
 	return (
 		<section>
 			<aside>
 				<div className="flex items-center justify-between">
 					<p className="text-xxl-bold">Transaction details</p>
-					<CgTrash
-						className="cursor-pointer text-neutral-70"
-						size={20}
-						onClick={openCancelTransaction}
-					/>
+					{dataTransaction && (
+						<CgTrash
+							className="cursor-pointer text-neutral-70"
+							size={20}
+							onClick={() =>
+								onOpenCancelTransaction({
+									restaurant_outlet_uuid: outletId,
+									transaction_uuid: dataTransaction.uuid,
+								})
+							}
+						/>
+					)}
 				</div>
 
 				{dataTransaction && (
@@ -52,6 +71,7 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 				<CancelTransactionModal
 					isOpen={isOpenCancelTransaction}
 					close={closeCancelTransaction}
+					value={valueState}
 				/>
 			)}
 		</section>

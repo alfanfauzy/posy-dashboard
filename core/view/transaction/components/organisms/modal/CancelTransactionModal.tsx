@@ -1,3 +1,8 @@
+import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
+import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
+import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
+import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
+import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import {Button} from 'posy-fnb-core';
 import React from 'react';
@@ -9,12 +14,36 @@ const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 type CancelTransactionModalProps = {
 	close: () => void;
 	isOpen: boolean;
+	value: CreateCancelTransactionInput | undefined;
 };
 
 const CancelTransactionModal = ({
 	isOpen,
 	close,
+	value,
 }: CancelTransactionModalProps) => {
+	const queryClient = useQueryClient();
+
+	const {createCancelTransaction, isLoading} =
+		useCreateCancelTransactionViewModel({
+			onSuccess: data => {
+				if (data.message === 'OK') {
+					queryClient.invalidateQueries([GetTransactionsQueryKey]);
+					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+					close();
+				}
+			},
+		});
+
+	const onCancelTransaction = () => {
+		if (value) {
+			createCancelTransaction({
+				transaction_uuid: value.transaction_uuid,
+				restaurant_outlet_uuid: value.restaurant_outlet_uuid,
+			});
+		}
+	};
+
 	return (
 		<Modal open={isOpen} handleClose={close}>
 			<section className="flex w-[380px] flex-col items-center justify-center p-4">
@@ -33,7 +62,13 @@ const CancelTransactionModal = ({
 					>
 						No, Maybe Later
 					</Button>
-					<Button variant="primary" size="l" fullWidth onClick={close}>
+					<Button
+						isLoading={isLoading}
+						variant="primary"
+						size="l"
+						fullWidth
+						onClick={onCancelTransaction}
+					>
 						Delete Trx
 					</Button>
 				</div>
