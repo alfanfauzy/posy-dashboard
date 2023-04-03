@@ -4,6 +4,7 @@ import {
 	Transactions,
 	TransactionSummary,
 } from '@/domain/transaction/model';
+import {PaymentSummary} from '@/domain/transaction/repositories/GetPaymentSummaryRepository';
 import {UpdateTransactionInput} from '@/domain/transaction/repositories/TransactionRepository';
 import {Metadata} from '@/domain/vo/BaseMetadata';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
@@ -16,6 +17,7 @@ import {
 	UpdateTransactionDataResponse,
 } from '../types';
 import {CreateCancelTransactionDataResponse} from '../types/CreateCancelTransactionType';
+import {GetPaymentSummaryDataResponse} from '../types/GetPaymentSummaryType';
 
 // map server data to own model
 export const mapToTransactionsModel = (
@@ -104,5 +106,26 @@ export const mapToCreateCancelTransactionModel = (
 	uuid: data.uuid,
 	metadata: {
 		cancel_at: data.cancel_at.seconds,
+	},
+});
+
+export const mapToPaymentSummaryModel = (
+	data: GetPaymentSummaryDataResponse,
+): PaymentSummary => ({
+	discount_general_percentage: data.discount_general_percentage,
+	discount_general_price: data.discount_general_price,
+	discount_product_price: data.discount_product_price,
+	payment_price: data.payment_price,
+	subtotal_price: data.subtotal_price,
+	tax_and_charge: {
+		service_charge_price: data.tax_and_charge.service_charge_price,
+		tax_and_charge_price: data.tax_and_charge.tax_and_charge_price,
+		tax_price: data.tax_and_charge.tax_price,
+		tax_percentage: data.tax_and_charge.tax_percentage,
+		is_service_charge_taxable: data.tax_and_charge.is_service_charge_taxable,
+		is_tax: data.tax_and_charge.is_tax,
+		is_service_charge: data.tax_and_charge.is_service_charge,
+		service_charge_percentage: data.tax_and_charge.service_charge_percentage,
+		tax_type: data.tax_and_charge.tax_type,
 	},
 });

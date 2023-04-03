@@ -17,7 +17,7 @@ import {CgTrash} from 'react-icons/cg';
 import CancelOrderModal from '../modal/CancelOrderModal';
 import PaymentSummary from '../payment-summary';
 
-const OrderStatusStyle = cva('lowercase first-letter:uppercase', {
+export const OrderStatusStyle = cva('lowercase first-letter:uppercase', {
 	variants: {
 		variant: {
 			ORDER_RECEIVED: 'text-blue-success',
@@ -239,9 +239,15 @@ const OrderDetails = ({
 					</div>
 				)}
 
-				{tabValueOrder === 1 && !showDeleteOrder && dataOrder && (
-					<PaymentSummary dataOrder={dataOrder} />
-				)}
+				{tabValueOrder === 1 &&
+					!showDeleteOrder &&
+					dataOrder &&
+					dataTransaction && (
+						<PaymentSummary
+							dataOrder={dataOrder}
+							transaction_uuid={dataTransaction?.uuid}
+						/>
+					)}
 			</aside>
 
 			{isOpenCancelOrder && (
