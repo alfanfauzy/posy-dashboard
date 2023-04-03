@@ -1,8 +1,12 @@
 import CountUpTimer from '@/atoms/countup';
 import {listOrderTabs} from '@/constants/order';
+import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {Orders} from '@/domain/order/model';
 import {Transaction} from '@/domain/transaction/model';
 import useDisclosure from '@/hooks/useDisclosure';
+import {useAppSelector} from '@/store/hooks';
+import {useCreateServeOrderViewModel} from '@/view/order/view-models/CreateServeOrderViewModel';
+import {useQueryClient} from '@tanstack/react-query';
 import {cva} from 'class-variance-authority';
 import {Button, Checkbox, Loading, Tabs} from 'posy-fnb-core';
 import React from 'react';
@@ -47,8 +51,35 @@ const OrderDetails = ({
 	dataOrder,
 	loadOrder,
 }: OrderDetailsProps) => {
+	const queryClient = useQueryClient();
+	const {outletId} = useAppSelector(state => state.auth);
+
 	const [isOpenCancelOrder, {open: openCancelOrder, close: closeCancelOrder}] =
 		useDisclosure({initialState: false});
+
+	const {createServeOrder, data: dataServeOrder} = useCreateServeOrderViewModel(
+		{
+			onSuccess: data => {
+				if (data.message === 'OK') {
+					queryClient.invalidateQueries([GetOrdersQueryKey]);
+				}
+			},
+		},
+	);
+
+	const handleChangeServeOrder = (
+		order_uuid: string,
+		order_detail_uuid: string,
+		restaurant_outlet_uuid: string,
+	) => {
+		createServeOrder({
+			order_uuid,
+			order_detail_uuid,
+			restaurant_outlet_uuid,
+		});
+	};
+
+	console.log(dataServeOrder);
 
 	return (
 		<section>
@@ -110,9 +141,19 @@ const OrderDetails = ({
 											<Checkbox
 												key={orderDetail.uuid}
 												title={orderDetail.product_name}
-												onChange={() => undefined}
+												onChange={() =>
+													handleChangeServeOrder(
+														order.uuid,
+														orderDetail.uuid,
+														outletId,
+													)
+												}
 												size="m"
-												// disabled
+												disabled={
+													orderDetail.status === 'SERVED' ||
+													orderDetail.status === 'CANCEL'
+												}
+												checked={orderDetail.status === 'SERVED'}
 											/>
 										))}
 									</div>

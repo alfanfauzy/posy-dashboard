@@ -6,6 +6,8 @@ type OrderStatus =
 	| 'ORDER_SERVED'
 	| 'ORDER_CANCELLED';
 
+type OrderDetailStatus = 'RECEIVED' | 'PROCESS' | 'SERVED' | 'CANCEL';
+
 type AddonInformation = {
 	addon_name: string;
 	addon_price: number;
@@ -33,7 +35,7 @@ type OrderDetail = {
 	price_subtotal: number;
 	addon_information: Array<AddonInformation>;
 	order_note: string;
-	status: OrderStatus;
+	status: OrderDetailStatus;
 	cancel_reason: string;
 };
 

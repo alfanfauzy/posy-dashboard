@@ -160,75 +160,80 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 					</div>
 				</div>
 			)}
+
 			{loadTransaction && (
 				<div className="-mt-10 flex h-full w-full items-center justify-center">
 					<Loading size={75} />
 				</div>
 			)}
 
-			<article className="flex h-full flex-col">
-				<section className="h-full px-4 py-6">
-					<TransactionDetails dataTransaction={dataTransaction} />
+			{selectedTrxId && (
+				<article className="flex h-full flex-col">
+					<section className="h-full px-4 py-6">
+						<TransactionDetails dataTransaction={dataTransaction} />
 
-					<div className="h-full overflow-y-auto">
-						<EditTransactionForm methods={methods} />
+						<div className="h-full overflow-y-auto">
+							<EditTransactionForm methods={methods} />
 
-						<OrderDetails
-							dataTransaction={dataTransaction}
-							setTabValueOrder={setTabValueOrder}
-							tabValueOrder={tabValueorder}
-							openCreateOrder={openCreateOrder}
-							showDeleteOrder={showDeleteOrder}
-							toggleShowDeleteOrder={toggleShowDeleteOrder}
-							dataOrder={dataOrder}
-							loadOrder={loadOrder}
-						/>
-					</div>
-				</section>
-
-				<section className="absolute bottom-0 w-full rounded-bl-2xl bg-white p-4 shadow-basic">
-					{showDeleteOrder && (
-						<Button variant="secondary" onClick={closeDeleteOrder} fullWidth>
-							<p className="whitespace-nowrap text-m-semibold">
-								Back to order details
-							</p>
-						</Button>
-					)}
-					{!showDeleteOrder && tabValueorder === 0 && (
-						<div className="flex gap-2">
-							<Button variant="secondary" onClick={handlePrintQr}>
-								<p className="whitespace-nowrap text-m-semibold">Reprint QR</p>
-							</Button>
-							<Button
-								variant="primary"
-								fullWidth
-								isLoading={loadPrintToKitchen}
-								onClick={onPrintToKitchen}
-								className="whitespace-nowrap text-m-semibold"
-							>
-								Print to Kitchen
-							</Button>
+							<OrderDetails
+								dataTransaction={dataTransaction}
+								setTabValueOrder={setTabValueOrder}
+								tabValueOrder={tabValueorder}
+								openCreateOrder={openCreateOrder}
+								showDeleteOrder={showDeleteOrder}
+								toggleShowDeleteOrder={toggleShowDeleteOrder}
+								dataOrder={dataOrder}
+								loadOrder={loadOrder}
+							/>
 						</div>
-					)}
-					{!showDeleteOrder && tabValueorder === 1 && (
-						<div className="flex gap-2">
-							<Button variant="secondary" onClick={openApplyDiscount}>
-								<div className="rounded-full border-[1.5px] border-neutral-90 p-0.5">
-									<AiOutlinePercentage />
-								</div>
+					</section>
+
+					<section className="absolute bottom-0 w-full rounded-bl-2xl bg-white p-4 shadow-basic">
+						{showDeleteOrder && (
+							<Button variant="secondary" onClick={closeDeleteOrder} fullWidth>
+								<p className="whitespace-nowrap text-m-semibold">
+									Back to order details
+								</p>
 							</Button>
-							<Button
-								variant="primary"
-								fullWidth
-								onClick={openCreatePayment}
-								className="whitespace-nowrap text-m-semibold"
-							>
-								Payment
-							</Button>
-						</div>
-					)}
-				</section>
-			</article>
+						)}
+						{!showDeleteOrder && tabValueorder === 0 && (
+							<div className="flex gap-2">
+								<Button variant="secondary" onClick={handlePrintQr}>
+									<p className="whitespace-nowrap text-m-semibold">
+										Reprint QR
+									</p>
+								</Button>
+								<Button
+									variant="primary"
+									fullWidth
+									isLoading={loadPrintToKitchen}
+									onClick={onPrintToKitchen}
+									className="whitespace-nowrap text-m-semibold"
+								>
+									Print to Kitchen
+								</Button>
+							</div>
+						)}
+						{!showDeleteOrder && tabValueorder === 1 && (
+							<div className="flex gap-2">
+								<Button variant="secondary" onClick={openApplyDiscount}>
+									<div className="rounded-full border-[1.5px] border-neutral-90 p-0.5">
+										<AiOutlinePercentage />
+									</div>
+								</Button>
+								<Button
+									variant="primary"
+									fullWidth
+									onClick={openCreatePayment}
+									className="whitespace-nowrap text-m-semibold"
+								>
+									Payment
+								</Button>
+							</div>
+						)}
+					</section>
+				</article>
+			)}
 
 			{isOpenCreatePayment && (
 				<CreatePaymentModal
