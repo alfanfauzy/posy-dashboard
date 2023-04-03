@@ -5,8 +5,12 @@ type UseDisclosureType = {
 	callbacks?: {onOpen?(): void; onClose?(): void};
 };
 
-const useDisclosure = ({initialState, callbacks}: UseDisclosureType) => {
+const useDisclosure = <TData extends object>({
+	initialState,
+	callbacks,
+}: UseDisclosureType) => {
 	const [isOpen, setIsOpen] = useState(initialState);
+	const [valueState, setValueState] = useState<TData>();
 
 	const open = () => {
 		if (!isOpen) {
@@ -30,7 +34,7 @@ const useDisclosure = ({initialState, callbacks}: UseDisclosureType) => {
 		}
 	};
 
-	return [isOpen, {open, close, toggle}] as const;
+	return [isOpen, {open, close, toggle}, {valueState, setValueState}] as const;
 };
 
 export default useDisclosure;

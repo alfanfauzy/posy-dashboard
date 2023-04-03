@@ -3,6 +3,7 @@ import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/Create
 import {Metadata} from '@/domain/vo/BaseMetadata';
 
 import {CreateOrderManualDataResponse, GetOrdersDataResponse} from '../types';
+import {CreateCancelOrderDataResponse} from '../types/CreateCancelOrderType';
 import {CreatePrintOrderToKitchenDataResponse} from '../types/CreatePrintToKitchenType';
 import {CreateServeOrderDataResponse} from '../types/CreateServeOrderType';
 
@@ -49,6 +50,15 @@ export const mapToCreatePrintOrderToKitchenModel = (
 
 export const mapToCreateServeOrderModel = (
 	data: CreateServeOrderDataResponse,
+): {uuid: string; metadata: Metadata} => ({
+	uuid: data.uuid,
+	metadata: {
+		updated_at: data.metadata.updated_at.seconds,
+	},
+});
+
+export const mapToCreateCancelOrderModel = (
+	data: CreateCancelOrderDataResponse,
 ): {uuid: string; metadata: Metadata} => ({
 	uuid: data.uuid,
 	metadata: {

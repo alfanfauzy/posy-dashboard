@@ -2,6 +2,7 @@ import CountUpTimer from '@/atoms/countup';
 import {listOrderTabs} from '@/constants/order';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {Orders} from '@/domain/order/model';
+import {CreateCancelOrderInput} from '@/domain/order/repositories/CreateCancelOrderRepository';
 import {Transaction} from '@/domain/transaction/model';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useAppSelector} from '@/store/hooks';
@@ -54,18 +55,24 @@ const OrderDetails = ({
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
 
-	const [isOpenCancelOrder, {open: openCancelOrder, close: closeCancelOrder}] =
-		useDisclosure({initialState: false});
+	const [
+		isOpenCancelOrder,
+		{open: openCancelOrder, close: closeCancelOrder},
+		{setValueState, valueState},
+	] = useDisclosure<
+		Pick<
+			CreateCancelOrderInput,
+			'is_all' | 'order_detail_uuid' | 'order_uuid'
+		> & {product_name: string}
+	>({initialState: false});
 
-	const {createServeOrder, data: dataServeOrder} = useCreateServeOrderViewModel(
-		{
-			onSuccess: data => {
-				if (data.message === 'OK') {
-					queryClient.invalidateQueries([GetOrdersQueryKey]);
-				}
-			},
+	const {createServeOrder} = useCreateServeOrderViewModel({
+		onSuccess: data => {
+			if (data.message === 'OK') {
+				queryClient.invalidateQueries([GetOrdersQueryKey]);
+			}
 		},
-	);
+	});
 
 	const handleChangeServeOrder = (
 		order_uuid: string,
@@ -79,7 +86,20 @@ const OrderDetails = ({
 		});
 	};
 
-	console.log(dataServeOrder);
+	const onOpenCancelOrder = (
+		is_all: boolean,
+		order_uuid: string,
+		order_detail_uuid: string,
+		product_name: string,
+	) => {
+		setValueState({
+			is_all,
+			order_uuid,
+			order_detail_uuid,
+			product_name,
+		});
+		openCancelOrder();
+	};
 
 	return (
 		<section>
@@ -169,7 +189,9 @@ const OrderDetails = ({
 										<div
 											className="cursor-pointer text-red-accent duration-150"
 											role="presentation"
-											onClick={openCancelOrder}
+											onClick={() =>
+												onOpenCancelOrder(true, order.uuid, '', '')
+											}
 										>
 											Cancel Order
 										</div>
@@ -185,7 +207,14 @@ const OrderDetails = ({
 												</p>
 												<p
 													role="presentation"
-													onClick={openCancelOrder}
+													onClick={() =>
+														onOpenCancelOrder(
+															false,
+															order.uuid,
+															orderDetail.uuid,
+															orderDetail.product_name,
+														)
+													}
 													className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75"
 												>
 													Cancel
@@ -216,7 +245,11 @@ const OrderDetails = ({
 			</aside>
 
 			{isOpenCancelOrder && (
-				<CancelOrderModal isOpen={isOpenCancelOrder} close={closeCancelOrder} />
+				<CancelOrderModal
+					isOpen={isOpenCancelOrder}
+					close={closeCancelOrder}
+					value={valueState}
+				/>
 			)}
 		</section>
 	);
