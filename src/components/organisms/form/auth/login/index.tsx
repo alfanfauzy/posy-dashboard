@@ -10,7 +10,6 @@ import {
 } from '@/view/auth/schemas';
 import {useLoginViewModel} from '@/view/auth/view-models/LoginViewModel';
 import {useRouter} from 'next/router';
-import {useSnackbar} from 'notistack';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import * as reactHookForm from 'react-hook-form';
@@ -19,7 +18,6 @@ import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 const OrganismsFormLogin = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const {enqueueSnackbar} = useSnackbar();
 	const [showPassword, {toggle}] = useDisclosure({initialState: false});
 
 	const {
@@ -27,6 +25,7 @@ const OrganismsFormLogin = () => {
 		handleSubmit,
 		formState: {errors, isValid},
 		setValue,
+		setError,
 	} = useForm({
 		schema: validationSchemaLogin,
 	});
@@ -38,12 +37,27 @@ const OrganismsFormLogin = () => {
 				router.push('/transaction');
 			}
 		},
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		onError: (e: any) => {
-			enqueueSnackbar({
-				variant: 'error',
-				message: e?.response?.data?.more_info,
-			});
-			setValue('password', '');
+			if (e?.response?.data?.more_info === 'user not found') {
+				setValue('email', '');
+				setError(
+					'email',
+					{message: e?.response?.data?.more_info},
+					{
+						shouldFocus: true,
+					},
+				);
+			} else {
+				setValue('password', '');
+				setError(
+					'password',
+					{message: e?.response?.data?.more_info},
+					{
+						shouldFocus: true,
+					},
+				);
+			}
 		},
 	});
 
@@ -60,7 +74,7 @@ const OrganismsFormLogin = () => {
 				className="mt-10 w-full rounded-3xl p-10 shadow-basic"
 				onSubmit={handleSubmit(onSubmit)}
 			>
-				<p className="text-xxl-semibold">Hello, Welcome Back!</p>
+				<p className="text-xxl-semibold">Hello, Welcome back!</p>
 				<div className="mt-4 flex flex-col gap-4">
 					<Input
 						type="text"
@@ -90,7 +104,7 @@ const OrganismsFormLogin = () => {
 						onClick={() => router.push('forget-password')}
 						className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75"
 					>
-						Forgot Password
+						Forgot password
 					</p>
 				</div>
 				<Button

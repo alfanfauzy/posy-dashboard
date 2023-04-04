@@ -50,7 +50,7 @@ const OrganismsFormForgetPassword = () => {
 						onClick={() => router.push('login')}
 						className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75"
 					>
-						Back to Login
+						Back to login
 					</p>
 				</div>
 				<Button
