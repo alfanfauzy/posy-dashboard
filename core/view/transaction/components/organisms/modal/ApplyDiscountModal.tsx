@@ -33,7 +33,7 @@ const ApplyDiscountModal = ({
 	const {outletId} = useAppSelector(state => state.auth);
 	const {selectedTrxId} = useAppSelector(state => state.transaction);
 
-	const [price] = useState(Number(router.query.subtotal));
+	const [price] = useState(Number(router.query.subtotal) || 0);
 
 	const {
 		register,

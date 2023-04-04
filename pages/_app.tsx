@@ -11,6 +11,7 @@ import type {NextPageWithLayout} from '@/types/index';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import type {AppProps} from 'next/app';
+import {SnackbarProvider} from 'notistack';
 import {Suspense, useState} from 'react';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -33,12 +34,18 @@ const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<Provider store={store}>
-				<PersistGate persistor={persistor}>
-					<ModalWrapper />
-					{getLayout(<Component {...pageProps} />)}
-				</PersistGate>
-			</Provider>
+			<SnackbarProvider
+				maxSnack={3}
+				autoHideDuration={1500}
+				anchorOrigin={{horizontal: 'center', vertical: 'top'}}
+			>
+				<Provider store={store}>
+					<PersistGate persistor={persistor}>
+						<ModalWrapper />
+						{getLayout(<Component {...pageProps} />)}
+					</PersistGate>
+				</Provider>
+			</SnackbarProvider>
 			<ReactQueryDevtools />
 		</QueryClientProvider>
 	);

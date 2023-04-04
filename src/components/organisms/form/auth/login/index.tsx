@@ -10,6 +10,7 @@ import {
 } from '@/view/auth/schemas';
 import {useLoginViewModel} from '@/view/auth/view-models/LoginViewModel';
 import {useRouter} from 'next/router';
+import {useSnackbar} from 'notistack';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import * as reactHookForm from 'react-hook-form';
@@ -18,7 +19,17 @@ import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 const OrganismsFormLogin = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const {enqueueSnackbar} = useSnackbar();
 	const [showPassword, {toggle}] = useDisclosure({initialState: false});
+
+	const {
+		register,
+		handleSubmit,
+		formState: {errors, isValid},
+		setValue,
+	} = useForm({
+		schema: validationSchemaLogin,
+	});
 
 	const {login, isLoading: loadLogin} = useLoginViewModel({
 		onSuccess: data => {
@@ -27,14 +38,13 @@ const OrganismsFormLogin = () => {
 				router.push('/transaction');
 			}
 		},
-	});
-
-	const {
-		register,
-		handleSubmit,
-		formState: {errors},
-	} = useForm({
-		schema: validationSchemaLogin,
+		onError: (e: any) => {
+			enqueueSnackbar({
+				variant: 'error',
+				message: e?.response?.data?.more_info,
+			});
+			setValue('password', '');
+		},
 	});
 
 	const onSubmit: reactHookForm.SubmitHandler<
@@ -80,11 +90,12 @@ const OrganismsFormLogin = () => {
 						onClick={() => router.push('forget-password')}
 						className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75"
 					>
-						Forget Password
+						Forgot Password
 					</p>
 				</div>
 				<Button
 					isLoading={loadLogin}
+					disabled={!isValid}
 					variant="primary"
 					size="l"
 					fullWidth
