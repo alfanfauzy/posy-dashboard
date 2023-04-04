@@ -22,6 +22,7 @@ import {
 	UpdateTransactionDataResponse,
 } from '../types';
 import {CreateCancelTransactionDataResponse} from '../types/CreateCancelTransactionType';
+import {CreateMakePaymentDataResponse} from '../types/CreateMakePaymentType';
 import {GetPaymentSummaryDataResponse} from '../types/GetPaymentSummaryType';
 
 // map server data to own model
@@ -150,4 +151,12 @@ export const mapToCreateApplyDiscountPayload = (
 	discount_percentage: Number(payload.discount_percentage),
 	transaction_uuid: payload.transaction_uuid,
 	restaurant_outlet_uuid: payload.restaurant_outlet_uuid,
+});
+
+export const mapToCreateMakePaymentModel = (
+	data: CreateMakePaymentDataResponse,
+): {metadata: Metadata} => ({
+	metadata: {
+		updated_at: data.metadata.updated_at.seconds,
+	},
 });

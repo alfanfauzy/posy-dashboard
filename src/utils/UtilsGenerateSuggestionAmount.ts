@@ -1,19 +1,19 @@
-const toRupiah = number =>
+const toRupiah = (number: number) =>
 	new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'IDR',
 		maximumFractionDigits: 0,
 	}).format(Number(number));
 
-export const generateSuggestionAmount = amount => {
+export const generateSuggestionAmount = (amount: number): Array<number> => {
 	const splittedAmount = toRupiah(amount).slice(4).split(',');
 
 	if (amount % 100000 === 0 || splittedAmount.length > 3) {
-		return amount;
+		return [amount];
 	} else {
 		const idxAmount = splittedAmount[splittedAmount.length - 2];
 
-		const divideAmount = idxAmount / 100;
+		const divideAmount = Number(idxAmount) / 100;
 
 		const [splittedDividedAmount, selected] = divideAmount
 			.toFixed(2)
@@ -24,10 +24,10 @@ export const generateSuggestionAmount = amount => {
 		let million = 0;
 
 		if (splittedAmount.length >= 3) {
-			million = splittedAmount[0] * 1000000;
+			million = Number(splittedAmount[0]) * 1000000;
 		}
 
-		const printSuggestion = length => {
+		const printSuggestion = (length: number) => {
 			const list = [50000, 100000];
 			const arr = [];
 
@@ -35,7 +35,7 @@ export const generateSuggestionAmount = amount => {
 			for (let i = 0; i < length; i++) {
 				const amt =
 					million +
-					splittedDividedAmount[0] * hundred +
+					Number(splittedDividedAmount) * hundred +
 					list[list.length - length + i];
 				arr.push(amt);
 			}
@@ -43,10 +43,10 @@ export const generateSuggestionAmount = amount => {
 			return arr;
 		};
 
-		if (selected < 50) {
-			printSuggestion(2);
+		if (Number(selected) < 50) {
+			return printSuggestion(2);
 		} else {
-			printSuggestion(1);
+			return printSuggestion(1);
 		}
 	}
 };

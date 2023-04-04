@@ -2,6 +2,9 @@
 const nextConfig = {
 	output: 'standalone',
 	reactStrictMode: true,
+	images: {
+		domains: ['pvpapi.klikoo.co.id'],
+	},
 	rewrites() {
 		return [
 			{

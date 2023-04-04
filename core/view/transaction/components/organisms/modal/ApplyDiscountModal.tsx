@@ -11,7 +11,6 @@ import {
 import {useCreateApplyDiscountViewModel} from '@/view/transaction/view-models/CreateApplyDiscountViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
 import {Button, Input} from 'posy-fnb-core';
 import React, {useEffect, useState} from 'react';
 
@@ -28,12 +27,11 @@ const ApplyDiscountModal = ({
 	closeApplyDiscount,
 	isOpenApplyDiscount,
 }: ApplyDiscountModalProps) => {
-	const router = useRouter();
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
-	const {selectedTrxId} = useAppSelector(state => state.transaction);
+	const {selectedTrxId, payment} = useAppSelector(state => state.transaction);
 
-	const [price] = useState(Number(router.query.subtotal) || 0);
+	const [price] = useState(Number(payment.subtotal) || 0);
 
 	const {
 		register,
@@ -68,11 +66,10 @@ const ApplyDiscountModal = ({
 	};
 
 	useEffect(() => {
-		setValue('discount_percentage', router.query.discount_percentage as string);
-		const discountPrice =
-			(Number(router.query.discount_percentage) * price) / 100;
+		setValue('discount_percentage', payment.discount_percentage.toString());
+		const discountPrice = (Number(payment.discount_percentage) * price) / 100;
 		setValue('discount_price', discountPrice.toString());
-	}, [router.query.discount_percentage]);
+	}, [payment.discount_percentage]);
 
 	return (
 		<Modal

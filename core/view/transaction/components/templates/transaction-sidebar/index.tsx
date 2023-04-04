@@ -8,9 +8,8 @@ import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel
 import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/update-transaction';
 import {useGetTransactionViewModel} from '@/view/transaction/view-models/GetTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
-import {useRouter} from 'next/router';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {RefObject, useEffect, useRef, useState} from 'react';
+import React, {RefObject, useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
 import {useReactToPrint} from 'react-to-print';
 
@@ -28,16 +27,15 @@ type TransactionSidebarProps = {
 };
 
 const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
-	const router = useRouter();
 	const queryClient = useQueryClient();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const printToKitchenRef = useRef<any>();
-	const {selectedTrxId} = useAppSelector(state => state.transaction);
+	const {
+		selectedTrxId,
+		payment: {discount_percentage},
+	} = useAppSelector(state => state.transaction);
 	const {outletId} = useAppSelector(state => state.auth);
 
-	const [discountPercentage, setDiscountPercentage] = useState(
-		Number(router.query.discount_percentage),
-	);
 	const [tabValueorder, setTabValueOrder] = useState(0);
 
 	const [isOpenCreateOrder, {open: openCreateOrder, close: closeCreateOrder}] =
@@ -58,7 +56,8 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 	const [
 		isOpenPaymentConfirmation,
 		{open: openPaymentConfirmation, close: closePaymentConfirmation},
-	] = useDisclosure({initialState: false});
+		{valueState, setValueState},
+	] = useDisclosure<{total: number}>({initialState: false});
 
 	const [
 		isOpenApplyDiscount,
@@ -155,10 +154,6 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 		}
 	};
 
-	useEffect(() => {
-		setDiscountPercentage(Number(router.query.discount_percentage));
-	}, [router.query.discount_percentage]);
-
 	return (
 		<main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
 			{!selectedTrxId && (
@@ -231,7 +226,7 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 									variant="secondary"
 									onClick={openApplyDiscount}
 									className={`${
-										discountPercentage > 0 ? 'bg-secondary-border' : ''
+										discount_percentage > 0 ? 'bg-secondary-border' : ''
 									}`}
 								>
 									<div className="rounded-full border-[1.5px] border-neutral-90 p-0.5">
@@ -257,6 +252,7 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 					closeCreatePayment={closeCreatePayment}
 					isOpenCreatePayment={isOpenCreatePayment}
 					openPaymentConfirmation={openPaymentConfirmation}
+					setValueState={setValueState}
 				/>
 			)}
 
@@ -264,6 +260,7 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 				<PaymentConfirmationModal
 					closePaymentConfirmation={closePaymentConfirmation}
 					isOpenPaymentConfirmation={isOpenPaymentConfirmation}
+					valueState={valueState}
 				/>
 			)}
 
