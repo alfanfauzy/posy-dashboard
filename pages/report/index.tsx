@@ -1,7 +1,7 @@
 import {SEO} from '@/constants/seo';
 import MetaHeader from '@/molecules/meta-header';
 import type {NextPageWithLayout} from '@/types/index';
-// import ViewReportPage from '@/view/Report/components/pages';
+import ViewReportPage from '@/view/report/components/pages';
 
 const Page: NextPageWithLayout = () => (
 	<>
@@ -11,8 +11,7 @@ const Page: NextPageWithLayout = () => (
 			keywords={SEO.keywords}
 			image={SEO.image}
 		/>
-		{/* <ViewReportPage /> */}
-		<main className="mt-20 text-s-semibold bg-slate-500 text-3xl">report</main>
+		<ViewReportPage />
 	</>
 );
 

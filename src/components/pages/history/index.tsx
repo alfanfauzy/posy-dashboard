@@ -19,7 +19,7 @@ const Datepicker = dynamic(() => import('@/atoms/input/datepicker'), {
 	loading: () => <div />,
 });
 
-const generateStatus = (status: TransactionStatus) => {
+export const generateStatus = (status: TransactionStatus) => {
 	const statusColor = {
 		WAITING_ORDER: ' text-blue-success',
 		WAITING_PAYMENT: ' text-red-accent',
@@ -119,7 +119,7 @@ const columns = ({
 	},
 ];
 
-const PagesTransaction = () => {
+const PagesHistory = () => {
 	const {query} = useRouter();
 	const dispatch = useAppDispatch();
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
@@ -360,4 +360,4 @@ const PagesTransaction = () => {
 	);
 };
 
-export default PagesTransaction;
+export default PagesHistory;
