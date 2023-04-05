@@ -1,6 +1,7 @@
-import {Reports} from '@/domain/report/model';
+import {ReportSummary, Reports} from '@/domain/report/model';
 
 import {GetTransactionReportsDataResponse} from '../types/GetTransactionReportsType';
+import {GetTransactionReportSummaryDataResponse} from '../types/GetTransactionReportSummaryType';
 
 export const mapToTransactionReportsModel = (
 	datas: Array<GetTransactionReportsDataResponse>,
@@ -39,3 +40,12 @@ export const mapToTransactionReportsModel = (
 		is_paid: data.is_paid,
 		paid_at: data.paid_at.seconds,
 	}));
+
+export const mapToTransactionReportSummaryModel = (
+	data: GetTransactionReportSummaryDataResponse,
+): ReportSummary => ({
+	most_selling_product: data.most_selling_product,
+	total_price_transaction: data.total_price_transaction,
+	total_transaction: data.total_transaction,
+	total_order_qty: data.total_order_qty,
+});

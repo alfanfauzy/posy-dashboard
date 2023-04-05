@@ -35,3 +35,10 @@ export type ReportBased = {
 
 export type Reports = Array<ReportBased>;
 export type Report = ReportBased;
+
+export type ReportSummary = {
+	total_transaction: number;
+	total_price_transaction: number;
+	total_order_qty: number;
+	most_selling_product: string;
+};

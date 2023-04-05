@@ -1,13 +1,16 @@
 import InputSearch from '@/atoms/input/search';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useAppSelector} from '@/store/hooks';
+import {toRupiah} from '@/utils/common';
 import {defineds} from '@/utils/date';
 import {onChangeQueryParams} from '@/utils/UtilsChangeQueryParams';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 import React, {useState} from 'react';
 
+import {useGetTransactionReportSummaryViewModel} from '../../view-models/GetTransactionReportSummaryViewModel';
 import {useGetTransactionReportsViewModel} from '../../view-models/GetTransactionReportsViewModel';
+import ReportSummary from '../organisms/summary';
 import ReportTable from '../organisms/table';
 
 const Datepicker = dynamic(() => import('@/atoms/input/datepicker'), {
@@ -63,6 +66,35 @@ const ViewReportPage = () => {
 		},
 	);
 
+	const {data: dataSummary, isLoading: loadSummary} =
+		useGetTransactionReportSummaryViewModel(
+			{
+				limit: Number(query.limit) || 10,
+				page: Number(query.page) || 1,
+				search: [
+					// {
+					// 	field: 'status',
+					// 	value: 'PAID|CANCELLED',
+					// },
+					// {
+					// 	field: 'keyword',
+					// 	value: (query.search as string) || '',
+					// },
+					// {
+					// 	field: 'created_at',
+					// 	value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
+					// },
+					{
+						field: 'restaurant_outlet_uuid',
+						value: outletId,
+					},
+				],
+			},
+			{
+				enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+			},
+		);
+
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
 			<article>
@@ -91,6 +123,7 @@ const ViewReportPage = () => {
 						</div>
 					</div>
 				</aside>
+				<ReportSummary isLoading={loadSummary} data={dataSummary} />
 				<ReportTable
 					data={dataReports}
 					isLoading={loadDataReports}

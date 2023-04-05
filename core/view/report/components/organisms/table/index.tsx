@@ -39,16 +39,16 @@ const ReportTable = ({data, isLoading, pagination}: ReportTableProps) => {
 				paginationData={pagination}
 				columns={columns({onClickFilter: openFilter, selectedColumns})}
 				dataSource={data}
-				scroll={{y: '54vh', x: 1100}}
+				scroll={{y: '43vh', x: 1100}}
 				loading={isLoading}
 			/>
 			{isOpenFilter && (
 				<div
 					ref={refFilter}
-					className="bg-white rounded-lg p-4 shadow-xl absolute right-0 top-0"
+					className="bg-white rounded-lg p-4 shadow-basic absolute right-0 top-0 pb-10 h-[370px]"
 				>
 					<p className="text-m-semibold">Show column:</p>
-					<aside className="my-2">
+					<aside className="mt-2 overflow-y-auto h-full">
 						{defaultColumns.slice(0, defaultColumns.length - 1).map(item => (
 							<div key={item.key} className="flex items-center gap-1 -ml-4">
 								<Checkbox
