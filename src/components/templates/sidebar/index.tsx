@@ -30,9 +30,14 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 	const {width} = useViewportListener();
 	const {collapseSidebar, collapsed} = useProSidebar();
 	const dispatch = useAppDispatch();
-	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
-		state => state.auth,
-	);
+	const {
+		outletId,
+		isSubscription,
+		isLoggedIn,
+		authData: {
+			user_info: {fullname},
+		},
+	} = useAppSelector(state => state.auth);
 
 	const [outletOpt, setOutletOpt] = useState<
 		Array<{label: string; value: string}>
@@ -121,7 +126,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 							<PersonIcon height={24} width={24} />
 						</div>
 						{!collapsed && (
-							<div className="text-m-semibold line-clamp-1">Cyntia Simmons</div>
+							<div className="text-m-semibold line-clamp-1">{fullname}</div>
 						)}
 					</div>
 					{dataOutletSelection && (

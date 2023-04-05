@@ -20,7 +20,12 @@ const initialState: AuthState = {
 	showSidebar: false,
 	outletId: '',
 	authData: {
-		uuid: '',
+		user_info: {
+			email: '',
+			phone: '',
+			fullname: '',
+			user_uuid: '',
+		},
 		token: '',
 		refresh_token: '',
 		expired_at: 0,
@@ -40,7 +45,12 @@ export const AuthSlice = createSlice({
 			state.isLoggedIn = false;
 			state.outletId = '';
 			state.authData = {
-				uuid: '',
+				user_info: {
+					email: '',
+					phone: '',
+					fullname: '',
+					user_uuid: '',
+				},
 				token: '',
 				refresh_token: '',
 				expired_at: 0,

@@ -39,7 +39,7 @@ const OrganismsFormLogin = () => {
 		},
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		onError: (e: any) => {
-			if (e?.response?.data?.more_info === 'user not found') {
+			if (e?.response?.data?.message === 'User not found') {
 				setValue('email', '');
 				setError(
 					'email',
