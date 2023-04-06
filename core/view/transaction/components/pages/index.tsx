@@ -5,6 +5,7 @@ import TransactionSidebaBar from '@/view/transaction/components/templates/transa
 import React, {useRef} from 'react';
 
 const ViewTransactionPage = () => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const componentRef = useRef<any>();
 	const {width} = useViewportListener();
 	const {showSidebar} = useAppSelector(state => state.auth);

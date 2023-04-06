@@ -1,8 +1,8 @@
 import {SEO} from '@/constants/seo';
-import ContainerVerifyAccount from '@/containers/auth/verify-account';
 import MetaHeader from '@/molecules/meta-header';
 import AuthLayout from '@/templates/layout/auth-layout';
 import type {NextPageWithLayout} from '@/types/index';
+import PagesVerifyAccount from '@/view/auth/components/pages/verify-account';
 
 const Page: NextPageWithLayout = () => (
 	<>
@@ -12,7 +12,7 @@ const Page: NextPageWithLayout = () => (
 			keywords={SEO.keywords}
 			image={SEO.image}
 		/>
-		<ContainerVerifyAccount />
+		<PagesVerifyAccount />
 	</>
 );
 

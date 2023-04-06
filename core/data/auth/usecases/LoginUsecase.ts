@@ -2,9 +2,9 @@ import {MutationOptions} from '@/data/common/types';
 import {
 	LoginInput,
 	LoginRepository,
-} from '@/domain/auth/repositories/AuthRepository';
+} from '@/domain/auth/repositories/LoginRepository';
 
-import {mapToLoginModel} from '../mappers/LoginMapper';
+import {mapToLoginModel} from '../mappers/AuthMapper';
 import {useLoginMutation} from '../sources/LoginMutation';
 import {LoginDataResponse} from '../types';
 

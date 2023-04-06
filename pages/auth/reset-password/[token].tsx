@@ -1,21 +1,21 @@
 import {SEO} from '@/constants/seo';
 import MetaHeader from '@/molecules/meta-header';
-import AuthLayout from '@/templates/layout/auth-layout';
+import PlainLayout from '@/templates/layout/plain-layout';
 import type {NextPageWithLayout} from '@/types/index';
-import PagesForgetPassword from '@/view/auth/components/pages/forget-password';
+import PagesCreateNewPassword from '@/view/auth/components/pages/reset-password';
 
 const Page: NextPageWithLayout = () => (
 	<>
 		<MetaHeader
-			title="Posy Resto - Forgot Password"
+			title="Posy Resto - Create New Password"
 			description={SEO.description}
 			keywords={SEO.keywords}
 			image={SEO.image}
 		/>
-		<PagesForgetPassword />
+		<PagesCreateNewPassword />
 	</>
 );
 
-Page.getLayout = page => <AuthLayout>{page}</AuthLayout>;
+Page.getLayout = page => <PlainLayout>{page}</PlainLayout>;
 
 export default Page;

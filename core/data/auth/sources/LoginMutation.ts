@@ -1,5 +1,5 @@
 import {MutationOptions} from '@/data/common/types';
-import {LoginInput} from '@/domain/auth/repositories/AuthRepository';
+import {LoginInput} from '@/domain/auth/repositories/LoginRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
@@ -16,7 +16,7 @@ const Login = async (
 
 	return {
 		code: response?.code,
-		data: response?.data as any,
+		data: response?.data,
 		message: response?.message,
 		more_info: response?.more_info,
 	};

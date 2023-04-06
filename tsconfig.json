@@ -27,7 +27,7 @@
 			"@/containers/*": ["src/containers/*"],
 			"@/atoms/*": ["src/components/atoms/*"],
 			"@/molecules/*": ["src/components/molecules/*"],
-			"@/organisms/*": ["src/components/organisms/*"],
+			"@/organisms/*": ["core/view/auth/components/organisms/*"],
 			"@/pages/*": ["src/components/pages/*"],
 			"@/templates/*": ["src/components/templates/*"],
 			"@/constants/*": ["src/constants/*"],

@@ -1,7 +1,6 @@
 import InputSearch from '@/atoms/input/search';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useAppSelector} from '@/store/hooks';
-import {toRupiah} from '@/utils/common';
 import {defineds} from '@/utils/date';
 import {onChangeQueryParams} from '@/utils/UtilsChangeQueryParams';
 import dynamic from 'next/dynamic';
@@ -43,10 +42,10 @@ const ViewReportPage = () => {
 			limit: Number(query.limit) || 10,
 			page: Number(query.page) || 1,
 			search: [
-				// {
-				// 	field: 'status',
-				// 	value: 'PAID|CANCELLED',
-				// },
+				{
+					field: 'status',
+					value: 'PAID|CANCELLED',
+				},
 				// {
 				// 	field: 'keyword',
 				// 	value: (query.search as string) || '',
@@ -72,10 +71,10 @@ const ViewReportPage = () => {
 				limit: Number(query.limit) || 10,
 				page: Number(query.page) || 1,
 				search: [
-					// {
-					// 	field: 'status',
-					// 	value: 'PAID|CANCELLED',
-					// },
+					{
+						field: 'status',
+						value: 'PAID|CANCELLED',
+					},
 					// {
 					// 	field: 'keyword',
 					// 	value: (query.search as string) || '',

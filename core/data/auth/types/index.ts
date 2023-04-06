@@ -1,3 +1,5 @@
+import {Metadata} from '@/data/common/types/metadata';
+
 export type LoginDataResponse = {
 	user_info: {
 		user_uuid: string;
@@ -11,4 +13,13 @@ export type LoginDataResponse = {
 		seconds: number;
 		nanos: number;
 	};
+};
+
+export type RequestResetPasswordDataResponse = {
+	success: boolean;
+	metadata: Metadata;
+};
+
+export type VerifyTokenDataResponse = {
+	is_valid: boolean;
 };

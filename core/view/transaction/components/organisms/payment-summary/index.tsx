@@ -15,7 +15,9 @@ type PaymentSummaryProps = {
 
 const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 	const dispatch = useAppDispatch();
-	const {outletId} = useAppSelector(state => state.auth);
+	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
+		state => state.auth,
+	);
 
 	const {data: dataPayment, isLoading: loadPayment} =
 		useGetPaymentSummaryViewModel(
@@ -24,6 +26,7 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 				transaction_uuid,
 			},
 			{
+				enabled: outletId.length > 0 && isSubscription && isLoggedIn,
 				onSuccess: data => {
 					if (data.message === 'OK') {
 						dispatch(
