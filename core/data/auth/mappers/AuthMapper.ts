@@ -1,10 +1,12 @@
 import {Login} from '@/domain/auth/model';
 import {RequestResetPassword} from '@/domain/auth/repositories/RequestResetPasswordRepository';
+import {ResetPassword} from '@/domain/auth/repositories/ResetPasswordRepository';
 import {VerifyToken} from '@/domain/auth/repositories/VerifyTokenRepository';
 
 import {
 	LoginDataResponse,
 	RequestResetPasswordDataResponse,
+	ResetPasswordDataResponse,
 	VerifyTokenDataResponse,
 } from '../types';
 
@@ -28,4 +30,10 @@ export const mapToVerifyTokenModel = (
 	data: VerifyTokenDataResponse,
 ): VerifyToken => ({
 	is_valid: data.is_valid,
+});
+
+export const mapToResetPasswordModel = (
+	data: ResetPasswordDataResponse,
+): ResetPassword => ({
+	success: data.success,
 });

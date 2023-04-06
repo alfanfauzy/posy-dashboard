@@ -11,7 +11,7 @@ const VerifyToken = async (
 	input: VerifyTokenInput,
 ): Promise<Response<VerifyTokenDataResponse>> => {
 	const response = await Get({
-		endpoint: `/user-service/v1/user/forgot-password/verify/${input.token}}`,
+		endpoint: `/user-service/v1/user/forgot-password/verify/${input.token}`,
 	});
 
 	return {

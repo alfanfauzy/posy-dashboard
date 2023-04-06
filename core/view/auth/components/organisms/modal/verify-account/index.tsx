@@ -24,7 +24,7 @@ const OrganismsFormVerifyAccount = () => {
 					size="l"
 					fullWidth
 					className="mt-6"
-					onClick={() => router.push('create-new-password')}
+					onClick={() => router.push('login')}
 				>
 					Ok
 				</Button>

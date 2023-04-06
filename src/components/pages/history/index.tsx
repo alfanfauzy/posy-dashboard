@@ -21,8 +21,8 @@ const Datepicker = dynamic(() => import('@/atoms/input/datepicker'), {
 
 export const generateStatus = (status: TransactionStatus) => {
 	const statusColor = {
-		WAITING_ORDER: ' text-blue-success',
-		WAITING_PAYMENT: ' text-red-accent',
+		WAITING_ORDER: 'text-blue-success',
+		WAITING_PAYMENT: 'text-red-accent',
 		WAITING_FOOD: 'text-yellow-500',
 		PAID: 'text-green-success',
 		CANCELLED: 'text-red-accent',

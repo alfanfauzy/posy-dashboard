@@ -5,7 +5,9 @@ import {
 	validationSchemaCreateNewPassword,
 	ValidationSchemaCreateNewPasswordType,
 } from '@/view/auth/schemas';
+import {useResetPasswordViewModel} from '@/view/auth/view-models/ResetPasswordViewModel';
 import {useRouter} from 'next/router';
+import {useSnackbar} from 'notistack';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import * as reactHookForm from 'react-hook-form';
@@ -13,6 +15,7 @@ import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 
 const OrganismsFormCreateNewPassword = () => {
 	const router = useRouter();
+	const {enqueueSnackbar} = useSnackbar();
 	const [showPassword, {toggle: toggleShowPassword}] = useDisclosure({
 		initialState: false,
 	});
@@ -22,15 +25,33 @@ const OrganismsFormCreateNewPassword = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: {errors},
+		formState: {errors, isValid},
 	} = useForm({
+		mode: 'onChange',
 		schema: validationSchemaCreateNewPassword,
+	});
+
+	const {resetPassword, isLoading} = useResetPasswordViewModel({
+		onSuccess: data => {
+			if (data.data.success) {
+				enqueueSnackbar({
+					message: 'Password has been reset',
+					variant: 'success',
+				});
+				setTimeout(() => {
+					router.push('/login');
+				}, 1500);
+			}
+		},
 	});
 
 	const onSubmit: reactHookForm.SubmitHandler<
 		ValidationSchemaCreateNewPasswordType
-	> = () => {
-		router.push('verify-account');
+	> = form => {
+		resetPassword({
+			...form,
+			token: router.query.token as string,
+		});
 	};
 
 	return (
@@ -76,12 +97,14 @@ const OrganismsFormCreateNewPassword = () => {
 								<AiOutlineEye onClick={toggleShowConfirmPassword} />
 							)
 						}
-						{...register('confirmPassword')}
-						error={!!errors?.confirmPassword}
-						helperText={errors?.confirmPassword?.message}
+						{...register('confirm_password')}
+						error={!!errors?.confirm_password}
+						helperText={errors?.confirm_password?.message}
 					/>
 				</div>
 				<Button
+					disabled={!isValid}
+					isLoading={isLoading}
 					variant="primary"
 					size="l"
 					fullWidth

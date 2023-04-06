@@ -23,3 +23,7 @@ export type RequestResetPasswordDataResponse = {
 export type VerifyTokenDataResponse = {
 	is_valid: boolean;
 };
+
+export type ResetPasswordDataResponse = {
+	success: boolean;
+};
