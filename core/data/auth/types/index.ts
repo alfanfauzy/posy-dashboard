@@ -27,3 +27,7 @@ export type VerifyTokenDataResponse = {
 export type ResetPasswordDataResponse = {
 	success: boolean;
 };
+
+export type LogoutDataResponse = {
+	success: boolean;
+};

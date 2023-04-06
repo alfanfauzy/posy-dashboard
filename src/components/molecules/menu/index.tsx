@@ -19,7 +19,7 @@ const MoleculesMenu = ({item, collapse}: MoleculesMenuProps) => {
 		push(`/${path}`);
 	};
 
-	const firstPath = asPath.split('/')[1];
+	const [, firstPath] = asPath.split('/');
 
 	return (
 		<Menu key={item.path} className={`w-full py-1 ${!collapse ? 'px-6' : ''}`}>
@@ -54,7 +54,6 @@ const MoleculesMenu = ({item, collapse}: MoleculesMenuProps) => {
 					}`}
 					icon={item.icon}
 					onClick={() => linkTo(item.path)}
-					// onClick={item.path === 'login' ? handleLogout : () => undefined}
 				>
 					<p>{item.title}</p>
 				</MenuItem>

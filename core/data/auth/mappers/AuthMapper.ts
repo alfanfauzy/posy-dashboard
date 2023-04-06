@@ -1,10 +1,12 @@
 import {Login} from '@/domain/auth/model';
+import {Logout} from '@/domain/auth/repositories/LogoutRepository';
 import {RequestResetPassword} from '@/domain/auth/repositories/RequestResetPasswordRepository';
 import {ResetPassword} from '@/domain/auth/repositories/ResetPasswordRepository';
 import {VerifyToken} from '@/domain/auth/repositories/VerifyTokenRepository';
 
 import {
 	LoginDataResponse,
+	LogoutDataResponse,
 	RequestResetPasswordDataResponse,
 	ResetPasswordDataResponse,
 	VerifyTokenDataResponse,
@@ -35,5 +37,9 @@ export const mapToVerifyTokenModel = (
 export const mapToResetPasswordModel = (
 	data: ResetPasswordDataResponse,
 ): ResetPassword => ({
+	success: data.success,
+});
+
+export const mapToLogoutModel = (data: LogoutDataResponse): Logout => ({
 	success: data.success,
 });

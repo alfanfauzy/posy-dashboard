@@ -13,6 +13,7 @@ import {
 	setRestaurantOutletId,
 	setShowSidebar,
 } from '@/store/slices/auth';
+import {useLogoutViewModel} from '@/view/auth/view-models/LogoutViewModel';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {Select} from 'antd';
 import {useRouter} from 'next/router';
@@ -35,7 +36,8 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 		isSubscription,
 		isLoggedIn,
 		authData: {
-			user_info: {fullname},
+			user_info: {fullname, user_uuid},
+			token,
 		},
 	} = useAppSelector(state => state.auth);
 
@@ -69,11 +71,22 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 		dispatch(setRestaurantOutletId(e));
 	};
 
+	const {logout} = useLogoutViewModel({
+		onSuccess: data => {
+			if (data.data.success) {
+				router.push('auth/login');
+				setTimeout(() => {
+					dispatch(onLogout());
+				}, 500);
+			}
+		},
+	});
+
 	const handleLogout = () => {
-		router.push('auth/login');
-		setTimeout(() => {
-			dispatch(onLogout());
-		}, 500);
+		logout({
+			token,
+			user_uuid,
+		});
 	};
 
 	return (
