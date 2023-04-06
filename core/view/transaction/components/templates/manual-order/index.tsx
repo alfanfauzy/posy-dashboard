@@ -452,6 +452,7 @@ const ManualSubmitOrder = ({
 						<Button
 							variant="primary"
 							isLoading={loadCreateOrderManual}
+							disabled={order.length === 0}
 							onClick={onSubmitOrder}
 							fullWidth
 						>

@@ -157,7 +157,7 @@ const OrderDetails = ({
 										</p>
 									</div>
 									<div className="mt-2 w-full">
-										{order.order_detail.map(orderDetail => (
+										{order?.order_detail?.map(orderDetail => (
 											<Checkbox
 												key={orderDetail.uuid}
 												title={orderDetail.product_name}
@@ -169,10 +169,7 @@ const OrderDetails = ({
 													)
 												}
 												size="m"
-												disabled={
-													orderDetail.status === 'SERVED' ||
-													orderDetail.status === 'CANCEL'
-												}
+												disabled={orderDetail.status !== 'PROCESS'}
 												checked={orderDetail.status === 'SERVED'}
 											/>
 										))}
@@ -197,7 +194,7 @@ const OrderDetails = ({
 										</div>
 									</div>
 									<div className="mt-2 w-full">
-										{order.order_detail.map(orderDetail => (
+										{order.order_detail?.map(orderDetail => (
 											<div
 												key={orderDetail.uuid}
 												className="my-2 flex items-center justify-between"

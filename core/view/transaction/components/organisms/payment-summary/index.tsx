@@ -58,7 +58,7 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 						</p>
 					</div>
 					<div className="mt-2 flex w-full flex-col gap-2">
-						{order.order_detail.map(orderDetail => (
+						{order.order_detail?.map(orderDetail => (
 							<div key={orderDetail.uuid} className="flex justify-between">
 								<p className="flex-1 text-m-regular">
 									{orderDetail.product_name} x{orderDetail.qty}

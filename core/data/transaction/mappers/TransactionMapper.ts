@@ -8,6 +8,8 @@ import {
 	CreateApplyDiscountBasedInput,
 	CreateApplyDiscountInput,
 } from '@/domain/transaction/repositories/CreateApplyDiscountRepository';
+import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
+import {Receipt} from '@/domain/transaction/repositories/CreatePrintReceiptRepository';
 import {PaymentSummary} from '@/domain/transaction/repositories/GetPaymentSummaryRepository';
 import {UpdateTransactionInput} from '@/domain/transaction/repositories/TransactionRepository';
 import {Metadata} from '@/domain/vo/BaseMetadata';
@@ -23,6 +25,7 @@ import {
 } from '../types';
 import {CreateCancelTransactionDataResponse} from '../types/CreateCancelTransactionType';
 import {CreateMakePaymentDataResponse} from '../types/CreateMakePaymentType';
+import {CreatePrintReceiptDataResponse} from '../types/CreatePrintReceiptType';
 import {GetPaymentSummaryDataResponse} from '../types/GetPaymentSummaryType';
 
 // map server data to own model
@@ -155,8 +158,63 @@ export const mapToCreateApplyDiscountPayload = (
 
 export const mapToCreateMakePaymentModel = (
 	data: CreateMakePaymentDataResponse,
-): {metadata: Metadata} => ({
+): MakePayment => ({
+	paid_amount: data.paid_amount,
+	payment_method: data.payment_method,
+	payment_method_category: data.payment_method_category,
+	success: data.success,
+	total_amount: data.total_amount,
 	metadata: {
 		updated_at: data.metadata.updated_at.seconds,
 	},
+	transaction_code: data.transaction_code,
+});
+
+export const mapToReceiptModel = (
+	data: CreatePrintReceiptDataResponse,
+): Receipt => ({
+	logo_image_url: data.logo_image_url,
+	restaurant_code: data.restaurant_code,
+	restaurant_name: data.restaurant_name,
+	restaurant_outlet_code: data.restaurant_outlet_code,
+	transaction_category: data.transaction_category,
+	table_number: data.table_number,
+	total_pax: data.total_pax,
+	transaction_code: data.transaction_code,
+	customer_name: data.customer_name,
+	cashier_by: data.cashier_by,
+	served_by: data.served_by,
+	created_at: data.created_at.seconds,
+	paid_at: data.paid_at.seconds,
+	items: data.items,
+	paid_amount: data.paid_amount,
+	change_amount: data.change_amount,
+	payment_method_uuid: data.payment_method_uuid,
+	payment_method_name: data.payment_method_name,
+	payment_method_category_uuid: data.payment_method_category_uuid,
+	payment_method_category_name: data.payment_method_category_name,
+	payment_summary: {
+		discount_general_percentage:
+			data.payment_summary.discount_general_percentage,
+		discount_general_price: data.payment_summary.discount_general_price,
+		discount_product_price: data.payment_summary.discount_product_price,
+		payment_price: data.payment_summary.payment_price,
+		subtotal_price: data.payment_summary.subtotal_price,
+		tax_and_charge: {
+			service_charge_price:
+				data.payment_summary.tax_and_charge.service_charge_price,
+			tax_and_charge_price:
+				data.payment_summary.tax_and_charge.tax_and_charge_price,
+			tax_price: data.payment_summary.tax_and_charge.tax_price,
+			tax_percentage: data.payment_summary.tax_and_charge.tax_percentage,
+			is_service_charge_taxable:
+				data.payment_summary.tax_and_charge.is_service_charge_taxable,
+			is_tax: data.payment_summary.tax_and_charge.is_tax,
+			is_service_charge: data.payment_summary.tax_and_charge.is_service_charge,
+			service_charge_percentage:
+				data.payment_summary.tax_and_charge.service_charge_percentage,
+			tax_type: data.payment_summary.tax_and_charge.tax_type,
+		},
+	},
+	status: data.status,
 });

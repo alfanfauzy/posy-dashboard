@@ -2,16 +2,12 @@ import {Transaction} from '@/domain/transaction/model';
 import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useAppSelector} from '@/store/hooks';
+import {generateTransactionCode} from '@/utils/UtilsGenerateTransactionCode';
 import moment from 'moment';
 import React from 'react';
 import {CgTrash} from 'react-icons/cg';
 
 import CancelTransactionModal from '../modal/CancelTransactionModal';
-
-const generateTransactionCode = (code: string) => {
-	const codeArr = code.slice(code.length - 12);
-	return codeArr;
-};
 
 type TransactionDetailsProps = {
 	dataTransaction: Transaction | undefined;

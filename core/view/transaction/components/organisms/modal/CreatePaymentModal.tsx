@@ -1,19 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {mapToCreateMakePaymentModel} from '@/data/transaction/mappers/TransactionMapper';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
-import {useAppDispatch, useAppSelector} from '@/store/hooks';
-import {onChangeSelectedTrxId} from '@/store/slices/transaction';
+import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
+import {useAppSelector} from '@/store/hooks';
 import {toRupiah} from '@/utils/common';
 import {generateSuggestionAmount} from '@/utils/UtilsGenerateSuggestionAmount';
 import {useGetPaymentMethodCategoriesViewModel} from '@/view/payment-method/view-models/GetPaymentMethodCategoriesViewModel';
 import {useGetPaymentMethodsViewModel} from '@/view/payment-method/view-models/GetPaymentMethodsViewModel';
 import {useCreateMakePaymentViewModel} from '@/view/transaction/view-models/CreateMakePaymentViewModel';
+import {useCreatePrintReceiptViewModel} from '@/view/transaction/view-models/CreatePrintReceiptViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {FiPrinter} from 'react-icons/fi';
 import {NumericFormat} from 'react-number-format';
+import {useReactToPrint} from 'react-to-print';
+
+import PrintBillReceipt from '../receipt/PrintBillReceipt';
 
 const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,
@@ -23,7 +28,7 @@ type CreatePaymentModalProps = {
 	isOpenCreatePayment: boolean;
 	closeCreatePayment: () => void;
 	openPaymentConfirmation: () => void;
-	setValueState: (value: {total: number}) => void;
+	setValueState: (value: MakePayment) => void;
 };
 
 const CreatePaymentModal = ({
@@ -33,7 +38,8 @@ const CreatePaymentModal = ({
 	setValueState,
 }: CreatePaymentModalProps) => {
 	const queryClient = useQueryClient();
-	const dispatch = useAppDispatch();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const printReceiptRef = useRef<any>();
 	const {outletId} = useAppSelector(state => state.auth);
 	const {payment, selectedTrxId} = useAppSelector(state => state.transaction);
 	const [selectedPaymentCategory, setSelectedPaymentCategory] = useState({
@@ -71,11 +77,9 @@ const CreatePaymentModal = ({
 	const {makePayment, isLoading} = useCreateMakePaymentViewModel({
 		onSuccess: data => {
 			if (data.data.success) {
-				setValueState({
-					total: price,
-				});
+				const mappedData = mapToCreateMakePaymentModel(data.data);
+				setValueState(mappedData);
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
-				dispatch(onChangeSelectedTrxId({id: ''}));
 				closeCreatePayment();
 				openPaymentConfirmation();
 			}
@@ -91,6 +95,24 @@ const CreatePaymentModal = ({
 			additional_info: additionalInfo,
 		});
 	};
+
+	const handlePrintToKitchen = useReactToPrint({
+		content: () => printReceiptRef.current,
+	});
+
+	const {
+		data: dataReceipt,
+		createPrintReceipt,
+		isLoading: loadReceipt,
+	} = useCreatePrintReceiptViewModel({
+		onSuccess: data => {
+			if (data) {
+				setTimeout(() => {
+					handlePrintToKitchen();
+				}, 100);
+			}
+		},
+	});
 
 	useEffect(() => {
 		if (dataPaymentMethods && selectedPaymentCategory.type === 'cash') {
@@ -156,8 +178,15 @@ const CreatePaymentModal = ({
 
 							<div className="mt-14 w-full xl:px-8">
 								<Button
+									isLoading={loadReceipt}
 									fullWidth
 									className="flex items-center justify-center gap-3"
+									onClick={() =>
+										createPrintReceipt({
+											transaction_uuid: selectedTrxId,
+											restaurant_outlet_uuid: outletId,
+										})
+									}
 								>
 									<FiPrinter size={20} />
 									Print Bill
@@ -278,6 +307,12 @@ const CreatePaymentModal = ({
 					</div>
 				</aside>
 			</section>
+			{dataReceipt && (
+				<PrintBillReceipt
+					data={dataReceipt}
+					printReceiptRef={printReceiptRef}
+				/>
+			)}
 		</Modal>
 	);
 };

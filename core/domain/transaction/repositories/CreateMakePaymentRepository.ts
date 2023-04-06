@@ -1,4 +1,3 @@
-import {Metadata} from '@/domain/vo/BaseMetadata';
 import {ResultMutation} from '@/domain/vo/BaseResponse';
 
 export type CreateMakePaymentInput = {
@@ -9,9 +8,18 @@ export type CreateMakePaymentInput = {
 	additional_info: string;
 };
 
-export type CreateMakePaymentResult = ResultMutation<
-	{metadata: Metadata} | undefined
->;
+export type MakePayment = {
+	success: boolean;
+	payment_method_category: string;
+	transaction_code: string;
+	payment_method: string;
+	total_amount: number;
+	paid_amount: number;
+	metadata: {
+		updated_at: number;
+	};
+};
+export type CreateMakePaymentResult = ResultMutation<MakePayment | undefined>;
 
 export type CreateMakePaymentRepository = {
 	makePayment(input: CreateMakePaymentInput): void;

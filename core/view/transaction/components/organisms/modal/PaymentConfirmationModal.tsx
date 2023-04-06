@@ -1,8 +1,15 @@
+import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
+import {useAppDispatch, useAppSelector} from '@/store/hooks';
+import {onChangeSelectedTrxId} from '@/store/slices/transaction';
 import {toRupiah} from '@/utils/common';
+import {useCreatePrintReceiptViewModel} from '@/view/transaction/view-models/CreatePrintReceiptViewModel';
 import dynamic from 'next/dynamic';
 import {Button} from 'posy-fnb-core';
-import React from 'react';
+import React, {useRef} from 'react';
 import {BsFillCheckCircleFill} from 'react-icons/bs';
+import {useReactToPrint} from 'react-to-print';
+
+import PrintBillReceipt from '../receipt/PrintBillReceipt';
 
 const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,
@@ -11,11 +18,7 @@ const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 type PaymentConfirmationModalProps = {
 	isOpenPaymentConfirmation: boolean;
 	closePaymentConfirmation: () => void;
-	valueState:
-		| {
-				total: number;
-		  }
-		| undefined;
+	valueState: MakePayment | undefined;
 };
 
 const PaymentConfirmationModal = ({
@@ -23,6 +26,35 @@ const PaymentConfirmationModal = ({
 	isOpenPaymentConfirmation,
 	valueState,
 }: PaymentConfirmationModalProps) => {
+	const dispatch = useAppDispatch();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const printReceiptRef = useRef<any>();
+	const {outletId} = useAppSelector(state => state.auth);
+	const {selectedTrxId} = useAppSelector(state => state.transaction);
+
+	const handlePrintReceiptRef = useReactToPrint({
+		content: () => printReceiptRef.current,
+	});
+
+	const {
+		data: dataReceipt,
+		createPrintReceipt,
+		isLoading: loadReceipt,
+	} = useCreatePrintReceiptViewModel({
+		onSuccess: data => {
+			if (data) {
+				setTimeout(() => {
+					handlePrintReceiptRef();
+				}, 100);
+			}
+		},
+	});
+
+	const onClosePaymentConfirmation = () => {
+		closePaymentConfirmation();
+		dispatch(onChangeSelectedTrxId({id: ''}));
+	};
+
 	return (
 		<Modal
 			closeOverlay
@@ -38,33 +70,41 @@ const PaymentConfirmationModal = ({
 							Payment completed!
 						</p>
 						<p className="text-l-regular text-neutral-70">
-							ID: OR01C320101230001
+							{`ID: ${valueState.transaction_code}`}
 						</p>
 					</div>
 					<div className="mt-6 flex flex-col gap-2 border-t border-neutral-30 pt-6 pb-2">
 						<div className="flex items-center justify-between">
 							<p className="text-l-semibold text-primary-main">Total amount</p>
 							<p className="text-l-semibold text-primary-main">
-								{toRupiah(valueState.total)}
+								{toRupiah(valueState.total_amount)}
 							</p>
 						</div>
 						<div className="flex items-center justify-between">
 							<p className="text-m-regular text-primary-main">Payment type</p>
-							<p className="text-m-semibold text-primary-main">Debit</p>
+							<p className="text-m-semibold text-primary-main">
+								{valueState.payment_method_category}
+							</p>
 						</div>
 						<div className="flex items-center justify-between">
 							<p className="text-m-regular text-primary-main">Provider</p>
-							<p className="text-m-semibold text-primary-main">BCA</p>
+							<p className="text-m-semibold text-primary-main">
+								{valueState.payment_method}
+							</p>
 						</div>
 					</div>
 					<div className="border-t border-neutral-30 py-2">
 						<div className="flex items-center justify-between">
 							<p className="text-l-semibold text-primary-main">Amount paid</p>
-							<p className="text-l-semibold text-primary-main">Rp510.000</p>
+							<p className="text-l-semibold text-primary-main">
+								{toRupiah(valueState.paid_amount)}
+							</p>
 						</div>
 						<div className="flex items-center justify-between">
 							<p className="text-l-semibold text-primary-main">Change</p>
-							<p className="text-l-semibold text-primary-main">-</p>
+							<p className="text-l-semibold text-primary-main">
+								{toRupiah(valueState.paid_amount - valueState.total_amount)}
+							</p>
 						</div>
 					</div>
 					<div className="mt-12 flex items-center justify-center gap-4">
@@ -72,19 +112,32 @@ const PaymentConfirmationModal = ({
 							size="xl"
 							variant="secondary"
 							className="w-1/2"
-							onClick={closePaymentConfirmation}
+							onClick={onClosePaymentConfirmation}
 						>
 							Close
 						</Button>
 						<Button
+							isLoading={loadReceipt}
 							size="xl"
 							className="w-1/2"
-							onClick={closePaymentConfirmation}
+							onClick={() =>
+								createPrintReceipt({
+									transaction_uuid: selectedTrxId,
+									restaurant_outlet_uuid: outletId,
+								})
+							}
 						>
 							Print Receipt
 						</Button>
 					</div>
 				</section>
+			)}
+
+			{dataReceipt && (
+				<PrintBillReceipt
+					data={dataReceipt}
+					printReceiptRef={printReceiptRef}
+				/>
 			)}
 		</Modal>
 	);

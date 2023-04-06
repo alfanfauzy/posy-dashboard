@@ -1,4 +1,5 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useForm} from '@/hooks/useForm';
 import NoOrderIcon from '@/icons/noOrder';
@@ -57,7 +58,7 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 		isOpenPaymentConfirmation,
 		{open: openPaymentConfirmation, close: closePaymentConfirmation},
 		{valueState, setValueState},
-	] = useDisclosure<{total: number}>({initialState: false});
+	] = useDisclosure<MakePayment>({initialState: false});
 
 	const [
 		isOpenApplyDiscount,
