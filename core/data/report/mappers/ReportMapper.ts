@@ -39,6 +39,8 @@ export const mapToTransactionReportsModel = (
 		is_open: data.is_open,
 		is_paid: data.is_paid,
 		paid_at: data.paid_at.seconds,
+		total_order_qty: data.total_order_qty,
+		time_spent: data.time_spent,
 	}));
 
 export const mapToTransactionReportSummaryModel = (

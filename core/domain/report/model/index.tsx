@@ -31,6 +31,8 @@ export type ReportBased = {
 	updated_at: number;
 	first_order_at: number;
 	paid_at: number;
+	time_spent: number;
+	total_order_qty: number;
 };
 
 export type Reports = Array<ReportBased>;

@@ -38,4 +38,6 @@ export type GetTransactionReportsDataResponse = {
 	updated_at: UpdatedAt;
 	first_order_at: FirstOrderAt;
 	paid_at: PaidAt;
+	total_order_qty: number;
+	time_spent: number;
 };

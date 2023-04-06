@@ -23,7 +23,7 @@ type Col =
 			| 'total_price_final'
 			| 'status'
 			| 'payment_method_name'
-			| 'total_order'
+			| 'total_order_qty'
 	  >
 	| 'order_time'
 	| 'action';
@@ -68,7 +68,7 @@ export const defaultColumns: DefaultColumns = [
 		name: 'Payment method',
 	},
 	{
-		key: 'total_order',
+		key: 'total_order_qty',
 		name: 'Total item sold',
 	},
 	{
@@ -129,10 +129,12 @@ const defCol = ({
 	},
 	{
 		title: 'Order time',
-		dataIndex: 'total_order',
+		dataIndex: 'time_spent',
 		width: 120,
 		key: 'order_time',
-		render: text => <p className="whitespace-nowrap text-m-regular">{text}</p>,
+		render: text => (
+			<p className="whitespace-nowrap text-m-regular">{`${text % 60} min`}</p>
+		),
 	},
 	{
 		title: 'Cashier',
@@ -174,8 +176,8 @@ const defCol = ({
 	},
 	{
 		title: 'Total item sold',
-		dataIndex: 'total_order',
-		key: 'total_order',
+		dataIndex: 'total_order_qty',
+		key: 'total_order_qty',
 		width: 150,
 		render: text => <p className="whitespace-nowrap text-m-regular">{text}</p>,
 	},
