@@ -80,7 +80,7 @@ const ViewTaxAndServicePage = () => {
 		<main className="flex h-full gap-4 overflow-hidden">
 			<section className="relative h-full flex-1 overflow-hidden rounded-2xl bg-neutral-10 p-6">
 				<aside className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
+					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						Tax & service
 					</p>
 				</aside>

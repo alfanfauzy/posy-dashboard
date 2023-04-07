@@ -98,7 +98,7 @@ const ViewReportPage = () => {
 		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
 			<article>
 				<aside className="flex items-start">
-					<p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
+					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						Report Summary
 					</p>
 				</aside>

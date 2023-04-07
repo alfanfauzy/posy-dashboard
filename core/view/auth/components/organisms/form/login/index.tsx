@@ -15,6 +15,7 @@ import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import * as reactHookForm from 'react-hook-form';
 import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
+import {IoIosAlert} from 'react-icons/io';
 
 const OrganismsFormLogin = () => {
 	const router = useRouter();
@@ -83,6 +84,7 @@ const OrganismsFormLogin = () => {
 						error={!!errors?.email}
 						helperText={errors?.email?.message}
 						{...register('email')}
+						endAdornment={errors.email && <IoIosAlert className="text-error" />}
 					/>
 					<Input
 						type={showPassword ? 'text' : 'password'}

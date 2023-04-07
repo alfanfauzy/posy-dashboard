@@ -156,10 +156,10 @@ const OrganismsFormEditProduct = ({
 				<FormProvider {...methods}>
 					<div className="px-6 py-4">
 						<aside className="flex gap-6">
-							<div>
+							<div className="rounded-lg shadow-sm">
 								<Image
-									src="/images/logo.png"
-									alt="product image"
+									src={dataProduct.product_image_url}
+									alt={dataProduct.product_name}
 									width={142}
 									height={142}
 								/>

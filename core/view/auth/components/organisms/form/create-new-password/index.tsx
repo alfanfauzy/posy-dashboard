@@ -58,7 +58,7 @@ const OrganismsFormCreateNewPassword = () => {
 				onSubmit={handleSubmit(onSubmit)}
 			>
 				<div>
-					<p className="text-xxl-semibold text-primary-main">
+					<p className="text-xxl-semibold text-neutral-100">
 						Create a strong password
 					</p>
 					<p className="mt-6 text-l-regular text-primary-main">

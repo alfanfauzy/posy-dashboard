@@ -86,14 +86,14 @@ const columns = ({
 		),
 	},
 	{
-		title: <p className="whitespace-nowrap">Total payment</p>,
+		title: <p className="whitespace-nowrap">Total sales</p>,
 		dataIndex: 'total_payment',
 		key: 'total_payment',
 		render: text => <p className="whitespace-nowrap text-m-regular">{text}</p>,
 	},
 	{
 		align: 'center',
-		title: 'Status',
+		title: 'Trx status',
 		dataIndex: 'status',
 		key: 'status',
 		render: text => (
@@ -321,7 +321,7 @@ const PagesHistory = () => {
 		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
 			<article>
 				<aside className="flex items-start">
-					<p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
+					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						History
 					</p>
 				</aside>
