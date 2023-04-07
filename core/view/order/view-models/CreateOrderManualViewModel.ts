@@ -1,10 +1,9 @@
 import {MutationOptions} from '@/data/common/types';
-import {CreateOrderManualDataResponse} from '@/data/order/types';
 import {useCreateOrderManualUsecase} from '@/data/order/usecases/CreateOrderManualUsecase';
 import {CreateOrderManualRepository} from '@/domain/order/repositories/CreateOrderManualRepository';
 
 export const useCreateOrderManualViewModel = (
-	options?: MutationOptions<CreateOrderManualDataResponse>,
+	options: MutationOptions,
 ): CreateOrderManualRepository => {
 	const result = useCreateOrderManualUsecase(options);
 

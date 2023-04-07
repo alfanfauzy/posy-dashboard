@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {mapToCreateMakePaymentModel} from '@/data/transaction/mappers/TransactionMapper';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {useAppSelector} from '@/store/hooks';
@@ -75,10 +74,10 @@ const CreatePaymentModal = ({
 		);
 
 	const {makePayment, isLoading} = useCreateMakePaymentViewModel({
-		onSuccess: data => {
-			if (data.data.success) {
-				const mappedData = mapToCreateMakePaymentModel(data.data);
-				setValueState(mappedData);
+		onSuccess: _data => {
+			const data = _data as MakePayment;
+			if (data) {
+				setValueState(data);
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 				closeCreatePayment();
 				openPaymentConfirmation();

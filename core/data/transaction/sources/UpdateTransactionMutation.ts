@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
-import {UpdateTransactionInput} from '@/domain/transaction/repositories/TransactionRepository';
+import {UpdateTransactionInput} from '@/domain/transaction/repositories/UpdateTransactionRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {UpdateTransactionDataResponse} from '../types';
 
@@ -23,9 +23,13 @@ const UpdateTransaction = async (
 };
 
 export const useUpdateTransactionMutation = (
-	options?: MutationOptions<UpdateTransactionDataResponse>,
+	options: UseMutationOptions<
+		Response<UpdateTransactionDataResponse>,
+		AxiosError<Response>,
+		UpdateTransactionInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: UpdateTransactionInput) => UpdateTransaction(input),
+		mutationFn: UpdateTransaction,
 		...options,
 	});

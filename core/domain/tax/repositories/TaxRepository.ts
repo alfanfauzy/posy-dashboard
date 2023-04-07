@@ -26,12 +26,13 @@ export type UpdateTaxInput = {
 	tax_type: TaxType;
 };
 
+export type UpdateTax = {
+	success: boolean;
+	metadata: Metadata;
+};
+
 export type UpdateOutletProductStatusResult = ResultMutation<
-	| {
-			success: boolean;
-			metadata: Metadata;
-	  }
-	| undefined
+	UpdateTax | undefined
 >;
 
 export type UpdateTaxRepository = {

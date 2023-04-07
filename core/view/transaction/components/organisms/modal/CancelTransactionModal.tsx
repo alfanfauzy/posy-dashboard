@@ -1,6 +1,9 @@
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
-import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
+import {
+	CancelTransaction,
+	CreateCancelTransactionInput,
+} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
@@ -26,8 +29,9 @@ const CancelTransactionModal = ({
 
 	const {createCancelTransaction, isLoading} =
 		useCreateCancelTransactionViewModel({
-			onSuccess: data => {
-				if (data.message === 'OK') {
+			onSuccess: _data => {
+				const data = _data as CancelTransaction;
+				if (data) {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 					close();

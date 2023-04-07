@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {UpdateOutletProductStatusInput} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {UpdateOutletProductStatusDataResponse} from '../types/OutletProduct';
 
@@ -23,10 +23,13 @@ const UpdateOutletProductStatus = async (
 };
 
 export const useUpdateOutletProductStatusMutation = (
-	options?: MutationOptions<UpdateOutletProductStatusDataResponse>,
+	options: UseMutationOptions<
+		Response<UpdateOutletProductStatusDataResponse>,
+		AxiosError<Response>,
+		UpdateOutletProductStatusInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: UpdateOutletProductStatusInput) =>
-			UpdateOutletProductStatus(input),
+		mutationFn: UpdateOutletProductStatus,
 		...options,
 	});

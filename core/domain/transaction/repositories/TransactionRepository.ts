@@ -1,4 +1,3 @@
-import {QrCode} from '@/domain/qr-code/model';
 import {
 	Transaction,
 	Transactions,
@@ -6,7 +5,7 @@ import {
 } from '@/domain/transaction/model';
 import {FilterBased, InputVariables} from '@/domain/vo/BaseInput';
 import {Pagination} from '@/domain/vo/BasePagination';
-import {ResultMutation, ResultQuery} from '@/domain/vo/BaseResponse';
+import {ResultQuery} from '@/domain/vo/BaseResponse';
 
 /**
  * GET
@@ -32,35 +31,3 @@ export type GetTransactionSummaryInput = {restaurant_outlet_uuid: string};
 export type GetTransactionSummaryResult = ResultQuery<
 	TransactionSummary | undefined
 >;
-
-/**
- * CREATE
- */
-
-export type CreateTransactionInput = {restaurant_outlet_uuid: string};
-
-export type CreateTransactionResult = ResultMutation<QrCode | undefined>;
-
-export type CreateTransactionRepository = {
-	createTransaction(input: CreateTransactionInput): void;
-} & CreateTransactionResult;
-
-/**
- * UPDATE
- */
-
-export type UpdateTransactionInput = {
-	restaurant_outlet_table_uuid: string;
-	transaction_category: number;
-	total_pax: number;
-	customer_name: string;
-	transaction_uuid: string;
-};
-
-export type UpdateTransactionResult = ResultMutation<
-	{uuid: string; updated_at: number} | undefined
->;
-
-export type UpdateTransactionRepository = {
-	updateTransaction(input: UpdateTransactionInput): void;
-} & UpdateTransactionResult;

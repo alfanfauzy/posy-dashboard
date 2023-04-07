@@ -1,6 +1,9 @@
 import {listCancelReason} from '@/constants/order';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
-import {CreateCancelOrderInput} from '@/domain/order/repositories/CreateCancelOrderRepository';
+import {
+	CancelOrder,
+	CreateCancelOrderInput,
+} from '@/domain/order/repositories/CreateCancelOrderRepository';
 import {useAppSelector} from '@/store/hooks';
 import {useCreateCancelOrderViewModel} from '@/view/order/view-models/CreateCancelOrderViewModel';
 import {useQueryClient} from '@tanstack/react-query';
@@ -29,8 +32,9 @@ const CancelOrderModal = ({isOpen, close, value}: CancelOrderModalProps) => {
 	const [reason, setReason] = useState({label: '', value: ''});
 
 	const {createCancelOrder, isLoading} = useCreateCancelOrderViewModel({
-		onSuccess: data => {
-			if (data.message === 'OK') {
+		onSuccess: _data => {
+			const data = _data as CancelOrder;
+			if (data) {
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
 				close();
 			}

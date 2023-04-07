@@ -3,8 +3,11 @@ import {
 	mapToTaxModel,
 	mapToUpdateTaxPayload,
 } from '@/data/tax/mappers/TaxMapper';
+import {GetTaxQueryKey} from '@/data/tax/sources/GetTaxQuery';
+import {UpdateTax} from '@/domain/tax/repositories/TaxRepository';
 import {useForm} from '@/hooks/useForm';
 import {useAppSelector} from '@/store/hooks';
+import {useQueryClient} from '@tanstack/react-query';
 import {Skeleton} from 'antd';
 import {
 	validationSchemaUpdateTax,
@@ -18,6 +21,7 @@ import {Controller} from 'react-hook-form';
 import * as reactHookForm from 'react-hook-form';
 
 const ViewTaxAndServicePage = () => {
+	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
 
 	const {
@@ -36,7 +40,7 @@ const ViewTaxAndServicePage = () => {
 		},
 	});
 
-	const {data, isLoading: loadData} = useGetTaxViewModel(
+	const {data: dataTax, isLoading: loadData} = useGetTaxViewModel(
 		{
 			restaurant_outlet_uuid: outletId,
 		},
@@ -54,7 +58,12 @@ const ViewTaxAndServicePage = () => {
 		},
 	);
 
-	const {updateTax, isLoading: loadUpdateTax} = useUpdateTaxViewModel();
+	const {updateTax, isLoading: loadUpdateTax} = useUpdateTaxViewModel({
+		onSuccess: _data => {
+			const data = _data as UpdateTax;
+			if (data) queryClient.invalidateQueries([GetTaxQueryKey]);
+		},
+	});
 
 	const onSubmit: reactHookForm.SubmitHandler<
 		ValidationSchemaUpdateTaxType
@@ -83,7 +92,7 @@ const ViewTaxAndServicePage = () => {
 							<Skeleton paragraph={{rows: 10}} />
 						</div>
 					)}
-					{data && (
+					{dataTax && (
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<article className="flex gap-6">
 								<aside className="w-1/2 rounded-3xl border border-neutral-30 p-6">

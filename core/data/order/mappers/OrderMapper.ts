@@ -1,4 +1,5 @@
 import {Orders} from '@/domain/order/model';
+import {CancelOrder} from '@/domain/order/repositories/CreateCancelOrderRepository';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {Metadata} from '@/domain/vo/BaseMetadata';
 
@@ -59,7 +60,7 @@ export const mapToCreateServeOrderModel = (
 
 export const mapToCreateCancelOrderModel = (
 	data: CreateCancelOrderDataResponse,
-): {uuid: string; metadata: Metadata} => ({
+): CancelOrder => ({
 	uuid: data.uuid,
 	metadata: {
 		updated_at: data.metadata.updated_at.seconds,

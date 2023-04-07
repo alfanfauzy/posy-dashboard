@@ -1,3 +1,4 @@
+import {BaseError} from '@/domain/vo/BaseError';
 import {ResultMutation} from '@/domain/vo/BaseResponse';
 
 export type LogoutInput = {
@@ -9,7 +10,7 @@ export type Logout = {
 	success: boolean;
 };
 
-export type LogoutResult = ResultMutation<Logout | undefined>;
+export type LogoutResult = ResultMutation<Logout, BaseError>;
 
 export type LogoutRepository = {
 	logout(input: LogoutInput): void;

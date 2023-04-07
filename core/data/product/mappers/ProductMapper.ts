@@ -1,10 +1,11 @@
 /* eslint-disable no-restricted-syntax */
 import {Product, Products} from '@/domain/product/model';
 import {
+	UpdateOutletProduct,
 	UpdateOutletProductDefaultInput,
 	UpdateOutletProductInput,
 } from '@/domain/product/repositories/UpdateOutletProductRepository';
-import {Metadata} from '@/domain/vo/BaseMetadata';
+import {UpdateOutletProductStatus} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
 import {ValidationSchemaProductOutletType} from '@/view/product/schemas/update-product';
 
 import {
@@ -94,10 +95,7 @@ export const mapToOutletProductsModel = (
 
 export const mapToUpdateOutletProductStatusModel = (
 	data: UpdateOutletProductStatusDataResponse,
-): {
-	success: boolean;
-	metadata: Metadata;
-} => ({
+): UpdateOutletProductStatus => ({
 	success: data.success,
 	metadata: {
 		updated_at: data.metadata.updated_at.seconds,
@@ -141,10 +139,7 @@ export const mapToOutletProductModel = (
 
 export const mapToUpdateOutletProductModel = (
 	data: UpdateOutletProductStatusDataResponse,
-): {
-	success: boolean;
-	metadata: Metadata;
-} => ({
+): UpdateOutletProduct => ({
 	success: data.success,
 	metadata: {
 		updated_at: data.metadata.updated_at.seconds,

@@ -1,3 +1,4 @@
+import {BaseError} from '@/domain/vo/BaseError';
 import {Metadata} from '@/domain/vo/BaseMetadata';
 import {ResultMutation} from '@/domain/vo/BaseResponse';
 
@@ -11,7 +12,8 @@ export type RequestResetPassword = {
 };
 
 export type RequestResetPasswordResult = ResultMutation<
-	RequestResetPassword | undefined
+	RequestResetPassword,
+	BaseError
 >;
 
 export type RequestResetPasswordRepository = {

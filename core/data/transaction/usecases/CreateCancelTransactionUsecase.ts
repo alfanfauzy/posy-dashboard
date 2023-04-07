@@ -1,26 +1,67 @@
+import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
 import {
 	CreateCancelTransactionInput,
 	CreateCancelTransactionRepository,
 } from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
+import {BaseError} from '@/domain/vo/BaseError';
+import {useSnackbar} from 'notistack';
 
 import {mapToCreateCancelTransactionModel} from '../mappers/TransactionMapper';
 import {useCreateCancelTransactionMutation} from '../sources/CreateCancelTransactionMutation';
-import {CreateCancelTransactionDataResponse} from '../types/CreateCancelTransactionType';
 
-export const useCreateCancelTransactionUsecase = (
-	options?: MutationOptions<CreateCancelTransactionDataResponse>,
-): CreateCancelTransactionRepository => {
-	const {mutate, data, ...rest} = useCreateCancelTransactionMutation(options);
+export const useCreateCancelTransactionUsecase = ({
+	onSuccess,
+	onError,
+	...options
+}: MutationOptions): CreateCancelTransactionRepository => {
+	let error: BaseError | null = null;
+	const {enqueueSnackbar} = useSnackbar();
+
+	const {
+		mutate,
+		data,
+		error: _error,
+		...rest
+	} = useCreateCancelTransactionMutation({
+		onSuccess: (dataSuccess, ...args) => {
+			if (dataSuccess) {
+				onSuccess?.(
+					mapToCreateCancelTransactionModel(dataSuccess.data),
+					...args,
+				);
+				enqueueSnackbar({
+					message: 'Transaction Cancelled Successfully',
+					variant: 'success',
+				});
+			}
+		},
+		onError: (dataError, ...args) => {
+			if (dataError) {
+				const err = mapToBaseError(dataError);
+				onError?.(err, ...args);
+				enqueueSnackbar({
+					message: err.message,
+					variant: 'error',
+				});
+			}
+		},
+		...options,
+	});
 
 	const createCancelTransaction = (input: CreateCancelTransactionInput) => {
 		mutate(input);
 	};
 
+	if (_error) {
+		error = mapToBaseError(_error);
+	}
+
 	if (data?.data) {
 		return {
 			createCancelTransaction,
 			data: mapToCreateCancelTransactionModel(data?.data),
+			error,
 			...rest,
 		};
 	}
@@ -28,6 +69,7 @@ export const useCreateCancelTransactionUsecase = (
 	return {
 		createCancelTransaction,
 		data: undefined,
+		error,
 		...rest,
 	};
 };

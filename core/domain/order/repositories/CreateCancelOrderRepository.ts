@@ -9,9 +9,9 @@ export type CreateCancelOrderInput = {
 	restaurant_outlet_uuid: string;
 };
 
-export type CreateCancelOrderResult = ResultMutation<
-	{uuid: string; metadata: Metadata} | undefined
->;
+export type CancelOrder = {uuid: string; metadata: Metadata};
+
+export type CreateCancelOrderResult = ResultMutation<CancelOrder | undefined>;
 
 export type CreateCancelOrderRepository = {
 	createCancelOrder(input: CreateCancelOrderInput): void;

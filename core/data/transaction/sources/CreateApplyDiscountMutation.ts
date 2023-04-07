@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {CreateApplyDiscountInput} from '@/domain/transaction/repositories/CreateApplyDiscountRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {CreateApplyDiscountDataResponse} from '../types/CreateApplyDiscountType';
 
@@ -23,9 +23,13 @@ const CreateApplyDiscount = async (
 };
 
 export const useCreateApplyDiscountMutation = (
-	options?: MutationOptions<CreateApplyDiscountDataResponse>,
+	options: UseMutationOptions<
+		Response<CreateApplyDiscountDataResponse>,
+		AxiosError<Response>,
+		CreateApplyDiscountInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: CreateApplyDiscountInput) => CreateApplyDiscount(input),
+		mutationFn: CreateApplyDiscount,
 		...options,
 	});

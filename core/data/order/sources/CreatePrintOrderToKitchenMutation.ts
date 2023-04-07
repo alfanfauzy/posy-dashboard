@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {CreatePrintOrderToKitchenInput} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {CreatePrintOrderToKitchenDataResponse} from '../types/CreatePrintToKitchenType';
 
@@ -23,10 +23,13 @@ const CreatePrintOrderToKitchen = async (
 };
 
 export const useCreatePrintOrderToKitchenMutation = (
-	options?: MutationOptions<CreatePrintOrderToKitchenDataResponse>,
+	options: UseMutationOptions<
+		Response<CreatePrintOrderToKitchenDataResponse>,
+		AxiosError<Response>,
+		CreatePrintOrderToKitchenInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: CreatePrintOrderToKitchenInput) =>
-			CreatePrintOrderToKitchen(input),
+		mutationFn: CreatePrintOrderToKitchen,
 		...options,
 	});

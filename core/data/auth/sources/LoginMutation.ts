@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {LoginInput} from '@/domain/auth/repositories/LoginRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {LoginDataResponse} from '../types';
 
@@ -23,9 +23,13 @@ const Login = async (
 };
 
 export const useLoginMutation = (
-	options?: MutationOptions<LoginDataResponse>,
+	options: UseMutationOptions<
+		Response<LoginDataResponse>,
+		AxiosError<Response>,
+		LoginInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: LoginInput) => Login(input),
+		mutationFn: Login,
 		...options,
 	});

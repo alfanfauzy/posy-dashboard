@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {UpdateTaxInput} from '@/domain/tax/repositories/TaxRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {UpdateTaxDataResponse} from '../types';
 
@@ -18,16 +18,20 @@ const UpdateTax = async (
 
 	return {
 		code: response?.code,
-		data: response?.data as any,
+		data: response?.data,
 		message: response?.message,
 		more_info: response?.more_info,
 	};
 };
 
 export const useUpdateTaxMutation = (
-	options?: MutationOptions<UpdateTaxDataResponse>,
+	options: UseMutationOptions<
+		Response<UpdateTaxDataResponse>,
+		AxiosError<Response>,
+		UpdateTaxInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: UpdateTaxInput) => UpdateTax(input),
+		mutationFn: UpdateTax,
 		...options,
 	});

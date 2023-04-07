@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {CreateServeOrderInput} from '@/domain/order/repositories/CreateServeOrderRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {CreateServeOrderDataResponse} from '../types/CreateServeOrderType';
 
@@ -23,9 +23,13 @@ const CreateServeOrder = async (
 };
 
 export const useCreateServeOrderMutation = (
-	options?: MutationOptions<CreateServeOrderDataResponse>,
+	options: UseMutationOptions<
+		Response<CreateServeOrderDataResponse>,
+		AxiosError<Response>,
+		CreateServeOrderInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: CreateServeOrderInput) => CreateServeOrder(input),
+		mutationFn: CreateServeOrder,
 		...options,
 	});

@@ -1,5 +1,6 @@
 import Logo from '@/atoms/logo';
-import {mapToLoginModel} from '@/data/auth/mappers/AuthMapper';
+import {Login} from '@/domain/auth/model';
+import {BaseError} from '@/domain/vo/BaseError';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useForm} from '@/hooks/useForm';
 import {useAppDispatch} from '@/store/hooks';
@@ -26,24 +27,23 @@ const OrganismsFormLogin = () => {
 		formState: {errors, isValid},
 		setValue,
 		setError,
-	} = useForm({
-		schema: validationSchemaLogin,
-	});
+	} = useForm({mode: 'onChange', schema: validationSchemaLogin});
 
 	const {login, isLoading: loadLogin} = useLoginViewModel({
-		onSuccess: data => {
-			if (data?.data) {
-				dispatch(onLoginSuccess(mapToLoginModel(data?.data)));
+		onSuccess: _data => {
+			const data = _data as Login;
+			if (data) {
+				dispatch(onLoginSuccess(data));
 				router.push('/transaction');
 			}
 		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		onError: (e: any) => {
-			if (e?.response?.data?.message === 'User not found') {
+		onError: _error => {
+			const error = _error as BaseError;
+			if (error?.isUnknown()) {
 				setValue('email', '');
 				setError(
 					'email',
-					{message: e?.response?.data?.more_info},
+					{message: error.message},
 					{
 						shouldFocus: true,
 					},
@@ -52,7 +52,7 @@ const OrganismsFormLogin = () => {
 				setValue('password', '');
 				setError(
 					'password',
-					{message: e?.response?.data?.more_info},
+					{message: error.message},
 					{
 						shouldFocus: true,
 					},

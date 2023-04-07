@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {CreateMakePaymentInput} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {CreateMakePaymentDataResponse} from '../types/CreateMakePaymentType';
 
@@ -23,9 +23,13 @@ const CreateMakePayment = async (
 };
 
 export const useCreateMakePaymentMutation = (
-	options?: MutationOptions<CreateMakePaymentDataResponse>,
+	options: UseMutationOptions<
+		Response<CreateMakePaymentDataResponse>,
+		AxiosError<Response>,
+		CreateMakePaymentInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: CreateMakePaymentInput) => CreateMakePayment(input),
+		mutationFn: CreateMakePayment,
 		...options,
 	});

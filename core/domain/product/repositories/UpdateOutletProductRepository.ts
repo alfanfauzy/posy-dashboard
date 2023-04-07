@@ -27,12 +27,13 @@ export type UpdateOutletProductInput = {
 	addons: Array<AddonInput>;
 };
 
+export type UpdateOutletProduct = {
+	success: boolean;
+	metadata: Metadata;
+};
+
 export type UpdateOutletProductResult = ResultMutation<
-	| {
-			success: boolean;
-			metadata: Metadata;
-	  }
-	| undefined
+	UpdateOutletProduct | undefined
 >;
 
 export type UpdateOutletProductDefaultInput = {

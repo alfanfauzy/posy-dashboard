@@ -1,4 +1,8 @@
 import Logo from '@/atoms/logo';
+import {
+	RequestResetPassword,
+	RequestResetPasswordInput,
+} from '@/domain/auth/repositories/RequestResetPasswordRepository';
 import {useForm} from '@/hooks/useForm';
 import {
 	validationSchemaForgetPassword,
@@ -22,10 +26,10 @@ const OrganismsFormForgetPassword = () => {
 	});
 
 	const {requestResetPassword, isLoading} = useRequestResetPasswordViewModel({
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		onSuccess: (data, variables: any) => {
-			if (data.data.success)
-				router.push(`verify-account?email=${variables.email}`);
+		onSuccess: (_data, _variables) => {
+			const data = _data as RequestResetPassword;
+			const variables = _variables as RequestResetPasswordInput;
+			if (data.success) router.push(`verify-account?email=${variables.email}`);
 		},
 	});
 

@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {CreateCancelOrderInput} from '@/domain/order/repositories/CreateCancelOrderRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {CreateCancelOrderDataResponse} from '../types/CreateCancelOrderType';
 
@@ -23,9 +23,13 @@ const CreateCancelOrder = async (
 };
 
 export const useCreateCancelOrderMutation = (
-	options?: MutationOptions<CreateCancelOrderDataResponse>,
+	options: UseMutationOptions<
+		Response<CreateCancelOrderDataResponse>,
+		AxiosError<Response>,
+		CreateCancelOrderInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: CreateCancelOrderInput) => CreateCancelOrder(input),
+		mutationFn: CreateCancelOrder,
 		...options,
 	});

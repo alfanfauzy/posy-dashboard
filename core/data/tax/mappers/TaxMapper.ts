@@ -1,6 +1,8 @@
 import {Tax} from '@/domain/tax/model';
-import {UpdateTaxInput} from '@/domain/tax/repositories/TaxRepository';
-import {Metadata} from '@/domain/vo/BaseMetadata';
+import {
+	UpdateTax,
+	UpdateTaxInput,
+} from '@/domain/tax/repositories/TaxRepository';
 import {ValidationSchemaUpdateTaxType} from '@/view/tax-and-service/schemas/UpdateTaxSchema';
 
 import {GetTaxDataResponse, UpdateTaxDataResponse} from '../types';
@@ -18,10 +20,7 @@ export const mapToTaxModel = (data: GetTaxDataResponse): Tax => ({
 
 export const mapToUpdateTaxModel = (
 	data: UpdateTaxDataResponse,
-): {
-	success: boolean;
-	metadata: Metadata;
-} => ({
+): UpdateTax => ({
 	success: data.success,
 	metadata: {
 		updated_at: data.metadata.updated_at.seconds,

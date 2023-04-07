@@ -1,26 +1,62 @@
+import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
 import {
 	CreatePrintReceiptInput,
 	CreatePrintReceiptRepository,
 } from '@/domain/transaction/repositories/CreatePrintReceiptRepository';
+import {BaseError} from '@/domain/vo/BaseError';
+import {useSnackbar} from 'notistack';
 
 import {mapToReceiptModel} from '../mappers/TransactionMapper';
 import {useCreatePrintReceiptMutation} from '../sources/CreatePrintReceiptMutation';
-import {CreatePrintReceiptDataResponse} from '../types/CreatePrintReceiptType';
 
-export const useCreatePrintReceiptUsecase = (
-	options?: MutationOptions<CreatePrintReceiptDataResponse>,
-): CreatePrintReceiptRepository => {
-	const {mutate, data, ...rest} = useCreatePrintReceiptMutation(options);
+export const useCreatePrintReceiptUsecase = ({
+	onError,
+	...options
+}: MutationOptions): CreatePrintReceiptRepository => {
+	let error: BaseError | null = null;
+	const {enqueueSnackbar} = useSnackbar();
+
+	const {
+		mutate,
+		data,
+		error: _error,
+		...rest
+	} = useCreatePrintReceiptMutation({
+		onSuccess: dataSuccess => {
+			if (dataSuccess) {
+				enqueueSnackbar({
+					message: 'Receipt Printed Successfully',
+					variant: 'success',
+				});
+			}
+		},
+		onError: (dataError, ...args) => {
+			if (dataError) {
+				const err = mapToBaseError(dataError);
+				onError?.(err, ...args);
+				enqueueSnackbar({
+					message: err.message,
+					variant: 'error',
+				});
+			}
+		},
+		...options,
+	});
 
 	const createPrintReceipt = (input: CreatePrintReceiptInput) => {
 		mutate(input);
 	};
 
+	if (_error) {
+		error = mapToBaseError(_error);
+	}
+
 	if (data?.data) {
 		return {
 			createPrintReceipt,
 			data: mapToReceiptModel(data?.data),
+			error,
 			...rest,
 		};
 	}
@@ -28,6 +64,7 @@ export const useCreatePrintReceiptUsecase = (
 	return {
 		createPrintReceipt,
 		data: undefined,
+		error,
 		...rest,
 	};
 };

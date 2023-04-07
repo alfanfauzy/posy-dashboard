@@ -2,6 +2,7 @@ import {orderType} from '@/constants/order';
 import {mapToUpdateTransactionPayload} from '@/data/transaction/mappers/TransactionMapper';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
+import {UpdateTransaction} from '@/domain/transaction/repositories/UpdateTransactionRepository';
 import {useAppSelector} from '@/store/hooks';
 import {useGetTablesViewModel} from '@/view/table/view-models/GetTablesViewModel';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
@@ -48,8 +49,9 @@ const EditTransactionForm = ({methods}: EditTransactionFormProps) => {
 
 	const {updateTransaction, isLoading: loadUpdateTransaction} =
 		useUpdateTransactionViewModel({
-			onSuccess: data => {
-				if (data.message === 'OK') {
+			onSuccess: _data => {
+				const data = _data as UpdateTransaction;
+				if (data) {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				}

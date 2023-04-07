@@ -19,10 +19,10 @@ export type ResultMutation<
 	TError = unknown,
 	TVariables = unknown,
 > = Omit<
-	UseMutationResult<unknown, TError, TVariables>,
-	'data' | 'mutate' | 'mutateAsync'
+	UseMutationResult<TData, TError, TVariables, unknown>,
+	'data' | 'mutate' | 'mutateAsync' | 'variables' | 'failureReason'
 > & {
-	data: TData;
+	data: TData | null | undefined;
 };
 
 export type DataList<TData> = {

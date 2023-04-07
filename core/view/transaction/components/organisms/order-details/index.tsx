@@ -3,6 +3,7 @@ import {listOrderTabs} from '@/constants/order';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {Orders} from '@/domain/order/model';
 import {CreateCancelOrderInput} from '@/domain/order/repositories/CreateCancelOrderRepository';
+import {ServeOrder} from '@/domain/order/repositories/CreateServeOrderRepository';
 import {Transaction} from '@/domain/transaction/model';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useAppSelector} from '@/store/hooks';
@@ -67,10 +68,9 @@ const OrderDetails = ({
 	>({initialState: false});
 
 	const {createServeOrder} = useCreateServeOrderViewModel({
-		onSuccess: data => {
-			if (data.message === 'OK') {
-				queryClient.invalidateQueries([GetOrdersQueryKey]);
-			}
+		onSuccess: _data => {
+			const data = _data as ServeOrder;
+			if (data) queryClient.invalidateQueries([GetOrdersQueryKey]);
 		},
 	});
 
@@ -169,7 +169,10 @@ const OrderDetails = ({
 													)
 												}
 												size="m"
-												disabled={orderDetail.status !== 'PROCESS'}
+												disabled={
+													orderDetail.status !== 'PROCESS' &&
+													orderDetail.status !== 'CANCEL'
+												}
 												checked={orderDetail.status === 'SERVED'}
 											/>
 										))}
@@ -183,15 +186,17 @@ const OrderDetails = ({
 								<div key={order.uuid} className="my-4 w-full">
 									<div className="flex items-center justify-between text-m-semibold">
 										<p>{`Order ${idx + 1}`}</p>
-										<div
-											className="cursor-pointer text-red-accent duration-150"
-											role="presentation"
-											onClick={() =>
-												onOpenCancelOrder(true, order.uuid, '', '')
-											}
-										>
-											Cancel Order
-										</div>
+										{order.status !== 'ORDER_CANCELLED' && (
+											<div
+												className="cursor-pointer text-red-accent duration-150"
+												role="presentation"
+												onClick={() =>
+													onOpenCancelOrder(true, order.uuid, '', '')
+												}
+											>
+												Cancel Order
+											</div>
+										)}
 									</div>
 									<div className="mt-2 w-full">
 										{order.order_detail?.map(orderDetail => (
@@ -202,20 +207,22 @@ const OrderDetails = ({
 												<p className="text-m-regular">
 													{orderDetail.product_name}
 												</p>
-												<p
-													role="presentation"
-													onClick={() =>
-														onOpenCancelOrder(
-															false,
-															order.uuid,
-															orderDetail.uuid,
-															orderDetail.product_name,
-														)
-													}
-													className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75"
-												>
-													Cancel
-												</p>
+												{orderDetail.status !== 'CANCEL' && (
+													<p
+														role="presentation"
+														onClick={() =>
+															onOpenCancelOrder(
+																false,
+																order.uuid,
+																orderDetail.uuid,
+																orderDetail.product_name,
+															)
+														}
+														className="cursor-pointer text-s-semibold text-red-caution hover:text-opacity-75"
+													>
+														Cancel
+													</p>
+												)}
 											</div>
 										))}
 									</div>

@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {CreateCancelTransactionDataResponse} from '../types/CreateCancelTransactionType';
 
@@ -23,7 +23,11 @@ const CreateCancelTransaction = async (
 };
 
 export const useCreateCancelTransactionMutation = (
-	options?: MutationOptions<CreateCancelTransactionDataResponse>,
+	options: UseMutationOptions<
+		Response<CreateCancelTransactionDataResponse>,
+		AxiosError<Response>,
+		CreateCancelTransactionInput
+	>,
 ) =>
 	useMutation({
 		mutationFn: (input: CreateCancelTransactionInput) =>

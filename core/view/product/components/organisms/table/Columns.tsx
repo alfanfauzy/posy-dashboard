@@ -1,5 +1,6 @@
 import {GetOutletProductsQueryKey} from '@/data/product/sources/GetOutletProductsQuery';
 import {Product} from '@/domain/product/model';
+import {UpdateOutletProductStatus} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
 import {useAppDispatch, useAppSelector} from '@/store/hooks';
 import {onChangeProductId} from '@/store/slices/product';
 import {toRupiah} from '@/utils/common';
@@ -20,7 +21,11 @@ const ProductColumns = (openEditProduct: () => void): ColumnsType<Product> => {
 	};
 
 	const {updateOutletProductStatus} = useUpdateOutletProductStatusViewModel({
-		onSuccess: () => queryClient.invalidateQueries([GetOutletProductsQueryKey]),
+		onSuccess: _data => {
+			const data = _data as UpdateOutletProductStatus;
+			if (data.success)
+				queryClient.invalidateQueries([GetOutletProductsQueryKey]);
+		},
 	});
 
 	return [

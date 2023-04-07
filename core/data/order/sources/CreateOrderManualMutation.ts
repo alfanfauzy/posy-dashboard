@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {CreateOrderManualInput} from '@/domain/order/repositories/CreateOrderManualRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {CreateOrderManualDataResponse} from '../types';
 
@@ -23,9 +23,13 @@ const CreateOrderManual = async (
 };
 
 export const useCreateOrderManualMutation = (
-	options?: MutationOptions<CreateOrderManualDataResponse>,
+	options: UseMutationOptions<
+		Response<CreateOrderManualDataResponse>,
+		AxiosError<Response>,
+		CreateOrderManualInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: CreateOrderManualInput) => CreateOrderManual(input),
+		mutationFn: CreateOrderManual,
 		...options,
 	});

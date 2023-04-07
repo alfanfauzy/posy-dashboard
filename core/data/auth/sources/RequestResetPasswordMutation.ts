@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {RequestResetPasswordInput} from '@/domain/auth/repositories/RequestResetPasswordRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {RequestResetPasswordDataResponse} from '../types';
 
@@ -23,10 +23,13 @@ const RequestResetPassword = async (
 };
 
 export const useRequestResetPasswordMutation = (
-	options?: MutationOptions<RequestResetPasswordDataResponse>,
+	options: UseMutationOptions<
+		Response<RequestResetPasswordDataResponse>,
+		AxiosError<Response>,
+		RequestResetPasswordInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: RequestResetPasswordInput) =>
-			RequestResetPassword(input),
+		mutationFn: RequestResetPassword,
 		...options,
 	});

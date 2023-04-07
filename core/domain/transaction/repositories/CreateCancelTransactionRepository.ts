@@ -6,8 +6,10 @@ export type CreateCancelTransactionInput = {
 	restaurant_outlet_uuid: string;
 };
 
+export type CancelTransaction = {uuid: string; metadata: Metadata};
+
 export type CreateCancelTransactionResult = ResultMutation<
-	{uuid: string; metadata: Metadata} | undefined
+	CancelTransaction | undefined
 >;
 
 export type CreateCancelTransactionRepository = {

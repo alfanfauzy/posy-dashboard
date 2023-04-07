@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {LogoutInput} from '@/domain/auth/repositories/LogoutRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {LogoutDataResponse} from '../types';
 
@@ -23,9 +23,13 @@ const Logout = async (
 };
 
 export const useLogoutMutation = (
-	options?: MutationOptions<LogoutDataResponse>,
+	options: UseMutationOptions<
+		Response<LogoutDataResponse>,
+		AxiosError<Response>,
+		LogoutInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: LogoutInput) => Logout(input),
+		mutationFn: Logout,
 		...options,
 	});

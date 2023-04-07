@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {GetPaymentSummaryQueryKey} from '@/data/transaction/sources/GetPaymentSummaryQuery';
+import {ApplyDiscount} from '@/domain/transaction/repositories/CreateApplyDiscountRepository';
 import {useForm} from '@/hooks/useForm';
 import {useAppSelector} from '@/store/hooks';
 import {toRupiah} from '@/utils/common';
@@ -49,8 +50,9 @@ const ApplyDiscountModal = ({
 	});
 
 	const {createApplyDiscount, isLoading} = useCreateApplyDiscountViewModel({
-		onSuccess: data => {
-			if (data.message === 'OK') {
+		onSuccess: _data => {
+			const data = _data as ApplyDiscount;
+			if (data) {
 				queryClient.invalidateQueries([GetPaymentSummaryQueryKey]);
 				closeApplyDiscount();
 			}

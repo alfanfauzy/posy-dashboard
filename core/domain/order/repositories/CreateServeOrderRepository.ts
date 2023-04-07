@@ -7,9 +7,9 @@ export type CreateServeOrderInput = {
 	restaurant_outlet_uuid: string;
 };
 
-export type CreateServeOrderResult = ResultMutation<
-	{uuid: string; metadata: Metadata} | undefined
->;
+export type ServeOrder = {uuid: string; metadata: Metadata};
+
+export type CreateServeOrderResult = ResultMutation<ServeOrder | undefined>;
 
 export type CreateServeOrderRepository = {
 	createServeOrder(input: CreateServeOrderInput): void;

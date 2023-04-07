@@ -1,5 +1,6 @@
 import {mapToOutletProductModel} from '@/data/product/mappers/ProductMapper';
 import {GetOutletProductsQueryKey} from '@/data/product/sources/GetOutletProductsQuery';
+import {UpdateOutletProduct} from '@/domain/product/repositories/UpdateOutletProductRepository';
 import {useForm} from '@/hooks/useForm';
 import {useAppSelector} from '@/store/hooks';
 import {removeFormatRupiah} from '@/utils/UtilsCurrencyFormater';
@@ -102,8 +103,9 @@ const OrganismsFormEditProduct = ({
 
 	const {updateOutletProduct, isLoading: loadUpdateProduct} =
 		useUpdateOutletProductViewModel({
-			onSuccess: data => {
-				if (data.data) {
+			onSuccess: _data => {
+				const data = _data as UpdateOutletProduct;
+				if (data.success) {
 					queryClient.invalidateQueries([GetOutletProductsQueryKey]);
 					setTimeout(() => {
 						onCloseEditProduct();

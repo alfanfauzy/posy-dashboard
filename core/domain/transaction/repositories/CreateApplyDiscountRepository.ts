@@ -13,8 +13,10 @@ export type CreateApplyDiscountBasedInput = {
 	transaction_uuid: string;
 };
 
+export type ApplyDiscount = {uuid: string; metadata: Metadata};
+
 export type CreateApplyDiscountResult = ResultMutation<
-	{uuid: string; metadata: Metadata} | undefined
+	ApplyDiscount | undefined
 >;
 
 export type CreateApplyDiscountRepository = {

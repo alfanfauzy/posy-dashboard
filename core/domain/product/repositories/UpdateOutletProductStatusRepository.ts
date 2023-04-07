@@ -8,12 +8,13 @@ export type UpdateOutletProductStatusInput = {
 	product_uuids: Array<string>;
 };
 
+export type UpdateOutletProductStatus = {
+	success: boolean;
+	metadata: Metadata;
+};
+
 export type UpdateOutletProductStatusResult = ResultMutation<
-	| {
-			success: boolean;
-			metadata: Metadata;
-	  }
-	| undefined
+	UpdateOutletProductStatus | undefined
 >;
 
 export type UpdateOutletProductStatusRepository = {

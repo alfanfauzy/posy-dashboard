@@ -1,8 +1,8 @@
-import {MutationOptions} from '@/data/common/types';
 import {CreatePrintReceiptInput} from '@/domain/transaction/repositories/CreatePrintReceiptRepository';
 import {Response} from '@/domain/vo/BaseResponse';
-import {useMutation} from '@tanstack/react-query';
+import {UseMutationOptions, useMutation} from '@tanstack/react-query';
 import Post from 'api/post';
+import {AxiosError} from 'axios';
 
 import {CreatePrintReceiptDataResponse} from '../types/CreatePrintReceiptType';
 
@@ -23,9 +23,13 @@ const CreatePrintReceipt = async (
 };
 
 export const useCreatePrintReceiptMutation = (
-	options?: MutationOptions<CreatePrintReceiptDataResponse>,
+	options: UseMutationOptions<
+		Response<CreatePrintReceiptDataResponse>,
+		AxiosError<Response>,
+		CreatePrintReceiptInput
+	>,
 ) =>
 	useMutation({
-		mutationFn: (input: CreatePrintReceiptInput) => CreatePrintReceipt(input),
+		mutationFn: CreatePrintReceipt,
 		...options,
 	});

@@ -1,4 +1,5 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useForm} from '@/hooks/useForm';
@@ -134,8 +135,9 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 		data: dataPrintToKitchen,
 		isLoading: loadPrintToKitchen,
 	} = useCreatePrintOrderToKitchenViewModel({
-		onSuccess: data => {
-			if (data.message === 'OK') {
+		onSuccess: _data => {
+			const data = _data as CreatePrintOrderToKitchenModel;
+			if (data) {
 				setTimeout(() => {
 					handlePrintToKitchen();
 				}, 100);

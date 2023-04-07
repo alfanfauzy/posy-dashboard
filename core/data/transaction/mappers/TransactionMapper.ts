@@ -5,14 +5,18 @@ import {
 	TransactionSummary,
 } from '@/domain/transaction/model';
 import {
+	ApplyDiscount,
 	CreateApplyDiscountBasedInput,
 	CreateApplyDiscountInput,
 } from '@/domain/transaction/repositories/CreateApplyDiscountRepository';
+import {CancelTransaction} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {Receipt} from '@/domain/transaction/repositories/CreatePrintReceiptRepository';
 import {PaymentSummary} from '@/domain/transaction/repositories/GetPaymentSummaryRepository';
-import {UpdateTransactionInput} from '@/domain/transaction/repositories/TransactionRepository';
-import {Metadata} from '@/domain/vo/BaseMetadata';
+import {
+	UpdateTransaction,
+	UpdateTransactionInput,
+} from '@/domain/transaction/repositories/UpdateTransactionRepository';
 import {ValidationSchemaApplyDiscountType} from '@/view/transaction/schemas/apply-discount';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
 
@@ -94,7 +98,7 @@ export const mapToTransactionSummaryModel = (
 
 export const mapToUpdateTransactionModel = (
 	data: UpdateTransactionDataResponse,
-): {uuid: string; updated_at: number} => ({
+): UpdateTransaction => ({
 	uuid: data.uuid,
 	updated_at: data.updated_at.seconds,
 });
@@ -111,7 +115,7 @@ export const mapToUpdateTransactionPayload = (
 
 export const mapToCreateCancelTransactionModel = (
 	data: CreateCancelTransactionDataResponse,
-): {uuid: string; metadata: Metadata} => ({
+): CancelTransaction => ({
 	uuid: data.uuid,
 	metadata: {
 		cancel_at: data.cancel_at.seconds,
@@ -141,7 +145,7 @@ export const mapToPaymentSummaryModel = (
 
 export const mapToCreateApplyDiscountModel = (
 	data: CreateCancelTransactionDataResponse,
-): {uuid: string; metadata: Metadata} => ({
+): ApplyDiscount => ({
 	uuid: data.uuid,
 	metadata: {
 		cancel_at: data.cancel_at.seconds,

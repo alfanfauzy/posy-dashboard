@@ -1,4 +1,5 @@
 import Logo from '@/atoms/logo';
+import {ResetPassword} from '@/domain/auth/repositories/ResetPasswordRepository';
 import useDisclosure from '@/hooks/useDisclosure';
 import {useForm} from '@/hooks/useForm';
 import {
@@ -7,7 +8,6 @@ import {
 } from '@/view/auth/schemas';
 import {useResetPasswordViewModel} from '@/view/auth/view-models/ResetPasswordViewModel';
 import {useRouter} from 'next/router';
-import {useSnackbar} from 'notistack';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import * as reactHookForm from 'react-hook-form';
@@ -15,7 +15,6 @@ import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 
 const OrganismsFormCreateNewPassword = () => {
 	const router = useRouter();
-	const {enqueueSnackbar} = useSnackbar();
 	const [showPassword, {toggle: toggleShowPassword}] = useDisclosure({
 		initialState: false,
 	});
@@ -32,12 +31,9 @@ const OrganismsFormCreateNewPassword = () => {
 	});
 
 	const {resetPassword, isLoading} = useResetPasswordViewModel({
-		onSuccess: data => {
-			if (data.data.success) {
-				enqueueSnackbar({
-					message: 'Password has been reset',
-					variant: 'success',
-				});
+		onSuccess: _data => {
+			const data = _data as ResetPassword;
+			if (data.success) {
 				setTimeout(() => {
 					router.push('/login');
 				}, 1500);
