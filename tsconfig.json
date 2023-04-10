@@ -16,27 +16,7 @@
 		"incremental": true,
 		"baseUrl": ".",
 		"paths": {
-			"images/*": ["public/images/*"],
-			"pages/*": ["pages/*"],
-			"api/*": ["internals/api/*"],
-			"@/services/*": ["src/services/*"],
-			"@/config/*": ["src/config/*"],
-			"@/utils/*": ["src/utils/*"],
-			"@/store/*": ["src/store/*"],
-			"@/icons/*": ["src/assets/icons/*"],
-			"@/containers/*": ["src/containers/*"],
-			"@/atoms/*": ["src/components/atoms/*"],
-			"@/molecules/*": ["src/components/molecules/*"],
-			"@/organisms/*": ["core/view/auth/components/organisms/*"],
-			"@/pages/*": ["src/components/pages/*"],
-			"@/templates/*": ["src/components/templates/*"],
-			"@/constants/*": ["src/constants/*"],
-			"@/types/*": ["src/types/*"],
-			"@/hooks/*": ["src/hooks/*"],
-			"@/schemas/*": ["src/schemas/*"],
-			"@/domain/*": ["core/domain/*"],
-			"@/data/*": ["core/data/*"],
-			"@/view/*": ["core/view/*"]
+			"@/*": ["src/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "public/**/*"],

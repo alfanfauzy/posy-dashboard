@@ -16,7 +16,7 @@ const customJestConfig = {
 	setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 	modulePathIgnorePatterns: [],
 	moduleNameMapper: {
-		'^utils/(.*)$': '<rootDir>/src/utils/$1',
+		'^utils/(.*)$': '<rootDir>/src/view/common/utils/$1',
 	},
 };
 

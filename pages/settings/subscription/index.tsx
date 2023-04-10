@@ -1,5 +1,5 @@
-import {SEO} from '@/constants/seo';
-import MetaHeader from '@/molecules/meta-header';
+import MetaHeader from '@/view/common/components/molecules/meta-header';
+import {SEO} from '@/view/common/constants/seo';
 import ViewSubscriptionPage from '@/view/subscription/components/pages';
 
 const Page = () => (

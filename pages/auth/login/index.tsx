@@ -1,8 +1,8 @@
-import {SEO} from '@/constants/seo';
-import MetaHeader from '@/molecules/meta-header';
-import AuthLayout from '@/templates/layout/auth-layout';
-import type {NextPageWithLayout} from '@/types/index';
 import PagesLogin from '@/view/auth/components/pages/login';
+import MetaHeader from '@/view/common/components/molecules/meta-header';
+import AuthLayout from '@/view/common/components/templates/layout/auth-layout';
+import {SEO} from '@/view/common/constants/seo';
+import type {NextPageWithLayout} from '@/view/common/types/index';
 
 const Page: NextPageWithLayout = () => (
 	<>

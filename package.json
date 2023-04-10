@@ -21,8 +21,7 @@
 		"formatter": "yarn format:lint && yarn format:prettier",
 		"prepare": "husky install",
 		"run-docker:locally": "docker-compose up",
-		"vercel": "npx vercel build --prod --token=WJqtant93wzvrdrmfrRQ3fjd && npx vercel deploy --prebuilt --prod --token=WJqtant93wzvrdrmfrRQ3fjd",
-		"push:prod": "git push && npm run vercel"
+		"vercel": "npx vercel build --prod --token=WJqtant93wzvrdrmfrRQ3fjd && npx vercel deploy --prebuilt --prod --token=WJqtant93wzvrdrmfrRQ3fjd"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^2.9.10",

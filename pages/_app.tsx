@@ -4,10 +4,10 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import '../styles/globals.css';
 
-import ModalWrapper from '@/atoms/modal';
-import {persistor, wrapper} from '@/store/index';
-import Layout from '@/templates/layout';
-import type {NextPageWithLayout} from '@/types/index';
+import ModalWrapper from '@/view/common/components/atoms/modal';
+import Layout from '@/view/common/components/templates/layout';
+import {persistor, wrapper} from '@/view/common/store/index';
+import type {NextPageWithLayout} from '@/view/common/types/index';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import type {AppProps} from 'next/app';

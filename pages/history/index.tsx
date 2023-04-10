@@ -1,7 +1,7 @@
-import {SEO} from '@/constants/seo';
-import ContainerHistory from '@/containers/history';
-import MetaHeader from '@/molecules/meta-header';
-import type {NextPageWithLayout} from '@/types/index';
+import MetaHeader from '@/view/common/components/molecules/meta-header';
+import {SEO} from '@/view/common/constants/seo';
+import type {NextPageWithLayout} from '@/view/common/types';
+import ViewHistoryPage from '@/view/history/components/pages';
 
 const Page: NextPageWithLayout = () => (
 	<>
@@ -11,7 +11,7 @@ const Page: NextPageWithLayout = () => (
 			keywords={SEO.keywords}
 			image={SEO.image}
 		/>
-		<ContainerHistory />
+		<ViewHistoryPage />
 	</>
 );
 

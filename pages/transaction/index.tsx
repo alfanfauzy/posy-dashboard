@@ -1,6 +1,6 @@
-import {SEO} from '@/constants/seo';
-import MetaHeader from '@/molecules/meta-header';
-import type {NextPageWithLayout} from '@/types/index';
+import MetaHeader from '@/view/common/components/molecules/meta-header';
+import {SEO} from '@/view/common/constants/seo';
+import type {NextPageWithLayout} from '@/view/common/types/index';
 import ViewTransactionPage from '@/view/transaction/components/pages';
 
 const Page: NextPageWithLayout = () => (
