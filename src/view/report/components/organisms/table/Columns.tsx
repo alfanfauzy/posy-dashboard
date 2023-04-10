@@ -1,7 +1,7 @@
 import {Report} from '@/domain/report/model';
 import {toRupiah} from '@/view/common/utils/common';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
-import {generateStatus} from '@/view/history/components/pages';
+import {generateStatus} from '@/view/history/components/organisms/table/Columns';
 import {ColumnsType} from 'antd/es/table';
 import {BiFilter} from 'react-icons/bi';
 

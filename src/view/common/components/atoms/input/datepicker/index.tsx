@@ -1,4 +1,5 @@
 import ArrowDownIcon from '@/view/common/assets/icons/arrowDown';
+import {Dates} from '@/view/common/types/date';
 import {defaultStaticRanges} from '@/view/common/utils/date';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {addYears} from 'date-fns';
@@ -6,13 +7,13 @@ import isEqual from 'lodash.isequal';
 import dynamic from 'next/dynamic';
 import {Button} from 'posy-fnb-core';
 import React, {useEffect, useState} from 'react';
-import {DateRangePicker, Range} from 'react-date-range';
+import {DateRangePicker} from 'react-date-range';
 
 const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,
 });
 
-export const checkLabelColor = (date: Range) => {
+export const checkLabelColor = (date: Dates) => {
 	const element = document.getElementsByClassName('rdrStaticRange');
 	defaultStaticRanges.filter((el, idx) =>
 		isEqual(
@@ -26,8 +27,8 @@ export const checkLabelColor = (date: Range) => {
 };
 
 type DatepickerProps = {
-	dateProps: Array<Range>;
-	handleChange: (item: Range) => void;
+	dateProps: Array<Dates>;
+	handleChange: (item: Dates) => void;
 	open: () => void;
 	close: () => void;
 	isOpen: boolean;
@@ -42,7 +43,7 @@ const Datepicker: React.FC<DatepickerProps> = ({
 }) => {
 	const [date, setDate] = useState(dateProps);
 
-	const onChange = (item: {selection: Range}) => {
+	const onChange = (item: {selection: Dates}) => {
 		setDate([item.selection]);
 		checkLabelColor(item.selection);
 	};
@@ -82,8 +83,7 @@ const Datepicker: React.FC<DatepickerProps> = ({
 			</div>
 
 			<Modal
-				className="!h-fit !p-0"
-				overflow={false}
+				className="!p-0"
 				open={isOpen}
 				handleClose={close}
 				confirmButton={
@@ -103,6 +103,7 @@ const Datepicker: React.FC<DatepickerProps> = ({
 						data-testid="content-input"
 						minDate={addYears(new Date(), -5)}
 						maxDate={new Date()}
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						onChange={(e: any) => onChange(e)}
 						showMonthAndYearPickers
 						color="#E0DBFA"

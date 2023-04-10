@@ -44,10 +44,11 @@ const PrintToKitchenReceipt = ({
 									<p className="text-xxl-bold">{`${orderDetail.product_name} x${orderDetail.qty}`}</p>
 									<p className="mt-2 text-l-regular">
 										{orderDetail.addon_information
-											.map(addon =>
-												addon.addon_variants.map(
-													variant => variant.variant_name,
-												),
+											.map(
+												el =>
+													`${el.addon_name}: ${el.addon_variants
+														.map(variant => variant.variant_name)
+														.join(', ')}`,
 											)
 											.join(', ')}
 									</p>

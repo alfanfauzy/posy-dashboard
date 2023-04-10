@@ -2,8 +2,8 @@ import {Transaction} from '@/domain/transaction/model';
 import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
-import moment from 'moment';
 import React from 'react';
 import {CgTrash} from 'react-icons/cg';
 
@@ -56,7 +56,7 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 						</p>
 						<p className="text-l-semibold">
 							Time:
-							{moment.unix(dataTransaction?.created_at).format('HH:mm')}
+							{dateFormatter(dataTransaction?.created_at, 'HH:mm')}
 						</p>
 					</div>
 				)}

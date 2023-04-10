@@ -17,6 +17,7 @@ type DateFormatType =
 	| 'EEE, c LLLL yyyy'
 	| 'P'
 	| 'dd MMM, HH:mm'
+	| 'dd MMM yyyy, HH:mm'
 	| 't';
 
 export const dateFormatter = (
