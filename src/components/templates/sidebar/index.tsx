@@ -2,7 +2,6 @@
 
 import Logo from '@/atoms/logo';
 import {PROTECT_ROUTES} from '@/config/link';
-import {Logout} from '@/domain/auth/repositories/LogoutRepository';
 import {OutletSelection} from '@/domain/outlet/models';
 import useViewportListener from '@/hooks/useViewportListener';
 import PersonIcon from '@/icons/person';
@@ -73,14 +72,11 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 	};
 
 	const {logout} = useLogoutViewModel({
-		onSuccess: _data => {
-			const data = _data as Logout;
-			if (data.success) {
-				router.push('auth/login');
-				setTimeout(() => {
-					dispatch(onLogout());
-				}, 500);
-			}
+		onSuccess: () => {
+			router.push('auth/login');
+			setTimeout(() => {
+				dispatch(onLogout());
+			}, 500);
 		},
 	});
 

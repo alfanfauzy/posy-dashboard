@@ -23,6 +23,7 @@ import {
 	calculateOrderBeforeDiscount,
 	toRupiah,
 } from '@/utils/common';
+import {generateTransactionCode} from '@/utils/UtilsGenerateTransactionCode';
 import {useGetCategoriesViewModel} from '@/view/category/view-models/GetCategoriesViewModel';
 import {useCreateOrderManualViewModel} from '@/view/order/view-models/CreateOrderManualViewModel';
 import {useGetMenuProductsViewModel} from '@/view/product/view-models/GetMenuProductsViewModel';
@@ -315,24 +316,24 @@ const ManualSubmitOrder = ({
 							)}
 							{!loadProduct && dataProduct && (
 								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-									{dataProduct.map(product => (
+									{dataProduct.map(item => (
 										<div
 											role="presentation"
-											onClick={() => onOpenAddVariantOrder(product)}
-											key={product.product_name}
+											onClick={() => onOpenAddVariantOrder(item)}
+											key={item.product_name}
 											className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
 										>
 											<p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
-												{product.product_name}
+												{item.product_name}
 											</p>
 											<div className="my-2 border-b border-neutral-40" />
 											<div className="flex flex-col items-center justify-center gap-1">
 												<p className="text-m-regular text-neutral-90">
-													{toRupiah(product.price_final)}
+													{toRupiah(item.price_final)}
 												</p>
-												{product.price_discount > 0 && (
+												{item.price_discount > 0 && (
 													<p className="text-xs line-through">
-														{toRupiah(product.price)}
+														{toRupiah(item.price)}
 													</p>
 												)}
 											</div>
@@ -347,7 +348,9 @@ const ManualSubmitOrder = ({
 				<div className="relative flex w-[500px] flex-1 flex-col rounded-l-2xl bg-neutral-10">
 					<div className="w-full px-6 pt-6">
 						<p className="text-xxl-bold">Your Order</p>
-						<p className="mt-1 text-l-semibold">ID: O150123002</p>
+						<p className="mt-1 text-l-semibold">
+							ID: {generateTransactionCode(dataTransaction?.transaction_code)}
+						</p>
 						<div className="my-2 border-b border-neutral-30" />
 					</div>
 
@@ -358,22 +361,28 @@ const ManualSubmitOrder = ({
 									<div>
 										<p className="text-s-regular">Customer name</p>
 										<p className="text-l-semibold line-clamp-1">
-											Henderson Moraes
+											{dataTransaction?.customer_name || '-'}
 										</p>
 									</div>
 									<div className="mt-4">
 										<p className="text-s-regular">Type of transaction</p>
-										<p className="text-l-semibold">Dine in</p>
+										<p className="text-l-semibold">
+											{dataTransaction.transaction_category || '-'}
+										</p>
 									</div>
 								</div>
 								<div className="col-span-2">
 									<div>
 										<p className="text-s-regular">Total pax</p>
-										<p className="text-l-semibold">4</p>
+										<p className="text-l-semibold">
+											{dataTransaction.total_pax || '-'}
+										</p>
 									</div>
 									<div className="mt-4">
 										<p className="text-s-regular">Table number</p>
-										<p className="text-l-semibold">20</p>
+										<p className="text-l-semibold">
+											{dataTransaction.table_number || '-'}
+										</p>
 									</div>
 								</div>
 							</div>

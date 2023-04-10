@@ -1,12 +1,17 @@
 import {UpdatedAt} from '@/data/common/types/metadata';
 import {Order} from '@/domain/order/model';
 
-export enum TransactionStatus {
+enum TransactionStatus {
 	WAITING_ORDER = 'WAITING_ORDER',
 	WAITING_PAYMENT = 'WAITING_PAYMENT',
 	WAITING_FOOD = 'WAITING_FOOD',
 	PAID = 'PAID',
 	CANCELLED = 'CANCELLED',
+}
+
+enum TransactionCategory {
+	DINE_IN = 'DINE_IN',
+	TAKE_AWAY = 'TAKE_AWAY',
 }
 
 type GetTransactionsDataResponseBased = {
@@ -23,7 +28,7 @@ type GetTransactionsDataResponseBased = {
 	status: TransactionStatus;
 	transaction_code: string;
 	session_suffix: string;
-	transaction_category: string;
+	transaction_category: TransactionCategory;
 	customer_name: string;
 	customer_phone: string;
 	customer_email: string;
@@ -46,6 +51,21 @@ type GetTransactionsDataResponseBased = {
 	is_paid: boolean;
 	staff: string;
 	table_number: string;
+	restaurant_uuid: string;
+	restaurant_name: string;
+	restaurant_email: string;
+	restaurant_outlet_name: string;
+	total_order_qty: number;
+	total_price_base: number;
+	total_price_tax: number;
+	total_price_discount: number;
+	total_price_after_discount: number;
+	total_price_final: number;
+	payment_method_uuid: string;
+	payment_method_name: string;
+	cashier_by: string;
+	served_by: string;
+	time_spent: number;
 };
 
 export type GetTransactionsDataResponse = GetTransactionsDataResponseBased;

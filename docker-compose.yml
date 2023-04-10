@@ -2,14 +2,14 @@ version: '3'
 
 services:
   posy-dashboard:
-    container_name: posy-dashboard
-    image: posy-dashboard
+    container_name: posy-fnb-dashboard
+    image: posy--fnb-dashboard
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        APP_NAME: $APP_NAME
-        NEXT_PUBLIC_API_ENDPOINT: $NEXT_PUBLIC_API
+        NEXT_APP_NAME: $NEXT_APP_NAME
+        NEXT_PUBLIC_API: $NEXT_PUBLIC_API
     env_file:
       - .env
     ports:
