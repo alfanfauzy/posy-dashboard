@@ -24,7 +24,7 @@ variables: &build_variables
   NAMESPACE: $CI_PROJECT_NAMESPACE
   PROJECT_NAME: $CI_PROJECT_NAME
   NEXT_PUBLIC_API: $NEXT_PUBLIC_API
-  APP_NAME: $APP_NAME
+  NEXT_APP_NAME: $NEXT_APP_NAME
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
 
 test:
@@ -92,7 +92,7 @@ build_image:
         --build-arg GIT_COMMIT="$IMAGE_TAG" \
         --build-arg GIT_DATE="$CI_COMMIT_TIMESTAMP" \
         --build-arg IMG_NAME="$DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME" \
-        --build-arg APP_NAME="$APP_NAME" \
+        --build-arg NEXT_APP_NAME="$NEXT_APP_NAME" \
         --build-arg NEXT_PUBLIC_API="$NEXT_PUBLIC_API" \
         $DOCKER_BUILD_OPTS \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$IMAGE_TAG \
@@ -125,7 +125,7 @@ build_image_tagged:
         --build-arg GIT_COMMIT="$IMAGE_TAG" \
         --build-arg GIT_DATE="$CI_COMMIT_TIMESTAMP" \
         --build-arg IMG_NAME="$DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME" \
-        --build-arg APP_NAME="$APP_NAME" \
+        --build-arg NEXT_APP_NAME="$NEXT_APP_NAME" \
         --build-arg NEXT_PUBLIC_API="$NEXT_PUBLIC_API" \
         $DOCKER_BUILD_OPTS \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$IMAGE_TAG \

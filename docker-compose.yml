@@ -3,7 +3,7 @@ version: '3'
 services:
   posy-dashboard:
     container_name: posy-fnb-dashboard
-    image: posy--fnb-dashboard
+    image: posy-fnb-dashboard
     build:
       context: .
       dockerfile: Dockerfile
