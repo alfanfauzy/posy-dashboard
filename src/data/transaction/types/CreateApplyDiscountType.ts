@@ -1,6 +1,8 @@
-import {CancelAt} from '@/data/common/types/metadata';
+import {UpdatedAt} from '@/data/common/types/metadata';
 
 export type CreateApplyDiscountDataResponse = {
 	uuid: string;
-	cancel_at: CancelAt;
+	metadata: {
+		updated_at: UpdatedAt;
+	};
 };

@@ -6,6 +6,7 @@ import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
+	onChangePayment,
 	onChangeSearch,
 	onChangeSelectedTrxId,
 	onClearSearch,
@@ -123,6 +124,15 @@ const OrganismsContentsTransaction = ({
 
 	const handleSelectTrx = (trxId: string) => {
 		dispatch(onChangeSelectedTrxId({id: trxId}));
+		dispatch(
+			onChangePayment({
+				payment: {
+					discount_percentage: 0,
+					subtotal: 0,
+					total: 0,
+				},
+			}),
+		);
 	};
 
 	return (

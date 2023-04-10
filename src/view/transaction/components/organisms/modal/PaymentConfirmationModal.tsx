@@ -1,6 +1,7 @@
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {onChangePayment} from '@/view/common/store/slices/transaction';
 import {toRupiah} from '@/view/common/utils/common';
 import {useCreatePrintReceiptViewModel} from '@/view/transaction/view-models/CreatePrintReceiptViewModel';
 import dynamic from 'next/dynamic';
@@ -53,13 +54,22 @@ const PaymentConfirmationModal = ({
 	const onClosePaymentConfirmation = () => {
 		closePaymentConfirmation();
 		dispatch(onChangeSelectedTrxId({id: ''}));
+		dispatch(
+			onChangePayment({
+				payment: {
+					discount_percentage: 0,
+					subtotal: 0,
+					total: 0,
+				},
+			}),
+		);
 	};
 
 	return (
 		<Modal
 			closeOverlay
 			open={isOpenPaymentConfirmation}
-			handleClose={closePaymentConfirmation}
+			handleClose={onClosePaymentConfirmation}
 			className="min-w-[382px]"
 		>
 			{valueState && (

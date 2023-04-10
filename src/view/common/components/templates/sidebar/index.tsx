@@ -14,6 +14,7 @@ import {
 	setRestaurantOutletId,
 	setShowSidebar,
 } from '@/view/common/store/slices/auth';
+import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {Select} from 'antd';
 import {useRouter} from 'next/router';
@@ -69,6 +70,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 
 	const onChangeOutlet = (e: string) => {
 		dispatch(setRestaurantOutletId(e));
+		dispatch(onChangeSelectedTrxId({id: ''}));
 	};
 
 	const {logout} = useLogoutViewModel({

@@ -7,7 +7,7 @@ import {
 import {BaseError} from '@/domain/vo/BaseError';
 import {useSnackbar} from 'notistack';
 
-import {mapToCreateMakePaymentModel} from '../mappers/TransactionMapper';
+import {mapToMakePaymentModel} from '../mappers/TransactionMapper';
 import {useCreateMakePaymentMutation} from '../sources/CreateMakePaymentMutation';
 
 export const useCreateMakePaymentUsecase = ({
@@ -26,7 +26,7 @@ export const useCreateMakePaymentUsecase = ({
 	} = useCreateMakePaymentMutation({
 		onSuccess: (dataSuccess, ...args) => {
 			if (dataSuccess) {
-				onSuccess?.(mapToCreateMakePaymentModel(dataSuccess.data), ...args);
+				onSuccess?.(mapToMakePaymentModel(dataSuccess.data), ...args);
 				enqueueSnackbar({
 					message: 'Payment Made Successfully',
 					variant: 'success',
@@ -57,7 +57,7 @@ export const useCreateMakePaymentUsecase = ({
 	if (data?.data) {
 		return {
 			makePayment,
-			data: mapToCreateMakePaymentModel(data?.data),
+			data: mapToMakePaymentModel(data?.data),
 			error,
 			...rest,
 		};

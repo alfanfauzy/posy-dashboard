@@ -2,7 +2,7 @@ import 'posy-fnb-core/dist/index.css';
 import 'posy-fnb-core/dist/style.css';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import '../styles/globals.css';
+import '@/view/common/styles/globals.css';
 
 import ModalWrapper from '@/view/common/components/atoms/modal';
 import Layout from '@/view/common/components/templates/layout';

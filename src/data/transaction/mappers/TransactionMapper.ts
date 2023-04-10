@@ -27,6 +27,7 @@ import {
 	GetTransactionSummaryDataResponse,
 	UpdateTransactionDataResponse,
 } from '../types';
+import {CreateApplyDiscountDataResponse} from '../types/CreateApplyDiscountType';
 import {CreateCancelTransactionDataResponse} from '../types/CreateCancelTransactionType';
 import {CreateMakePaymentDataResponse} from '../types/CreateMakePaymentType';
 import {CreatePrintReceiptDataResponse} from '../types/CreatePrintReceiptType';
@@ -155,7 +156,7 @@ export const mapToUpdateTransactionPayload = (
 	transaction_uuid: data.transaction_uuid,
 });
 
-export const mapToCreateCancelTransactionModel = (
+export const mapToCancelTransactionModel = (
 	data: CreateCancelTransactionDataResponse,
 ): CancelTransaction => ({
 	uuid: data.uuid,
@@ -185,16 +186,16 @@ export const mapToPaymentSummaryModel = (
 	},
 });
 
-export const mapToCreateApplyDiscountModel = (
-	data: CreateCancelTransactionDataResponse,
+export const mapToApplyDiscountModel = (
+	data: CreateApplyDiscountDataResponse,
 ): ApplyDiscount => ({
 	uuid: data.uuid,
 	metadata: {
-		cancel_at: data.cancel_at.seconds,
+		updated_at: data.metadata.updated_at.seconds,
 	},
 });
 
-export const mapToCreateApplyDiscountPayload = (
+export const mapToApplyDiscountPayload = (
 	payload: ValidationSchemaApplyDiscountType & CreateApplyDiscountBasedInput,
 ): CreateApplyDiscountInput => ({
 	discount_percentage: Number(payload.discount_percentage),
@@ -202,7 +203,7 @@ export const mapToCreateApplyDiscountPayload = (
 	restaurant_outlet_uuid: payload.restaurant_outlet_uuid,
 });
 
-export const mapToCreateMakePaymentModel = (
+export const mapToMakePaymentModel = (
 	data: CreateMakePaymentDataResponse,
 ): MakePayment => ({
 	paid_amount: data.paid_amount,

@@ -9,8 +9,8 @@ import {ValidationSchemaApplyDiscountType} from '@/view/transaction/schemas/appl
 import {useSnackbar} from 'notistack';
 
 import {
-	mapToCreateApplyDiscountModel,
-	mapToCreateApplyDiscountPayload,
+	mapToApplyDiscountModel,
+	mapToApplyDiscountPayload,
 } from '../mappers/TransactionMapper';
 import {useCreateApplyDiscountMutation} from '../sources/CreateApplyDiscountMutation';
 
@@ -30,7 +30,7 @@ export const useCreateApplyDiscountUsecase = ({
 	} = useCreateApplyDiscountMutation({
 		onSuccess: (dataSuccess, ...args) => {
 			if (dataSuccess) {
-				onSuccess?.(mapToCreateApplyDiscountModel(dataSuccess.data), ...args);
+				onSuccess?.(mapToApplyDiscountModel(dataSuccess.data), ...args);
 				enqueueSnackbar({
 					message: 'Discount Applied Successfully',
 					variant: 'success',
@@ -53,7 +53,7 @@ export const useCreateApplyDiscountUsecase = ({
 	const createApplyDiscount = (
 		input: ValidationSchemaApplyDiscountType & CreateApplyDiscountBasedInput,
 	) => {
-		const payload = mapToCreateApplyDiscountPayload(input);
+		const payload = mapToApplyDiscountPayload(input);
 		mutate(payload);
 	};
 
@@ -64,7 +64,7 @@ export const useCreateApplyDiscountUsecase = ({
 	if (data?.data) {
 		return {
 			createApplyDiscount,
-			data: mapToCreateApplyDiscountModel(data?.data),
+			data: mapToApplyDiscountModel(data?.data),
 			error,
 			...rest,
 		};

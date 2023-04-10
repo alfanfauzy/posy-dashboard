@@ -31,7 +31,7 @@ import {useGetMenuProductViewModel} from '@/view/product/view-models/GetMenuProd
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import {Button, Loading, Modal, Tabs, Textarea} from 'posy-fnb-core';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {CgTrash} from 'react-icons/cg';
 import {IoMdArrowBack} from 'react-icons/io';
 
@@ -61,7 +61,7 @@ const ManualSubmitOrder = ({
 		state => state.order.orderForm,
 	);
 	const {outletId} = useAppSelector(state => state.auth);
-	const {order} = useAppSelector(state => state.order);
+	const {order, orderForm} = useAppSelector(state => state.order);
 
 	const [
 		isOpenAddVariantOrder,
@@ -90,11 +90,15 @@ const ManualSubmitOrder = ({
 		{enabled: !!isOpenCreateOrder},
 	);
 
+	const onCloseAddManualOrder = () => {
+		closeCreateOrder();
+		dispatch(onClearOrder());
+	};
+
 	const {createOrderManual, isLoading: loadCreateOrderManual} =
 		useCreateOrderManualViewModel({
 			onSuccess: () => {
-				closeCreateOrder();
-				dispatch(onClearOrder());
+				onCloseAddManualOrder();
 				queryClient.invalidateQueries([
 					GetOrdersQueryKey,
 					{transaction_uuid: dataTransaction?.uuid},
@@ -261,10 +265,31 @@ const ManualSubmitOrder = ({
 		);
 	};
 
+	const AddonRequired = useMemo(
+		() =>
+			dataProductDetail?.addons?.flatMap(el =>
+				el.is_optional
+					? []
+					: {
+							addOnUuid: el.uuid,
+							required: !el.is_optional,
+					  },
+			),
+		[dataProductDetail?.addons],
+	);
+
+	const isValidAddon = useMemo(
+		() =>
+			AddonRequired?.map(el =>
+				orderForm.addOnVariant.some(v => v.addOnUuid === el.addOnUuid),
+			),
+		[AddonRequired, orderForm.addOnVariant],
+	);
+
 	return (
 		<BottomSheet
 			open={isOpenCreateOrder}
-			onClose={closeCreateOrder}
+			onClose={onCloseAddManualOrder}
 			style={{
 				background: '#F7F7F7',
 				padding: '24px 0',
@@ -279,7 +304,7 @@ const ManualSubmitOrder = ({
 						<div className="flex items-center gap-[10px]">
 							<IoMdArrowBack
 								size={24}
-								onClick={closeCreateOrder}
+								onClick={onCloseAddManualOrder}
 								className="cursor-pointer hover:opacity-70"
 							/>
 							<p className="cursor-default text-xxl-bold">Choose Orders</p>
@@ -316,29 +341,32 @@ const ManualSubmitOrder = ({
 							)}
 							{!loadProduct && dataProduct && (
 								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-									{dataProduct.map(item => (
-										<div
-											role="presentation"
-											onClick={() => onOpenAddVariantOrder(item)}
-											key={item.product_name}
-											className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
-										>
-											<p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
-												{item.product_name}
-											</p>
-											<div className="my-2 border-b border-neutral-40" />
-											<div className="flex flex-col items-center justify-center gap-1">
-												<p className="text-m-regular text-neutral-90">
-													{toRupiah(item.price_final)}
-												</p>
-												{item.price_discount > 0 && (
-													<p className="text-xs line-through">
-														{toRupiah(item.price)}
+									{dataProduct.flatMap(
+										item =>
+											item.is_available && (
+												<div
+													role="presentation"
+													onClick={() => onOpenAddVariantOrder(item)}
+													key={item.product_name}
+													className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
+												>
+													<p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
+														{item.product_name}
 													</p>
-												)}
-											</div>
-										</div>
-									))}
+													<div className="my-2 border-b border-neutral-40" />
+													<div className="flex flex-col items-center justify-center gap-1">
+														<p className="text-m-regular text-neutral-90">
+															{toRupiah(item.price_final)}
+														</p>
+														{item.price_discount > 0 && (
+															<p className="text-xs line-through">
+																{toRupiah(item.price)}
+															</p>
+														)}
+													</div>
+												</div>
+											),
+									)}
 								</div>
 							)}
 						</article>
@@ -489,7 +517,12 @@ const ManualSubmitOrder = ({
 							>
 								Cancel
 							</Button>
-							<Button variant="primary" onClick={handleAddOrder} fullWidth>
+							<Button
+								variant="primary"
+								onClick={handleAddOrder}
+								disabled={!isValidAddon?.every(item => item)}
+								fullWidth
+							>
 								Add to Basket
 							</Button>
 						</div>
@@ -554,7 +587,11 @@ const ManualSubmitOrder = ({
 											<div className="flex items-center gap-4">
 												<p className="text-xxl-semibold">{addon.addon_name}</p>
 												<div className="text-m-regular">
-													Required | select 1
+													{`${
+														addon.is_optional
+															? 'Optional'
+															: 'Required | select 1'
+													}`}
 												</div>
 											</div>
 

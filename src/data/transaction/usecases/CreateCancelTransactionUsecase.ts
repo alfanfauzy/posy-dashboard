@@ -7,7 +7,7 @@ import {
 import {BaseError} from '@/domain/vo/BaseError';
 import {useSnackbar} from 'notistack';
 
-import {mapToCreateCancelTransactionModel} from '../mappers/TransactionMapper';
+import {mapToCancelTransactionModel} from '../mappers/TransactionMapper';
 import {useCreateCancelTransactionMutation} from '../sources/CreateCancelTransactionMutation';
 
 export const useCreateCancelTransactionUsecase = ({
@@ -26,10 +26,7 @@ export const useCreateCancelTransactionUsecase = ({
 	} = useCreateCancelTransactionMutation({
 		onSuccess: (dataSuccess, ...args) => {
 			if (dataSuccess) {
-				onSuccess?.(
-					mapToCreateCancelTransactionModel(dataSuccess.data),
-					...args,
-				);
+				onSuccess?.(mapToCancelTransactionModel(dataSuccess.data), ...args);
 				enqueueSnackbar({
 					message: 'Transaction Cancelled Successfully',
 					variant: 'success',
@@ -60,7 +57,7 @@ export const useCreateCancelTransactionUsecase = ({
 	if (data?.data) {
 		return {
 			createCancelTransaction,
-			data: mapToCreateCancelTransactionModel(data?.data),
+			data: mapToCancelTransactionModel(data?.data),
 			error,
 			...rest,
 		};
