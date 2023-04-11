@@ -110,7 +110,6 @@ deploy_to_stage:
   tags: ['pvg']
   variables:
     DOCKER_HOST: posy-fnb01.int.stage.pvg.im
-    APP_NAME: posy-fnb-dashboard
     APP_IMAGE_TAG: latest
     APP_PORT: 3000
     HOST_PORT: 3001
