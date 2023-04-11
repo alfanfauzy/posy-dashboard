@@ -73,14 +73,14 @@ const PrintBillReceipt = ({data, printReceiptRef}: PrintBillReceiptProps) => {
 							</div>
 						</div>
 
-						{data.items.map(item => (
+						{data.items.map((item, idx) => (
 							<div
 								key={item.name}
 								className="border-b border-dashed border-gray-400"
 							>
 								<div className="mx-auto max-w-md pb-2 pt-4">
 									<p className="text-left text-m-semibold text-neutral-100">
-										Order 1
+										{`Order ${idx + 1}`}
 									</p>
 								</div>
 								<div className="flex justify-between pb-2 pt-2">
