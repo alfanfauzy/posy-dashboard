@@ -5,7 +5,7 @@ import Sidebar from '@/view/common/components/templates/sidebar';
 import {UNPROTECT_ROUTES} from '@/view/common/config/link';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {setIsSubscription} from '@/view/common/store/slices/auth';
-import {useGetOutletSelectionViewModel} from '@/view/outlet/GetOutletSelectionViewModel';
+import {useGetOutletSelectionViewModel} from '@/view/outlet/view-models/GetOutletSelectionViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import {useRouter} from 'next/router';
 import {Loading} from 'posy-fnb-core';

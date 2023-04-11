@@ -15,7 +15,7 @@ const GetOutletSelection = async (): Promise<
 
 	return {
 		code: response?.code,
-		data: response?.data as any,
+		data: response?.data,
 		message: response?.message,
 		more_info: response?.more_info,
 	};

@@ -13,20 +13,27 @@ import {useReactToPrint} from 'react-to-print';
 
 import {generateStatus} from '../../table/Columns';
 
-const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
-	loading: () => <div />,
-});
+const Modal = dynamic(
+	() => import('posy-fnb-core').then(module => module.Modal),
+	{
+		loading: () => <div />,
+	},
+);
 
 type HistoryDetailModalProps = {
 	record: Transaction;
-	isOpen: boolean;
-	close: () => void;
+	isOpenDetail: boolean;
+	closeDetail: () => void;
+	openRefund: () => void;
+	setValueRefund: (record: Transaction) => void;
 };
 
 const HistoryDetailModal = ({
 	record,
-	close,
-	isOpen,
+	closeDetail,
+	isOpenDetail,
+	openRefund,
+	setValueRefund,
 }: HistoryDetailModalProps) => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const printReceiptRef = useRef<any>();
@@ -61,8 +68,6 @@ const HistoryDetailModal = ({
 			},
 		);
 
-	const onOpenRefund = () => close();
-
 	const handlePrintReceiptRef = useReactToPrint({
 		content: () => printReceiptRef.current,
 	});
@@ -81,18 +86,28 @@ const HistoryDetailModal = ({
 		},
 	});
 
+	const handleOpenRefund = (transaction: Transaction) => {
+		openRefund();
+		setValueRefund(transaction);
+		closeDetail();
+	};
+
 	return (
 		<>
 			<Modal
 				className="!p-0 lg:min-w-[700px]"
-				closeOverlay
 				isLoading={loadDataHistory || loadDataorder || loadDataPayment}
-				open={isOpen}
-				handleClose={close}
+				closeOverlay
+				open={isOpenDetail}
+				handleClose={closeDetail}
 				confirmButton={
 					dataOrder && dataTransaction ? (
 						<div className="mx-4 flex w-full items-center justify-center gap-4">
-							<Button variant="secondary" onClick={onOpenRefund} fullWidth>
+							<Button
+								variant="secondary"
+								onClick={() => handleOpenRefund(dataTransaction)}
+								fullWidth
+							>
 								Refund
 							</Button>
 							<Button
@@ -137,13 +152,13 @@ const HistoryDetailModal = ({
 						</aside>
 						<aside className="grid grid-cols-5 gap-6 border-b border-neutral-40 py-4">
 							<div className="col-span-2">
-								<p className="text-l-bold">
-									<p>Date</p>
+								<div className="text-l-bold">
+									<div>Date</div>
 									{dateFormatter(
 										dataTransaction.created_at,
 										'dd MMM yyyy, HH:mm',
 									)}
-								</p>
+								</div>
 							</div>
 							<div>
 								<p>Staff</p>

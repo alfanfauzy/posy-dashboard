@@ -79,7 +79,7 @@ const OrganismsFormLogin = () => {
 				<div className="mt-4 flex flex-col gap-4">
 					<Input
 						type="text"
-						labelText="Email Address"
+						labelText="Email address"
 						placeholder="Enter a valid email"
 						error={!!errors?.email}
 						helperText={errors?.email?.message}
@@ -89,7 +89,7 @@ const OrganismsFormLogin = () => {
 					<Input
 						type={showPassword ? 'text' : 'password'}
 						labelText="Password"
-						placeholder="Input Password"
+						placeholder="Input password"
 						endAdornment={
 							showPassword ? (
 								<AiOutlineEyeInvisible onClick={toggle} />

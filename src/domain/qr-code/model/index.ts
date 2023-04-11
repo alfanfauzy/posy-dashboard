@@ -4,5 +4,7 @@ export type QrCode = {
 	qrcode_url: string;
 	transaction_code: string;
 	seconds: number;
-	nanos: number;
+	logo: string;
+	outlet_name: string;
+	restaurant_name: string;
 };

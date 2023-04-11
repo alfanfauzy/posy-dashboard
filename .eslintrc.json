@@ -33,7 +33,10 @@
 					{
 						"newlinesBetween": "always",
 						"groups": ["module", ["parent", "index", "sibling"]],
-						"alphabetize": {"order": "asc", "ignoreCase": true}
+						"alphabetize": {
+							"order": "asc",
+							"ignoreCase": true
+						}
 					}
 				],
 				"@typescript-eslint/naming-convention": [
@@ -67,7 +70,12 @@
 				"jest/prefer-mock-promise-shorthand": "error",
 				"jest/prefer-expect-resolves": "error",
 				"jest/prefer-comparison-matcher": "error",
-				"jest/max-nested-describe": ["error", {"max": 2}],
+				"jest/max-nested-describe": [
+					"error",
+					{
+						"max": 2
+					}
+				],
 				"jest/prefer-lowercase-title": [
 					"error",
 					{
@@ -76,7 +84,10 @@
 				],
 				"jest/consistent-test-it": [
 					"error",
-					{"fn": "it", "withinDescribe": "test"}
+					{
+						"fn": "it",
+						"withinDescribe": "test"
+					}
 				],
 				"@typescript-eslint/naming-convention": [
 					"warn",
@@ -139,7 +150,12 @@
 		"react/jsx-closing-bracket-location": "error",
 		"react/jsx-closing-tag-location": "error",
 		"react/jsx-curly-newline": "off",
-		"react/jsx-filename-extension": ["error", {"extensions": [".tsx", ".jsx"]}],
+		"react/jsx-filename-extension": [
+			"error",
+			{
+				"extensions": [".tsx", ".jsx"]
+			}
+		],
 		"react/jsx-indent-props": [2, "tab"],
 		"react/jsx-indent": "off",
 		"no-console": "warn",
@@ -164,6 +180,7 @@
 		"@typescript-eslint/no-var-requires": "off",
 		"@typescript-eslint/no-unused-vars": "warn",
 		"no-inline-comments": "warn",
+		"no-unneeded-ternary": "error",
 		"prefer-destructuring": [
 			"warn",
 			{

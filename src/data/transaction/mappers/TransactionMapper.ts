@@ -12,11 +12,17 @@ import {
 import {CancelTransaction} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {Receipt} from '@/domain/transaction/repositories/CreatePrintReceiptRepository';
+import {
+	CreateRefundTransactionBasedInput,
+	CreateRefundTransactionInput,
+	RefundTransaction,
+} from '@/domain/transaction/repositories/CreateRefundTransactionRepository';
 import {PaymentSummary} from '@/domain/transaction/repositories/GetPaymentSummaryRepository';
 import {
 	UpdateTransaction,
 	UpdateTransactionInput,
 } from '@/domain/transaction/repositories/UpdateTransactionRepository';
+import {ValidationSchemaRefundType} from '@/view/history/schemas/RefundSchema';
 import {ValidationSchemaApplyDiscountType} from '@/view/transaction/schemas/apply-discount';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
 
@@ -31,6 +37,7 @@ import {CreateApplyDiscountDataResponse} from '../types/CreateApplyDiscountType'
 import {CreateCancelTransactionDataResponse} from '../types/CreateCancelTransactionType';
 import {CreateMakePaymentDataResponse} from '../types/CreateMakePaymentType';
 import {CreatePrintReceiptDataResponse} from '../types/CreatePrintReceiptType';
+import {CreateRefundTransactionDataResponse} from '../types/CreateRefundTransactionType';
 import {GetPaymentSummaryDataResponse} from '../types/GetPaymentSummaryType';
 
 // map server data to own model
@@ -126,8 +133,10 @@ export const mapToCreateTransactionModel = (
 	base64_qrcode: data.qrcode.base64_qrcode,
 	qrcode_url: data.qrcode.qrcode_url,
 	transaction_code: data.qrcode.transaction_code,
-	nanos: data.created_at.nanos,
 	seconds: data.created_at.seconds,
+	logo: data.qrcode.logo,
+	outlet_name: data.qrcode.outlet_name,
+	restaurant_name: data.qrcode.restaurant_name,
 });
 
 export const mapToTransactionSummaryModel = (
@@ -264,4 +273,22 @@ export const mapToReceiptModel = (
 		},
 	},
 	status: data.status,
+});
+
+export const mapToRefundTransactionModel = (
+	data: CreateRefundTransactionDataResponse,
+): RefundTransaction => ({
+	uuid: data.uuid,
+	metadata: {
+		created_at: data.metadata.created_at.seconds,
+	},
+});
+
+export const mapToRefundTransactionPayload = (
+	payload: ValidationSchemaRefundType & CreateRefundTransactionBasedInput,
+): CreateRefundTransactionInput => ({
+	authorization_user_uuid: payload.authorization_user_uuid.value,
+	authorization_credential: payload.authorization_credential,
+	restaurant_outlet_uuid: payload.restaurant_outlet_uuid,
+	transaction_uuid: payload.transaction_uuid,
 });

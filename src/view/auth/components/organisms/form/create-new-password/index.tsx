@@ -70,7 +70,7 @@ const OrganismsFormCreateNewPassword = () => {
 					<Input
 						type={showPassword ? 'text' : 'password'}
 						labelText="New Password"
-						placeholder="Input Password"
+						placeholder="Input password"
 						endAdornment={
 							showPassword ? (
 								<AiOutlineEyeInvisible onClick={toggleShowPassword} />
@@ -85,7 +85,7 @@ const OrganismsFormCreateNewPassword = () => {
 					<Input
 						type={showConfirmPassword ? 'text' : 'password'}
 						labelText="Confirm Password"
-						placeholder="Input Password"
+						placeholder="Input password"
 						endAdornment={
 							showConfirmPassword ? (
 								<AiOutlineEyeInvisible onClick={toggleShowConfirmPassword} />

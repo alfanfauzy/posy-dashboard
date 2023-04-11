@@ -1,4 +1,4 @@
-import {GetOutletSelectionResult} from '@/domain/outlet/repositories/OutletRepository';
+import {GetOutletSelectionResult} from '@/domain/outlet/repositories/GetOutletSelectionRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

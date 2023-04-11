@@ -9,6 +9,7 @@ import {useRouter} from 'next/router';
 import React from 'react';
 
 import HistoryDetailModal from '../modal/history-detail';
+import RefundModal from '../modal/refund';
 import {HistoryTablecolumns} from './Columns';
 
 type HistoryTableProps = {
@@ -21,6 +22,14 @@ const HistoryTable = ({date}: HistoryTableProps) => {
 		useDisclosure<Transaction>({
 			initialState: false,
 		});
+
+	const [
+		isOpenRefundModal,
+		{open: openRefund, close: closeRefundModal},
+		{setValueState: setValueRefund, valueState: valueRefund},
+	] = useDisclosure<Transaction>({
+		initialState: false,
+	});
 
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
@@ -75,8 +84,18 @@ const HistoryTable = ({date}: HistoryTableProps) => {
 			{isOpenDetail && valueState && (
 				<HistoryDetailModal
 					record={valueState}
-					close={close}
-					isOpen={isOpenDetail}
+					closeDetail={close}
+					isOpenDetail={isOpenDetail}
+					openRefund={openRefund}
+					setValueRefund={setValueRefund}
+				/>
+			)}
+
+			{isOpenRefundModal && valueRefund && (
+				<RefundModal
+					close={closeRefundModal}
+					isOpen={isOpenRefundModal}
+					valueRefund={valueRefund}
 				/>
 			)}
 		</article>
