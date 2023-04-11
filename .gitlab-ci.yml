@@ -74,9 +74,8 @@ build_image:
   stage: build-image
   extends: .k8s_docker_runner
   tags: ['pvg']
-  only:
-    - master
-    - development
+  # only:
+  #   - master
   variables:
     <<: *build_variables
   before_script:
