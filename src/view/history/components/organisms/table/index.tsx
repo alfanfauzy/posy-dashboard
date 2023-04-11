@@ -46,7 +46,7 @@ const HistoryTable = ({date}: HistoryTableProps) => {
 			search: [
 				{
 					field: 'status',
-					value: 'PAID|CANCELLED',
+					value: 'PAID|CANCELLED|REFUND',
 				},
 				{
 					field: 'keyword',

@@ -10,6 +10,7 @@ export const generateStatus = (status: TransactionStatus) => {
 		WAITING_FOOD: 'text-yellow-500',
 		PAID: 'text-green-success',
 		CANCELLED: 'text-red-accent',
+		REFUND: 'text-yellow-500',
 	};
 
 	const statusText = {
@@ -18,6 +19,7 @@ export const generateStatus = (status: TransactionStatus) => {
 		WAITING_FOOD: 'Waiting Food',
 		PAID: 'Paid',
 		CANCELLED: 'Cancelled',
+		REFUND: 'Refund',
 	};
 
 	return <p className={`${statusColor[status]}`}>{statusText[status]}</p>;
