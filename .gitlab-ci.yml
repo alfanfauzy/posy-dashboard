@@ -3,6 +3,7 @@ stages:
   - build
   - quality-code
   - build-image
+  - deploy
 
 include:
   - project: 'devops/gitlab-ci-templates'
@@ -102,6 +103,19 @@ build_image:
     - docker push $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:latest
     - |
       echo -e "\e[1;93mDocker image: " $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$IMAGE_TAG
+
+deploy_to_stage:
+  stage: deploy
+  extends: .deploy_to_docker
+  tags: ['pvg']
+  variables:
+    DOCKER_HOST: posy-fnb01.int.stage.pvg.im
+    APP_NAME: posy-fnb-dashboard
+    APP_IMAGE_TAG: latest
+    APP_PORT: 3000
+    HOST_PORT: 3001
+
+
 
 build_image_tagged:
   stage: build-image
