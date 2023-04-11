@@ -1,5 +1,6 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
+import {QrCode} from '@/domain/qr-code/model';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
@@ -8,10 +9,11 @@ import {useAppSelector} from '@/view/common/store/hooks';
 import {useCreatePrintOrderToKitchenViewModel} from '@/view/order/view-models/CreatePrintOrderToKitchenViewModel';
 import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
 import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/update-transaction';
+import {useGetQrCodeViewModel} from '@/view/transaction/view-models/GetQrCodeViewModel';
 import {useGetTransactionViewModel} from '@/view/transaction/view-models/GetTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {RefObject, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
 import {useReactToPrint} from 'react-to-print';
 
@@ -20,18 +22,17 @@ import ApplyDiscountModal from '../../organisms/modal/ApplyDiscountModal';
 import CreatePaymentModal from '../../organisms/modal/CreatePaymentModal';
 import PaymentConfirmationModal from '../../organisms/modal/PaymentConfirmationModal';
 import OrderDetails from '../../organisms/order-details';
+import PrintQrCodeReceipt from '../../organisms/receipt/PrintQrCodeReceipt';
 import PrintToKitchenReceipt from '../../organisms/receipt/PrintToKitchenReceipt';
 import TransactionDetails from '../../organisms/transaction-details';
 import ManualSubmitOrder from '../manual-order';
 
-type TransactionSidebarProps = {
-	qrRef: RefObject<HTMLDivElement>;
-};
-
-const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
+const TransactionSidebar = () => {
 	const queryClient = useQueryClient();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const printToKitchenRef = useRef<any>();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const qrRef = useRef<any>();
 	const {
 		selectedTrxId,
 		payment: {discount_percentage},
@@ -146,6 +147,21 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 		},
 	});
 
+	const {
+		getQrCode,
+		data: dataQrCode,
+		isLoading: loadQrCode,
+	} = useGetQrCodeViewModel({
+		onSuccess: _data => {
+			const data = _data as QrCode;
+			if (data) {
+				setTimeout(() => {
+					handlePrintQr();
+				}, 100);
+			}
+		},
+	});
+
 	const onPrintToKitchen = () => {
 		{
 			dataOrder &&
@@ -207,7 +223,15 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 						)}
 						{!showDeleteOrder && tabValueorder === 0 && (
 							<div className="flex gap-2">
-								<Button variant="secondary" onClick={handlePrintQr}>
+								<Button
+									variant="secondary"
+									onClick={() =>
+										getQrCode({
+											transaction_uuid: selectedTrxId,
+										})
+									}
+									isLoading={loadQrCode}
+								>
 									<p className="whitespace-nowrap text-m-semibold">
 										Reprint QR
 									</p>
@@ -287,6 +311,9 @@ const TransactionSidebar = ({qrRef}: TransactionSidebarProps) => {
 					dataPrintToKitchen={dataPrintToKitchen}
 					printToKitchenRef={printToKitchenRef}
 				/>
+			)}
+			{dataQrCode && (
+				<PrintQrCodeReceipt data={dataQrCode} printReceiptRef={qrRef} />
 			)}
 		</main>
 	);

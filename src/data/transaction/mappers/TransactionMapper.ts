@@ -39,6 +39,7 @@ import {CreateMakePaymentDataResponse} from '../types/CreateMakePaymentType';
 import {CreatePrintReceiptDataResponse} from '../types/CreatePrintReceiptType';
 import {CreateRefundTransactionDataResponse} from '../types/CreateRefundTransactionType';
 import {GetPaymentSummaryDataResponse} from '../types/GetPaymentSummaryType';
+import {GetQrCodeDataResponse} from '../types/GetQrCodeType';
 
 // map server data to own model
 export const mapToTransactionsModel = (
@@ -291,4 +292,15 @@ export const mapToRefundTransactionPayload = (
 	authorization_credential: payload.authorization_credential,
 	restaurant_outlet_uuid: payload.restaurant_outlet_uuid,
 	transaction_uuid: payload.transaction_uuid,
+});
+
+export const mapToQrCodeModel = (data: GetQrCodeDataResponse): QrCode => ({
+	base64_qrcode: data.base64_qrcode,
+	logo: data.logo,
+	outlet_name: data.outlet_name,
+	qrcode_url: data.qrcode_url,
+	restaurant_name: data.restaurant_name,
+	transaction_code: '',
+	uuid: '',
+	seconds: 0,
 });

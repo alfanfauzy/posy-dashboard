@@ -17,7 +17,7 @@ import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTra
 import {useQueryClient} from '@tanstack/react-query';
 import {Skeleton} from 'antd';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useReactToPrint} from 'react-to-print';
 
 import PrintQrCodeReceipt from '../receipt/PrintQrCodeReceipt';
@@ -37,13 +37,7 @@ const generateBorderColor = (
 	return borderColor[status];
 };
 
-type OrganismsContentsTransactionProps = {
-	componentRef: React.RefObject<HTMLInputElement>;
-};
-
-const OrganismsContentsTransaction = ({
-	componentRef,
-}: OrganismsContentsTransactionProps) => {
+const OrganismsContentsTransaction = () => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {selectedTrxId, search} = useAppSelector(state => state.transaction);
@@ -52,9 +46,11 @@ const OrganismsContentsTransaction = ({
 	);
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
 	const [status, setStatus] = useState('');
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const qrRef = useRef<any>();
 
 	const handlePrint = useReactToPrint({
-		content: () => componentRef.current,
+		content: () => qrRef.current,
 	});
 
 	const {
@@ -289,9 +285,7 @@ const OrganismsContentsTransaction = ({
 				</div>
 			</article>
 
-			{dataQr && (
-				<PrintQrCodeReceipt data={dataQr} printReceiptRef={componentRef} />
-			)}
+			{dataQr && <PrintQrCodeReceipt data={dataQr} printReceiptRef={qrRef} />}
 		</section>
 	);
 };
