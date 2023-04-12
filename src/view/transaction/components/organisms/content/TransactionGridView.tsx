@@ -37,7 +37,11 @@ const generateBorderColor = (
 	return borderColor[status];
 };
 
-const OrganismsContentsTransaction = () => {
+type TransactionGridViewProps = {
+	openTableCapacity: () => void;
+};
+
+const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {selectedTrxId, search} = useAppSelector(state => state.transaction);
@@ -45,6 +49,7 @@ const OrganismsContentsTransaction = () => {
 		state => state.auth,
 	);
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
+
 	const [status, setStatus] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const qrRef = useRef<any>();
@@ -187,6 +192,7 @@ const OrganismsContentsTransaction = () => {
 							<FilterChip
 								label={`Table Capacity: ${dataSummary.available_capacity}/${dataSummary.table_capacity}`}
 								openSearch={openSearch}
+								onClick={openTableCapacity}
 							/>
 							<InputSearch
 								isOpen={openSearch}
@@ -290,4 +296,4 @@ const OrganismsContentsTransaction = () => {
 	);
 };
 
-export default OrganismsContentsTransaction;
+export default TransactionGridView;

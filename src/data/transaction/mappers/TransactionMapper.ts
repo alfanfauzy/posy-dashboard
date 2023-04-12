@@ -18,6 +18,7 @@ import {
 	RefundTransaction,
 } from '@/domain/transaction/repositories/CreateRefundTransactionRepository';
 import {PaymentSummary} from '@/domain/transaction/repositories/GetPaymentSummaryRepository';
+import {TableStatus} from '@/domain/transaction/repositories/GetTableStatusRepository';
 import {
 	UpdateTransaction,
 	UpdateTransactionInput,
@@ -40,6 +41,7 @@ import {CreatePrintReceiptDataResponse} from '../types/CreatePrintReceiptType';
 import {CreateRefundTransactionDataResponse} from '../types/CreateRefundTransactionType';
 import {GetPaymentSummaryDataResponse} from '../types/GetPaymentSummaryType';
 import {GetQrCodeDataResponse} from '../types/GetQrCodeType';
+import {GetTableStatusDataResponse} from '../types/GetTableStatusType';
 
 // map server data to own model
 export const mapToTransactionsModel = (
@@ -304,3 +306,13 @@ export const mapToQrCodeModel = (data: GetQrCodeDataResponse): QrCode => ({
 	uuid: '',
 	seconds: 0,
 });
+
+export const mapToTableStatusModel = (
+	datas: Array<GetTableStatusDataResponse>,
+): Array<TableStatus> =>
+	datas.map(data => ({
+		table_uuid: data.table_uuid,
+		table_number: data.table_number,
+		priority: data.priority,
+		is_available: data.is_available,
+	}));

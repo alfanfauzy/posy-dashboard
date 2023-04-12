@@ -3,7 +3,7 @@ import {toRupiah} from '@/view/common/utils/common';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {ColumnsType} from 'antd/es/table';
 
-export const generateStatus = (status: TransactionStatus) => {
+export const generateStatusTransaction = (status: TransactionStatus) => {
 	const statusColor = {
 		WAITING_ORDER: 'text-blue-success',
 		WAITING_PAYMENT: 'text-red-accent',
@@ -87,7 +87,7 @@ export const HistoryTablecolumns = ({
 		key: 'status',
 		render: text => (
 			<div className="whitespace-nowrap text-m-regular">
-				{generateStatus(text)}
+				{generateStatusTransaction(text)}
 			</div>
 		),
 	},

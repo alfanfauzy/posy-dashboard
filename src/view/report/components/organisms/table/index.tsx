@@ -27,10 +27,10 @@ const ReportTable = ({data, isLoading, pagination}: ReportTableProps) => {
 	});
 
 	const refFilter = useRef(null);
-	useClickOutside({
+	useClickOutside<{state: boolean}>({
 		ref: refFilter,
 		handleClick: closeFilter,
-		state: isOpenFilter,
+		state: {state: isOpenFilter},
 	});
 
 	return (

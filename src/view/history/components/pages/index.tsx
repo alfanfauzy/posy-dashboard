@@ -30,8 +30,6 @@ const PagesHistory = () => {
 		},
 	]);
 
-	// const handleOpenDetails = (record: Transaction) => {};
-
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
 			<article>

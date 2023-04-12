@@ -1,14 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {RefObject, useEffect} from 'react';
 
-type UseClickOutsideProps = {
-	ref: RefObject<HTMLInputElement>;
+type UseClickOutsideProps<TData> = {
+	ref: RefObject<HTMLElement>;
 	handleClick: () => void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	state?: any;
+	state?: TData;
 };
 
-const useClickOutside = ({ref, handleClick, state}: UseClickOutsideProps) => {
+const useClickOutside = <TData extends object>({
+	ref,
+	handleClick,
+	state,
+}: UseClickOutsideProps<TData>) => {
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
 			if (ref.current && !ref.current.contains(event.target as Node)) {

@@ -3,6 +3,7 @@ import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {defineds} from '@/view/common/utils/date';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
+import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 import React, {useState} from 'react';
@@ -49,14 +50,14 @@ const ViewReportPage = () => {
 					field: 'status',
 					value: 'PAID|CANCELLED',
 				},
-				// {
-				// 	field: 'keyword',
-				// 	value: (query.search as string) || '',
-				// },
-				// {
-				// 	field: 'created_at',
-				// 	value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
-				// },
+				{
+					field: 'keyword',
+					value: (query.search as string) || '',
+				},
+				{
+					field: 'created_at',
+					value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
+				},
 				{
 					field: 'restaurant_outlet_uuid',
 					value: outletId,
@@ -78,14 +79,14 @@ const ViewReportPage = () => {
 						field: 'status',
 						value: 'PAID|CANCELLED',
 					},
-					// {
-					// 	field: 'keyword',
-					// 	value: (query.search as string) || '',
-					// },
-					// {
-					// 	field: 'created_at',
-					// 	value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
-					// },
+					{
+						field: 'keyword',
+						value: (query.search as string) || '',
+					},
+					{
+						field: 'created_at',
+						value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
+					},
 					{
 						field: 'restaurant_outlet_uuid',
 						value: outletId,

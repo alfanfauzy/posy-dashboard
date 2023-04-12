@@ -1,7 +1,7 @@
 import {Report} from '@/domain/report/model';
 import {toRupiah} from '@/view/common/utils/common';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
-import {generateStatus} from '@/view/history/components/organisms/table/Columns';
+import {generateStatusTransaction} from '@/view/history/components/organisms/table/Columns';
 import {ColumnsType} from 'antd/es/table';
 import {BiFilter} from 'react-icons/bi';
 
@@ -196,7 +196,9 @@ const defCol = ({
 		width: 150,
 		key: 'status',
 		render: text => (
-			<p className="whitespace-nowrap text-m-medium">{generateStatus(text)}</p>
+			<p className="whitespace-nowrap text-m-medium">
+				{generateStatusTransaction(text)}
+			</p>
 		),
 	},
 	{

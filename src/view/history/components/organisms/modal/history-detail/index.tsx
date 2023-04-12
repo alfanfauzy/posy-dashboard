@@ -11,7 +11,7 @@ import {Button} from 'posy-fnb-core';
 import React, {useRef} from 'react';
 import {useReactToPrint} from 'react-to-print';
 
-import {generateStatus} from '../../table/Columns';
+import {generateStatusTransaction} from '../../table/Columns';
 
 const Modal = dynamic(
 	() => import('posy-fnb-core').then(module => module.Modal),
@@ -173,7 +173,7 @@ const HistoryDetailModal = ({
 							<div className="flex flex-col items-end">
 								<p>Status</p>
 								<p className="text-l-bold">
-									{generateStatus(dataTransaction.status)}
+									{generateStatusTransaction(dataTransaction.status)}
 								</p>
 							</div>
 						</aside>
