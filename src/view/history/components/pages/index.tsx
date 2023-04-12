@@ -52,7 +52,7 @@ const PagesHistory = () => {
 						<div className="flex w-1/2 items-center lg:w-1/4">
 							<InputSearch
 								isOpen
-								placeholder="Search Transaction"
+								placeholder="Search transaction"
 								search={(query.search as string) || ''}
 								onSearch={e => onChangeQueryParams('search', e.target.value)}
 								onClearSearch={() => onChangeQueryParams('search', '')}

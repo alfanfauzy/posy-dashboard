@@ -141,7 +141,7 @@ const EditTransactionForm = ({methods}: EditTransactionFormProps) => {
 				size="l"
 				variant="secondary"
 				fullWidth
-				className="mt-4"
+				className="mt-4 disabled:bg-neutral-10 disabled:border disabled:border-neutral-50 disabled:text-neutral-50"
 				isLoading={loadUpdateTransaction}
 			>
 				Save

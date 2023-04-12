@@ -1,4 +1,5 @@
 import {GetOutletProductsQueryKey} from '@/data/product/sources/GetOutletProductsQuery';
+import {Pagination} from '@/domain/vo/BasePagination';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import Select from '@/view/common/components/atoms/input/select';
 import {useAppSelector} from '@/view/common/store/hooks';
@@ -28,11 +29,13 @@ const categoryOptions = [
 type OrganismsNavFilterProductProps = {
 	selectedRowKeys: Array<Key>;
 	setSelectedRowKeys: (key: Array<Key>) => void;
+	pagination: Pagination | undefined;
 };
 
 const OrganismsNavFilterProduct = ({
 	selectedRowKeys,
 	setSelectedRowKeys,
+	pagination,
 }: OrganismsNavFilterProductProps) => {
 	const {query} = useRouter();
 	const queryClient = useQueryClient();
@@ -68,12 +71,17 @@ const OrganismsNavFilterProduct = ({
 				/>
 				<div className="flex w-1/2 items-center lg:w-1/4">
 					<InputSearch
-						placeholder="Search Product"
+						placeholder="Search product"
 						isOpen
 						search={(query.search as string) || ''}
 						onSearch={e => onChangeQueryParams('search', e.target.value)}
 						onClearSearch={() => onChangeQueryParams('search', '')}
 					/>
+				</div>
+				<div>
+					<p className="text-m-medium text-primary-main">
+						Total product: {pagination?.total_objs}
+					</p>
 				</div>
 			</div>
 		</aside>

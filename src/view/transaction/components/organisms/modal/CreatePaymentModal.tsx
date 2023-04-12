@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {useAppSelector} from '@/view/common/store/hooks';
@@ -49,7 +48,10 @@ const CreatePaymentModal = ({
 	const [additionalInfo, setAdditionalInfo] = useState('');
 	const [price, setPrice] = useState(payment.total || 0);
 
-	const suggestionAmount = useMemo(() => generateSuggestionAmount(price), []);
+	const suggestionAmount = useMemo(
+		() => generateSuggestionAmount(price),
+		[price],
+	);
 
 	const {
 		data: dataPaymentMethodCategories,
@@ -287,7 +289,7 @@ const CreatePaymentModal = ({
 									/>
 								</div>
 							)}
-							<div className="bg-slate-200">
+							<div>
 								<Button
 									isLoading={isLoading}
 									disabled={
@@ -297,7 +299,7 @@ const CreatePaymentModal = ({
 									}
 									onClick={handleMakePayment}
 									fullWidth
-									className="flex items-center justify-center gap-3"
+									className="flex items-center justify-center gap-3 disabled:bg-opacity-70"
 								>
 									Continue Payment
 								</Button>
