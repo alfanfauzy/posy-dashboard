@@ -190,6 +190,7 @@ const TransactionSidebar = () => {
 						{!showDeleteOrder && tabValueorder === 0 && (
 							<div className="flex gap-2">
 								<Button
+									fullWidth
 									variant="secondary"
 									onClick={() =>
 										getQrCode({
@@ -202,14 +203,16 @@ const TransactionSidebar = () => {
 										Reprint QR
 									</p>
 								</Button>
-								<Button
-									variant="primary"
-									fullWidth
-									onClick={openPrintToKitchen}
-									className="whitespace-nowrap text-m-semibold"
-								>
-									Print to Kitchen
-								</Button>
+								{dataOrder && dataOrder?.length > 0 && (
+									<Button
+										variant="primary"
+										fullWidth
+										onClick={openPrintToKitchen}
+										className="whitespace-nowrap text-m-semibold"
+									>
+										Print to Kitchen
+									</Button>
+								)}
 							</div>
 						)}
 						{!showDeleteOrder && tabValueorder === 1 && (
