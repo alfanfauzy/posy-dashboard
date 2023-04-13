@@ -3,7 +3,7 @@
  * Auth reducer
  *
  */
-import {Login} from '@/domain/auth/model';
+import {Login, RefreshToken} from '@/domain/auth/model';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export type AuthState = {
@@ -39,6 +39,14 @@ export const AuthSlice = createSlice({
 		onLoginSuccess: (state: AuthState, action: PayloadAction<Login>) => {
 			state.isLoggedIn = true;
 			state.authData = action.payload;
+		},
+		onSetCredentials: (
+			state: AuthState,
+			action: PayloadAction<RefreshToken>,
+		) => {
+			state.authData.token = action.payload.token;
+			state.authData.refresh_token = action.payload.refresh_token;
+			state.authData.expired_at = action.payload.expired_at;
 		},
 		onLogout: (state: AuthState) => {
 			state.isSubscription = false;
@@ -77,6 +85,7 @@ export const {
 	setShowSidebar,
 	setRestaurantOutletId,
 	setIsSubscription,
+	onSetCredentials,
 } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

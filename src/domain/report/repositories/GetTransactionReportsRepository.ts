@@ -6,7 +6,8 @@ import {Report, Reports} from '../model';
 
 export type GetTransactionReportsInput = InputVariables<
 	keyof Report,
-	| keyof Pick<Report, 'payment_method_uuid' | 'status' | 'created_at'>
+	| keyof Pick<Report, 'payment_method_uuid' | 'status'>
+	| 'date'
 	| keyof FilterBased
 >;
 

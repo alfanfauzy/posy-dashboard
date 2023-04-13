@@ -23,7 +23,7 @@ export type UpdateOutletProductInput = {
 	is_show: boolean;
 	price: number;
 	price_after_discount: number;
-	// cooking_duration: number;
+	cooking_duration: number;
 	addons: Array<AddonInput>;
 };
 

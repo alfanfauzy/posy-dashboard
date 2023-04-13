@@ -58,8 +58,10 @@ const ProductColumns = (openEditProduct: () => void): ColumnsType<Product> => {
 			key: 'price_final',
 			width: '118px',
 			align: 'center',
-			render: text => (
-				<p className="whitespace-nowrap text-m-regular">{toRupiah(text)}</p>
+			render: (_, record) => (
+				<p className="whitespace-nowrap text-m-regular">
+					{toRupiah(record.price_final)}
+				</p>
 			),
 		},
 		{

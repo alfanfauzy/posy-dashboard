@@ -4,7 +4,7 @@ type Patch = {
 	title?: string;
 	baseURL?: string;
 	endpoint: string;
-	data: Record<string, any>;
+	data: Record<string, unknown>;
 	headers?: Record<string, string>;
 	isAuth?: boolean;
 };
@@ -24,7 +24,7 @@ type Patch = {
  */
 const Patch = async ({baseURL, endpoint, data, headers = {}}: Patch) => {
 	const {status, ...response} =
-		(await axios().patch(endpoint, data, {
+		(await axios.patch(endpoint, data, {
 			headers: headers || {},
 			baseURL,
 		})) || {};

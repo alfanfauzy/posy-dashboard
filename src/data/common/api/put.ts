@@ -4,7 +4,7 @@ type Put = {
 	title?: string;
 	baseURL?: string;
 	endpoint: string;
-	data: Record<string, any>;
+	data: Record<string, unknown>;
 	headers?: Record<string, string>;
 	isAuth?: boolean;
 };
@@ -24,7 +24,7 @@ type Put = {
  */
 const Put = async ({baseURL, endpoint, data, headers = {}}: Put) => {
 	const {status, ...response} =
-		(await axios().put(endpoint, data, {
+		(await axios.put(endpoint, data, {
 			headers: headers || {},
 			baseURL,
 		})) || {};

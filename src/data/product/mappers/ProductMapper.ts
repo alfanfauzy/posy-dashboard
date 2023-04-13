@@ -80,11 +80,11 @@ export const mapToOutletProductsModel = (
 		product_name: data.product.product_name,
 		product_image_url: data.product.product_image_url,
 		product_description: data.product.product_description,
+		price: data.price,
 		price_final: data.price_final,
 		price_discount_percentage: data.price_discount_percentage,
 		price_after_discount: data.price_after_discount,
 		price_discount: data.price_discount,
-		price: data.price,
 		is_favourite: data.is_favourite,
 		is_discount: data.is_discount,
 		is_available: data.is_available,
@@ -166,4 +166,5 @@ export const mapToUpdateOutletProductPayload = (
 			variant_price: parseInt(variant.variant_price.split('.').join('')),
 		})),
 	})),
+	cooking_duration: parseInt(data.cooking_duration),
 });

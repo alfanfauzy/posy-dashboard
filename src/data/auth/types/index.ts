@@ -31,3 +31,13 @@ export type ResetPasswordDataResponse = {
 export type LogoutDataResponse = {
 	success: boolean;
 };
+
+export type RefreshTokenDataResponse = {
+	uuid: string;
+	token: string;
+	refresh_token: string;
+	expired_at: {
+		seconds: number;
+		nanos: number;
+	};
+};

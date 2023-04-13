@@ -3,10 +3,10 @@ import axios from '.';
 type Get = {
 	baseURL?: string;
 	endpoint: string;
-	params?: Record<string, any>;
+	params?: Record<string, unknown>;
 	headers?: Record<string, string>;
 	isAuth?: boolean;
-	data?: any;
+	data?: unknown;
 };
 
 /**
@@ -21,7 +21,7 @@ type Get = {
  */
 const Get = async ({baseURL, endpoint, data, params, headers = {}}: Get) => {
 	const {status, ...response} =
-		(await axios().get(endpoint, {
+		(await axios.get(endpoint, {
 			headers: headers || {},
 			params,
 			baseURL,

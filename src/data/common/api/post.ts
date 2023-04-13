@@ -2,7 +2,7 @@ import axios from '.';
 
 type Post = {
 	endpoint: string;
-	data: any;
+	data: unknown;
 	baseURL?: string;
 	headers?: Record<string, string>;
 	isAuth?: boolean;
@@ -24,7 +24,7 @@ type Post = {
 
 const Post = async ({baseURL, endpoint, data, headers = {}}: Post) => {
 	const {status, ...response} =
-		(await axios().post(endpoint, data, {
+		(await axios.post(endpoint, data, {
 			headers: {
 				...headers,
 			},

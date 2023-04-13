@@ -4,7 +4,7 @@ type Delete = {
 	title?: string;
 	baseURL?: string;
 	endpoint: string;
-	params?: Record<string, any>;
+	params?: Record<string, unknown>;
 	headers?: Record<string, string>;
 	isAuth?: boolean;
 };
@@ -21,7 +21,7 @@ type Delete = {
  */
 const Delete = async ({baseURL, endpoint, params, headers = {}}: Delete) => {
 	const {status, ...response} =
-		(await axios().delete(endpoint, {
+		(await axios.delete(endpoint, {
 			headers: headers || {},
 			params,
 			baseURL,

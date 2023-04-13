@@ -58,6 +58,8 @@ const OrganismsFormEditProduct = ({
 		name: 'addon',
 	});
 
+	console.log(errors);
+	console.log(isValid);
 	const {data: dataProduct, isLoading: loadDataProduct} =
 		useGetOutletProductViewModel(
 			{
@@ -73,6 +75,15 @@ const OrganismsFormEditProduct = ({
 						setValue('is_show', mappedData.is_show);
 						setValue('is_available', mappedData.is_available);
 						setValue('is_favourite', mappedData.is_favourite);
+						setValue('is_favourite', mappedData.is_favourite);
+						setValue(
+							'cooking_duration',
+							mappedData.cooking_duration.toString(),
+						);
+						setValue(
+							'is_active_cooking_duration',
+							mappedData.cooking_duration > 0,
+						);
 						setValue(
 							'price_after_discount',
 							mappedData.price_after_discount.toString(),
@@ -116,11 +127,19 @@ const OrganismsFormEditProduct = ({
 
 	const onToggleActiveDiscount = (value: boolean) => {
 		setValue('is_discount', !value);
-		setValue('price_after_discount', '');
-		setValue('price_discount_percentage', '');
 		resetField('price_after_discount');
 		resetField('price_discount_percentage');
+		setValue('price_after_discount', '');
+		setValue('price_discount_percentage', '');
 	};
+
+	const onToggleActiveCookingDuration = (value: boolean) => {
+		setValue('is_active_cooking_duration', !value);
+		resetField('cooking_duration');
+		setValue('cooking_duration', '');
+	};
+
+	console.log(watch());
 
 	const onSubmit = (data: ValidationSchemaProductOutletType) => {
 		updateOutletProduct(data, {
@@ -232,7 +251,7 @@ const OrganismsFormEditProduct = ({
 
 						<aside className="mt-6 grid grid-cols-3 gap-6">
 							<div>
-								<p className="mb-4">Activate Discount</p>
+								<p className="mb-4">Activate discount</p>
 								<Controller
 									control={control}
 									name="is_discount"
@@ -283,6 +302,33 @@ const OrganismsFormEditProduct = ({
 									error={!!errors.price_after_discount}
 									helperText={errors.price_after_discount?.message}
 									disabled
+								/>
+							</div>
+						</aside>
+
+						<aside className="mt-6 grid grid-cols-3 gap-6">
+							<div>
+								<p className="mb-4">Activate cooking duration</p>
+								<Controller
+									control={control}
+									name="is_active_cooking_duration"
+									render={({field: {value}}) => (
+										<Toggle
+											value={value}
+											onChange={() => onToggleActiveCookingDuration(value)}
+										/>
+									)}
+								/>
+							</div>
+							<div className="col-span-2">
+								<Input
+									fullwidth
+									labelText="Cooking duration (minute)"
+									disabled={!watch('is_active_cooking_duration')}
+									error={!!errors.cooking_duration}
+									helperText={errors.cooking_duration?.message}
+									placeholder="60"
+									{...register('cooking_duration')}
 								/>
 							</div>
 						</aside>

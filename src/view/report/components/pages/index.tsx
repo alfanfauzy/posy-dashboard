@@ -48,14 +48,14 @@ const ViewReportPage = () => {
 			search: [
 				{
 					field: 'status',
-					value: 'PAID|CANCELLED',
+					value: 'all',
 				},
 				{
 					field: 'keyword',
 					value: (query.search as string) || '',
 				},
 				{
-					field: 'created_at',
+					field: 'date',
 					value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
 				},
 				{
@@ -77,14 +77,14 @@ const ViewReportPage = () => {
 				search: [
 					{
 						field: 'status',
-						value: 'PAID|CANCELLED',
+						value: 'all',
 					},
 					{
 						field: 'keyword',
 						value: (query.search as string) || '',
 					},
 					{
-						field: 'created_at',
+						field: 'date',
 						value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
 					},
 					{

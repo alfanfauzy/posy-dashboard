@@ -1,4 +1,4 @@
-import {Login} from '@/domain/auth/model';
+import {Login, RefreshToken} from '@/domain/auth/model';
 import {Logout} from '@/domain/auth/repositories/LogoutRepository';
 import {RequestResetPassword} from '@/domain/auth/repositories/RequestResetPasswordRepository';
 import {ResetPassword} from '@/domain/auth/repositories/ResetPasswordRepository';
@@ -7,6 +7,7 @@ import {VerifyToken} from '@/domain/auth/repositories/VerifyTokenRepository';
 import {
 	LoginDataResponse,
 	LogoutDataResponse,
+	RefreshTokenDataResponse,
 	RequestResetPasswordDataResponse,
 	ResetPasswordDataResponse,
 	VerifyTokenDataResponse,
@@ -16,6 +17,15 @@ export const mapToLoginModel = (data: LoginDataResponse): Login => ({
 	user_info: data.user_info,
 	token: data.token,
 	refresh_token: data.refresh_token,
+	expired_at: data.expired_at.seconds,
+});
+
+export const mapToRefreshTokenModel = (
+	data: RefreshTokenDataResponse,
+): RefreshToken => ({
+	token: data.token,
+	refresh_token: data.refresh_token,
+	uuid: data.uuid,
 	expired_at: data.expired_at.seconds,
 });
 

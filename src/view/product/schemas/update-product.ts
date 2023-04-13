@@ -6,6 +6,10 @@ export const validationSchemaProductOutlet = z
 		is_show: z.boolean(),
 		is_available: z.boolean(),
 		is_discount: z.boolean(),
+		is_active_cooking_duration: z.boolean(),
+		cooking_duration: z
+			.string()
+			.min(1, {message: 'Cooking duration is required'}),
 		price: z.string().min(1, {message: 'Price is required'}),
 		price_after_discount: z.string().min(1, {message: 'Price is required'}),
 		price_discount_percentage: z
@@ -59,6 +63,18 @@ export const validationSchemaProductOutlet = z
 		{
 			message: 'Discount percentage is required',
 			path: ['price_discount_percentage'],
+		},
+	)
+	.refine(
+		data => {
+			if (data.is_active_cooking_duration) {
+				return data.is_active_cooking_duration !== undefined;
+			}
+			return true;
+		},
+		{
+			message: 'Discount percentage is required',
+			path: ['cooking_duration'],
 		},
 	);
 

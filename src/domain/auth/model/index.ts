@@ -11,3 +11,12 @@ type LoginBased = {
 };
 
 export type Login = LoginBased;
+
+type RefreshTokenBased = {
+	uuid: string;
+	token: string;
+	refresh_token: string;
+	expired_at: number;
+};
+
+export type RefreshToken = RefreshTokenBased;
