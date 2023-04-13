@@ -1,17 +1,13 @@
-import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
-import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {QrCode} from '@/domain/qr-code/model';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
-import {useCreatePrintOrderToKitchenViewModel} from '@/view/order/view-models/CreatePrintOrderToKitchenViewModel';
 import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
 import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/update-transaction';
 import {useGetQrCodeViewModel} from '@/view/transaction/view-models/GetQrCodeViewModel';
 import {useGetTransactionViewModel} from '@/view/transaction/view-models/GetTransactionViewModel';
-import {useQueryClient} from '@tanstack/react-query';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
@@ -21,28 +17,29 @@ import EditTransactionForm from '../../organisms/form/EditTransactionForm';
 import ApplyDiscountModal from '../../organisms/modal/ApplyDiscountModal';
 import CreatePaymentModal from '../../organisms/modal/CreatePaymentModal';
 import PaymentConfirmationModal from '../../organisms/modal/PaymentConfirmationModal';
+import PrintToKitchenModal from '../../organisms/modal/PrintToKitchenModal';
 import OrderDetails from '../../organisms/order-details';
 import PrintQrCodeReceipt from '../../organisms/receipt/PrintQrCodeReceipt';
-import PrintToKitchenReceipt from '../../organisms/receipt/PrintToKitchenReceipt';
 import TransactionDetails from '../../organisms/transaction-details';
 import ManualSubmitOrder from '../manual-order';
 
 const TransactionSidebar = () => {
-	const queryClient = useQueryClient();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const printToKitchenRef = useRef<any>();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const qrRef = useRef<any>();
 	const {
 		selectedTrxId,
 		payment: {discount_percentage},
 	} = useAppSelector(state => state.transaction);
-	const {outletId} = useAppSelector(state => state.auth);
 
 	const [tabValueorder, setTabValueOrder] = useState(0);
 
 	const [isOpenCreateOrder, {open: openCreateOrder, close: closeCreateOrder}] =
 		useDisclosure({initialState: false});
+
+	const [
+		isOpenPrintToKitchen,
+		{open: openPrintToKitchen, close: closePrintToKitchen},
+	] = useDisclosure({initialState: false});
 
 	const [
 		showDeleteOrder,
@@ -127,26 +124,6 @@ const TransactionSidebar = () => {
 		content: () => qrRef.current,
 	});
 
-	const handlePrintToKitchen = useReactToPrint({
-		content: () => printToKitchenRef.current,
-	});
-
-	const {
-		createPrintOrderToKitchen,
-		data: dataPrintToKitchen,
-		isLoading: loadPrintToKitchen,
-	} = useCreatePrintOrderToKitchenViewModel({
-		onSuccess: _data => {
-			const data = _data as CreatePrintOrderToKitchenModel;
-			if (data) {
-				setTimeout(() => {
-					handlePrintToKitchen();
-				}, 100);
-				queryClient.invalidateQueries([GetOrdersQueryKey]);
-			}
-		},
-	});
-
 	const {
 		getQrCode,
 		data: dataQrCode,
@@ -161,17 +138,6 @@ const TransactionSidebar = () => {
 			}
 		},
 	});
-
-	const onPrintToKitchen = () => {
-		{
-			dataOrder &&
-				createPrintOrderToKitchen({
-					transaction_uuid: selectedTrxId,
-					restaurant_outlet_uuid: outletId,
-					order_uuids: dataOrder.map(order => order.uuid),
-				});
-		}
-	};
 
 	return (
 		<main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
@@ -239,8 +205,7 @@ const TransactionSidebar = () => {
 								<Button
 									variant="primary"
 									fullWidth
-									isLoading={loadPrintToKitchen}
-									onClick={onPrintToKitchen}
+									onClick={openPrintToKitchen}
 									className="whitespace-nowrap text-m-semibold"
 								>
 									Print to Kitchen
@@ -306,14 +271,16 @@ const TransactionSidebar = () => {
 				/>
 			)}
 
-			{dataPrintToKitchen && (
-				<PrintToKitchenReceipt
-					dataPrintToKitchen={dataPrintToKitchen}
-					printToKitchenRef={printToKitchenRef}
-				/>
-			)}
 			{dataQrCode && (
 				<PrintQrCodeReceipt data={dataQrCode} printReceiptRef={qrRef} />
+			)}
+
+			{isOpenPrintToKitchen && dataOrder && (
+				<PrintToKitchenModal
+					isOpenPrintToKitchen={isOpenPrintToKitchen}
+					onClosePrintToKitchen={closePrintToKitchen}
+					dataOrder={dataOrder}
+				/>
 			)}
 		</main>
 	);

@@ -58,8 +58,6 @@ const OrganismsFormEditProduct = ({
 		name: 'addon',
 	});
 
-	console.log(errors);
-	console.log(isValid);
 	const {data: dataProduct, isLoading: loadDataProduct} =
 		useGetOutletProductViewModel(
 			{
@@ -138,8 +136,6 @@ const OrganismsFormEditProduct = ({
 		resetField('cooking_duration');
 		setValue('cooking_duration', '');
 	};
-
-	console.log(watch());
 
 	const onSubmit = (data: ValidationSchemaProductOutletType) => {
 		updateOutletProduct(data, {

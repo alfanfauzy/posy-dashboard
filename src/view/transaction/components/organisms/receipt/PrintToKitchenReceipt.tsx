@@ -39,8 +39,11 @@ const PrintToKitchenReceipt = ({
 					<aside key={order.uuid}>
 						<div className="mt-4 flex flex-col items-start">
 							<p className="text-xl-semibold">{`Order ${idx + 1}`}</p>
-							{order.order_detail.map(orderDetail => (
-								<div key={orderDetail.product_name} className="mt-5">
+							{order.order_detail.map((orderDetail, v) => (
+								<div
+									key={`${orderDetail.product_name} - ${v}`}
+									className="mt-5"
+								>
 									<p className="text-xxl-bold">{`${orderDetail.product_name} x${orderDetail.qty}`}</p>
 									<p className="mt-2 text-l-regular">
 										{orderDetail.addon_information
