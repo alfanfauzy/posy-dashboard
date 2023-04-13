@@ -31,7 +31,7 @@ const generateBorderColor = (
 		return 'border-2 border-primary-main';
 	}
 	const borderColor: Record<string, string> = {
-		WAITING_ORDER: 'border-2 border-blue-success',
+		WAITING_FOOD: 'border-2 border-blue-success',
 		WAITING_PAYMENT: 'border-2 border-green-success',
 	};
 	return borderColor[status];
@@ -166,13 +166,13 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 							}`}
 						>
 							<FilterChip
-								label={`Waiting Order: ${dataSummary?.waiting_order}`}
+								label={`Waiting Food: ${dataSummary?.waiting_food}`}
 								openSearch={openSearch}
 								onClick={e =>
-									handleSetStatus(e, TransactionStatus.WAITING_ORDER)
+									handleSetStatus(e, TransactionStatus.WAITING_FOOD)
 								}
 								className={`${
-									status === TransactionStatus.WAITING_ORDER
+									status === TransactionStatus.WAITING_FOOD
 										? 'border-2 border-blue-success'
 										: 'border-neutral-50 '
 								}`}
@@ -282,7 +282,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 			<article className="absolute bottom-0 mb-5 flex w-full gap-4">
 				<div className="flex items-center gap-1">
 					<div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
-					<p className="text-s-semibold">Waiting Order</p>
+					<p className="text-s-semibold">Waiting Food</p>
 				</div>
 
 				<div className="flex items-center gap-1">

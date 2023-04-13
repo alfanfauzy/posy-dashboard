@@ -149,6 +149,7 @@ export const mapToTransactionSummaryModel = (
 	available_capacity: data.available_capacity,
 	table_capacity: data.table_capacity,
 	waiting_order: data.waiting_order,
+	waiting_food: data.waiting_food,
 });
 
 export const mapToUpdateTransactionModel = (

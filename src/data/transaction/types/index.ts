@@ -93,6 +93,7 @@ export type CreateTransactionDataResponse = {
 export type GetTransactionSummaryDataResponse = {
 	waiting_order: number;
 	waiting_payment: number;
+	waiting_food: number;
 	table_capacity: number;
 	available_capacity: number;
 };

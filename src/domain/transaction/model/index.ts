@@ -58,6 +58,7 @@ export type Transactions = Array<TransactionBased>;
 
 export type TransactionSummary = {
 	waiting_order: number;
+	waiting_food: number;
 	waiting_payment: number;
 	table_capacity: number;
 	available_capacity: number;

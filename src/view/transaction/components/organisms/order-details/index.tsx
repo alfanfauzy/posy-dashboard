@@ -169,10 +169,7 @@ const OrderDetails = ({
 													)
 												}
 												size="m"
-												disabled={
-													orderDetail.status !== 'PROCESS' &&
-													orderDetail.status !== 'CANCEL'
-												}
+												disabled={orderDetail.status !== 'PROCESS'}
 												checked={orderDetail.status === 'SERVED'}
 											/>
 										))}
