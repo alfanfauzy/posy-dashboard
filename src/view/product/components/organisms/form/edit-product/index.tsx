@@ -50,6 +50,7 @@ const OrganismsFormEditProduct = ({
 		setValue,
 		getValues,
 		watch,
+		reset,
 		register,
 	} = methods;
 
@@ -68,43 +69,66 @@ const OrganismsFormEditProduct = ({
 				onSuccess: data => {
 					if (data.message === 'OK' && data.data) {
 						const mappedData = mapToOutletProductModel(data.data);
-						setValue('price', mappedData.price.toString());
-						setValue('is_discount', mappedData.is_discount);
-						setValue('is_show', mappedData.is_show);
-						setValue('is_available', mappedData.is_available);
-						setValue('is_favourite', mappedData.is_favourite);
-						setValue('is_favourite', mappedData.is_favourite);
-						setValue(
-							'cooking_duration',
-							mappedData.cooking_duration.toString(),
-						);
-						setValue(
-							'is_active_cooking_duration',
-							mappedData.cooking_duration > 0,
-						);
-						setValue(
-							'price_after_discount',
-							mappedData.price_after_discount.toString(),
-						);
-						setValue(
-							'price_discount_percentage',
-							mappedData.price_discount_percentage.toString(),
-						);
-						if (mappedData?.addons) {
-							mappedData?.addons.forEach(addon => {
-								append({
-									addon_name: addon.addon_name,
-									can_choose_multiple: addon.can_choose_multiple,
-									is_required: !addon.is_optional,
-									addon_variants: addon.variants.map(variant => ({
-										variant_name: variant.variant_name,
-										variant_price: variant?.variant_price
-											? variant?.variant_price.toString()
-											: '0',
-									})),
-								});
-							});
-						}
+						reset({
+							cooking_duration: mappedData.cooking_duration.toString(),
+							is_active_cooking_duration: mappedData.cooking_duration > 0,
+							is_available: mappedData.is_available,
+							is_discount: mappedData.is_discount,
+							is_favourite: mappedData.is_favourite,
+							is_show: mappedData.is_show,
+							price: mappedData.price.toString(),
+							price_after_discount: mappedData.price_after_discount.toString(),
+							price_discount_percentage:
+								mappedData.price_discount_percentage.toString(),
+							addon: mappedData?.addons?.map(addon => ({
+								addon_name: addon.addon_name,
+								is_required: !addon.is_optional,
+								can_choose_multiple: addon.can_choose_multiple,
+								addon_variants: addon.variants.map(variant => ({
+									variant_name: variant.variant_name,
+									variant_price: variant?.variant_price
+										? variant?.variant_price.toString()
+										: '0',
+								})),
+							})),
+						});
+						// setValue('price', mappedData.price.toString());
+						// setValue('is_discount', mappedData.is_discount);
+						// setValue('is_show', mappedData.is_show);
+						// setValue('is_available', mappedData.is_available);
+						// setValue('is_favourite', mappedData.is_favourite);
+						// setValue('is_favourite', mappedData.is_favourite);
+						// setValue(
+						// 	'cooking_duration',
+						// 	mappedData.cooking_duration.toString(),
+						// );
+						// setValue(
+						// 	'is_active_cooking_duration',
+						// 	mappedData.cooking_duration > 0,
+						// );
+						// setValue(
+						// 	'price_after_discount',
+						// 	mappedData.price_after_discount.toString(),
+						// );
+						// setValue(
+						// 	'price_discount_percentage',
+						// 	mappedData.price_discount_percentage.toString(),
+						// );
+						// if (mappedData?.addons) {
+						// 	mappedData?.addons.forEach(addon => {
+						// 		append({
+						// 			addon_name: addon.addon_name,
+						// 			can_choose_multiple: addon.can_choose_multiple,
+						// 			is_required: !addon.is_optional,
+						// 			addon_variants: addon.variants.map(variant => ({
+						// 				variant_name: variant.variant_name,
+						// 				variant_price: variant?.variant_price
+						// 					? variant?.variant_price.toString()
+						// 					: '0',
+						// 			})),
+						// 		});
+						// 	});
+						// }
 					}
 				},
 			},
@@ -125,16 +149,16 @@ const OrganismsFormEditProduct = ({
 
 	const onToggleActiveDiscount = (value: boolean) => {
 		setValue('is_discount', !value);
-		resetField('price_after_discount');
-		resetField('price_discount_percentage');
+		// resetField('price_after_discount');
+		// resetField('price_discount_percentage');
 		setValue('price_after_discount', '');
-		setValue('price_discount_percentage', '');
+		setValue('price_discount_percentage', '', {shouldValidate: true});
 	};
 
 	const onToggleActiveCookingDuration = (value: boolean) => {
 		setValue('is_active_cooking_duration', !value);
 		resetField('cooking_duration');
-		setValue('cooking_duration', '');
+		setValue('cooking_duration', '', {shouldValidate: true});
 	};
 
 	const onSubmit = (data: ValidationSchemaProductOutletType) => {
@@ -229,7 +253,7 @@ const OrganismsFormEditProduct = ({
 												+removeFormatRupiah(getValues('price')) -
 												(+removeFormatRupiah(getValues('price')) *
 													+removeFormatRupiah(
-														getValues('price_discount_percentage'),
+														getValues('price_discount_percentage') || '',
 													)) /
 													100;
 
@@ -272,7 +296,7 @@ const OrganismsFormEditProduct = ({
 												+removeFormatRupiah(getValues('price')) -
 												(+removeFormatRupiah(getValues('price')) *
 													+removeFormatRupiah(
-														getValues('price_discount_percentage'),
+														getValues('price_discount_percentage') || '',
 													)) /
 													100;
 

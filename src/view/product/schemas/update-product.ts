@@ -9,9 +9,15 @@ export const validationSchemaProductOutlet = z
 		is_active_cooking_duration: z.boolean(),
 		cooking_duration: z
 			.string()
-			.min(1, {message: 'Cooking duration is required'}),
+			.min(1, {message: 'Cooking duration is required'})
+			.optional()
+			.or(z.literal('')),
 		price: z.string().min(1, {message: 'Price is required'}),
-		price_after_discount: z.string().min(1, {message: 'Price is required'}),
+		price_after_discount: z
+			.string()
+			.min(1, {message: 'Price is required'})
+			.optional()
+			.or(z.literal('')),
 		price_discount_percentage: z
 			.string()
 			.regex(/^[0-9+\-()]*$/i, {
@@ -20,7 +26,9 @@ export const validationSchemaProductOutlet = z
 			.min(1, {message: 'Discount percentage is required'})
 			.refine(val => parseInt(val) <= 100, {
 				message: "Discount percentage can't be more than 100%",
-			}),
+			})
+			.optional()
+			.or(z.literal('')),
 		addon: z
 			.object({
 				addon_name: z
@@ -43,8 +51,8 @@ export const validationSchemaProductOutlet = z
 	})
 	.refine(
 		data => {
-			if (data.is_discount) {
-				return data.is_discount !== undefined;
+			if (data.is_discount && !data.price_after_discount) {
+				return false;
 			}
 			return true;
 		},
@@ -55,25 +63,25 @@ export const validationSchemaProductOutlet = z
 	)
 	.refine(
 		data => {
-			if (data.is_discount) {
-				return data.is_discount !== undefined;
+			if (data.is_discount && !data.price_discount_percentage) {
+				return false;
 			}
 			return true;
 		},
 		{
-			message: 'Discount percentage is required',
+			message: 'Discount is required',
 			path: ['price_discount_percentage'],
 		},
 	)
 	.refine(
 		data => {
-			if (data.is_active_cooking_duration) {
-				return data.is_active_cooking_duration !== undefined;
+			if (data.is_active_cooking_duration && !data.cooking_duration) {
+				return false;
 			}
 			return true;
 		},
 		{
-			message: 'Discount percentage is required',
+			message: 'Cooking duration is required',
 			path: ['cooking_duration'],
 		},
 	);

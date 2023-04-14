@@ -153,7 +153,9 @@ export const mapToUpdateOutletProductPayload = (
 	restaurant_outlet_uuid: default_input.restaurant_outlet_uuid,
 	product_uuid: default_input.product_uuid,
 	price: parseInt(data.price.split('.').join('')),
-	price_after_discount: parseInt(data.price_after_discount.split('.').join('')),
+	price_after_discount: data.price_after_discount
+		? parseInt(data.price_after_discount.split('.').join(''))
+		: 0,
 	is_show: data.is_show,
 	is_favourite: data.is_favourite,
 	is_available: data.is_available,
@@ -166,5 +168,5 @@ export const mapToUpdateOutletProductPayload = (
 			variant_price: parseInt(variant.variant_price.split('.').join('')),
 		})),
 	})),
-	cooking_duration: parseInt(data.cooking_duration),
+	cooking_duration: data.cooking_duration ? parseInt(data.cooking_duration) : 0,
 });
