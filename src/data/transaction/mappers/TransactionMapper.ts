@@ -22,6 +22,7 @@ import {TableStatus} from '@/domain/transaction/repositories/GetTableStatusRepos
 import {
 	UpdateTransaction,
 	UpdateTransactionInput,
+	UpdateTransactionInputBased,
 } from '@/domain/transaction/repositories/UpdateTransactionRepository';
 import {ValidationSchemaRefundType} from '@/view/history/schemas/RefundSchema';
 import {ValidationSchemaApplyDiscountType} from '@/view/transaction/schemas/apply-discount';
@@ -160,13 +161,17 @@ export const mapToUpdateTransactionModel = (
 });
 
 export const mapToUpdateTransactionPayload = (
-	data: ValidationSchemaUpdateTransactionType & {transaction_uuid: string},
+	data: ValidationSchemaUpdateTransactionType & UpdateTransactionInputBased,
 ): UpdateTransactionInput => ({
 	customer_name: data.customer_name,
-	restaurant_outlet_table_uuid: data.restaurant_outlet_table_uuid.value,
+	restaurant_outlet_table_uuid:
+		data.restaurant_outlet_table_uuid && data.transaction_category.value === 0
+			? data.restaurant_outlet_table_uuid.value
+			: '',
 	total_pax: Number(data.total_pax),
 	transaction_category: data.transaction_category.value,
 	transaction_uuid: data.transaction_uuid,
+	restaurant_outlet_uuid: data.restaurant_outlet_uuid,
 });
 
 export const mapToCancelTransactionModel = (

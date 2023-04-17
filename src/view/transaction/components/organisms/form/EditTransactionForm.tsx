@@ -1,4 +1,3 @@
-import {mapToUpdateTransactionPayload} from '@/data/transaction/mappers/TransactionMapper';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {UpdateTransaction} from '@/domain/transaction/repositories/UpdateTransactionRepository';
@@ -61,14 +60,16 @@ const EditTransactionForm = ({methods}: EditTransactionFormProps) => {
 	const onSubmit: reactHookForm.SubmitHandler<
 		ValidationSchemaUpdateTransactionType
 	> = form => {
-		const payload = {
+		updateTransaction({
 			...form,
 			transaction_uuid: selectedTrxId,
-		};
-		const mappedPayload = mapToUpdateTransactionPayload(payload);
-		updateTransaction(mappedPayload);
+			restaurant_outlet_uuid: outletId,
+		});
 	};
 
+	console.log(watch());
+
+	console.log(errors);
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className="flex gap-4">
@@ -115,11 +116,18 @@ const EditTransactionForm = ({methods}: EditTransactionFormProps) => {
 							name="restaurant_outlet_table_uuid"
 							render={({field: {onChange}}) => (
 								<Select
-									disabled={loadTable}
+									disabled={
+										loadTable || watch('transaction_category.value') === 1
+									}
 									isLoading={loadTable}
 									size="m"
 									labelText="Table"
-									value={watch('restaurant_outlet_table_uuid')}
+									value={
+										watch('restaurant_outlet_table_uuid') as {
+											label: string;
+											value: string;
+										}
+									}
 									onChange={onChange}
 									options={
 										dataTable?.map(el => ({

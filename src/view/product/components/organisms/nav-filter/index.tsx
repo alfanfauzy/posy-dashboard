@@ -1,5 +1,6 @@
 import {GetOutletProductsQueryKey} from '@/data/product/sources/GetOutletProductsQuery';
 import {Pagination} from '@/domain/vo/BasePagination';
+import {useGetCategoriesViewModel} from '@/view/category/view-models/GetCategoriesViewModel';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import Select from '@/view/common/components/atoms/input/select';
 import {useAppSelector} from '@/view/common/store/hooks';
@@ -18,13 +19,13 @@ const actionOptions = (length: number) => [
 	{label: 'Mark as available', value: 'is_available'},
 ];
 
-const categoryOptions = [
-	{label: 'Select Category', value: '', hide: true},
-	{label: 'Category: All', value: 'all'},
-	{label: 'Category: Food', value: 'food'},
-	{label: 'Category: Beverages', value: 'beverages'},
-	{label: 'Category: Desserts', value: 'desserts'},
-];
+// const categoryOptions = [
+// 	{label: 'Select Category', value: '', hide: true},
+// 	{label: 'Category: All', value: 'all'},
+// 	{label: 'Category: Food', value: 'food'},
+// 	{label: 'Category: Beverages', value: 'beverages'},
+// 	{label: 'Category: Desserts', value: 'desserts'},
+// ];
 
 type OrganismsNavFilterProductProps = {
 	selectedRowKeys: Array<Key>;
@@ -55,6 +56,8 @@ const OrganismsNavFilterProduct = ({
 		setSelectedRowKeys([]);
 	};
 
+	const {data: dataCategory} = useGetCategoriesViewModel();
+
 	return (
 		<aside className="mt-4">
 			<div className="mt-1 flex items-center space-x-4">
@@ -64,11 +67,18 @@ const OrganismsNavFilterProduct = ({
 						onChange={handleChangeRowAction}
 					/>
 				)}
-				<Select
-					options={categoryOptions}
-					onChange={e => onChangeQueryParams('category', e.currentTarget.value)}
-					defaultValue={query.category as string}
-				/>
+				{dataCategory && (
+					<Select
+						options={dataCategory.map(category => ({
+							label: category.category_name,
+							value: category.uuid,
+						}))}
+						onChange={e =>
+							onChangeQueryParams('category', e.currentTarget.value)
+						}
+						defaultValue={query.category as string}
+					/>
+				)}
 				<div className="flex w-1/2 items-center lg:w-1/4">
 					<InputSearch
 						placeholder="Search product"

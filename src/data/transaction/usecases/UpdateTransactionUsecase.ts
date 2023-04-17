@@ -1,13 +1,17 @@
 import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
 import {
-	UpdateTransactionInput,
+	UpdateTransactionInputBased,
 	UpdateTransactionRepository,
 } from '@/domain/transaction/repositories/UpdateTransactionRepository';
 import {BaseError} from '@/domain/vo/BaseError';
+import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
 import {useSnackbar} from 'notistack';
 
-import {mapToUpdateTransactionModel} from '../mappers/TransactionMapper';
+import {
+	mapToUpdateTransactionModel,
+	mapToUpdateTransactionPayload,
+} from '../mappers/TransactionMapper';
 import {useUpdateTransactionMutation} from '../sources/UpdateTransactionMutation';
 
 export const useUpdateTransactionUsecase = ({
@@ -46,8 +50,11 @@ export const useUpdateTransactionUsecase = ({
 		...options,
 	});
 
-	const updateTransaction = (input: UpdateTransactionInput) => {
-		mutate(input);
+	const updateTransaction = (
+		input: ValidationSchemaUpdateTransactionType & UpdateTransactionInputBased,
+	) => {
+		const mappedInput = mapToUpdateTransactionPayload(input);
+		mutate(mappedInput);
 	};
 
 	if (_error) {

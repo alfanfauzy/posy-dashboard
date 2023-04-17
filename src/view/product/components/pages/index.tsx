@@ -32,6 +32,10 @@ const ViewProductPage = () => {
 				field: 'restaurant_outlet_uuid',
 				value: outletId,
 			},
+			{
+				field: 'category_uuid',
+				value: (query.category as string) || '',
+			},
 		],
 		sort: {field: 'created_at', value: 'desc'},
 	});

@@ -7,7 +7,9 @@ import {Product, Products} from '../model';
 
 export type GetOutletProductsInput = InputVariables<
 	keyof Metadata,
-	keyof Pick<Product, 'product_name'> | keyof FilterBased
+	| keyof Pick<Product, 'product_name'>
+	| keyof {category_uuid: string}
+	| keyof FilterBased
 >;
 
 export type GetOutletProductsResult = ResultQuery<Products | undefined> & {
