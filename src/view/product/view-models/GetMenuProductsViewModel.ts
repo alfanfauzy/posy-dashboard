@@ -1,4 +1,4 @@
-import {GetMenuProductsDataResponse} from '@/data/product/types/MenuProduct';
+import {GetMenuProductsDataResponse} from '@/data/product/types/GetMenuProductsType';
 import {useGetMenuProductsUsecase} from '@/data/product/usecases/GetMenuProductsUsecase';
 import {
 	GetMenuProductsInput,

@@ -27,6 +27,7 @@ export const useLogoutUsecase = ({
 		onSuccess: (dataSuccess, ...args) => {
 			if (dataSuccess) {
 				onSuccess?.(mapToLogoutModel(dataSuccess?.data), ...args);
+				localStorage.clear();
 			}
 		},
 		onError: (dataError, ...args) => {

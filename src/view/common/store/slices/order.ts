@@ -3,7 +3,7 @@
  * Order reducer
  *
  */
-import {Product} from '@/domain/product/model';
+import {Product} from '@/domain/product/model/ProductOutlet';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export type AddOnVariant = {

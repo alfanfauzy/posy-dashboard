@@ -1,4 +1,4 @@
-import {Products} from '@/domain/product/model';
+import {Products} from '@/domain/product/model/ProductOutlet';
 import {Pagination} from '@/domain/vo/BasePagination';
 import Table from '@/view/common/components/atoms/table';
 import React, {Key} from 'react';

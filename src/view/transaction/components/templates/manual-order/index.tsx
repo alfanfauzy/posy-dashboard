@@ -1,9 +1,11 @@
+/* eslint-disable no-nested-ternary */
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {mapProductMenuToProductOutletModel} from '@/data/product/mappers/ProductMapper';
 import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
 import {AddonVariant} from '@/domain/addon/model';
-import {Product} from '@/domain/product/model';
+import {MenuProductBased} from '@/domain/product/model/ProductMenu';
+import {Product} from '@/domain/product/model/ProductOutlet';
 import {Transaction} from '@/domain/transaction/model';
-import {useGetCategoriesViewModel} from '@/view/category/view-models/GetCategoriesViewModel';
 import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
@@ -57,7 +59,7 @@ const ManualSubmitOrder = ({
 	const dispatch = useAppDispatch();
 	const [tabValueMenu, setTabValueMenu] = useState(0);
 
-	const {quantity, product, notes, addOnVariant} = useAppSelector(
+	const {quantity, notes, product, addOnVariant} = useAppSelector(
 		state => state.order.orderForm,
 	);
 	const {outletId} = useAppSelector(state => state.auth);
@@ -68,6 +70,12 @@ const ManualSubmitOrder = ({
 		{open: openAddVariantOrder, close: closeAddVariantOrder},
 	] = useDisclosure({initialState: false});
 
+	const [filteredProducts, setFilteredProducts] = useState<
+		Array<MenuProductBased>
+	>([]);
+
+	const [searchValue, setSearchValue] = useState<string>('');
+
 	const {data: dataProductDetail, isLoading: loadProductDetail} =
 		useGetMenuProductViewModel(
 			{
@@ -76,19 +84,6 @@ const ManualSubmitOrder = ({
 			},
 			{enabled: !!(isOpenAddVariantOrder && product?.uuid)},
 		);
-
-	const {data: dataCategory} = useGetCategoriesViewModel(
-		{
-			limit: 100,
-			page: 1,
-			sort: {
-				field: 'category_name',
-				value: 'desc',
-			},
-			search: [],
-		},
-		{enabled: !!isOpenCreateOrder},
-	);
 
 	const onCloseAddManualOrder = () => {
 		closeCreateOrder();
@@ -125,6 +120,32 @@ const ManualSubmitOrder = ({
 			},
 			{enabled: !!isOpenCreateOrder},
 		);
+
+	const AddonRequired = useMemo(
+		() =>
+			dataProductDetail?.addons?.flatMap(el =>
+				el.is_optional
+					? []
+					: {
+							addOnUuid: el.uuid,
+							required: !el.is_optional,
+					  },
+			),
+		[dataProductDetail?.addons],
+	);
+
+	const isValidAddon = useMemo(
+		() =>
+			AddonRequired?.map(el =>
+				orderForm.addOnVariant.some(v => v.addOnUuid === el.addOnUuid),
+			),
+		[AddonRequired, orderForm.addOnVariant],
+	);
+
+	const memoizeProducts = useMemo(
+		() => dataProduct && dataProduct[tabValueMenu],
+		[dataProduct, tabValueMenu],
+	);
 
 	const handleIncreamentQuantity = useCallback(
 		() => dispatch(onChangeQuantity({operator: 'plus', value: 1})),
@@ -181,6 +202,7 @@ const ManualSubmitOrder = ({
 
 	const onSubmitOrder = () => {
 		const payload = order.map(el => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const tempAddOn: Array<any> = [];
 			const addOn = el.addOnVariant;
 
@@ -190,6 +212,7 @@ const ManualSubmitOrder = ({
 					return filteredAddOn.variant_uuids.push(addon.variant_uuid);
 				}
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				const obj: any = {
 					uuid: addon.addOnUuid,
 					variant_uuids: [],
@@ -215,10 +238,20 @@ const ManualSubmitOrder = ({
 		}
 	};
 
-	const onClear = () => {
-		// dispatch(onClearSearch())
-		// setDataTransaction(data)
-		// closeSearch()
+	const onClearSearch = () => {
+		setFilteredProducts([]);
+		setSearchValue('');
+	};
+
+	const onSearch = (value: string) => {
+		const filteredData =
+			(memoizeProducts &&
+				memoizeProducts.products.filter((el: MenuProductBased) =>
+					el.product_name.toLowerCase().includes(value.toLowerCase()),
+				)) ||
+			[];
+		setSearchValue(value);
+		setFilteredProducts(filteredData);
 	};
 
 	const onOpenAddVariantOrder = (new_product: Product) => {
@@ -265,27 +298,6 @@ const ManualSubmitOrder = ({
 		);
 	};
 
-	const AddonRequired = useMemo(
-		() =>
-			dataProductDetail?.addons?.flatMap(el =>
-				el.is_optional
-					? []
-					: {
-							addOnUuid: el.uuid,
-							required: !el.is_optional,
-					  },
-			),
-		[dataProductDetail?.addons],
-	);
-
-	const isValidAddon = useMemo(
-		() =>
-			AddonRequired?.map(el =>
-				orderForm.addOnVariant.some(v => v.addOnUuid === el.addOnUuid),
-			),
-		[AddonRequired, orderForm.addOnVariant],
-	);
-
 	return (
 		<BottomSheet
 			open={isOpenCreateOrder}
@@ -313,23 +325,23 @@ const ManualSubmitOrder = ({
 							<InputSearch
 								placeholder="Search product"
 								isOpen
-								// onSearch={onSearch}
-								onClearSearch={onClear}
-								search=""
+								onSearch={e => onSearch(e.target.value)}
+								onClearSearch={onClearSearch}
+								search={searchValue}
 							/>
 						</div>
 					</section>
 
 					<section id="menus" className="mt-6 h-full w-full">
-						{dataCategory && (
+						{dataProduct && (
 							<Tabs
 								scrollable
-								items={dataCategory?.map((el, idx) => ({
+								items={dataProduct?.map((el, idx) => ({
 									label: el.category_name,
 									value: idx,
 								}))}
 								value={tabValueMenu}
-								onChange={e => setTabValueMenu(e)}
+								onChange={val => setTabValueMenu(val)}
 								fullWidth
 							/>
 						)}
@@ -339,34 +351,79 @@ const ManualSubmitOrder = ({
 									<Loading size={75} />
 								</div>
 							)}
-							{!loadProduct && dataProduct && (
+							{(searchValue.length > 0 && filteredProducts.length === 0) ||
+							(memoizeProducts &&
+								memoizeProducts.products.every(el => !el.is_available)) ? (
+								<div className="mt-6 flex items-center justify-center text-l-semibold">
+									there&apos;s no product yet
+								</div>
+							) : (
+								<div />
+							)}
+
+							{!loadProduct && dataProduct && memoizeProducts && (
 								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-									{dataProduct.flatMap(
-										item =>
-											item.is_available && (
-												<div
-													role="presentation"
-													onClick={() => onOpenAddVariantOrder(item)}
-													key={item.product_name}
-													className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
-												>
-													<p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
-														{item.product_name}
+									{searchValue.length > 0 &&
+										filteredProducts.length > 0 &&
+										filteredProducts.map(prd => (
+											<div
+												role="presentation"
+												onClick={() =>
+													onOpenAddVariantOrder(
+														mapProductMenuToProductOutletModel(prd),
+													)
+												}
+												key={prd.product_name}
+												className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
+											>
+												<p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
+													{prd.product_name}
+												</p>
+												<div className="my-2 border-b border-neutral-40" />
+												<div className="flex flex-col items-center justify-center gap-1">
+													<p className="text-m-regular text-neutral-90">
+														{toRupiah(prd.price_final)}
 													</p>
-													<div className="my-2 border-b border-neutral-40" />
-													<div className="flex flex-col items-center justify-center gap-1">
-														<p className="text-m-regular text-neutral-90">
-															{toRupiah(item.price_final)}
+													{prd.price_discount > 0 && (
+														<p className="text-xs line-through">
+															{toRupiah(prd.price)}
 														</p>
-														{item.price_discount > 0 && (
-															<p className="text-xs line-through">
-																{toRupiah(item.price)}
-															</p>
-														)}
-													</div>
+													)}
 												</div>
-											),
-									)}
+											</div>
+										))}
+
+									{searchValue.length === 0 &&
+										memoizeProducts.products.map(
+											prd =>
+												prd.is_available && (
+													<div
+														role="presentation"
+														onClick={() =>
+															onOpenAddVariantOrder(
+																mapProductMenuToProductOutletModel(prd),
+															)
+														}
+														key={prd.product_name}
+														className="min-h-[116px] cursor-pointer rounded-2xl border border-neutral-90 p-4 duration-300 ease-in-out hover:bg-neutral-20 hover:bg-opacity-50 active:shadow-md"
+													>
+														<p className="min-h-[48px] text-center text-l-semibold text-neutral-70 line-clamp-2">
+															{prd.product_name}
+														</p>
+														<div className="my-2 border-b border-neutral-40" />
+														<div className="flex flex-col items-center justify-center gap-1">
+															<p className="text-m-regular text-neutral-90">
+																{toRupiah(prd.price_final)}
+															</p>
+															{prd.price_discount > 0 && (
+																<p className="text-xs line-through">
+																	{toRupiah(prd.price)}
+																</p>
+															)}
+														</div>
+													</div>
+												),
+										)}
 								</div>
 							)}
 						</article>
@@ -395,7 +452,11 @@ const ManualSubmitOrder = ({
 									<div className="mt-4">
 										<p className="text-s-regular">Type of transaction</p>
 										<p className="text-l-semibold">
-											{dataTransaction.transaction_category || '-'}
+											{dataTransaction?.transaction_category === 'DINE_IN'
+												? 'Dine in'
+												: dataTransaction?.transaction_category === 'TAKE_AWAY'
+												? 'Take away'
+												: '-'}
 										</p>
 									</div>
 								</div>
@@ -442,7 +503,10 @@ const ManualSubmitOrder = ({
 													</div>
 													<p className="text-m-regular">
 														{item.addOnVariant
-															.map(variant => variant.variant_name)
+															.map(
+																variant =>
+																	`${variant.addOnName}: ${variant.variant_name}`,
+															)
 															.join(', ')}
 													</p>
 												</div>
@@ -534,20 +598,20 @@ const ManualSubmitOrder = ({
 								<Loading size={90} />
 							</div>
 						)}
-						{product && dataProductDetail && (
+						{dataProductDetail && (
 							<div>
 								<aside>
 									<p className="text-heading-s-semibold">
-										{product.product_name}
+										{dataProductDetail.product_name}
 									</p>
 									<div className="flex items-center gap-2">
 										<p className="text-xxl-medium">
-											{toRupiah(product.price_final)}
+											{toRupiah(dataProductDetail.price_final)}
 										</p>
-										{product.price_discount > 0 && (
+										{dataProductDetail.price_discount > 0 && (
 											<div>
 												<p className="text-xxl-medium text-neutral-80 line-through">
-													{toRupiah(product.price)}
+													{toRupiah(dataProductDetail.price)}
 												</p>
 											</div>
 										)}

@@ -3,7 +3,7 @@ import {Metadata} from '@/domain/vo/BaseMetadata';
 import {Pagination} from '@/domain/vo/BasePagination';
 import {ResultQuery} from '@/domain/vo/BaseResponse';
 
-import {Product, Products} from '../model';
+import {Product, Products} from '../model/ProductOutlet';
 
 export type GetOutletProductsInput = InputVariables<
 	keyof Metadata,

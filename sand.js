@@ -265,5 +265,3 @@ const result = access.reduce((acc, curr) => {
 	}
 	return acc;
 }, []);
-
-// console.log(result);

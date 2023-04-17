@@ -1,5 +1,8 @@
-/* eslint-disable no-restricted-syntax */
-import {Product, Products} from '@/domain/product/model';
+import {
+	MenuProductBased,
+	MenuProducts,
+} from '@/domain/product/model/ProductMenu';
+import {Product, Products} from '@/domain/product/model/ProductOutlet';
 import {
 	UpdateOutletProduct,
 	UpdateOutletProductDefaultInput,
@@ -8,10 +11,8 @@ import {
 import {UpdateOutletProductStatus} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
 import {ValidationSchemaProductOutletType} from '@/view/product/schemas/update-product';
 
-import {
-	GetMenuProductDataResponse,
-	GetMenuProductsDataResponse,
-} from '../types/MenuProduct';
+import {GetMenuProductsDataResponse} from '../types/GetMenuProductsType';
+import {GetMenuProductDataResponse} from '../types/GetMenuProductType';
 import {
 	GetOutletProductDataResponse,
 	GetOutletProductsDataResponse,
@@ -19,22 +20,37 @@ import {
 } from '../types/OutletProduct';
 
 // map server data to own model
+// export const mapToMenuProductsModel = (
+// 	datas: Array<GetMenuProductsDataResponse>,
+// ): Products => {
+// 	const newData: Products = [];
+// 	datas.forEach(el => {
+// 		el.products.forEach(product => {
+// 			newData[product.uuid as any] = product;
+// 		});
+// 	});
+
+// 	for (const key in newData) {
+// 		const product = newData[key];
+// 		newData.push(product);
+// 	}
+
+// 	return newData;
+// };
+
 export const mapToMenuProductsModel = (
 	datas: Array<GetMenuProductsDataResponse>,
-): Products => {
-	const newData: Products = [];
-	datas.forEach(el => {
-		el.products.forEach(product => {
-			newData[product.uuid as any] = product;
-		});
-	});
-
-	for (const key in newData) {
-		const product = newData[key];
-		newData.push(product);
-	}
-
-	return newData;
+): MenuProducts => {
+	const newData = {
+		category_name: 'All',
+		category_uuid: 'all',
+		products: datas.flatMap(el => el.products),
+	};
+	return [newData, ...datas].map(el => ({
+		category_name: el.category_name,
+		category_uuid: el.category_uuid,
+		products: el.products,
+	}));
 };
 
 export const mapToMenuProductModel = (
@@ -169,4 +185,25 @@ export const mapToUpdateOutletProductPayload = (
 		})),
 	})),
 	cooking_duration: data.cooking_duration ? parseInt(data.cooking_duration) : 0,
+});
+
+export const mapProductMenuToProductOutletModel = (
+	prd: MenuProductBased,
+): Product => ({
+	uuid: prd.uuid,
+	product_name: prd.product_name,
+	price: prd.price,
+	price_final: prd.price_final,
+	price_discount: prd.price_discount,
+	is_available: prd.is_available,
+	cooking_duration: prd.cooking_duration,
+	is_discount: prd.is_discount,
+	is_favourite: prd.is_favourite,
+	price_after_discount: prd.price_after_discount,
+	product_image_url: prd.product_image_url,
+	product_description: prd.product_description,
+	price_discount_percentage: prd.price_discount_percentage,
+	categories: prd.categories,
+	addons: [],
+	is_show: true,
 });

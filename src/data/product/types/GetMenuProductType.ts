@@ -23,31 +23,14 @@ type Addon = {
 	variants: Array<AddonVariant>;
 };
 
-type MenuProductResponse = {
+type Product = {
 	uuid: string;
 	product_name: string;
 	product_description: string;
 	product_image_url: string;
-	is_favourite: boolean;
-	is_discount: boolean;
-	is_available: boolean;
-	is_show: boolean;
-	price: number;
-	price_discount: number;
-	price_after_discount: number;
-	price_discount_percentage: number;
-	price_final: number;
-	cooking_duration: number;
-	categories: Array<Category> | undefined;
+	restaurant_uuid: string;
+	categories: Array<Category>;
 };
-
-type GetMenuProductDataResponseBased = {
-	category_uuid: string;
-	category_name: string;
-	products: Array<MenuProductResponse>;
-};
-
-export type GetMenuProductsDataResponse = GetMenuProductDataResponseBased;
 
 export type GetMenuProductDataResponse = {
 	detail: {
@@ -61,7 +44,7 @@ export type GetMenuProductDataResponse = {
 		price_discount_percentage: number;
 		price_final: number;
 		cooking_duration: number;
-		product: MenuProductResponse;
+		product: Product;
 	};
 	addons: Array<Addon>;
 };

@@ -7,7 +7,7 @@ import {UseQueryOptions} from '@tanstack/react-query';
 
 import {mapToMenuProductModel} from '../mappers/ProductMapper';
 import {useGetMenuProductQuery} from '../sources/GetMenuProductQuery';
-import {GetMenuProductDataResponse} from '../types/MenuProduct';
+import {GetMenuProductDataResponse} from '../types/GetMenuProductType';
 
 export const useGetMenuProductUsecase = (
 	input: GetMenuProductInput,

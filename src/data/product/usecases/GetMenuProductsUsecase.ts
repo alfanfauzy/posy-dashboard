@@ -7,7 +7,7 @@ import {UseQueryOptions} from '@tanstack/react-query';
 
 import {mapToMenuProductsModel} from '../mappers/ProductMapper';
 import {useGetMenuProductsQuery} from '../sources/GetMenuProductsQuery';
-import {GetMenuProductsDataResponse} from '../types/MenuProduct';
+import {GetMenuProductsDataResponse} from '../types/GetMenuProductsType';
 
 export const useGetMenuProductsUsecase = (
 	input: GetMenuProductsInput,
@@ -15,7 +15,7 @@ export const useGetMenuProductsUsecase = (
 ): GetMenuProductsResult => {
 	const {data, ...rest} = useGetMenuProductsQuery(input, options);
 
-	if (data?.data?.objs) {
+	if (data?.data?.objs.map) {
 		const dataMapper = mapToMenuProductsModel(data.data.objs);
 
 		return {

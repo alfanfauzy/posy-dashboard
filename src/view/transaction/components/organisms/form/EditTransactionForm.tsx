@@ -67,9 +67,6 @@ const EditTransactionForm = ({methods}: EditTransactionFormProps) => {
 		});
 	};
 
-	console.log(watch());
-
-	console.log(errors);
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className="flex gap-4">

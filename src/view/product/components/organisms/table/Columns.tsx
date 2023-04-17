@@ -1,5 +1,5 @@
 import {GetOutletProductsQueryKey} from '@/data/product/sources/GetOutletProductsQuery';
-import {Product} from '@/domain/product/model';
+import {Product} from '@/domain/product/model/ProductOutlet';
 import {UpdateOutletProductStatus} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeProductId} from '@/view/common/store/slices/product';

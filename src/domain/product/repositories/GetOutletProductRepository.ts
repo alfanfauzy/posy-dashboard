@@ -1,6 +1,6 @@
 import {ResultQuery} from '@/domain/vo/BaseResponse';
 
-import {Product} from '../model';
+import {Product} from '../model/ProductOutlet';
 
 export type GetOutletProductInput = {
 	product_uuid: string;

@@ -3,7 +3,7 @@ import {GetMenuProductsInput} from '@/domain/product/repositories/GetMenuProduct
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 
-import {GetMenuProductsDataResponse} from '../types/MenuProduct';
+import {GetMenuProductsDataResponse} from '../types/GetMenuProductsType';
 
 export const GetMenuProductsQueryKey = (input?: GetMenuProductsInput) =>
 	['Products/list', input] as const;
