@@ -341,7 +341,10 @@ const ManualSubmitOrder = ({
 									value: idx,
 								}))}
 								value={tabValueMenu}
-								onChange={val => setTabValueMenu(val)}
+								onChange={val => {
+									setTabValueMenu(val);
+									setSearchValue('');
+								}}
 								fullWidth
 							/>
 						)}
