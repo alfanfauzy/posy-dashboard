@@ -35,7 +35,7 @@ const OrganismsFormCreateNewPassword = () => {
 			const data = _data as ResetPassword;
 			if (data.success) {
 				setTimeout(() => {
-					router.push('/login');
+					router.push('/auth/login');
 				}, 1500);
 			}
 		},

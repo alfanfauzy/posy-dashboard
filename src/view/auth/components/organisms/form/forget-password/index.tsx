@@ -2,6 +2,7 @@ import {
 	RequestResetPassword,
 	RequestResetPasswordInput,
 } from '@/domain/auth/repositories/RequestResetPasswordRepository';
+import {BaseError} from '@/domain/vo/BaseError';
 import {
 	validationSchemaForgetPassword,
 	ValidationSchemaForgetPasswordType,
@@ -20,8 +21,11 @@ const OrganismsFormForgetPassword = () => {
 	const {
 		register,
 		handleSubmit,
+		setValue,
+		setError,
 		formState: {errors, isValid},
 	} = useForm({
+		mode: 'onChange',
 		schema: validationSchemaForgetPassword,
 	});
 
@@ -30,6 +34,19 @@ const OrganismsFormForgetPassword = () => {
 			const data = _data as RequestResetPassword;
 			const variables = _variables as RequestResetPasswordInput;
 			if (data.success) router.push(`verify-account?email=${variables.email}`);
+		},
+		onError: _error => {
+			const error = _error as BaseError;
+			if (error?.isUnknown()) {
+				setValue('email', '');
+				setError(
+					'email',
+					{message: error.message},
+					{
+						shouldFocus: true,
+					},
+				);
+			}
 		},
 	});
 
