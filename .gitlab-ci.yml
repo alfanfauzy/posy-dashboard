@@ -32,6 +32,8 @@ test:
   stage: test
   image: node:18-alpine
   extends: .k8s_docker_runner
+  except:
+    - tags
   tags: ['pvg']
   before_script:
     - yarn install --frozen-lockfile
@@ -48,6 +50,8 @@ build:
   image: node:18-alpine
   extends: .k8s_docker_runner
   tags: ['pvg']
+  except:
+    - tags
   before_script:
     - yarn install --frozen-lockfile
     - yarn config set cache-folder ~/.cache/yarn
@@ -62,6 +66,8 @@ quality-code:
   image: node:18-alpine
   extends: .k8s_docker_runner
   tags: ['pvg']
+  except:
+    - tags
   before_script:
     - yarn install --frozen-lockfile
     - yarn config set cache-folder ~/.cache/yarn
@@ -107,6 +113,8 @@ deploy_to_stage:
   stage: deploy
   extends: .deploy_to_docker
   tags: ['pvg']
+  only:
+    - master
   variables:
     DOCKER_HOST: posy-fnb01.int.stage.pvg.im
     APP_IMAGE_TAG: latest
