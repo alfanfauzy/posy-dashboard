@@ -4,6 +4,8 @@ import {useRouter} from 'next/router';
 import {Loading} from 'posy-fnb-core';
 import React from 'react';
 
+import OrganismsFormExpiredLink from '../../organisms/modal/expired-link';
+
 const PagesCreateNewPassword = () => {
 	const {
 		query: {token},
@@ -25,12 +27,7 @@ const PagesCreateNewPassword = () => {
 			</div>
 		);
 
-	if (isError)
-		return (
-			<div className="flex h-full items-center justify-center">
-				Token is invalid
-			</div>
-		);
+	if (isError) return <OrganismsFormExpiredLink />;
 
 	return (
 		<main className="h-full">
