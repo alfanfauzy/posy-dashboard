@@ -125,9 +125,12 @@ const CreatePaymentModal = ({
 			closable={false}
 			footer={null}
 			width={900}
+			style={{
+				top: 40,
+			}}
 		>
 			<section className="flex h-full">
-				<aside className="flex flex-col w-1/3 h-full overflow-auto items-center rounded-l-3xl bg-neutral-30 p-10">
+				<aside className="flex flex-col w-1/3 h-full overflow-auto items-center rounded-l-3xl bg-neutral-30 py-10">
 					<div className="mb-6">
 						<p className="text-xxl-semibold">Choose payment method</p>
 					</div>
