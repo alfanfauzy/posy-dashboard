@@ -70,7 +70,6 @@ const PrintToKitchenModal = ({
 	return (
 		<>
 			<Modal
-				className="!h-fit"
 				open={isOpenPrintToKitchen}
 				handleClose={onClosePrintToKitchen}
 				style={{

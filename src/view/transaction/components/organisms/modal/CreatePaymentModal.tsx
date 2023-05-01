@@ -8,7 +8,7 @@ import {useGetPaymentMethodsViewModel} from '@/view/payment-method/view-models/G
 import {useCreateMakePaymentViewModel} from '@/view/transaction/view-models/CreateMakePaymentViewModel';
 import {useCreatePrintReceiptViewModel} from '@/view/transaction/view-models/CreatePrintReceiptViewModel';
 import {useQueryClient} from '@tanstack/react-query';
-import dynamic from 'next/dynamic';
+import {Modal} from 'antd';
 import Image from 'next/image';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -17,10 +17,6 @@ import {NumericFormat} from 'react-number-format';
 import {useReactToPrint} from 'react-to-print';
 
 import PrintBillReceipt from '../receipt/PrintBillReceipt';
-
-const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
-	loading: () => <div />,
-});
 
 type CreatePaymentModalProps = {
 	isOpenCreatePayment: boolean;
@@ -46,11 +42,12 @@ const CreatePaymentModal = ({
 	});
 	const [selectedPayment, setSelectedPayment] = useState('');
 	const [additionalInfo, setAdditionalInfo] = useState('');
+	const [suggestionPrice] = useState(payment.total || 0);
 	const [price, setPrice] = useState(payment.total || 0);
 
 	const suggestionAmount = useMemo(
-		() => generateSuggestionAmount(price),
-		[price],
+		() => generateSuggestionAmount(suggestionPrice),
+		[suggestionPrice],
 	);
 
 	const {
@@ -123,17 +120,14 @@ const CreatePaymentModal = ({
 
 	return (
 		<Modal
-			closeOverlay
 			open={isOpenCreatePayment}
-			handleClose={closeCreatePayment}
-			style={{
-				maxWidth: '75%',
-				width: '75%',
-			}}
-			className="!p-0"
+			onCancel={closeCreatePayment}
+			closable={false}
+			footer={null}
+			width={900}
 		>
-			<section className="flex">
-				<aside className="flex w-1/3 flex-col items-center rounded-l-3xl bg-neutral-30 p-10">
+			<section className="flex h-full">
+				<aside className="flex flex-col w-1/3 h-full overflow-auto items-center rounded-l-3xl bg-neutral-30 p-10">
 					<div className="mb-6">
 						<p className="text-xxl-semibold">Choose payment method</p>
 					</div>
