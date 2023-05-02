@@ -1,4 +1,5 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {Orders} from '@/domain/order/model';
 import {CreateCancelOrderInput} from '@/domain/order/repositories/CreateCancelOrderRepository';
 import {ServeOrder} from '@/domain/order/repositories/CreateServeOrderRepository';
@@ -70,7 +71,10 @@ const OrderDetails = ({
 	const {createServeOrder} = useCreateServeOrderViewModel({
 		onSuccess: _data => {
 			const data = _data as ServeOrder;
-			if (data) queryClient.invalidateQueries([GetOrdersQueryKey]);
+			if (data) {
+				queryClient.invalidateQueries([GetOrdersQueryKey]);
+				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+			}
 		},
 	});
 

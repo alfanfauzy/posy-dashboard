@@ -1,4 +1,5 @@
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
+import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {toRupiah} from '@/view/common/utils/common';
@@ -78,6 +79,7 @@ const CreatePaymentModal = ({
 			if (data) {
 				setValueState(data);
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
+				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				closeCreatePayment();
 				openPaymentConfirmation();
 			}
