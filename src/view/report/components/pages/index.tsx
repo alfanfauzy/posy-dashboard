@@ -6,6 +6,7 @@ import {useAppSelector} from '@/view/common/store/hooks';
 import {defineds} from '@/view/common/utils/date';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
+import {DownloadFile} from '@/view/common/utils/UtilsDownloadExcel';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 import {Button} from 'posy-fnb-core';
@@ -124,15 +125,9 @@ const ViewReportPage = () => {
 		);
 
 	const {downloadReport, isLoading} = useDownloadTransactionReportsViewModel({
-		onSuccess(data) {
-			const responseData = data as Response<string>;
-			const url = window.URL.createObjectURL(new Blob([responseData?.data]));
-			const link = document.createElement('a');
-			link.href = url;
-			link.setAttribute('download', `export.xlsx`);
-			document.body.appendChild(link);
-			link.click();
-			link.remove();
+		onSuccess(response) {
+			const {data: responseDownloadReport} = response as Response<string>;
+			DownloadFile(responseDownloadReport);
 		},
 	});
 
