@@ -1,4 +1,4 @@
-import {DownloadTransactionReports} from '@/domain/report/repositories/DownloadReportsRepository';
+import {GetDownloadTransactionReportInput} from '@/domain/report/repositories/GetDownloadReportsRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {store} from '@/view/common/store';
 import {useMutation, UseMutationOptions} from '@tanstack/react-query';
@@ -8,7 +8,7 @@ export const GetTransactionReportsQueryKey =
 	'transaction-reports/download' as const;
 
 const GetDownloadTransactionReports = async (
-	input?: DownloadTransactionReports,
+	input: GetDownloadTransactionReportInput,
 ): Promise<Response<string>> => {
 	const {token} = store.getState().auth.authData;
 
@@ -17,7 +17,7 @@ const GetDownloadTransactionReports = async (
 		input,
 		{
 			headers: {
-				token: token,
+				token,
 			},
 			responseType: 'arraybuffer',
 		},
@@ -32,7 +32,11 @@ const GetDownloadTransactionReports = async (
 };
 
 export const useGetDownloadTransactionReportsMutation = (
-	options?: UseMutationOptions<Response<string>, AxiosError<Response>, any>,
+	options?: UseMutationOptions<
+		Response<string>,
+		AxiosError<Response>,
+		GetDownloadTransactionReportInput
+	>,
 ) =>
 	useMutation({
 		mutationFn: GetDownloadTransactionReports,

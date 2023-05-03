@@ -1,11 +1,11 @@
-import {DownloadTransactionReports} from '@/domain/report/repositories/DownloadReportsRepository';
+import {GetDownloadTransactionReportInput} from '@/domain/report/repositories/GetDownloadReportsRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {defineds} from '@/view/common/utils/date';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
-import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
+import {dateFormatter, toUnix} from '@/view/common/utils/UtilsdateFormatter';
 import {DownloadFile} from '@/view/common/utils/UtilsDownloadExcel';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
@@ -42,7 +42,7 @@ const ViewReportPage = () => {
 		},
 	]);
 
-	const queryDownload = useMemo(() => {
+	const queryDownload: GetDownloadTransactionReportInput = useMemo(() => {
 		return {
 			start_date: toUnix(date[0].startDate),
 			end_date: toUnix(date[0].endDate),
@@ -61,7 +61,7 @@ const ViewReportPage = () => {
 				},
 			],
 		};
-	}, [query, outletId, date]);
+	}, [outletId, date]);
 
 	const {
 		data: dataReports,
@@ -125,14 +125,20 @@ const ViewReportPage = () => {
 		);
 
 	const {downloadReport, isLoading} = useDownloadTransactionReportsViewModel({
-		onSuccess(response) {
+		onSuccess(response, _variables) {
 			const {data: responseDownloadReport} = response as Response<string>;
-			DownloadFile(responseDownloadReport);
+			const variables = _variables as GetDownloadTransactionReportInput;
+			DownloadFile(
+				responseDownloadReport,
+				`transaction-report-${dateFormatter(
+					parseInt(variables.start_date),
+				)}-${dateFormatter(parseInt(variables.end_date))}`,
+			);
 		},
 	});
 
 	const handleDownloadReport = () => {
-		downloadReport(queryDownload as unknown as DownloadTransactionReports);
+		downloadReport(queryDownload);
 	};
 
 	return (
@@ -159,7 +165,7 @@ const ViewReportPage = () => {
 							close={closeFilterDate}
 							open={openFilterDate}
 							isOpen={isOpenFilterDate}
-							handleChange={(item: any) => setDate([item])}
+							handleChange={item => setDate([item])}
 						/>
 						<div className="flex w-1/2 items-center lg:w-1/4">
 							<InputSearch

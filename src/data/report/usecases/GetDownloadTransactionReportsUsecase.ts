@@ -1,18 +1,18 @@
 import {MutationOptions} from '@/data/common/types';
 import {
-	DownloadReportsRepository,
-	DownloadTransactionReports,
-} from '@/domain/report/repositories/DownloadReportsRepository';
+	GetDownloadReportsRepository,
+	GetDownloadTransactionReportInput,
+} from '@/domain/report/repositories/GetDownloadReportsRepository';
 
 import {useGetDownloadTransactionReportsMutation} from '../sources/GetDownloadTransactionReportsQuery';
 
 export const useDownloadTransactionReportsUsecase = (
 	options?: MutationOptions,
-): DownloadReportsRepository => {
+): GetDownloadReportsRepository => {
 	const {mutate, data, ...rest} =
 		useGetDownloadTransactionReportsMutation(options);
 
-	const downloadReport = (input?: DownloadTransactionReports) => {
+	const downloadReport = (input: GetDownloadTransactionReportInput) => {
 		mutate(input);
 	};
 
