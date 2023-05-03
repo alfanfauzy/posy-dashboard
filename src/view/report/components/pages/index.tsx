@@ -1,3 +1,5 @@
+import {DownloadTransactionReports} from '@/domain/report/repositories/DownloadReportsRepository';
+import {Response} from '@/domain/vo/BaseResponse';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
@@ -6,8 +8,10 @@ import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
-import React, {useState} from 'react';
+import {Button} from 'posy-fnb-core';
+import React, {useMemo, useState} from 'react';
 
+import {useDownloadTransactionReportsViewModel} from '../../view-models/GetDownloadTransactionReportsViewModel';
 import {useGetTransactionReportSummaryViewModel} from '../../view-models/GetTransactionReportSummaryViewModel';
 import {useGetTransactionReportsViewModel} from '../../view-models/GetTransactionReportsViewModel';
 import ReportSummary from '../organisms/summary';
@@ -37,6 +41,27 @@ const ViewReportPage = () => {
 		},
 	]);
 
+	const queryDownload = useMemo(() => {
+		return {
+			start_date: toUnix(date[0].startDate),
+			end_date: toUnix(date[0].endDate),
+			filter: [
+				{
+					field: 'restaurant_outlet_uuid',
+					value: outletId || 'all',
+				},
+				{
+					field: 'payment_method_uuid',
+					value: '',
+				},
+				{
+					field: 'transaction_category',
+					value: 'all',
+				},
+			],
+		};
+	}, [query, outletId, date]);
+
 	const {
 		data: dataReports,
 		isLoading: loadDataReports,
@@ -65,7 +90,7 @@ const ViewReportPage = () => {
 			],
 		},
 		{
-			enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+			enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 		},
 	);
 
@@ -94,17 +119,43 @@ const ViewReportPage = () => {
 				],
 			},
 			{
-				enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+				enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 			},
 		);
+
+	const {downloadReport, isLoading} = useDownloadTransactionReportsViewModel({
+		onSuccess(data) {
+			const responseData = data as Response<string>;
+			const url = window.URL.createObjectURL(new Blob([responseData?.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', `export.xlsx`);
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+		},
+	});
+
+	const handleDownloadReport = () => {
+		downloadReport(queryDownload as unknown as DownloadTransactionReports);
+	};
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
 			<article>
-				<aside className="flex items-start">
+				<aside className="flex justify-between">
 					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						Report Summary
 					</p>
+					<Button
+						size="m"
+						isLoading={isLoading}
+						onClick={() => {
+							handleDownloadReport();
+						}}
+					>
+						Download Report
+					</Button>
 				</aside>
 				<aside className="mt-6">
 					<div className="mt-1 flex items-center space-x-4">
