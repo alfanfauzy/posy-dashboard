@@ -1,13 +1,18 @@
+import {GetDownloadTransactionReportInput} from '@/domain/report/repositories/GetDownloadReportsRepository';
+import {Response} from '@/domain/vo/BaseResponse';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {defineds} from '@/view/common/utils/date';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
-import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
+import {dateFormatter, toUnix} from '@/view/common/utils/UtilsdateFormatter';
+import {DownloadFile} from '@/view/common/utils/UtilsDownloadExcel';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
-import React, {useState} from 'react';
+import {Button} from 'posy-fnb-core';
+import React, {useMemo, useState} from 'react';
 
+import {useDownloadTransactionReportsViewModel} from '../../view-models/GetDownloadTransactionReportsViewModel';
 import {useGetTransactionReportSummaryViewModel} from '../../view-models/GetTransactionReportSummaryViewModel';
 import {useGetTransactionReportsViewModel} from '../../view-models/GetTransactionReportsViewModel';
 import ReportSummary from '../organisms/summary';
@@ -37,6 +42,27 @@ const ViewReportPage = () => {
 		},
 	]);
 
+	const queryDownload: GetDownloadTransactionReportInput = useMemo(() => {
+		return {
+			start_date: toUnix(date[0].startDate),
+			end_date: toUnix(date[0].endDate),
+			filter: [
+				{
+					field: 'restaurant_outlet_uuid',
+					value: outletId || 'all',
+				},
+				{
+					field: 'payment_method_uuid',
+					value: '',
+				},
+				{
+					field: 'transaction_category',
+					value: 'all',
+				},
+			],
+		};
+	}, [outletId, date]);
+
 	const {
 		data: dataReports,
 		isLoading: loadDataReports,
@@ -65,7 +91,7 @@ const ViewReportPage = () => {
 			],
 		},
 		{
-			enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+			enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 		},
 	);
 
@@ -94,17 +120,43 @@ const ViewReportPage = () => {
 				],
 			},
 			{
-				enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+				enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 			},
 		);
+
+	const {downloadReport, isLoading} = useDownloadTransactionReportsViewModel({
+		onSuccess(response, _variables) {
+			const {data: responseDownloadReport} = response as Response<string>;
+			const variables = _variables as GetDownloadTransactionReportInput;
+			DownloadFile(
+				responseDownloadReport,
+				`transaction-report-${dateFormatter(
+					parseInt(variables.start_date),
+				)}-${dateFormatter(parseInt(variables.end_date))}`,
+			);
+		},
+	});
+
+	const handleDownloadReport = () => {
+		downloadReport(queryDownload);
+	};
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
 			<article>
-				<aside className="flex items-start">
+				<aside className="flex justify-between">
 					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						Report Summary
 					</p>
+					<Button
+						size="m"
+						isLoading={isLoading}
+						onClick={() => {
+							handleDownloadReport();
+						}}
+					>
+						Download Report
+					</Button>
 				</aside>
 				<aside className="mt-6">
 					<div className="mt-1 flex items-center space-x-4">
@@ -113,7 +165,7 @@ const ViewReportPage = () => {
 							close={closeFilterDate}
 							open={openFilterDate}
 							isOpen={isOpenFilterDate}
-							handleChange={(item: any) => setDate([item])}
+							handleChange={item => setDate([item])}
 						/>
 						<div className="flex w-1/2 items-center lg:w-1/4">
 							<InputSearch
