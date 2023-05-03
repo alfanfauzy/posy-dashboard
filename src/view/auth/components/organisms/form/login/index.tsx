@@ -6,10 +6,12 @@ import {
 } from '@/view/auth/schemas';
 import {useLoginViewModel} from '@/view/auth/view-models/LoginViewModel';
 import Logo from '@/view/common/components/atoms/logo';
+import {whatsapp} from '@/view/common/constants/contact';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {onLoginSuccess} from '@/view/common/store/slices/auth';
+import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
@@ -69,58 +71,68 @@ const OrganismsFormLogin = () => {
 	};
 
 	return (
-		<article className="flex h-full flex-col items-center justify-center overflow-y-auto p-14 lg:p-16 xl:p-24">
+		<article className="flex h-full flex-col items-center justify-center overflow-y-hidden p-14 lg:p-16 xl:p-24">
 			<Logo />
-			<form
-				className="mt-10 w-full rounded-3xl p-10 shadow-basic"
-				onSubmit={handleSubmit(onSubmit)}
-			>
-				{/* <p className="text-xxl-semibold">Hello, Welcome back!</p> */}
-				<div className="mt-4 flex flex-col gap-4">
-					<Input
-						type="text"
-						labelText="Email address"
-						placeholder="Enter a valid email"
-						error={!!errors?.email}
-						helperText={errors?.email?.message}
-						{...register('email')}
-						endAdornment={errors.email && <IoIosAlert className="text-error" />}
-					/>
-					<Input
-						type={showPassword ? 'text' : 'password'}
-						labelText="Password"
-						placeholder="Input password"
-						endAdornment={
-							showPassword ? (
-								<AiOutlineEyeInvisible onClick={toggle} />
-							) : (
-								<AiOutlineEye onClick={toggle} />
-							)
-						}
-						{...register('password')}
-						error={!!errors?.password}
-						helperText={errors?.password?.message}
-					/>
-					<p
-						role="presentation"
-						onClick={() => router.push('forget-password')}
-						className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75"
+			<section className="mt-10 w-full rounded-3xl p-10 shadow-basic">
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<p className="text-xxl-semibold">Hello, Welcome back!</p>
+					<div className="mt-4 flex flex-col gap-4">
+						<Input
+							type="text"
+							labelText="Email address"
+							placeholder="Enter a valid email"
+							error={!!errors?.email}
+							helperText={errors?.email?.message}
+							{...register('email')}
+							endAdornment={
+								errors.email && <IoIosAlert className="text-error" />
+							}
+						/>
+						<Input
+							type={showPassword ? 'text' : 'password'}
+							labelText="Password"
+							placeholder="Input password"
+							endAdornment={
+								showPassword ? (
+									<AiOutlineEyeInvisible onClick={toggle} />
+								) : (
+									<AiOutlineEye onClick={toggle} />
+								)
+							}
+							{...register('password')}
+							error={!!errors?.password}
+							helperText={errors?.password?.message}
+						/>
+						<p
+							role="presentation"
+							onClick={() => router.push('forget-password')}
+							className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75"
+						>
+							Forgot password
+						</p>
+					</div>
+					<Button
+						isLoading={loadLogin}
+						disabled={!isValid}
+						variant="primary"
+						size="l"
+						fullWidth
+						className="mt-6"
+						type="submit"
 					>
-						Forgot password
-					</p>
-				</div>
-				<Button
-					isLoading={loadLogin}
-					disabled={!isValid}
-					variant="primary"
-					size="l"
-					fullWidth
-					className="mt-6"
-					type="submit"
+						Login
+					</Button>
+				</form>
+				<Link
+					passHref
+					target="_blank"
+					href={`https://api.whatsapp.com/send/?phone=${whatsapp}`}
 				>
-					Login
-				</Button>
-			</form>
+					<Button variant="secondary" size="l" fullWidth className="mt-4">
+						Sign up
+					</Button>
+				</Link>
+			</section>
 		</article>
 	);
 };
