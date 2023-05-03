@@ -1,4 +1,5 @@
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
+import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {TransactionStatus} from '@/domain/transaction/model';
 import PlusCircleIcon from '@/view/common/assets/icons/plusCircle';
 import FilterChip from '@/view/common/components/atoms/chips/filter-chip';
@@ -66,6 +67,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		onSuccess: data => {
 			if (data) {
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
+				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				setTimeout(() => {
 					handlePrint();
 				}, 100);

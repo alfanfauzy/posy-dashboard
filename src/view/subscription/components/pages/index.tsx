@@ -1,3 +1,4 @@
+import {whatsapp} from '@/view/common/constants/contact';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import Image from 'next/image';
@@ -82,7 +83,7 @@ const ViewSubscriptionPage = () => {
 								<Link
 									passHref
 									target="_blank"
-									href="https://api.whatsapp.com/send/?phone=6282125270900"
+									href={`https://api.whatsapp.com/send/?phone=${whatsapp}`}
 								>
 									<Button className="mt-10" fullWidth>
 										Renew Subscription
@@ -112,7 +113,7 @@ const ViewSubscriptionPage = () => {
 						<Link
 							passHref
 							target="_blank"
-							href="https://api.whatsapp.com/send/?phone=6282125270900"
+							href={`https://api.whatsapp.com/send/?phone=${whatsapp}`}
 						>
 							<Button className="mt-10" fullWidth>
 								Renew Subscription

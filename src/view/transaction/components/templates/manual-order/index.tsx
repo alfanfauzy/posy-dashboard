@@ -2,6 +2,7 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {mapProductMenuToProductOutletModel} from '@/data/product/mappers/ProductMapper';
 import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
+import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {AddonVariant} from '@/domain/addon/model';
 import {MenuProductBased} from '@/domain/product/model/ProductMenu';
 import {Product} from '@/domain/product/model/ProductOutlet';
@@ -103,6 +104,7 @@ const ManualSubmitOrder = ({
 						transaction_uuid: dataTransaction?.uuid || '',
 					}),
 				);
+				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 			},
 		});
 
