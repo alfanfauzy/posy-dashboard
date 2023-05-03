@@ -90,7 +90,7 @@ build_image:
     - apk add --update nodejs npm
     - npm install -g yarn
   script:
-    - export NEXT_PUBLIC_API=$NEXT_PUBLIC_API_PROD
+    - export NEXT_PUBLIC_API=$NEXT_PUBLIC_API
     - |
       if [ "$CI_COMMIT_BRANCH" != master ]; then
         export IMAGE_TAG=dev-$CI_COMMIT_SHORT_SHA
