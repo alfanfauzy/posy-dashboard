@@ -6,7 +6,7 @@ export const validationSchemaLogin = z.object({
 	}),
 	password: z
 		.string()
-		.min(6, {message: 'Password must be atleast 6 characters'}),
+		.min(8, {message: 'Password must be atleast 8 characters'}),
 });
 
 export type ValidationSchemaLoginType = z.infer<typeof validationSchemaLogin>;
@@ -25,23 +25,15 @@ export const validationSchemaCreateNewPassword = z
 	.object({
 		password: z
 			.string()
-			.min(6, {message: 'Password must be at least 6 characters'})
 			.regex(
-				/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/,
-				{
-					message:
-						'Password must contain at least one uppercase letter, one number, and one special character',
-				},
+				/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/,
+				'Password must be at least 8 Characters, 1 Uppercase and 1 Lowercase',
 			),
 		confirm_password: z
 			.string()
-			.min(6, {message: 'Password must be at least 6 characters'})
 			.regex(
-				/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/,
-				{
-					message:
-						'Password must contain at least one uppercase letter, one number, and one special character',
-				},
+				/^(?=.*[A-Z])(?=.*[a-z]).{8,}$/,
+				'Password must be at least 8 Characters, 1 Uppercase and 1 Lowercase',
 			),
 	})
 	.superRefine(({password, confirm_password}, ctx) => {
