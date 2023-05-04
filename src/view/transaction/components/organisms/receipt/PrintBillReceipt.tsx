@@ -36,36 +36,36 @@ const PrintBillReceipt = ({data, printReceiptRef}: PrintBillReceiptProps) => {
 							<p className="text-center text-xxl-bold text-neutral-100">
 								{data.restaurant_name}
 							</p>
-							{/* location  */}
+
 							<p className="text-center text-l-regular text-neutral-100">
 								{data.restaurant_code}
 							</p>
-							{/* location  ^^^^ */}
-							<p className="pt-6 text-center text-xl-semibold text-neutral-100">
-								{data.transaction_category || '-'} / Table{' '}
-								{data.table_number || '-'} / Pax {data.total_pax || '-'}
+
+							<p className="pt-4 text-center lowercase text-xl-semibold text-neutral-100">
+								{data.transaction_category?.split('_')?.join(' ') || '-'} /
+								Table {data.table_number || '-'} / Pax {data.total_pax || '-'}
 							</p>
 						</div>
 					</div>
 
 					<div className="mx-auto max-w-md">
-						<div className="mx-auto max-w-md pb-2"></div>
+						<div className="mx-auto max-w-md"></div>
 						<div className="border-b border-dashed border-gray-400">
-							<div className="flex justify-between pb-2 pt-4">
+							<div className="flex justify-between pt-4">
 								<p className="text-m-regular text-neutral-100">Date</p>
 								<p className="text-m-regular text-neutral-100">Cashier</p>
 							</div>
-							<div className="flex justify-between pb-5">
+							<div className="flex justify-between mt-1">
 								<p className="text-m-semibold">
 									{dateFormatter(data.created_at, 'dd MMM yyyy')}
 								</p>
 								<p className="text-m-semibold">{data.cashier_by || '-'}</p>
 							</div>
-							<div className="flex justify-between pb-2 pt-2">
+							<div className="flex justify-between mt-2">
 								<p className="text-m-regular text-neutral-100">Trx ID</p>
 								<p className="text-m-regular text-neutral-100">Customer name</p>
 							</div>
-							<div className="flex justify-between pb-4">
+							<div className="flex justify-between mt-1 pb-4">
 								<p className="text-m-semibold">
 									{generateTransactionCode(data.transaction_code)}
 								</p>
@@ -73,26 +73,26 @@ const PrintBillReceipt = ({data, printReceiptRef}: PrintBillReceiptProps) => {
 							</div>
 						</div>
 
-						{data.items.map((item, idx) => (
-							<div
-								key={item.name}
-								className="border-b border-dashed border-gray-400"
-							>
-								<div className="mx-auto max-w-md pb-2 pt-4">
-									<p className="text-left text-m-semibold text-neutral-100">
-										{`Order ${idx + 1}`}
-									</p>
-								</div>
-								<div className="flex justify-between pb-2 pt-2">
-									<p className="text-m-regular text-neutral-100">{item.name}</p>
+						<div className="mx-auto mt-4 max-w-md">
+							<p className="text-left text-m-semibold text-neutral-100">
+								Order
+							</p>
+						</div>
+
+						{data.items.map(item => (
+							<div key={item.name}>
+								<div className="flex justify-between gap-4 py-2">
 									<p className="text-m-regular text-neutral-100">
-										{toRupiah(item.price)}
+										{item.name} x{item.qty}
+									</p>
+									<p className="text-m-regular text-neutral-100">
+										{toRupiah(item.subtotal_price)}
 									</p>
 								</div>
 							</div>
 						))}
 
-						<div className="border-b border-dashed border-gray-400">
+						<div className="border-y mt-4 border-dashed border-gray-400">
 							<div className="mx-auto max-w-md">
 								<div className="mx-auto max-w-md pb-2 pt-4">
 									<p className="text-left text-m-semibold text-neutral-100">
@@ -140,7 +140,7 @@ const PrintBillReceipt = ({data, printReceiptRef}: PrintBillReceiptProps) => {
 									<p className="text-center text-m-semibold text-neutral-100">
 										Closed Bill
 									</p>
-									<p className="pb-6 text-center text-m-regular text-neutral-100">
+									<p className="pb-4 mt-2 text-center text-m-regular text-neutral-100">
 										{dateFormatter(data.paid_at, 'dd MMM yyyy - HH:mm')}
 									</p>
 									<p className="text-center text-m-regular text-neutral-100">
