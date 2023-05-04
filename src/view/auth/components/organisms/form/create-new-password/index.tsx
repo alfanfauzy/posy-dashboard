@@ -62,8 +62,7 @@ const OrganismsFormCreateNewPassword = () => {
 						Create a strong password
 					</p>
 					<p className="mt-6 text-l-regular text-primary-main">
-						Your password must be at least 6 characters and should include a
-						combination of numbers, letters and special characters (!$@%).
+						Password must be at least 8 Characters, 1 Uppercase and 1 Lowercase.
 					</p>
 				</div>
 				<div className="mt-6 flex flex-col gap-4">
