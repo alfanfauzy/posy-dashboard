@@ -36,7 +36,10 @@ const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
 		<QueryClientProvider client={queryClient}>
 			<SnackbarProvider
 				maxSnack={3}
-				autoHideDuration={1500}
+				// className="border-t-8 border-blue-success"
+				// style={{borderRadius: '8px', background: '#ffffff', color: '#0A0A0A'}}
+				autoHideDuration={2000}
+				transitionDuration={500}
 				anchorOrigin={{horizontal: 'center', vertical: 'top'}}
 			>
 				<Provider store={store}>

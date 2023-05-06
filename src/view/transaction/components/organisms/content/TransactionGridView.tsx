@@ -147,8 +147,8 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	};
 
 	return (
-		<section className="relative h-full flex-1 overflow-hidden rounded-2xl bg-neutral-10 p-6">
-			<article className="h-fit">
+		<section className="relative h-full flex-1 overflow-hidden rounded-2xl bg-neutral-10">
+			<article className="h-fit p-6 pb-0">
 				<aside className="flex items-start justify-between">
 					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						Restaurant Transaction
@@ -220,7 +220,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				)}
 			</article>
 
-			<article className="h-[80%] w-full overflow-y-auto py-4">
+			<article className="h-[80%] w-full overflow-y-auto py-4 pb-20 px-6">
 				{loadData && (
 					<article className="flex h-full items-center justify-center">
 						<Loading size={90} />
@@ -281,7 +281,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				)}
 			</article>
 
-			<article className="absolute bottom-0 mb-5 flex w-full gap-4">
+			<article className="absolute bottom-0 p-5 flex w-full gap-4 bg-white">
 				<div className="flex items-center gap-1">
 					<div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
 					<p className="text-s-semibold">Waiting Food</p>

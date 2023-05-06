@@ -1,4 +1,4 @@
-import {Transaction} from '@/domain/transaction/model';
+import {Transaction, TransactionStatus} from '@/domain/transaction/model';
 import {toRupiah} from '@/view/common/utils/common';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
@@ -103,13 +103,15 @@ const HistoryDetailModal = ({
 				confirmButton={
 					dataOrder && dataTransaction ? (
 						<div className="mx-4 flex w-full items-center justify-center gap-4">
-							<Button
-								variant="secondary"
-								onClick={() => handleOpenRefund(dataTransaction)}
-								fullWidth
-							>
-								Refund
-							</Button>
+							{dataTransaction.status !== TransactionStatus.REFUND && (
+								<Button
+									variant="secondary"
+									onClick={() => handleOpenRefund(dataTransaction)}
+									fullWidth
+								>
+									Refund
+								</Button>
+							)}
 							<Button
 								variant="primary"
 								isLoading={loadReceipt}

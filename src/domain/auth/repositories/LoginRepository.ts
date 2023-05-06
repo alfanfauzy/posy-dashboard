@@ -5,6 +5,7 @@ import {ResultMutation} from '@/domain/vo/BaseResponse';
 export type LoginInput = {
 	email: string;
 	password: string;
+	notif_token: string;
 };
 
 export type LoginResult = ResultMutation<Login, BaseError>;

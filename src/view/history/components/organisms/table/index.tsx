@@ -53,7 +53,7 @@ const HistoryTable = ({date}: HistoryTableProps) => {
 					value: (query.search as string) || '',
 				},
 				{
-					field: 'created_at',
+					field: 'paid_at',
 					value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
 				},
 				{

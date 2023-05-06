@@ -1,15 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
+import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
+import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
+import CancelIcon from '@/view/common/assets/icons/cancel';
 import Transition from '@/view/common/components/atoms/animations/transition';
 import Sidebar from '@/view/common/components/templates/sidebar';
+import firebaseApp from '@/view/common/config/firebase';
 import {UNPROTECT_ROUTES} from '@/view/common/config/link';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {setIsSubscription} from '@/view/common/store/slices/auth';
 import {useGetOutletSelectionViewModel} from '@/view/outlet/view-models/GetOutletSelectionViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
+import {useQueryClient} from '@tanstack/react-query';
+import {getMessaging, onMessage} from 'firebase/messaging';
 import {useRouter} from 'next/router';
+import {closeSnackbar, useSnackbar} from 'notistack';
 import {Loading} from 'posy-fnb-core';
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {ReactNode, useEffect, useRef, useState} from 'react';
 import {ProSidebarProvider} from 'react-pro-sidebar';
 
 type OrganismsLayoutProps = {
@@ -18,9 +25,25 @@ type OrganismsLayoutProps = {
 
 const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	const dispatch = useAppDispatch();
+	const queryClient = useQueryClient();
 	const {replace, asPath, pathname} = useRouter();
 	const {isLoggedIn, isSubscription} = useAppSelector(state => state.auth);
 	const [loading, setLoading] = useState(true);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const audioRef = useRef<any>();
+	const {enqueueSnackbar} = useSnackbar();
+
+	const play = () => {
+		if (audioRef.current) {
+			audioRef.current.play();
+		}
+	};
+
+	const handlePlayAudio = () => {
+		const button = document.createElement('button');
+		button.addEventListener('click', play);
+		button.click();
+	};
 
 	const {data: dataSubscription} = useGetSubscriptionSectionViewModel({
 		queryKey: [pathname],
@@ -30,22 +53,6 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	const {data: dataOutletSelection} = useGetOutletSelectionViewModel({
 		enabled: isLoggedIn && isSubscription,
 	});
-
-	// const [firstRender, setFirstRender] = useState(true)
-
-	// useEffect(() => {
-	//   // if (!firstRender) {
-	//   if (!isLoggedIn) router.replace('/auth/login')
-	//   else if (router.asPath === '/') {
-	//     router.replace('/transaction')
-	//     setLoading(false)
-	//   } else {
-	//     setLoading(false)
-	//   }
-	//   // } else {
-	//   //   setFirstRender(false)
-	//   // }
-	// }, [isLoggedIn, router])
 
 	useEffect(() => {
 		if (!isLoggedIn) replace('/auth/login');
@@ -80,10 +87,58 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		}
 	}, [dataSubscription]);
 
+	useEffect(() => {
+		const messaging = getMessaging(firebaseApp);
+
+		// const activateMessages = async () => {
+		// 	const token = await getToken(messaging, {
+		// 		vapidKey:
+		// 			'BPgeNUCEM49qqghR-3FUyfnM4grr7JYxOEsQDvKvZ9UvciADKNgwtxH1EQnk-CI0ZJ8uJI5W6h7phkeehYPL424',
+		// 	}).catch(() => console.log('error generating token'));
+
+		// 	if (token) console.log('token', token);
+		// 	if (!token) console.log('no token');
+		// };
+
+		// activateMessages();
+
+		onMessage(messaging, message => {
+			if (message.data) {
+				handlePlayAudio();
+
+				queryClient.invalidateQueries([GetTransactionsQueryKey]);
+				queryClient.invalidateQueries([
+					GetOrdersQueryKey,
+					{transaction_uuid: message?.data.transaction_uuid},
+				]);
+				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				enqueueSnackbar({
+					className: 'border-t-8 border-blue-success',
+					style: {borderRadius: '8px', background: '#ffffff', color: '#0A0A0A'},
+					action: snackbarId => (
+						<div className="mr-2">
+							<CancelIcon
+								onClick={() => {
+									closeSnackbar(snackbarId);
+								}}
+							/>
+						</div>
+					),
+					message: message.data.title as string,
+					variant: 'info',
+					anchorOrigin: {
+						horizontal: 'right',
+						vertical: 'top',
+					},
+				});
+			}
+		});
+	}, []);
+
 	if (loading) {
 		return (
 			<main className="flex h-screen w-full items-center justify-center">
-				<Loading backgroundColor="#2F265B" color="#2F265B" size={100} />
+				<Loading size={100} />
 			</main>
 		);
 	}
@@ -93,6 +148,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30 py-4">
 				<section className="flex h-full w-full gap-4">
 					<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
+					<audio ref={audioRef} src="/sounds/notif2.wav" />
 					<div className="h-full flex-1 overflow-y-scroll">
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>

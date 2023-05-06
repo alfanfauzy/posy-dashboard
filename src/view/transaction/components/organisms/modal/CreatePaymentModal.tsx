@@ -143,7 +143,7 @@ const CreatePaymentModal = ({
 					)}
 					{!loadPaymentMethodCategories && dataPaymentMethodCategories && (
 						<>
-							<div className="flex w-full flex-col gap-4 xl:px-8">
+							<div className="flex w-full flex-col gap-4 px-8">
 								{dataPaymentMethodCategories.map(
 									el =>
 										el.is_show && (
@@ -176,7 +176,7 @@ const CreatePaymentModal = ({
 								)}
 							</div>
 
-							<div className="mt-14 w-full xl:px-8">
+							<div className="mt-14 w-full px-8">
 								<Button
 									isLoading={loadReceipt}
 									fullWidth

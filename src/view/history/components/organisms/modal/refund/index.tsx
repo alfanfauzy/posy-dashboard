@@ -86,9 +86,7 @@ const RefundModal = ({close, isOpen, valueRefund}: RefundModalProps) => {
 		<Modal
 			isForm
 			handleSubmit={handleSubmit(onSubmit)}
-			className={`!p-0 lg:min-w-[700px] min-h-[400px] !h-fit ${
-				loadOutletUser ? 'flex justify-center items-center ' : ''
-			}`}
+			className="!p-0 lg:min-w-[700px]"
 			isLoading={loadDataTransaction}
 			open={isOpen}
 			handleClose={close}

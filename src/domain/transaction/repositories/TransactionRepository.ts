@@ -15,7 +15,7 @@ export type GetTransactionsInput = InputVariables<
 	keyof Transaction,
 	| keyof Pick<
 			Transaction,
-			'customer_name' | 'status' | 'transaction_code' | 'created_at'
+			'customer_name' | 'status' | 'transaction_code' | 'created_at' | 'paid_at'
 	  >
 	| keyof FilterBased
 >;
