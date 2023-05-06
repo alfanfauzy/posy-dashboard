@@ -108,7 +108,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 				width="250px"
 			>
 				<aside
-					className={`flex h-[12%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
+					className={`flex h-24 w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
 						collapsed ? 'px-6' : 'pl-12 pt-2'
 					}`}
 				>
@@ -126,7 +126,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 				<aside
 					className={`${
 						dataSubscriptionReminder?.is_show ? 'h-[60%]' : 'h-[70%]'
-					} overflow-y-auto pb-6`}
+					} overflow-y-auto pb-24`}
 				>
 					{PROTECT_ROUTES.map(route => (
 						<Menu key={route.title} item={route} collapse={collapsed} />

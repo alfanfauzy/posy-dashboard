@@ -22,7 +22,7 @@ const PrintQrCodeReceipt = ({
 						alt="logo"
 						width={57}
 						height={57}
-						className="mt-3 mb-6"
+						className="mt-3 mb-6 rounded-full"
 					/>
 				</div>
 				<div className="border-b border-neutral-40" />

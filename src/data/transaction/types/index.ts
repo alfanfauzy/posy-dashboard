@@ -7,6 +7,7 @@ enum TransactionStatus {
 	WAITING_FOOD = 'WAITING_FOOD',
 	PAID = 'PAID',
 	CANCELLED = 'CANCELLED',
+	REFUND = 'REFUND',
 }
 
 enum TransactionCategory {

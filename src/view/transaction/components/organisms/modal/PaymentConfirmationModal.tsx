@@ -70,20 +70,20 @@ const PaymentConfirmationModal = ({
 			closeOverlay
 			open={isOpenPaymentConfirmation}
 			handleClose={onClosePaymentConfirmation}
-			className="min-w-[382px]"
+			className="min-w-[382px] overflow-auto"
 		>
 			{valueState && (
 				<section>
 					<div className="flex flex-col items-center justify-center">
 						<BsFillCheckCircleFill size={52} className="text-green-success" />
-						<p className="mt-5 text-xxl-semibold text-primary-main">
+						<p className="mt-2 text-xxl-semibold text-primary-main">
 							Payment completed!
 						</p>
 						<p className="text-l-regular text-neutral-70">
 							{`ID: ${valueState.transaction_code}`}
 						</p>
 					</div>
-					<div className="mt-6 flex flex-col gap-2 border-t border-neutral-30 pt-6 pb-2">
+					<div className="mt-3 flex flex-col gap-2 border-t border-neutral-30 py-3">
 						<div className="flex items-center justify-between">
 							<p className="text-l-semibold text-primary-main">Total amount</p>
 							<p className="text-l-semibold text-primary-main">
@@ -117,7 +117,7 @@ const PaymentConfirmationModal = ({
 							</p>
 						</div>
 					</div>
-					<div className="mt-12 flex items-center justify-center gap-4">
+					<div className="mt-4 xl:mt-12 flex items-center justify-center gap-4">
 						<Button
 							size="xl"
 							variant="secondary"

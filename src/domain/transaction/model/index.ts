@@ -5,6 +5,7 @@ export enum TransactionStatus {
 	WAITING_FOOD = 'WAITING_FOOD',
 	PAID = 'PAID',
 	CANCELLED = 'CANCELLED',
+	REFUND = 'REFUND',
 }
 
 export enum TransactionCategory {
