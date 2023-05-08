@@ -96,7 +96,7 @@ const PrintToKitchenModal = ({
 							disabled={selectedOrder.length === 0}
 							fullWidth
 						>
-							Printed to kitchen
+							Print to kitchen
 						</Button>
 					</div>
 				}
