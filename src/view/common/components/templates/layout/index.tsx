@@ -124,7 +124,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 							/>
 						</div>
 					),
-					message: message.data.title as string,
+					message: message.data.content as string,
 					variant: 'info',
 					anchorOrigin: {
 						horizontal: 'right',
@@ -148,7 +148,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30 py-4">
 				<section className="flex h-full w-full gap-4">
 					<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
-					<audio ref={audioRef} src="/sounds/notif2.wav" />
+					<audio ref={audioRef} src="/sounds/notif.mp3" />
 					<div className="h-full flex-1 overflow-y-scroll">
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>
