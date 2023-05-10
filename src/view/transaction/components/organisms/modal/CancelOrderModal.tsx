@@ -7,13 +7,9 @@ import {listCancelReason} from '@/view/common/constants/order';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {useCreateCancelOrderViewModel} from '@/view/order/view-models/CreateCancelOrderViewModel';
 import {useQueryClient} from '@tanstack/react-query';
-import dynamic from 'next/dynamic';
-import {Button, Select} from 'posy-fnb-core';
+import {Modal} from 'antd';
+import {Button, Input, Select} from 'posy-fnb-core';
 import React, {useState} from 'react';
-
-const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
-	loading: () => <div />,
-});
 
 type CancelOrderModalProps = {
 	isOpen: boolean;
@@ -30,6 +26,7 @@ const CancelOrderModal = ({isOpen, close, value}: CancelOrderModalProps) => {
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
 	const [reason, setReason] = useState({label: '', value: ''});
+	const [reasonOther, setReasonOther] = useState('');
 
 	const {createCancelOrder, isLoading} = useCreateCancelOrderViewModel({
 		onSuccess: _data => {
@@ -47,15 +44,21 @@ const CancelOrderModal = ({isOpen, close, value}: CancelOrderModalProps) => {
 				is_all: value.is_all,
 				order_uuid: value.order_uuid,
 				order_detail_uuid: value.order_detail_uuid,
-				reason: reason.value,
+				reason: reason.value === 'OTHERS' ? reasonOther : reason.value,
 				restaurant_outlet_uuid: outletId,
 			});
 		}
 	};
 
 	return (
-		<Modal open={isOpen} handleClose={close}>
-			<section className="flex w-[340px] flex-col items-center justify-center p-4">
+		<Modal
+			open={isOpen}
+			onCancel={close}
+			closable={false}
+			footer={null}
+			width={400}
+		>
+			<section className="flex w-full flex-col items-center justify-center p-6">
 				<div className="">
 					<p className="text-center text-l-semibold line-clamp-2">
 						{`Are you sure you want to cancel  ${
@@ -73,6 +76,16 @@ const CancelOrderModal = ({isOpen, close, value}: CancelOrderModalProps) => {
 							placeholder="Select the reason"
 						/>
 					</div>
+					{reason.value === 'OTHERS' && (
+						<div className="mt-6">
+							<label>Other Reason: </label>
+							<Input
+								placeholder="Input other reason"
+								size="l"
+								onChange={e => setReasonOther(e.target.value)}
+							/>
+						</div>
+					)}
 				</div>
 				<div className="mt-8 flex w-full gap-3">
 					<Button
@@ -90,7 +103,10 @@ const CancelOrderModal = ({isOpen, close, value}: CancelOrderModalProps) => {
 						fullWidth
 						onClick={handleCancelOrder}
 						isLoading={isLoading}
-						disabled={reason.value.length <= 0}
+						disabled={
+							reason.value.length <= 0 ||
+							(reason.value === 'OTHERS' && reasonOther === '')
+						}
 					>
 						Yes
 					</Button>
