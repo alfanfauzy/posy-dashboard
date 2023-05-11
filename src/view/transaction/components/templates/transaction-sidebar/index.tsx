@@ -220,7 +220,7 @@ const TransactionSidebar = () => {
 										onClick={openPrintToKitchen}
 										className="whitespace-nowrap text-m-semibold"
 									>
-										Print to Kitchen
+										Print to kitchen
 									</Button>
 								)}
 							</div>

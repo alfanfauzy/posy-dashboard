@@ -1,4 +1,5 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {Orders} from '@/domain/order/model';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
@@ -54,6 +55,7 @@ const PrintToKitchenModal = ({
 				}, 100);
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 			}
 		},
 	});

@@ -1,4 +1,5 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {Orders} from '@/domain/order/model';
 import {CreateCancelOrderInput} from '@/domain/order/repositories/CreateCancelOrderRepository';
@@ -74,6 +75,7 @@ const OrderDetails = ({
 			if (data) {
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 			}
 		},
 	});
