@@ -19,6 +19,16 @@ export const PROTECT_ROUTES = [
 		title: 'Report',
 		path: 'report',
 		icon: <ReportIcon />,
+		subMenu: [
+			{
+				title: 'Report Summary',
+				path: 'report/summary',
+			},
+			{
+				title: 'Cancellation Report',
+				path: 'report/cancellation',
+			},
+		],
 	},
 	{
 		title: 'History',

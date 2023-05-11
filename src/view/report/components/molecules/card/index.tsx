@@ -1,7 +1,7 @@
 import React from 'react';
 
 type ReportSummaryCardProps = {
-	title: string;
+	title: string | number;
 	value: string;
 };
 
