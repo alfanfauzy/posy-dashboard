@@ -75,18 +75,18 @@ const PaymentConfirmationModal = ({
 			{valueState && (
 				<section>
 					<div className="flex flex-col items-center justify-center">
-						<BsFillCheckCircleFill size={52} className="text-green-success" />
-						<p className="mt-2 text-xxl-semibold text-primary-main">
+						<BsFillCheckCircleFill size={38} className="text-green-success" />
+						<p className="mt-1 text-xl-semibold text-primary-main">
 							Payment completed!
 						</p>
-						<p className="text-l-regular text-neutral-70">
+						<p className="text-m-regular text-neutral-70">
 							{`ID: ${valueState.transaction_code}`}
 						</p>
 					</div>
-					<div className="mt-3 flex flex-col gap-2 border-t border-neutral-30 py-3">
+					<div className="mt-2 flex flex-col gap-1 border-t border-neutral-30 py-2">
 						<div className="flex items-center justify-between">
-							<p className="text-l-semibold text-primary-main">Total amount</p>
-							<p className="text-l-semibold text-primary-main">
+							<p className="text-m-semibold text-primary-main">Total amount</p>
+							<p className="text-m-semibold text-primary-main">
 								{toRupiah(valueState.total_amount)}
 							</p>
 						</div>
@@ -105,21 +105,21 @@ const PaymentConfirmationModal = ({
 					</div>
 					<div className="border-t border-neutral-30 py-2">
 						<div className="flex items-center justify-between">
-							<p className="text-l-semibold text-primary-main">Amount paid</p>
-							<p className="text-l-semibold text-primary-main">
+							<p className="text-m-semibold text-primary-main">Amount paid</p>
+							<p className="text-m-semibold text-primary-main">
 								{toRupiah(valueState.paid_amount)}
 							</p>
 						</div>
 						<div className="flex items-center justify-between">
-							<p className="text-l-semibold text-primary-main">Change</p>
-							<p className="text-l-semibold text-primary-main">
+							<p className="text-m-semibold text-primary-main">Change</p>
+							<p className="text-m-semibold text-primary-main">
 								{toRupiah(valueState.paid_amount - valueState.total_amount)}
 							</p>
 						</div>
 					</div>
-					<div className="mt-4 xl:mt-12 flex items-center justify-center gap-4">
+					<div className="mt-2.5 xl:mt-12 flex items-center justify-center gap-4">
 						<Button
-							size="xl"
+							size="l"
 							variant="secondary"
 							className="w-1/2"
 							onClick={onClosePaymentConfirmation}
@@ -128,7 +128,7 @@ const PaymentConfirmationModal = ({
 						</Button>
 						<Button
 							isLoading={loadReceipt}
-							size="xl"
+							size="l"
 							className="w-1/2"
 							onClick={() =>
 								createPrintReceipt({

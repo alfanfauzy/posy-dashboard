@@ -90,6 +90,7 @@ const PrintToKitchenModal = ({
 							Cancel
 						</Button>
 						<Button
+							className="whitespace-nowrap"
 							variant="primary"
 							onClick={onPrintToKitchen}
 							isLoading={loadPrintToKitchen}

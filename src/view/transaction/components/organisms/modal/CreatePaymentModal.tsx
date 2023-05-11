@@ -132,8 +132,8 @@ const CreatePaymentModal = ({
 			}}
 		>
 			<section className="flex h-full">
-				<aside className="flex flex-col w-1/3 h-full overflow-auto items-center rounded-l-3xl bg-neutral-30 py-10">
-					<div className="mb-6">
+				<aside className="flex flex-col w-1/3 h-full overflow-auto items-center rounded-l-3xl bg-neutral-30 py-6">
+					<div className="mb-4">
 						<p className="text-xxl-semibold">Choose payment method</p>
 					</div>
 					{loadPaymentMethodCategories && (
@@ -143,7 +143,7 @@ const CreatePaymentModal = ({
 					)}
 					{!loadPaymentMethodCategories && dataPaymentMethodCategories && (
 						<>
-							<div className="flex w-full flex-col gap-4 px-8">
+							<div className="flex w-full flex-col gap-3 px-8">
 								{dataPaymentMethodCategories.map(
 									el =>
 										el.is_show && (
@@ -157,7 +157,7 @@ const CreatePaymentModal = ({
 													setSelectedPayment('');
 												}}
 												key={el.name}
-												className={`flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border  p-4 transition-all duration-300 ease-in-out hover:opacity-70 ${
+												className={`flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border px-4 py-2.5 transition-all duration-300 ease-in-out hover:opacity-70 ${
 													selectedPaymentCategory.type === el.name.toLowerCase()
 														? 'border-secondary-main bg-secondary-border'
 														: 'border-neutral-100 bg-neutral-10 hover:border-primary-main hover:bg-secondary-border hover:bg-opacity-70'
@@ -165,8 +165,8 @@ const CreatePaymentModal = ({
 											>
 												<Image
 													alt={el.name}
-													width={28}
-													height={28}
+													width={24}
+													height={24}
 													src={el.logo_url}
 													priority
 												/>
@@ -176,7 +176,7 @@ const CreatePaymentModal = ({
 								)}
 							</div>
 
-							<div className="mt-14 w-full px-8">
+							<div className="mt-6 w-full px-8">
 								<Button
 									isLoading={loadReceipt}
 									fullWidth
@@ -196,18 +196,18 @@ const CreatePaymentModal = ({
 					)}
 				</aside>
 
-				<aside className="flex-1 p-10">
+				<aside className="flex-1 p-6">
 					<div className="relative h-full">
 						<div className="mb-4 flex items-center gap-2">
-							<p className="text-heading-s-regular">Total amount:</p>
-							<p className="text-heading-s-bold">{toRupiah(payment.total)}</p>
+							<p className="text-xxl-regular">Total amount:</p>
+							<p className="text-xxl-bold">{toRupiah(payment.total)}</p>
 						</div>
 						{selectedPaymentCategory.type === 'cash' && (
 							<>
 								<div className="mt-4">
-									<p className="text-xl-semibold">Input Payment Received</p>
+									<p className="text-l-semibold">Input Payment Received</p>
 									<NumericFormat
-										className="mt-2 flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 p-4 text-center transition-all duration-300 ease-in-out focus:outline-none"
+										className="mt-2 flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 px-4 py-2.5 text-center transition-all duration-300 ease-in-out focus:outline-none"
 										thousandSeparator="."
 										decimalSeparator=","
 										prefix="Rp "
@@ -216,27 +216,27 @@ const CreatePaymentModal = ({
 										value={price}
 									/>
 								</div>
-								<div className="mt-6 grid w-full grid-cols-2 gap-4">
+								<div className="mt-4 grid w-full grid-cols-2 gap-4">
 									{suggestionAmount.slice(1).map(el => (
 										<div
 											key={el}
 											role="presentation"
 											onClick={() => setPrice(el)}
-											className={`flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border  p-4 transition-all duration-300 ease-in-out hover:opacity-70 ${
+											className={`flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border px-4 py-2.5 transition-all duration-300 ease-in-out hover:opacity-70 ${
 												selectedPaymentCategory.type !== 'cash'
 													? 'border-secondary-main bg-secondary-border'
 													: 'border-neutral-100 bg-neutral-10 hover:border-primary-main hover:bg-secondary-border hover:bg-opacity-70'
 											}`}
 										>
-											<p className="text-l-medium">{toRupiah(el)}</p>
+											<p className="text-m-medium">{toRupiah(el)}</p>
 										</div>
 									))}
 								</div>
 
 								<div className="mt-4">
-									<p className="text-xl-semibold">Change (auto filled)</p>
+									<p className="text-l-semibold">Change (auto filled)</p>
 									<input
-										className="mt-2 flex w-full items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 p-4 text-center transition-all duration-300 ease-in-out focus:outline-none disabled:bg-neutral-40"
+										className="mt-2 flex w-full items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 px-4 py-2.5 text-m-medium text-center transition-all duration-300 ease-in-out focus:outline-none disabled:bg-neutral-40"
 										disabled
 										value={toRupiah(price - payment.total)}
 									/>
@@ -253,7 +253,7 @@ const CreatePaymentModal = ({
 							)}
 
 						{selectedPaymentCategory.type !== 'cash' && dataPaymentMethods && (
-							<aside className="grid grid-cols-4 gap-4">
+							<aside className="grid grid-cols-4 gap-2">
 								{dataPaymentMethods.map(paymentMethod => (
 									<div
 										onClick={() => setSelectedPayment(paymentMethod.uuid)}
@@ -280,10 +280,10 @@ const CreatePaymentModal = ({
 							{(selectedPaymentCategory.type === 'card' ||
 								selectedPaymentCategory.type === 'bank transfer') && (
 								<div className="mt-4 mb-7">
-									<p className="text-xl-semibold">Trace number (Optional)</p>
+									<p className="text-l-semibold">Trace number (Optional)</p>
 									<input
 										onChange={e => setAdditionalInfo(e.target.value)}
-										className="mt-2 flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 p-4 text-center transition-all duration-300 ease-in-out focus:outline-none"
+										className="mt-2 flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 px-4 py-2.5 text-center transition-all duration-300 ease-in-out focus:outline-none text-m-medium"
 										placeholder="ex: 333456"
 									/>
 								</div>

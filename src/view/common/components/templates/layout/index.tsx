@@ -23,6 +23,12 @@ type OrganismsLayoutProps = {
 	children: ReactNode;
 };
 
+export const handlePlayAudio = (play: () => void) => {
+	const button = document.createElement('button');
+	button.addEventListener('click', play);
+	button.click();
+};
+
 const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
@@ -37,12 +43,6 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		if (audioRef.current) {
 			audioRef.current.play();
 		}
-	};
-
-	const handlePlayAudio = () => {
-		const button = document.createElement('button');
-		button.addEventListener('click', play);
-		button.click();
 	};
 
 	const {data: dataSubscription} = useGetSubscriptionSectionViewModel({
@@ -104,7 +104,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 
 		onMessage(messaging, message => {
 			if (message.data) {
-				handlePlayAudio();
+				handlePlayAudio(play);
 
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 				queryClient.invalidateQueries([

@@ -11,8 +11,7 @@
 		"prettier",
 		"plugin:@next/next/recommended",
 		"plugin:@typescript-eslint/recommended",
-		"plugin:prettier/recommended",
-		"plugin:@typescript-eslint/recommended"
+		"plugin:prettier/recommended"
 	],
 	"plugins": ["@typescript-eslint", "eslint-plugin-import-helpers", "prettier"],
 	"overrides": [

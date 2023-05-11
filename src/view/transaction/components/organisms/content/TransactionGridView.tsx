@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {TransactionStatus} from '@/domain/transaction/model';
+import CancelIcon from '@/view/common/assets/icons/cancel';
 import PlusCircleIcon from '@/view/common/assets/icons/plusCircle';
 import FilterChip from '@/view/common/components/atoms/chips/filter-chip';
 import InputSearch from '@/view/common/components/atoms/input/search';
+import {handlePlayAudio} from '@/view/common/components/templates/layout';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
@@ -17,8 +20,10 @@ import {useGetTransactionSummaryViewModel} from '@/view/transaction/view-models/
 import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTransactionsViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import {Skeleton} from 'antd';
+import {closeSnackbar, useSnackbar} from 'notistack';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {AiOutlineFullscreen} from 'react-icons/ai';
 import {useReactToPrint} from 'react-to-print';
 
 import PrintQrCodeReceipt from '../receipt/PrintQrCodeReceipt';
@@ -27,10 +32,21 @@ const generateBorderColor = (
 	status: string,
 	trxId: string,
 	selectedTrxId: string,
+	firstOrderAt: number,
+	isWaitingFood: boolean,
 ) => {
+	const now = Date.now();
+	const diffTime = Math.abs(now - firstOrderAt * 1000);
+	const diffMinutes = Math.floor(diffTime / 60000);
+
+	if (isWaitingFood && diffMinutes > 10) {
+		return 'border-2 border-error';
+	}
+
 	if (trxId === selectedTrxId) {
 		return 'border-2 border-primary-main';
 	}
+
 	const borderColor: Record<string, string> = {
 		WAITING_FOOD: 'border-2 border-blue-success',
 		WAITING_PAYMENT: 'border-2 border-green-success',
@@ -45,6 +61,7 @@ type TransactionGridViewProps = {
 const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
+	const {enqueueSnackbar} = useSnackbar();
 	const {selectedTrxId, search} = useAppSelector(state => state.transaction);
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
@@ -54,6 +71,14 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	const [status, setStatus] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const qrRef = useRef<any>();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const audioRef = useRef<any>();
+
+	const play = () => {
+		if (audioRef.current) {
+			audioRef.current.play();
+		}
+	};
 
 	const handlePrint = useReactToPrint({
 		content: () => qrRef.current,
@@ -146,13 +171,120 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		);
 	};
 
+	const requestFullScreen = () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const element: any = document.body;
+
+		const requestMethod =
+			element.requestFullscreen ||
+			element.webkitRequestFullScreen ||
+			element.mozRequestFullScreen ||
+			element.msRequestFullScreen;
+
+		if (requestMethod) {
+			requestMethod.call(element);
+		}
+	};
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			data?.map(el => {
+				const now = Date.now();
+				const diffTime = Math.abs(now - el.first_order_at * 1000);
+				const diffMinutes = Math.floor(diffTime / 60000);
+				const checktime = diffMinutes > 0 && diffMinutes % 2 === 0;
+				// console.log(diffMinutes, checktime, idx);
+				if (el.status === TransactionStatus.WAITING_FOOD && checktime) {
+					// console.log({diffMinutes}, idx);
+					handlePlayAudio(play);
+
+					enqueueSnackbar({
+						className: 'border-t-8 border-blue-success',
+						style: {
+							borderRadius: '8px',
+							background: '#ffffff',
+							color: '#0A0A0A',
+						},
+						action: snackbarId => (
+							<div className="mr-2">
+								<CancelIcon
+									onClick={() => {
+										closeSnackbar(snackbarId);
+									}}
+								/>
+							</div>
+						),
+						message: `Need: print to kitchen on table ${el.table_number}`,
+						variant: 'info',
+						anchorOrigin: {
+							horizontal: 'right',
+							vertical: 'top',
+						},
+					});
+					return el;
+				}
+			});
+		}, 1000 * 60);
+
+		return () => clearInterval(interval);
+	}, [data]);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			data?.map(el => {
+				const now = Date.now();
+				const diffTime = Math.abs(now - el.first_order_at * 1000);
+				const diffMinutes = Math.floor(diffTime / 60000);
+				const checktime = diffMinutes === 1;
+
+				if (el.status === TransactionStatus.WAITING_FOOD && checktime) {
+					handlePlayAudio(play);
+					enqueueSnackbar({
+						className: 'border-t-8 border-error',
+						style: {
+							borderRadius: '8px',
+							background: '#ffffff',
+							color: '#0A0A0A',
+						},
+						action: snackbarId => (
+							<div className="mr-2">
+								<CancelIcon
+									onClick={() => {
+										closeSnackbar(snackbarId);
+									}}
+								/>
+							</div>
+						),
+						message: `Please check order time on table ${el.table_number}`,
+						variant: 'info',
+						anchorOrigin: {
+							horizontal: 'right',
+							vertical: 'top',
+						},
+					});
+					return el;
+				}
+			});
+		}, 1000 * 60);
+
+		return () => clearInterval(interval);
+	}, [data]);
+
 	return (
-		<section className="relative h-full flex-1 overflow-hidden rounded-2xl bg-neutral-10">
+		<section className="relative h-full flex-1 flex flex-col md:gap-4 overflow-hidden rounded-2xl bg-neutral-10">
 			<article className="h-fit p-6 pb-0">
 				<aside className="flex items-start justify-between">
 					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						Restaurant Transaction
 					</p>
+
+					<div>
+						<AiOutlineFullscreen
+							onClick={requestFullScreen}
+							className="cursor-pointer hover:opacity-70"
+							size={24}
+						/>
+					</div>
 				</aside>
 
 				{loadSummary && (
@@ -220,7 +352,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				)}
 			</article>
 
-			<article className="h-[80%] w-full overflow-y-auto py-4 pb-20 px-6">
+			<article className="h-[80%] w-full overflow-y-auto pb-20 px-6">
 				{loadData && (
 					<article className="flex h-full items-center justify-center">
 						<Loading size={90} />
@@ -254,26 +386,32 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 					>
 						{data.length > 0 &&
 							data.map(el => (
-								<aside
-									key={el.uuid}
-									onClick={() => handleSelectTrx(el.uuid)}
-									role="presentation"
-									className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-primary-main active:shadow-md ${generateBorderColor(
-										status,
-										el.uuid,
-										selectedTrxId,
-									)}`}
-								>
-									<div className="flex justify-center border-b pb-2">
-										<p className="text-4xl font-normal text-neutral-70">
-											{el.table_number || '-'}
-										</p>
-									</div>
-									<div className="mt-2">
-										<p className="text-s-semibold text-neutral-90">Name</p>
-										<p className="text-m-regular text-neutral-90 line-clamp-1">
-											{el.customer_name || '-'}
-										</p>
+								<aside key={el.uuid} className="relative">
+									{!el.is_print_to_kitchen && (
+										<div className="w-4 h-4 absolute -right-1 top-0 rounded-full bg-error" />
+									)}
+									<div
+										onClick={() => handleSelectTrx(el.uuid)}
+										role="presentation"
+										className={`h-[124px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-primary-main active:shadow-md ${generateBorderColor(
+											status,
+											el.uuid,
+											selectedTrxId,
+											el.first_order_at,
+											el.status === TransactionStatus.WAITING_FOOD,
+										)}`}
+									>
+										<div className="flex justify-center border-b pb-2">
+											<p className="text-4xl font-normal text-neutral-70">
+												{el.table_number || '-'}
+											</p>
+										</div>
+										<div className="mt-2">
+											<p className="text-s-semibold text-neutral-90">Name</p>
+											<p className="text-m-regular text-neutral-90 line-clamp-1">
+												{el.customer_name || '-'}
+											</p>
+										</div>
 									</div>
 								</aside>
 							))}
@@ -294,6 +432,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 			</article>
 
 			{dataQr && <PrintQrCodeReceipt data={dataQr} printReceiptRef={qrRef} />}
+			<audio ref={audioRef} src="/sounds/notif.mp3" />
 		</section>
 	);
 };

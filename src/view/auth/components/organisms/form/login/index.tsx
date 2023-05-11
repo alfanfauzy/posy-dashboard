@@ -92,9 +92,7 @@ const OrganismsFormLogin = () => {
 	const onSubmit: reactHookForm.SubmitHandler<
 		ValidationSchemaLoginType
 	> = form => {
-		if (notifToken) {
-			login({...form, notif_token: notifToken});
-		}
+		login({...form, notif_token: notifToken});
 	};
 
 	return (

@@ -29,6 +29,7 @@ const ViewTaxAndServicePage = () => {
 		control,
 		formState: {errors, isValid},
 		watch,
+		reset,
 		handleSubmit,
 		setValue,
 	} = useForm({
@@ -152,7 +153,22 @@ const ViewTaxAndServicePage = () => {
 								</aside>
 							</article>
 							<aside className="mt-20 flex justify-end gap-4">
-								<Button variant="secondary" size="m">
+								<Button
+									type="button"
+									onClick={() =>
+										reset({
+											is_service_charge: false,
+											is_tax: false,
+											service_charge_percentage: '0',
+											tax_percentage: '0',
+											tax_type: 'TAX_AFTER_DISCOUNT',
+											is_service_charge_taxable: true,
+											restaurant_outlet_uuid: outletId,
+										})
+									}
+									variant="secondary"
+									size="m"
+								>
 									Discard
 								</Button>
 								<Button

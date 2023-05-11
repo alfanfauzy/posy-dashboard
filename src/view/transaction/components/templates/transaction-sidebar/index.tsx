@@ -9,7 +9,7 @@ import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/upda
 import {useGetQrCodeViewModel} from '@/view/transaction/view-models/GetQrCodeViewModel';
 import {useGetTransactionViewModel} from '@/view/transaction/view-models/GetTransactionViewModel';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
 import {useReactToPrint} from 'react-to-print';
 
@@ -42,8 +42,8 @@ const TransactionSidebar = () => {
 	] = useDisclosure({initialState: false});
 
 	const [
-		showDeleteOrder,
-		{toggle: toggleShowDeleteOrder, close: closeDeleteOrder},
+		isShowDeleteOrder,
+		{toggle: toggleShowDeleteOrder, close: closeShowDeleteOrder},
 	] = useDisclosure({
 		initialState: false,
 	});
@@ -139,6 +139,12 @@ const TransactionSidebar = () => {
 		},
 	});
 
+	useEffect(() => {
+		setTabValueOrder(0);
+		closeShowDeleteOrder();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedTrxId]);
+
 	return (
 		<main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
 			{!selectedTrxId && (
@@ -171,7 +177,7 @@ const TransactionSidebar = () => {
 								setTabValueOrder={setTabValueOrder}
 								tabValueOrder={tabValueorder}
 								openCreateOrder={openCreateOrder}
-								showDeleteOrder={showDeleteOrder}
+								showDeleteOrder={isShowDeleteOrder}
 								toggleShowDeleteOrder={toggleShowDeleteOrder}
 								dataOrder={dataOrder}
 								loadOrder={loadOrder}
@@ -180,14 +186,18 @@ const TransactionSidebar = () => {
 					</section>
 
 					<section className="absolute bottom-0 w-full rounded-bl-2xl bg-white p-4 shadow-basic">
-						{showDeleteOrder && (
-							<Button variant="secondary" onClick={closeDeleteOrder} fullWidth>
+						{isShowDeleteOrder && (
+							<Button
+								variant="secondary"
+								onClick={closeShowDeleteOrder}
+								fullWidth
+							>
 								<p className="whitespace-nowrap text-m-semibold">
 									Back to order details
 								</p>
 							</Button>
 						)}
-						{!showDeleteOrder && tabValueorder === 0 && (
+						{!isShowDeleteOrder && tabValueorder === 0 && (
 							<div className="flex gap-2">
 								<Button
 									fullWidth
@@ -215,7 +225,7 @@ const TransactionSidebar = () => {
 								)}
 							</div>
 						)}
-						{!showDeleteOrder && tabValueorder === 1 && (
+						{!isShowDeleteOrder && tabValueorder === 1 && (
 							<div className="flex gap-2">
 								<Button
 									variant="secondary"
