@@ -12,7 +12,7 @@ import {
 	ResetPasswordDataResponse,
 	VerifyTokenDataResponse,
 } from '../types';
-import {mapRoleAccess, mapRoleEnumToUserRole} from './RoleMapper';
+import {mapRoleAccess} from './RoleMapper';
 
 export const mapToLoginModel = (data: LoginDataResponse): Login => ({
 	user_info: {
@@ -26,7 +26,7 @@ export const mapToLoginModel = (data: LoginDataResponse): Login => ({
 	expired_at: data.expired_at.seconds,
 	role: {
 		uuid: data.role_access.role.uuid,
-		name: mapRoleEnumToUserRole(data.role_access.role.name),
+		name: data.role_access.role.name,
 	},
 	accesses: mapRoleAccess(data.role_access.accesses),
 });

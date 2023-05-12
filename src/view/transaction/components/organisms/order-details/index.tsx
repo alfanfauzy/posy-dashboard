@@ -4,6 +4,7 @@ import {Orders} from '@/domain/order/model';
 import {CreateCancelOrderInput} from '@/domain/order/repositories/CreateCancelOrderRepository';
 import {ServeOrder} from '@/domain/order/repositories/CreateServeOrderRepository';
 import {Transaction} from '@/domain/transaction/model';
+import {Can} from '@/view/auth/components/organisms/rbac';
 import CountUpTimer from '@/view/common/components/atoms/countup';
 import {listOrderTabs} from '@/view/common/constants/order';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
@@ -231,15 +232,17 @@ const OrderDetails = ({
 							))}
 
 						{!showDeleteOrder && (
-							<Button
-								variant="secondary"
-								fullWidth
-								size="l"
-								className="my-2 mb-28"
-								onClick={openCreateOrder}
-							>
-								Add New Order
-							</Button>
+							<Can I="create" an="order">
+								<Button
+									variant="secondary"
+									fullWidth
+									size="l"
+									className="my-2 mb-28"
+									onClick={openCreateOrder}
+								>
+									Add New Order
+								</Button>
+							</Can>
 						)}
 					</div>
 				)}

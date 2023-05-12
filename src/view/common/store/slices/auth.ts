@@ -30,7 +30,7 @@ const initialState: AuthState = {
 		refresh_token: '',
 		expired_at: 0,
 		role: {
-			name: undefined,
+			name: '',
 			uuid: '',
 		},
 		accesses: [],
@@ -67,7 +67,7 @@ export const AuthSlice = createSlice({
 				token: '',
 				refresh_token: '',
 				expired_at: 0,
-				role: {name: undefined, uuid: ''},
+				role: {name: '', uuid: ''},
 				accesses: [],
 			};
 		},

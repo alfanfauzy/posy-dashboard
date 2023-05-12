@@ -4,7 +4,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import '@/view/common/styles/globals.css';
 
-import {AbilityProvider} from '@/view/auth/components/organisms/ability';
+import {AbilityProvider} from '@/view/auth/components/organisms/rbac';
 import ModalWrapper from '@/view/common/components/atoms/modal';
 import Layout from '@/view/common/components/templates/layout';
 import {persistor, wrapper} from '@/view/common/store/index';

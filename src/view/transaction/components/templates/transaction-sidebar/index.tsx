@@ -1,5 +1,6 @@
 import {QrCode} from '@/domain/qr-code/model';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
+import {Can} from '@/view/auth/components/organisms/rbac';
 import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
@@ -189,29 +190,33 @@ const TransactionSidebar = () => {
 						)}
 						{!showDeleteOrder && tabValueorder === 0 && (
 							<div className="flex gap-2">
-								<Button
-									fullWidth
-									variant="secondary"
-									onClick={() =>
-										getQrCode({
-											transaction_uuid: selectedTrxId,
-										})
-									}
-									isLoading={loadQrCode}
-								>
-									<p className="whitespace-nowrap text-m-semibold">
-										Reprint QR
-									</p>
-								</Button>
-								{dataOrder && dataOrder?.length > 0 && (
+								<Can I="reprint-qrcode" an="transaction">
 									<Button
-										variant="primary"
 										fullWidth
-										onClick={openPrintToKitchen}
-										className="whitespace-nowrap text-m-semibold"
+										variant="secondary"
+										onClick={() =>
+											getQrCode({
+												transaction_uuid: selectedTrxId,
+											})
+										}
+										isLoading={loadQrCode}
 									>
-										Print to Kitchen
+										<p className="whitespace-nowrap text-m-semibold">
+											Reprint QR
+										</p>
 									</Button>
+								</Can>
+								{dataOrder && dataOrder?.length > 0 && (
+									<Can I="print_to_kitchen" an="order">
+										<Button
+											variant="primary"
+											fullWidth
+											onClick={openPrintToKitchen}
+											className="whitespace-nowrap text-m-semibold"
+										>
+											Print to Kitchen
+										</Button>
+									</Can>
 								)}
 							</div>
 						)}
@@ -228,14 +233,16 @@ const TransactionSidebar = () => {
 										<AiOutlinePercentage />
 									</div>
 								</Button>
-								<Button
-									variant="primary"
-									fullWidth
-									onClick={openCreatePayment}
-									className="whitespace-nowrap text-m-semibold"
-								>
-									Payment
-								</Button>
+								<Can I="payment" an="transaction">
+									<Button
+										variant="primary"
+										fullWidth
+										onClick={openCreatePayment}
+										className="whitespace-nowrap text-m-semibold"
+									>
+										Payment
+									</Button>
+								</Can>
 							</div>
 						)}
 					</section>

@@ -1,6 +1,6 @@
 import {MongoQuery, PureAbility, RawRuleOf} from '@casl/ability';
 
-type Actions =
+export type Actions =
 	| 'read'
 	| 'update'
 	| 'all_selection'
@@ -18,7 +18,7 @@ type Actions =
 	| 'manage_access_setting'
 	| 'create_permission';
 
-type Subjects =
+export type Subjects =
 	| 'setting_tax_service'
 	| 'outlet'
 	| 'setting_subscription'

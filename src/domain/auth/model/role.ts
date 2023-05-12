@@ -1,6 +1,4 @@
-type UserRole = 'OWNER' | 'MANAGER' | 'CASHIER' | 'WAITRESS' | undefined;
-
 export type Role = {
-	name: UserRole;
+	name: string;
 	uuid: string;
 };

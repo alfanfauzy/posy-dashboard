@@ -24,23 +24,3 @@ export const mapRoleAccess = (access: Access): Accesses => {
 		return acc;
 	}, []);
 };
-
-export const mapRoleEnumToUserRole = (role?: string) => {
-	switch (role) {
-		case 'Owner': {
-			return 'OWNER';
-		}
-		case 'Manager': {
-			return 'MANAGER';
-		}
-		case 'Cashier': {
-			return 'CASHIER';
-		}
-		case 'Waitress': {
-			return 'WAITRESS';
-		}
-		default: {
-			return undefined;
-		}
-	}
-};
