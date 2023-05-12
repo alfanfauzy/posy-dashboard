@@ -11,6 +11,7 @@ export const mapToCancellationReportModel = (
 ): CancellationReports =>
 	datas.map(data => ({
 		uuid: data.uuid,
+		transaction_code: data.transaction_code,
 		transaction_uuid: data.transaction_uuid,
 		outlet_name: data.outlet_name,
 		transaction_start: data.transaction_start,

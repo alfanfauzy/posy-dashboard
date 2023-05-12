@@ -18,7 +18,8 @@ type DateFormatType =
 	| 'P'
 	| 'dd MMM, HH:mm'
 	| 'dd MMM yyyy, HH:mm'
-	| 't';
+	| 't'
+	| 'dd/MM/yyyy, HH:mm';
 
 export const dateFormatter = (
 	date: number | Date,

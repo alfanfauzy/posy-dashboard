@@ -1,6 +1,7 @@
 export type GetCancellationReportsDataResponse = {
 	uuid: string;
 	transaction_uuid: string;
+	transaction_code: string;
 	transaction_start: string;
 	transaction_close: string;
 	cashier: string;

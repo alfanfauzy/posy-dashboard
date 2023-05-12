@@ -5,11 +5,7 @@ import {CancellationReport, CancellationSummary} from '../model';
 
 export type GetCancellationReportSummaryInput = InputVariables<
 	keyof CancellationReport,
-	| keyof Pick<
-			CancellationReport,
-			'outlet_uuid' | 'status' | 'transaction_start'
-	  >
-	| keyof FilterBased
+	'created_at' | keyof FilterBased
 >;
 export type GetCancellationReportSummaryResult = ResultQuery<
 	CancellationSummary | undefined
