@@ -84,7 +84,7 @@ instance.interceptors.response.use(
 				const {code, data} = await RefreshToken({
 					refresh_token,
 					token,
-					user_uuid: user_info.user_uuid,
+					user_uuid: user_info.uuid,
 				});
 
 				if (code === 401 || !data) {

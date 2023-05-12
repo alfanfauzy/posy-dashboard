@@ -1,5 +1,13 @@
 import {Metadata} from '@/data/common/types/metadata';
 
+export type Access = Array<{
+	description: string;
+	is_internal: boolean;
+	key: string;
+	name: string;
+	uuid: string;
+}>;
+
 export type LoginDataResponse = {
 	user_info: {
 		user_uuid: string;
@@ -12,6 +20,15 @@ export type LoginDataResponse = {
 	expired_at: {
 		seconds: number;
 		nanos: number;
+	};
+	role_access: {
+		role: {
+			accesses: null;
+			is_internal: boolean;
+			name: string;
+			uuid: string;
+		};
+		accesses: Access;
 	};
 };
 

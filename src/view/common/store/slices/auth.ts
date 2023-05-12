@@ -23,12 +23,17 @@ const initialState: AuthState = {
 		user_info: {
 			email: '',
 			phone: '',
-			fullname: '',
-			user_uuid: '',
+			full_name: '',
+			uuid: '',
 		},
 		token: '',
 		refresh_token: '',
 		expired_at: 0,
+		role: {
+			name: undefined,
+			uuid: '',
+		},
+		accesses: [],
 	},
 };
 
@@ -56,12 +61,14 @@ export const AuthSlice = createSlice({
 				user_info: {
 					email: '',
 					phone: '',
-					fullname: '',
-					user_uuid: '',
+					full_name: '',
+					uuid: '',
 				},
 				token: '',
 				refresh_token: '',
 				expired_at: 0,
+				role: {name: undefined, uuid: ''},
+				accesses: [],
 			};
 		},
 		setShowSidebar: (state: AuthState, action: PayloadAction<boolean>) => {
