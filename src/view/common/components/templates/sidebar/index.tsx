@@ -15,6 +15,7 @@ import {
 	setShowSidebar,
 } from '@/view/common/store/slices/auth';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {Select} from 'antd';
 import dynamic from 'next/dynamic';
@@ -128,9 +129,12 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 						dataSubscriptionReminder?.is_show ? 'h-[60%]' : 'h-[70%]'
 					} overflow-y-auto pb-6`}
 				>
-					{PROTECT_ROUTES.map(route => (
-						<Menu key={route.title} item={route} collapse={collapsed} />
-					))}
+					{PROTECT_ROUTES.map(
+						route =>
+							CheckPermission(route.permission) && (
+								<Menu key={route.title} item={route} collapse={collapsed} />
+							),
+					)}
 				</aside>
 
 				<aside className="absolute bottom-0 w-full items-center">

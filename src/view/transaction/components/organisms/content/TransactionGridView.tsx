@@ -269,7 +269,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 								>
 									<div className="flex justify-center border-b pb-2">
 										<p className="text-4xl font-normal text-neutral-70">
-											{el.table_number || '-'}
+											{`${el.table_number}${el.session_suffix}` || '-'}
 										</p>
 									</div>
 									<div className="mt-2">
