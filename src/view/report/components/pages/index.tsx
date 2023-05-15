@@ -1,5 +1,6 @@
 import {GetDownloadTransactionReportInput} from '@/domain/report/repositories/GetDownloadReportsRepository';
 import {Response} from '@/domain/vo/BaseResponse';
+import {Can} from '@/view/auth/components/organisms/rbac';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
@@ -148,15 +149,17 @@ const ViewReportPage = () => {
 					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						Report Summary
 					</p>
-					<Button
-						size="m"
-						isLoading={isLoading}
-						onClick={() => {
-							handleDownloadReport();
-						}}
-					>
-						Download Report
-					</Button>
+					<Can I="export_excel" an="transaction_report">
+						<Button
+							size="m"
+							isLoading={isLoading}
+							onClick={() => {
+								handleDownloadReport();
+							}}
+						>
+							Download Report
+						</Button>
+					</Can>
 				</aside>
 				<aside className="mt-6">
 					<div className="mt-1 flex items-center space-x-4">

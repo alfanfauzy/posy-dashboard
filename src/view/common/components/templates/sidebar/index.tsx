@@ -15,6 +15,7 @@ import {
 	setShowSidebar,
 } from '@/view/common/store/slices/auth';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {Select} from 'antd';
 import dynamic from 'next/dynamic';
@@ -47,7 +48,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 		isSubscription,
 		isLoggedIn,
 		authData: {
-			user_info: {fullname, user_uuid},
+			user_info: {full_name, uuid},
 			token,
 		},
 	} = useAppSelector(state => state.auth);
@@ -96,7 +97,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 	const handleLogout = () => {
 		logout({
 			token,
-			user_uuid,
+			user_uuid: uuid,
 		});
 	};
 
@@ -128,9 +129,12 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 						dataSubscriptionReminder?.is_show ? 'h-[60%]' : 'h-[70%]'
 					} overflow-y-auto pb-6`}
 				>
-					{PROTECT_ROUTES.map(route => (
-						<Menu key={route.title} item={route} collapse={collapsed} />
-					))}
+					{PROTECT_ROUTES.map(
+						route =>
+							CheckPermission(route.permission) && (
+								<Menu key={route.title} item={route} collapse={collapsed} />
+							),
+					)}
 				</aside>
 
 				<aside className="absolute bottom-0 w-full items-center">
@@ -153,18 +157,18 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 								<PersonIcon height={24} width={24} />
 							</div>
 							{!collapsed && (
-								<div className="text-m-semibold line-clamp-1">{fullname}</div>
+								<div className="text-m-semibold line-clamp-1">{full_name}</div>
 							)}
 						</div>
-						{dataOutletSelection && (
-							<Select
-								className={`mt-2.5 ${collapsed ? 'w-16' : '!w-[164px]'}`}
-								options={outletOpt}
-								value={outletId}
-								onChange={onChangeOutlet}
-								disabled={!isSubscription}
-							/>
-						)}
+
+						<Select
+							className={`mt-2.5 ${collapsed ? 'w-16' : '!w-[164px]'}`}
+							options={outletOpt}
+							value={outletId}
+							onChange={onChangeOutlet}
+							disabled={!isSubscription}
+						/>
+
 						<div
 							role="button"
 							onClick={openLogout}

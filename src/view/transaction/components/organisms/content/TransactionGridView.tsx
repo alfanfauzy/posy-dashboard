@@ -1,6 +1,7 @@
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {TransactionStatus} from '@/domain/transaction/model';
+import {Can} from '@/view/auth/components/organisms/rbac';
 import PlusCircleIcon from '@/view/common/assets/icons/plusCircle';
 import FilterChip from '@/view/common/components/atoms/chips/filter-chip';
 import InputSearch from '@/view/common/components/atoms/input/search';
@@ -206,15 +207,17 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 						</div>
 
 						<div className="w-1/4">
-							<Button
-								onClick={() => handleCreateTransaction(outletId)}
-								size="m"
-								fullWidth
-								variant="primary"
-								isLoading={loadCreateTransaction}
-							>
-								<p className="whitespace-nowrap">+ New Trx</p>
-							</Button>
+							<Can I="create" an="transaction">
+								<Button
+									onClick={() => handleCreateTransaction(outletId)}
+									size="m"
+									fullWidth
+									variant="primary"
+									isLoading={loadCreateTransaction}
+								>
+									<p className="whitespace-nowrap">+ New Trx</p>
+								</Button>
+							</Can>
 						</div>
 					</aside>
 				)}
@@ -266,7 +269,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 								>
 									<div className="flex justify-center border-b pb-2">
 										<p className="text-4xl font-normal text-neutral-70">
-											{el.table_number || '-'}
+											{`${el.table_number}${el.session_suffix}` || '-'}
 										</p>
 									</div>
 									<div className="mt-2">

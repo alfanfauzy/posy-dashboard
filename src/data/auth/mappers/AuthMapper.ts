@@ -12,12 +12,23 @@ import {
 	ResetPasswordDataResponse,
 	VerifyTokenDataResponse,
 } from '../types';
+import {mapRoleAccess} from './RoleMapper';
 
 export const mapToLoginModel = (data: LoginDataResponse): Login => ({
-	user_info: data.user_info,
+	user_info: {
+		uuid: data.user_info.user_uuid,
+		email: data.user_info.email,
+		full_name: data.user_info.fullname,
+		phone: data.user_info.phone,
+	},
 	token: data.token,
 	refresh_token: data.refresh_token,
 	expired_at: data.expired_at.seconds,
+	role: {
+		uuid: data.role_access.role.uuid,
+		name: data.role_access.role.name,
+	},
+	accesses: mapRoleAccess(data.role_access.accesses),
 });
 
 export const mapToRefreshTokenModel = (

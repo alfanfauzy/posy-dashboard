@@ -4,6 +4,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import '@/view/common/styles/globals.css';
 
+import {AbilityProvider} from '@/view/auth/components/organisms/rbac';
 import ModalWrapper from '@/view/common/components/atoms/modal';
 import Layout from '@/view/common/components/templates/layout';
 import {persistor, wrapper} from '@/view/common/store/index';
@@ -40,10 +41,12 @@ const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
 				anchorOrigin={{horizontal: 'center', vertical: 'top'}}
 			>
 				<Provider store={store}>
-					<PersistGate persistor={persistor}>
-						<ModalWrapper />
-						{getLayout(<Component {...pageProps} />)}
-					</PersistGate>
+					<AbilityProvider>
+						<PersistGate persistor={persistor}>
+							<ModalWrapper />
+							{getLayout(<Component {...pageProps} />)}
+						</PersistGate>
+					</AbilityProvider>
 				</Provider>
 			</SnackbarProvider>
 			<ReactQueryDevtools />

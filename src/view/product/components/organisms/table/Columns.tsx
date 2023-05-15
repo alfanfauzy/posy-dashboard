@@ -1,6 +1,7 @@
 import {GetOutletProductsQueryKey} from '@/data/product/sources/GetOutletProductsQuery';
 import {Product} from '@/domain/product/model/ProductOutlet';
 import {UpdateOutletProductStatus} from '@/domain/product/repositories/UpdateOutletProductStatusRepository';
+import {useAbility} from '@/view/auth/components/organisms/rbac';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeProductId} from '@/view/common/store/slices/product';
 import {toRupiah} from '@/view/common/utils/common';
@@ -14,6 +15,7 @@ const ProductColumns = (openEditProduct: () => void): ColumnsType<Product> => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
+	const ability = useAbility();
 
 	const onOpenEditProduct = (product_uuid: string) => {
 		openEditProduct();
@@ -73,6 +75,7 @@ const ProductColumns = (openEditProduct: () => void): ColumnsType<Product> => {
 			render: (val, record) => (
 				<div className="flex items-center justify-center">
 					<Toggle
+						disabled={!ability.can('change_show_product', 'product_outlet')}
 						value={val}
 						onChange={() =>
 							updateOutletProductStatus({
@@ -95,6 +98,9 @@ const ProductColumns = (openEditProduct: () => void): ColumnsType<Product> => {
 			render: (val, record) => (
 				<div className="flex items-center justify-center">
 					<Toggle
+						disabled={
+							!ability.can('change_available_product', 'product_outlet')
+						}
 						value={val}
 						onChange={() =>
 							updateOutletProductStatus({
@@ -118,15 +124,16 @@ const ProductColumns = (openEditProduct: () => void): ColumnsType<Product> => {
 			key: 'edit',
 			width: '60px',
 			fixed: 'right',
-			render: (val, record) => (
-				<div className="flex items-center justify-center">
-					<BiEdit
-						onClick={() => onOpenEditProduct(record.uuid)}
-						size={18}
-						className="cursor-pointer text-neutral-70 hover:opacity-70"
-					/>
-				</div>
-			),
+			render: (val, record) =>
+				ability.can('update', 'product_outlet') && (
+					<div className="flex items-center justify-center">
+						<BiEdit
+							onClick={() => onOpenEditProduct(record.uuid)}
+							size={18}
+							className="cursor-pointer text-neutral-70 hover:opacity-70"
+						/>
+					</div>
+				),
 		},
 	];
 };
