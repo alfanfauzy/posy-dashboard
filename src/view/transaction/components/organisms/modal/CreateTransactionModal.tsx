@@ -69,6 +69,7 @@ const CreateTransactionModal = ({
 		<Modal
 			open={open}
 			width={794}
+			closable={false}
 			footer={
 				<div className="grid grid-cols-2 gap-2 p-4">
 					<Button variant="secondary" onClick={() => handleClose(false)}>
@@ -115,7 +116,12 @@ const CreateTransactionModal = ({
 						<Input
 							size="l"
 							placeholder="Pax (Optional)"
-							{...register('total_pax')}
+							inputMode="numeric"
+							pattern="[0-9]*"
+							{...register('total_pax', {
+								setValueAs: v => v.replace(/\D/, ''),
+							})}
+							value={watch('total_pax')}
 							error={!!errors.total_pax}
 						/>
 					</div>
