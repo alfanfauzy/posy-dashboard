@@ -134,7 +134,7 @@ const CreateTransactionModal = ({
 				</div>
 			</div>
 			{watch('transaction_category.value') === 0 && (
-				<div className="bg-[#CBC7DD] mx-auto p-10">
+				<div className="bg-[#CBC7DD] mx-auto p-7 h-[460px] overflow-auto">
 					<TableTransactionGridView
 						orderType={watch('transaction_category.value')}
 						methods={methods}
