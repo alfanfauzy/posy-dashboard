@@ -82,12 +82,6 @@ const TransactionSidebar = () => {
 				onSuccess: data => {
 					if (data.message === 'OK' && data.data.table_number) {
 						setValue('customer_name', data?.data?.customer_name);
-						if (data?.data?.restaurant_outlet_table_uuid) {
-							setValue('restaurant_outlet_table_uuid', {
-								label: data?.data?.table_number,
-								value: data?.data?.restaurant_outlet_table_uuid,
-							});
-						}
 						if (data?.data?.total_pax > 0) {
 							setValue('total_pax', data?.data?.total_pax.toString());
 						}
