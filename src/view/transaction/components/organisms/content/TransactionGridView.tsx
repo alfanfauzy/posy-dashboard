@@ -52,7 +52,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		state => state.auth,
 	);
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
-	const [openModalTransaction, setOpenModalTransaction] = useState(true);
+	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 
 	const [status, setStatus] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
