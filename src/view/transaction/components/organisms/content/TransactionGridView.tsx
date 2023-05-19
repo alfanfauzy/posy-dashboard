@@ -93,6 +93,10 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		{
 			limit: 100,
 			page: 1,
+			sort: {
+				field: 'table_number',
+				value: 'asc',
+			},
 			search: [
 				{
 					field: 'status',
@@ -161,6 +165,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 
 	useEffect(() => {
 		dispatch(onChangeSelectedTrxId({id: dataQr?.uuid as string}));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dataQr]);
 
 	const handleCloseModalCreateTransaction = (value: boolean) => {
