@@ -4,6 +4,7 @@ import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRe
 import {useAppSelector} from '@/view/common/store/hooks';
 import {toRupiah} from '@/view/common/utils/common';
 import {generateSuggestionAmount} from '@/view/common/utils/UtilsGenerateSuggestionAmount';
+import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
 import {useGetPaymentMethodCategoriesViewModel} from '@/view/payment-method/view-models/GetPaymentMethodCategoriesViewModel';
 import {useGetPaymentMethodsViewModel} from '@/view/payment-method/view-models/GetPaymentMethodsViewModel';
 import {useCreateMakePaymentViewModel} from '@/view/transaction/view-models/CreateMakePaymentViewModel';
@@ -18,6 +19,7 @@ import {NumericFormat} from 'react-number-format';
 import {useReactToPrint} from 'react-to-print';
 
 import PrintBillReceipt from '../receipt/PrintBillReceipt';
+import ConfirmationModal from './ConfirmationModal';
 
 type CreatePaymentModalProps = {
 	isOpenCreatePayment: boolean;
@@ -45,6 +47,8 @@ const CreatePaymentModal = ({
 	const [additionalInfo, setAdditionalInfo] = useState('');
 	const [suggestionPrice] = useState(payment.total || 0);
 	const [price, setPrice] = useState(payment.total || 0);
+
+	const [openConfirmation, setOpenConfirmation] = useState(false);
 
 	const suggestionAmount = useMemo(
 		() => generateSuggestionAmount(suggestionPrice),
@@ -81,12 +85,39 @@ const CreatePaymentModal = ({
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				closeCreatePayment();
+				setOpenConfirmation(false);
 				openPaymentConfirmation();
 			}
 		},
 	});
 
-	const handleMakePayment = () => {
+	const {data: dataOrder} = useGetOrdersViewModel(
+		{
+			transaction_uuid: selectedTrxId || '',
+		},
+		{enabled: !!selectedTrxId},
+	);
+
+	const ListStatusOrder = useMemo(
+		() => dataOrder?.map(data => Number(data.status)),
+		[dataOrder],
+	);
+
+	/** Based On Status From Backend
+	 *
+	 * //Order Detail Status
+	 * NEED_TO_PRINT = "1"
+	 * ON_KITCHEN    = "2"
+	 * SERVED        = "3"
+	 * CANCEL        = "4"
+	 */
+	const statusOrder = [1, 2, 4];
+
+	const isNeedShowModal = statusOrder.some(value =>
+		ListStatusOrder?.includes(value),
+	);
+
+	const submitPayment = () => {
 		makePayment({
 			transaction_uuid: selectedTrxId,
 			restaurant_outlet_uuid: outletId,
@@ -94,6 +125,15 @@ const CreatePaymentModal = ({
 			pay_amount: price,
 			additional_info: additionalInfo,
 		});
+	};
+
+	const handleMakePayment = () => {
+		if (isNeedShowModal) {
+			setOpenConfirmation(true);
+			return;
+		}
+
+		submitPayment();
 	};
 
 	const handlePrintToKitchen = useReactToPrint({
@@ -311,6 +351,15 @@ const CreatePaymentModal = ({
 				<PrintBillReceipt
 					data={dataReceipt}
 					printReceiptRef={printReceiptRef}
+				/>
+			)}
+
+			{openConfirmation && (
+				<ConfirmationModal
+					isOpen={openConfirmation}
+					close={() => setOpenConfirmation(false)}
+					submit={submitPayment}
+					loading={isLoading}
 				/>
 			)}
 		</Modal>
