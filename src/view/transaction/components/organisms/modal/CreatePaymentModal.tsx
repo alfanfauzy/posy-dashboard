@@ -103,7 +103,19 @@ const CreatePaymentModal = ({
 		[dataOrder],
 	);
 
-	const isNeedShowModal = ListStatusOrder?.includes(1);
+	/** Based On Status From Backend
+	 *
+	 * //Order Detail Status
+	 * NEED_TO_PRINT = "1"
+	 * ON_KITCHEN    = "2"
+	 * SERVED        = "3"
+	 * CANCEL        = "4"
+	 */
+	const statusOrder = [1, 2, 4];
+
+	const isNeedShowModal = statusOrder.some(value =>
+		ListStatusOrder?.includes(value),
+	);
 
 	const submitPayment = () => {
 		makePayment({
