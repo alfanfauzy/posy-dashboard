@@ -14,7 +14,7 @@ const AtomsLogo = ({onClick, titleProps}: AtomsLogoProps) => (
 	>
 		<Logo />
 		<p
-			className={`${titleProps} whitespace-nowrap text-2xl font-bold text-primary-main`}
+			className={`${titleProps} whitespace-nowrap text-xl font-bold text-primary-main`}
 		>
 			Posy Resto
 		</p>

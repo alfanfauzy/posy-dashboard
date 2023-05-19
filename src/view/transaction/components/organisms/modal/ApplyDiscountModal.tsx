@@ -60,11 +60,12 @@ const ApplyDiscountModal = ({
 	});
 
 	const onSubmit = (data: ValidationSchemaApplyDiscountType) => {
-		createApplyDiscount({
-			transaction_uuid: selectedTrxId,
-			restaurant_outlet_uuid: outletId,
-			...data,
-		});
+		console.log(data);
+		// createApplyDiscount({
+		// 	transaction_uuid: selectedTrxId,
+		// 	restaurant_outlet_uuid: outletId,
+		// 	...data,
+		// });
 	};
 
 	useEffect(() => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {TransactionStatus} from '@/domain/transaction/model';
@@ -6,6 +7,7 @@ import PlusCircleIcon from '@/view/common/assets/icons/plusCircle';
 import FilterChip from '@/view/common/components/atoms/chips/filter-chip';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
+import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
 	onChangePayment,
@@ -20,6 +22,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {Skeleton} from 'antd';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {useRef, useState} from 'react';
+import {useProSidebar} from 'react-pro-sidebar';
 import {useReactToPrint} from 'react-to-print';
 
 import PrintQrCodeReceipt from '../receipt/PrintQrCodeReceipt';
@@ -50,6 +53,9 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
 	);
+	const {collapseSidebar, collapsed} = useProSidebar();
+	const {width} = useViewportListener();
+
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
 
 	const [status, setStatus] = useState('');
@@ -135,6 +141,9 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	};
 
 	const handleSelectTrx = (trxId: string) => {
+		if (width <= 1280) {
+			collapseSidebar(true);
+		}
 		dispatch(onChangeSelectedTrxId({id: trxId}));
 		dispatch(
 			onChangePayment({
@@ -148,7 +157,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	};
 
 	return (
-		<section className="relative h-full flex-1 overflow-hidden rounded-2xl bg-neutral-10 p-6">
+		<section className="relative h-full w-full flex flex-col gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-6">
 			<article className="h-fit">
 				<aside className="flex items-start justify-between">
 					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
@@ -162,10 +171,10 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 					</div>
 				)}
 				{dataSummary && (
-					<aside className="mt-4 flex gap-2">
+					<aside className="mt-2 flex gap-2 w-full justify-between">
 						<div
-							className={`flex flex-1 overflow-x-auto transition-all duration-500 ease-in-out ${
-								openSearch ? '' : 'gap-2'
+							className={`flex flex-1 max-w-[120px] sm:max-w-[200px] lg:max-w-[470px] xl:max-w-none transition-all overflow-x-auto duration-500 ease-in-out ${
+								openSearch ? 'pl-12' : 'gap-x-2'
 							}`}
 						>
 							<FilterChip
@@ -206,7 +215,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 							/>
 						</div>
 
-						<div className="w-1/4">
+						<div className="w-36">
 							<Can I="create" an="transaction">
 								<Button
 									onClick={() => handleCreateTransaction(outletId)}
@@ -214,8 +223,11 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 									fullWidth
 									variant="primary"
 									isLoading={loadCreateTransaction}
+									className="!px-0"
 								>
-									<p className="whitespace-nowrap">+ New Trx</p>
+									<p className="whitespace-nowrap text-s-semibold">
+										+ New transaction
+									</p>
 								</Button>
 							</Can>
 						</div>
@@ -223,7 +235,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				)}
 			</article>
 
-			<article className="h-[80%] w-full overflow-y-auto py-4">
+			<article className="h-[80%] w-full overflow-y-auto">
 				{loadData && (
 					<article className="flex h-full items-center justify-center">
 						<Loading size={90} />
@@ -242,7 +254,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 						>
 							<PlusCircleIcon className="cursor-pointer transition-all duration-300 ease-in-out hover:opacity-60" />
 							<p className="cursor-pointer text-l-medium text-neutral-60 transition-all duration-300 ease-in-out hover:opacity-60">
-								Create New Transaction
+								Create new transaction
 							</p>
 						</div>
 					</article>
@@ -252,7 +264,15 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 						className={`${
 							data.length === 0
 								? 'flex items-center justify-center bg-neutral-20'
-								: 'grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+								: `grid gap-3 ${
+										width > 1280 && !collapsed
+											? 'grid-cols-5'
+											: width > 1280 && collapsed
+											? 'grid-cols-6'
+											: selectedTrxId.length > 0 && width <= 1280
+											? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+											: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
+								  }`
 						}`}
 					>
 						{data.length > 0 &&

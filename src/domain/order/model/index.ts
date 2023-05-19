@@ -1,12 +1,20 @@
 import {Metadata} from '@/domain/vo/BaseMetadata';
 
-type OrderStatus =
-	| 'ORDER_RECEIVED'
-	| 'ORDER_PROCESS'
-	| 'ORDER_SERVED'
-	| 'ORDER_CANCELLED';
+export enum OrderStatus {
+	ORDER_NOT_SELECTED = '0',
+	ORDER_NEED_TO_PRINT = '1',
+	ORDER_ON_KITCHEN = '2',
+	ORDER_SERVED = '3',
+	ORDER_CANCELLED = '4',
+}
 
-type OrderDetailStatus = 'RECEIVED' | 'PROCESS' | 'SERVED' | 'CANCEL';
+export enum OrderDetailStatus {
+	NOT_SELECTED = '0',
+	NEED_TO_PRINT = '1',
+	ON_KITCHEN = '2',
+	SERVED = '3',
+	CANCEL = '4',
+}
 
 type AddonInformation = {
 	addon_name: string;

@@ -158,5 +158,3 @@ build_image_tagged:
       docker push $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$CI_COMMIT_TAG
     - |
       echo -e "\e[1;93mDocker image: " $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$CI_COMMIT_TAG
-
-

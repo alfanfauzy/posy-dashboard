@@ -21,10 +21,21 @@ body {
 	border: unset;
 }
 
+.ps-collapsed {
+	width: 54px !important;
+	min-width: 54px !important;
+}
+
 .ps-sidebar-container {
 	border-radius: 16px;
 	overflow-x: hidden !important;
 	overflow-y: hidden !important;
+}
+
+.ps-menu-button {
+	padding-left: 4px !important;
+	padding-right: 0 !important;
+	height: 46px !important;
 }
 
 .ps-menu-button:hover {
@@ -32,7 +43,7 @@ body {
 }
 
 .ps-submenu-content > ul > li > .ps-menu-button {
-	padding-left: 28px !important;
+	padding-left: 24px !important;
 }
 
 .ps-submenu-content {

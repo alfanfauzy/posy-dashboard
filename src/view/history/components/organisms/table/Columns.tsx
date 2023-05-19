@@ -7,10 +7,10 @@ export const generateStatusTransaction = (status: TransactionStatus) => {
 	const statusColor = {
 		WAITING_ORDER: 'text-blue-success',
 		WAITING_PAYMENT: 'text-red-accent',
-		WAITING_FOOD: 'text-yellow-500',
+		WAITING_FOOD: 'text-warning-main',
 		PAID: 'text-green-success',
 		CANCELLED: 'text-red-accent',
-		REFUND: 'text-yellow-500',
+		REFUND: 'text-warning-main',
 	};
 
 	const statusText = {

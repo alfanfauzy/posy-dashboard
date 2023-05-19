@@ -6,7 +6,7 @@ import {useGetPaymentSummaryViewModel} from '@/view/transaction/view-models/GetP
 import {Loading} from 'posy-fnb-core';
 import React from 'react';
 
-import {OrderStatusStyle} from '../order-details';
+import {generateStatusOrder} from '../order-details';
 
 type PaymentSummaryProps = {
 	dataOrder: Orders;
@@ -49,13 +49,7 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 				<div key={order.uuid} className="my-4 w-full">
 					<div className="flex items-center justify-between text-m-semibold">
 						<p>{`Order ${idx + 1}`}</p>
-						<p
-							className={OrderStatusStyle({
-								variant: order.status,
-							})}
-						>
-							{order.status.split('_')[1]}
-						</p>
+						{generateStatusOrder(order.status)}
 					</div>
 					<div className="mt-2 flex w-full flex-col gap-2">
 						{order.order_detail?.map(orderDetail => (

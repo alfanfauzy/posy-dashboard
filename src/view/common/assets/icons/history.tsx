@@ -3,8 +3,8 @@ import React from 'react';
 
 export const HistoryIcon = ({
 	fill = '#424242',
-	width = 22,
-	height = 22,
+	width = 18,
+	height = 18,
 	onClick,
 	className,
 }: IconType) => (
