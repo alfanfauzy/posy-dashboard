@@ -32,6 +32,17 @@ export const orderType = [
 	},
 ];
 
+export const orderTransactionType = {
+	DINE_IN: {
+		label: 'Dine in',
+		value: 0,
+	},
+	TAKE_AWAY: {
+		label: 'Take away',
+		value: 1,
+	},
+};
+
 export const listOrderTabs = [
 	{label: 'Order', value: 0},
 	{label: 'Payment', value: 1},

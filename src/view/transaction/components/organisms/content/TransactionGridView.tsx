@@ -21,10 +21,11 @@ import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTra
 import {useQueryClient} from '@tanstack/react-query';
 import {Skeleton} from 'antd';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useProSidebar} from 'react-pro-sidebar';
 import {useReactToPrint} from 'react-to-print';
 
+import CreateTransactionModal from '../modal/CreateTransactionModal';
 import PrintQrCodeReceipt from '../receipt/PrintQrCodeReceipt';
 
 const generateBorderColor = (
@@ -57,6 +58,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	const {width} = useViewportListener();
 
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
+	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 
 	const [status, setStatus] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,6 +79,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				setTimeout(() => {
 					handlePrint();
+					setOpenModalTransaction(true);
 				}, 100);
 			}
 		},
@@ -154,6 +157,15 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				},
 			}),
 		);
+	};
+
+	useEffect(() => {
+		dispatch(onChangeSelectedTrxId({id: dataQr?.uuid as string}));
+	}, [dataQr]);
+
+	const handleCloseModalCreateTransaction = (value: boolean) => {
+		setOpenModalTransaction(value);
+		dispatch(onChangeSelectedTrxId({id: ''}));
 	};
 
 	return (
@@ -317,6 +329,13 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 			</article>
 
 			{dataQr && <PrintQrCodeReceipt data={dataQr} printReceiptRef={qrRef} />}
+
+			{openModalTransaction && (
+				<CreateTransactionModal
+					open={openModalTransaction}
+					handleClose={handleCloseModalCreateTransaction}
+				/>
+			)}
 		</section>
 	);
 };

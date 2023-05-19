@@ -166,7 +166,7 @@ export const mapToUpdateTransactionPayload = (
 	customer_name: data.customer_name,
 	restaurant_outlet_table_uuid:
 		data.restaurant_outlet_table_uuid && data.transaction_category.value === 0
-			? data.restaurant_outlet_table_uuid.value
+			? data.restaurant_outlet_table_uuid
 			: '',
 	total_pax: Number(data.total_pax),
 	transaction_category: data.transaction_category.value,

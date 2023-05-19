@@ -2,21 +2,25 @@ import {Transaction} from '@/domain/transaction/model';
 import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import CountUpTimer from '@/view/common/components/atoms/countup';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
-import React from 'react';
+import React, {useState} from 'react';
 import {CgTrash} from 'react-icons/cg';
 import {FiEdit} from 'react-icons/fi';
 import {IoIosArrowDown, IoIosArrowUp} from 'react-icons/io';
 
 import CancelTransactionModal from '../modal/CancelTransactionModal';
+import CreateTransactionModal from '../modal/CreateTransactionModal';
 
 type TransactionDetailsProps = {
 	dataTransaction: Transaction | undefined;
 };
 
 const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
+	const dispatch = useAppDispatch();
+	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 	const {outletId} = useAppSelector(state => state.auth);
 	const [
 		isOpenCancelTransaction,
@@ -37,6 +41,11 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 		openCancelTransaction();
 	};
 
+	const handleCloseModalCreateTransaction = (value: boolean) => {
+		setOpenModalTransaction(value);
+		dispatch(onChangeSelectedTrxId({id: ''}));
+	};
+
 	return (
 		<section>
 			<aside className="p-4 min-h-[130px] lg:min-h-fit bg-gradient-to-r from-primary-main to-secondary-main rounded-b-2xl">
@@ -47,7 +56,11 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 					</p>
 					{dataTransaction && (
 						<div className="flex gap-6">
-							<FiEdit size={20} className="cursor-pointer text-neutral-10" />
+							<FiEdit
+								size={20}
+								className="cursor-pointer text-neutral-10"
+								onClick={() => setOpenModalTransaction(true)}
+							/>
 							<CgTrash
 								className="cursor-pointer text-neutral-10"
 								size={20}
@@ -131,6 +144,15 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 					isOpen={isOpenCancelTransaction}
 					close={closeCancelTransaction}
 					value={valueState}
+				/>
+			)}
+
+			{openModalTransaction && (
+				<CreateTransactionModal
+					open={openModalTransaction}
+					handleClose={handleCloseModalCreateTransaction}
+					isEdit
+					dataTransaction={dataTransaction}
 				/>
 			)}
 		</section>
