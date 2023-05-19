@@ -2,8 +2,7 @@ import {Transaction} from '@/domain/transaction/model';
 import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import CountUpTimer from '@/view/common/components/atoms/countup';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
-import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {useAppSelector} from '@/view/common/store/hooks';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
 import React, {useState} from 'react';
@@ -19,7 +18,6 @@ type TransactionDetailsProps = {
 };
 
 const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
-	const dispatch = useAppDispatch();
 	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 	const {outletId} = useAppSelector(state => state.auth);
 	const [
@@ -43,7 +41,6 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 
 	const handleCloseModalCreateTransaction = (value: boolean) => {
 		setOpenModalTransaction(value);
-		dispatch(onChangeSelectedTrxId({id: ''}));
 	};
 
 	return (

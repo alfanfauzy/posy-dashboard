@@ -101,12 +101,8 @@ const ManualSubmitOrder = ({
 					GetOrdersQueryKey,
 					{transaction_uuid: dataTransaction?.uuid},
 				]);
-				queryClient.invalidateQueries(
-					GetTransactionQueryKey({
-						transaction_uuid: dataTransaction?.uuid || '',
-					}),
-				);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				queryClient.invalidateQueries([GetTransactionQueryKey]);
 				setTimeout(() => {
 					openPrintToKitchen();
 				}, 500);

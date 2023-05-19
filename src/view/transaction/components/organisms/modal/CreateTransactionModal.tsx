@@ -1,3 +1,4 @@
+import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {Transaction} from '@/domain/transaction/model';
@@ -45,6 +46,7 @@ const CreateTransactionModal = ({
 				const data = _data as UpdateTransaction;
 				if (data) {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
+					queryClient.invalidateQueries([GetTransactionQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				}
 				handleClose(false);
@@ -83,19 +85,22 @@ const CreateTransactionModal = ({
 				orderTransactionType[transaction_category];
 
 			setValue('customer_name', customer_name);
-			setValue('total_pax', total_pax.toString());
-			setValue('total_pax', total_pax.toString());
+			setValue('total_pax', total_pax > 0 ? total_pax.toString() : undefined);
 			setValue('transaction_category', selectTransactionCategory);
 			setValue(
 				'restaurant_outlet_table_uuid',
-				restaurant_outlet_table_uuid.toString() || '',
+				restaurant_outlet_table_uuid?.toString() || '',
 			);
 		}
-	}, [isEdit]);
+	}, [dataTransaction, isEdit]);
 
 	return (
 		<Modal
+			style={{
+				top: 40,
+			}}
 			open={open}
+			onCancel={() => handleClose(false)}
 			width={794}
 			closable={false}
 			footer={
@@ -120,7 +125,7 @@ const CreateTransactionModal = ({
 		>
 			<div className="p-6 bg-[#2F265B] rounded-tr-xl rounded-tl-xl">
 				<p className="text-center text-xxl-bold text-white mb-6">
-					Create Transaction
+					{isEdit ? 'Edit' : 'Create'} Transaction
 				</p>
 				<div className="grid grid-cols-3 gap-6">
 					<reactHookForm.Controller
