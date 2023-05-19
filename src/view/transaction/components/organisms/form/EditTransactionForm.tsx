@@ -119,12 +119,6 @@ const EditTransactionForm = ({methods}: EditTransactionFormProps) => {
 									isLoading={loadTable}
 									size="m"
 									labelText="Table"
-									value={
-										watch('restaurant_outlet_table_uuid') as {
-											label: string;
-											value: string;
-										}
-									}
 									onChange={onChange}
 									options={
 										dataTable?.map(el => ({
