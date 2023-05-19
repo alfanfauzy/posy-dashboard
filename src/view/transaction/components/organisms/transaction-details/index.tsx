@@ -1,5 +1,6 @@
 import {Transaction} from '@/domain/transaction/model';
 import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
+import CountUpTimer from '@/view/common/components/atoms/countup';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
@@ -76,7 +77,11 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 
 							<div className="flex justify-between w-1/2 border-l pl-3">
 								<p className="text-m-semibold text-neutral-10">
-									{dateFormatter(dataTransaction?.created_at, 'HH:mm')}
+									{dataTransaction && dataTransaction?.first_order_at > 0 ? (
+										<CountUpTimer startTime={dataTransaction?.first_order_at} />
+									) : (
+										<div className="mx-0.5">-</div>
+									)}
 								</p>
 								{isOpenTransactionDetail ? (
 									<IoIosArrowUp
@@ -97,18 +102,22 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 							<div className="mt-3 flex gap-4 items-center justify-between">
 								<div className="w-1/2">
 									<p className="text-s-regular line-clamp-1 text-neutral-10">
-										Name: Kevin Aprillio Rahardja Supratman
+										Name: {dataTransaction.customer_name || '-'}
 									</p>
-									<p className="mt-1 text-s-regular line-clamp-1 text-neutral-10">
-										Type: Dine in
+									<p className="mt-1 text-s-regular line-clamp-1 lowercase text-neutral-10">
+										Type:{' '}
+										{dataTransaction.transaction_category
+											.split('_')
+											.join(' ') || '-'}
 									</p>
 								</div>
 								<div className="w-1/2 pl-1">
 									<p className="text-s-regular line-clamp-1 text-neutral-10">
-										Pax: 2
+										Pax: {dataTransaction.total_pax || '-'}
 									</p>
 									<p className="mt-1 text-s-regular line-clamp-1 text-neutral-10">
-										Time Order: 14:00
+										Time Order:{' '}
+										{dateFormatter(dataTransaction?.created_at, 'HH:mm')}
 									</p>
 								</div>
 							</div>

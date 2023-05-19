@@ -44,7 +44,7 @@
 		"next-redux-wrapper": "^8.1.0",
 		"node-thermal-printer": "^4.2.0",
 		"notistack": "^3.0.1",
-		"posy-fnb-core": "^1.1.7",
+		"posy-fnb-core": "^1.1.10",
 		"react": "18.2.0",
 		"react-date-range": "^1.4.0",
 		"react-debounce-input": "^3.3.0",

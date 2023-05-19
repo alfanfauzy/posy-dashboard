@@ -309,6 +309,7 @@ const TransactionSidebar = () => {
 					closeCreateOrder={closeCreateOrder}
 					isOpenCreateOrder={isOpenCreateOrder}
 					dataTransaction={dataTransaction}
+					openPrintToKitchen={openPrintToKitchen}
 				/>
 			)}
 

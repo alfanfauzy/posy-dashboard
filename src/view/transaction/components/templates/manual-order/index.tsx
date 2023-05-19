@@ -49,12 +49,14 @@ type ManualSubmitOrderProps = {
 	isOpenCreateOrder: boolean;
 	closeCreateOrder: () => void;
 	dataTransaction: Transaction;
+	openPrintToKitchen: () => void;
 };
 
 const ManualSubmitOrder = ({
 	closeCreateOrder,
 	isOpenCreateOrder,
 	dataTransaction,
+	openPrintToKitchen,
 }: ManualSubmitOrderProps) => {
 	const queryClient = useQueryClient();
 	const dispatch = useAppDispatch();
@@ -105,6 +107,9 @@ const ManualSubmitOrder = ({
 					}),
 				);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				setTimeout(() => {
+					openPrintToKitchen();
+				}, 500);
 			},
 		});
 

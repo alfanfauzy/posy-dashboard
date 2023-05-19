@@ -157,7 +157,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	};
 
 	return (
-		<section className="relative h-full w-full flex flex-col gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-6">
+		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-6">
 			<article className="h-fit">
 				<aside className="flex items-start justify-between">
 					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
