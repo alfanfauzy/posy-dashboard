@@ -26,7 +26,7 @@ import PaymentSummary from '../payment-summary';
 export const generateStatusOrder = (status: OrderStatus) => {
 	const statusColor = {
 		0: 'text-blue-success',
-		1: 'text-blue-success',
+		1: 'text-secondary-main',
 		2: 'text-warning-main',
 		3: 'text-green-success',
 		4: 'text-red-caution',

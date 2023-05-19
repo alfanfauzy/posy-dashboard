@@ -1,20 +1,59 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
-import {Orders} from '@/domain/order/model';
+import {OrderStatus, Orders} from '@/domain/order/model';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {useCreatePrintOrderToKitchenViewModel} from '@/view/order/view-models/CreatePrintOrderToKitchenViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import {Button, Checkbox} from 'posy-fnb-core';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useReactToPrint} from 'react-to-print';
 
+import {generateStatusOrder} from '../order-details';
 import PrintToKitchenReceipt from '../receipt/PrintToKitchenReceipt';
 
 const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,
 });
+
+const generateBgColor = (status: OrderStatus) => {
+	switch (status) {
+		case '0':
+			return 'bg-neutral-10';
+		case '1':
+			return 'bg-neutral-10';
+		case '2':
+			return 'bg-[#FFFCF0]';
+		case '3':
+			return 'bg-[#EEFFEF]';
+		case '4':
+			return 'bg-red-caution/10';
+		default:
+			return 'bg-blue-success';
+	}
+};
+
+const generateBorderColor = (status: OrderStatus, isChecked: boolean) => {
+	if (isChecked) {
+		switch (status) {
+			case '0':
+				return 'bg-neutral-10 border-2 border-secondary-main';
+			case '1':
+				return 'bg-neutral-10 border-2 border-secondary-main';
+			case '2':
+				return 'border-2 border-[#C69A00]';
+			case '3':
+				return 'border-2 border-green-success';
+			case '4':
+				return 'bg-red-caution/10 border-2 border-red-caution';
+			default:
+				return 'bg-blue-success border-2 border-secondary-main';
+		}
+	}
+
+	return 'border border-neutral-40';
+};
 
 type PrintToKitchenModalProps = {
 	isOpenPrintToKitchen: boolean;
@@ -69,6 +108,11 @@ const PrintToKitchenModal = ({
 		}
 	};
 
+	// useEffect(() => {
+	// 	setSelectedOrder()
+
+	// }, [dataOrder]);
+
 	return (
 		<>
 			<Modal
@@ -79,7 +123,9 @@ const PrintToKitchenModal = ({
 					width: '80%',
 					padding: 0,
 				}}
+				closeOverlay
 				showCloseButton
+				title="Print to kitchen"
 				confirmButton={
 					<div className="flex w-full items-center justify-center gap-4">
 						<Button
@@ -103,7 +149,13 @@ const PrintToKitchenModal = ({
 			>
 				<section className="px-8 pb-2">
 					{dataOrder.map((order, idx) => (
-						<div key={order.uuid} className="my-4 w-full">
+						<div
+							key={order.uuid}
+							className={`my-4 px-4 pb-4 pt-2  w-full rounded-lg ${generateBorderColor(
+								order.status,
+								selectedOrder.includes(order.uuid),
+							)} ${generateBgColor(order.status)}`}
+						>
 							<div className="flex items-center justify-between text-m-semibold">
 								<p>{`Order ${idx + 1}`}</p>
 								<div className="cursor-pointer">
@@ -122,6 +174,10 @@ const PrintToKitchenModal = ({
 								</div>
 							</div>
 							<div className="mt-1 w-full">
+								<div className="flex items-center justify-between">
+									<p className="text-m-regular">status</p>
+									{generateStatusOrder(order.status)}
+								</div>
 								{order.order_detail?.map(orderDetail => (
 									<div
 										key={orderDetail.uuid}
@@ -130,16 +186,6 @@ const PrintToKitchenModal = ({
 										<p className="text-m-regular">{`${orderDetail.product_name} x${orderDetail.qty}`}</p>
 									</div>
 								))}
-								<div className="flex items-center justify-between">
-									<p className="text-m-regular">status</p>
-									{order.is_printed ? (
-										<p className="text-m-regular text-green-success">
-											Printed to kitchen
-										</p>
-									) : (
-										<p>-</p>
-									)}
-								</div>
 							</div>
 						</div>
 					))}
