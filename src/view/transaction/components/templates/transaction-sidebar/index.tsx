@@ -200,6 +200,7 @@ const TransactionSidebar = () => {
 								// toggleShowDeleteOrder={toggleShowDeleteOrder}
 								dataOrder={dataOrder}
 								loadOrder={loadOrder}
+								openPrintToKitchen={openPrintToKitchen}
 							/>
 						</div>
 					</section>

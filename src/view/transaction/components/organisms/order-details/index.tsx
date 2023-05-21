@@ -26,7 +26,7 @@ import PaymentSummary from '../payment-summary';
 export const generateStatusOrder = (status: OrderStatus) => {
 	const statusColor = {
 		0: 'text-blue-success',
-		1: 'text-secondary-main',
+		1: 'text-secondary-main cursor-pointer hover:opacity-70',
 		2: 'text-warning-main',
 		3: 'text-green-success',
 		4: 'text-red-caution',
@@ -66,7 +66,7 @@ type OrderDetailsProps = {
 	setTabValueOrder: (value: number) => void;
 	openCreateOrder: () => void;
 	// showDeleteOrder: boolean;
-	// toggleShowDeleteOrder: () => void;
+	openPrintToKitchen: () => void;
 };
 
 const OrderDetails = ({
@@ -78,6 +78,7 @@ const OrderDetails = ({
 	// toggleShowDeleteOrder,
 	dataOrder,
 	loadOrder,
+	openPrintToKitchen,
 }: OrderDetailsProps) => {
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
@@ -216,7 +217,15 @@ const OrderDetails = ({
 								>
 									<div className="flex items-center justify-between text-m-semibold pb-2 mb-2.5 border-b border-neutral-30">
 										<p>{`Order ${idx + 1}`}</p>
-										{generateStatusOrder(order.status)}
+										<div
+											onClick={
+												order.status === OrderStatus.ORDER_NEED_TO_PRINT
+													? openPrintToKitchen
+													: () => undefined
+											}
+										>
+											{generateStatusOrder(order.status)}
+										</div>
 									</div>
 									<div className="mt-2 w-full">
 										{order?.order_detail?.map(orderDetail =>
