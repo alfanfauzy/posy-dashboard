@@ -67,7 +67,7 @@ type GetTransactionsDataResponseBased = {
 	cashier_by: string;
 	served_by: string;
 	time_spent: number;
-	is_print_to_kitchen: boolean;
+	need_print_to_kitchen: boolean;
 };
 
 export type GetTransactionsDataResponse = GetTransactionsDataResponseBased;

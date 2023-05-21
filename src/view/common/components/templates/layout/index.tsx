@@ -124,6 +124,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 							/>
 						</div>
 					),
+					autoHideDuration: 1000 * 10,
 					message: message.data.content as string,
 					variant: 'info',
 					anchorOrigin: {

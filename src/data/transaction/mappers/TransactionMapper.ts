@@ -86,7 +86,7 @@ export const mapToTransactionsModel = (
 		total_price_discount: data.total_price_discount,
 		total_price_final: data.total_price_final,
 		total_price_tax: data.total_price_tax,
-		is_print_to_kitchen: data.is_print_to_kitchen,
+		need_print_to_kitchen: data.need_print_to_kitchen,
 	}));
 
 export const mapToTransactionModel = (
@@ -129,7 +129,7 @@ export const mapToTransactionModel = (
 	total_price_discount: data.total_price_discount,
 	total_price_final: data.total_price_final,
 	total_price_tax: data.total_price_tax,
-	is_print_to_kitchen: data.is_print_to_kitchen,
+	need_print_to_kitchen: data.need_print_to_kitchen,
 });
 
 export const mapToCreateTransactionModel = (

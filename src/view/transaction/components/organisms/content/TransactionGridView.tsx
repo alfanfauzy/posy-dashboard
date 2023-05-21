@@ -214,6 +214,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 								/>
 							</div>
 						),
+						autoHideDuration: 1000 * 10,
 						message: `Need: print to kitchen on table ${el.table_number}`,
 						variant: 'info',
 						anchorOrigin: {
@@ -255,6 +256,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 								/>
 							</div>
 						),
+						autoHideDuration: 1000 * 10,
 						message: `Please check order time on table ${el.table_number}`,
 						variant: 'info',
 						anchorOrigin: {
@@ -387,8 +389,8 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 						{data.length > 0 &&
 							data.map(el => (
 								<aside key={el.uuid} className="relative">
-									{!el.is_print_to_kitchen && (
-										<div className="w-4 h-4 absolute -right-1 top-0 rounded-full bg-error" />
+									{el.total_order > 0 && el.need_print_to_kitchen && (
+										<div className="w-4 h-4 absolute right-0 top-0 rounded-full bg-error" />
 									)}
 									<div
 										onClick={() => handleSelectTrx(el.uuid)}
@@ -428,6 +430,11 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				<div className="flex items-center gap-1">
 					<div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-green-success" />
 					<p className="text-s-semibold">Waiting Payment</p>
+				</div>
+
+				<div className="flex items-center gap-1">
+					<div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-error" />
+					<p className="text-s-semibold">Check to Kitchen</p>
 				</div>
 			</article>
 
