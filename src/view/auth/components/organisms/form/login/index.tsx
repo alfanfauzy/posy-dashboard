@@ -71,8 +71,7 @@ const OrganismsFormLogin = () => {
 		const message = getMessaging(firebaseApp);
 
 		getToken(message, {
-			vapidKey:
-				'BPgeNUCEM49qqghR-3FUyfnM4grr7JYxOEsQDvKvZ9UvciADKNgwtxH1EQnk-CI0ZJ8uJI5W6h7phkeehYPL424',
+			vapidKey: process.env.NEXT_APP_VAPID_KEY,
 		})
 			.then(currentToken => {
 				if (currentToken) {

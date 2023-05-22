@@ -1,13 +1,13 @@
 import {initializeApp} from 'firebase/app';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyASgM9FGp-RNNdpW2azzyIHVNEth8LrY3g',
-	authDomain: 'posy-fnb-staging.firebaseapp.com',
-	projectId: 'posy-fnb-staging',
-	storageBucket: 'posy-fnb-staging.appspot.com',
-	messagingSenderId: '408454494774',
-	appId: '1:408454494774:web:5e6a6cd83b335f0cf6f697',
-	measurementId: 'G-KSJER3D771',
+	apiKey: process.env.NEXT_APP_API_KEY,
+	authDomain: process.env.NEXT_APP_AUTH_DOMAIN,
+	projectId: process.env.NEXT_APP_PROJECT_ID,
+	storageBucket: process.env.NEXT_APP_STORAGE_BUCKET,
+	messagingSenderId: process.env.NEXT_APP_MESSAGING_SENDER_ID,
+	appId: process.env.NEXT_APP_APP_ID,
+	measurementId: process.env.NEXT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
