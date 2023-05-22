@@ -151,7 +151,7 @@ const OrderDetails = ({
 							<Button
 								key={tab.value}
 								className="w-1/2 text-m-bold"
-								onClick={() => setTabValueOrder(tabValueOrder === 0 ? 1 : 0)}
+								onClick={() => setTabValueOrder(tabValueOrder)}
 							>
 								{tab.label}
 							</Button>
@@ -159,9 +159,9 @@ const OrderDetails = ({
 							<p
 								key={tab.value}
 								onClick={() => {
-									setTabValueOrder(tabValueOrder === 1 ? 0 : 1);
+									setTabValueOrder(tab.value);
 								}}
-								className="w-1/2 flex items-center justify-center text-m-bold"
+								className="w-1/2 flex items-center justify-center text-m-bold cursor-pointer hover:opacity-70 duration-300 ease-in-out"
 							>
 								{tab.label}
 							</p>
@@ -321,9 +321,9 @@ const OrderDetails = ({
 				)}
 
 				{tabValueOrder === 1 && dataTransaction && (
-					<>
+					<div className="h-3/4 overflow-auto">
 						{!dataOrder && (
-							<div className="my-4 bg-neutral-20 h-2/3 flex items-center justify-center">
+							<div className="my-4 bg-neutral-20 h-[85%] flex items-center justify-center">
 								<div className="flex w-full flex-col items-center justify-center gap-4">
 									<NoOrderIcon width={125} height={55} />
 									<p className="text-m-medium">There’s no payment yet</p>
@@ -337,7 +337,7 @@ const OrderDetails = ({
 								transaction_uuid={dataTransaction?.uuid}
 							/>
 						)}
-					</>
+					</div>
 				)}
 			</aside>
 

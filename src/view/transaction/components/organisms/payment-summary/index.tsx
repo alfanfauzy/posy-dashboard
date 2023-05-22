@@ -44,7 +44,7 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 		);
 
 	return (
-		<div className="mb-36">
+		<div className="mb-20">
 			{dataOrder.map((order, idx) => (
 				<div key={order.uuid} className="my-4 w-full">
 					<div className="flex items-center justify-between text-m-semibold">
