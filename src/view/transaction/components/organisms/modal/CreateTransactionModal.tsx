@@ -133,6 +133,7 @@ const CreateTransactionModal = ({
 						name="transaction_category"
 						render={({field: {onChange}}) => (
 							<Select
+								isSearchable={false}
 								className="rounded-md !mt-0 text-l-regular h-10"
 								onChange={e => {
 									onChange(e);
