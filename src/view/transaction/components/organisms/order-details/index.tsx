@@ -190,7 +190,7 @@ const OrderDetails = ({
 						)} */}
 
 						{!dataOrder && (
-							<div className="my-4 bg-neutral-20 h-full flex items-center justify-center">
+							<div className="my-4 bg-neutral-20 h-[85%] flex items-center justify-center">
 								<div
 									onClick={openCreateOrder}
 									className="flex flex-col items-center gap-3"
@@ -321,7 +321,7 @@ const OrderDetails = ({
 				)}
 
 				{tabValueOrder === 1 && dataTransaction && (
-					<div className="h-3/4 overflow-auto">
+					<div className="pb-10 h-3/4 overflow-auto">
 						{!dataOrder && (
 							<div className="my-4 bg-neutral-20 h-[85%] flex items-center justify-center">
 								<div className="flex w-full flex-col items-center justify-center gap-4">
