@@ -92,6 +92,11 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 		});
 	};
 
+	const onCollapseSidebar = () => {
+		collapseSidebar();
+		dispatch(onChangeSelectedTrxId({id: ''}));
+	};
+
 	return (
 		<>
 			<Sidebar
@@ -105,11 +110,11 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 					}`}
 				>
 					{!collapsed ? (
-						<Logo onClick={collapseSidebar} titleProps="text-xl" />
+						<Logo onClick={onCollapseSidebar} titleProps="text-xl" />
 					) : (
 						<BsList
 							size={24}
-							onClick={() => collapseSidebar()}
+							onClick={() => onCollapseSidebar()}
 							className="fill-primary cursor-pointer"
 						/>
 					)}

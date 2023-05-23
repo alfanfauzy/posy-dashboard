@@ -97,14 +97,14 @@ const CreateTransactionModal = ({
 	return (
 		<Modal
 			style={{
-				top: 40,
+				top: 15,
 			}}
 			open={open}
 			onCancel={() => handleClose(false)}
 			width={794}
 			closable={false}
 			footer={
-				<div className="grid grid-cols-2 gap-2 p-4">
+				<div className="grid grid-cols-2 gap-2 px-4 pb-4 pt-2">
 					<Button variant="secondary" onClick={() => handleClose(false)}>
 						Cancel
 					</Button>
@@ -123,11 +123,11 @@ const CreateTransactionModal = ({
 				</div>
 			}
 		>
-			<div className="p-6 bg-[#2F265B] rounded-tr-xl rounded-tl-xl">
-				<p className="text-center text-xxl-bold text-white mb-6">
-					{isEdit ? 'Edit' : 'Create'} Transaction
+			<div className="p-6 bg-gradient-to-r from-primary-main to-secondary-main rounded-tr-xl rounded-tl-xl">
+				<p className="text-center text-xxl-bold text-white mb-3">
+					{isEdit ? 'Edit' : 'Create New'} Transaction
 				</p>
-				<div className="grid grid-cols-3 gap-6">
+				<div className="grid grid-cols-3 gap-4">
 					<reactHookForm.Controller
 						control={control}
 						name="transaction_category"
@@ -168,13 +168,7 @@ const CreateTransactionModal = ({
 				</div>
 			</div>
 			{watch('transaction_category.value') === 0 && (
-				<div className="bg-[#CBC7DD] mx-auto p-4 max-h-[300px] overflow-auto">
-					<Input
-						size="m"
-						className="hidden"
-						{...register('restaurant_outlet_table_uuid')}
-						error={!!errors.restaurant_outlet_table_uuid}
-					/>
+				<div className="bg-gradient-to-r from-[#CBC7DD] to-neutral-10 mx-auto p-4 max-h-[300px] overflow-auto">
 					<TableTransactionGridView
 						orderType={watch('transaction_category.value')}
 						methods={methods}

@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
+import {QrCode} from '@/domain/qr-code/model';
 import {TransactionStatus} from '@/domain/transaction/model';
 import {Can} from '@/view/auth/components/organisms/rbac';
 import PlusCircleIcon from '@/view/common/assets/icons/plusCircle';
@@ -21,7 +22,7 @@ import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTra
 import {useQueryClient} from '@tanstack/react-query';
 import {Skeleton} from 'antd';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useProSidebar} from 'react-pro-sidebar';
 import {useReactToPrint} from 'react-to-print';
 
@@ -74,6 +75,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		isLoading: loadCreateTransaction,
 	} = useCreateTransactionViewModel({
 		onSuccess: data => {
+			const dt = data as QrCode;
 			if (data) {
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
@@ -81,6 +83,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 					handlePrint();
 					setOpenModalTransaction(true);
 				}, 100);
+				dispatch(onChangeSelectedTrxId({id: dt.uuid}));
 			}
 		},
 	});
@@ -163,14 +166,8 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		);
 	};
 
-	useEffect(() => {
-		dispatch(onChangeSelectedTrxId({id: dataQr?.uuid as string}));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dataQr]);
-
 	const handleCloseModalCreateTransaction = (value: boolean) => {
 		setOpenModalTransaction(value);
-		dispatch(onChangeSelectedTrxId({id: ''}));
 	};
 
 	return (

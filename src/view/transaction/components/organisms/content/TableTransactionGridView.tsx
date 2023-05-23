@@ -1,7 +1,7 @@
 import {useAppSelector} from '@/view/common/store/hooks';
 import {useGetTablesViewModel} from '@/view/table/view-models/GetTablesViewModel';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
-import {Input, Loading} from 'posy-fnb-core';
+import {Loading} from 'posy-fnb-core';
 import React from 'react';
 import * as reactHookForm from 'react-hook-form';
 
@@ -22,7 +22,7 @@ const TableTransactionGridView = ({
 
 	const {data: dataTable, isLoading: loadTable} = useGetTablesViewModel(
 		{
-			limit: 100,
+			limit: 200,
 			sort: {
 				field: 'priority',
 				value: 'asc',
@@ -40,22 +40,22 @@ const TableTransactionGridView = ({
 	return (
 		<section>
 			{loadTable && (
-				<article className="flex h-full items-center justify-center">
+				<article className="flex h-full items-center justify-center my-6">
 					<Loading size={90} />
 				</article>
 			)}
 			{dataTable && (
-				<aside className="grid grid-cols-5 gap-3">
+				<aside className="grid grid-cols-5 gap-3 px-4 py-2">
 					{dataTable.map(table => (
 						<div
 							key={table.uuid}
 							role="presentation"
-							className={`h-[100px] w-[100px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-[#5440BE] hover:border-4 active:shadow-md flex items-center justify-center justify-self-center
+							className={`h-[110px] w-full cursor-pointer rounded-2xl p-4 shadow-sm duration-300 ease-in-out hover:border-secondary-hover hover:border-4 active:shadow-md flex items-center justify-center justify-self-center
                             bg-white ${
 															watch('restaurant_outlet_table_uuid') ===
 															table.uuid
-																? `border-[#5440BE] border-4 !bg-[#CCC4F6]`
-																: `border-neutral-100`
+																? `border-secondary-hover border-[3px] !bg-secondary-border`
+																: `border-neutral-30 border shadow-sm`
 														}
 									`}
 							onClick={() => {
@@ -67,10 +67,9 @@ const TableTransactionGridView = ({
 								<p
 									className={`text-4xl font-normal ${
 										watch('restaurant_outlet_table_uuid') === table.uuid
-											? `text-black`
+											? `text-primary-main`
 											: `text-neutral-70`
-									}
-                                                        `}
+									}`}
 								>
 									{table.table_number || '-'}
 								</p>
