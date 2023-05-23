@@ -45,12 +45,12 @@ const TableTransactionGridView = ({
 				</article>
 			)}
 			{dataTable && (
-				<aside className="mt-4 grid grid-cols-5 gap-4">
+				<aside className="grid grid-cols-5 gap-3">
 					{dataTable.map(table => (
 						<div
 							key={table.uuid}
 							role="presentation"
-							className={`h-[124px] w-[130px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-[#5440BE] hover:border-4 active:shadow-md flex items-center justify-center 
+							className={`h-[100px] w-[100px] cursor-pointer rounded-2xl border p-4 shadow-sm duration-300 ease-in-out hover:border-[#5440BE] hover:border-4 active:shadow-md flex items-center justify-center justify-self-center
                             bg-white ${
 															watch('restaurant_outlet_table_uuid') ===
 															table.uuid

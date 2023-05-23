@@ -168,7 +168,7 @@ const CreateTransactionModal = ({
 				</div>
 			</div>
 			{watch('transaction_category.value') === 0 && (
-				<div className="bg-[#CBC7DD] mx-auto p-7 max-h-[460px] overflow-auto">
+				<div className="bg-[#CBC7DD] mx-auto p-4 max-h-[300px] overflow-auto">
 					<Input
 						size="m"
 						className="hidden"
