@@ -18,7 +18,7 @@ const TableTransactionGridView = ({
 		state => state.auth,
 	);
 
-	const {setValue, watch, register} = methods;
+	const {setValue, watch, trigger} = methods;
 
 	const {data: dataTable, isLoading: loadTable} = useGetTablesViewModel(
 		{
@@ -39,12 +39,6 @@ const TableTransactionGridView = ({
 
 	return (
 		<section>
-			<Input
-				size="l"
-				className="hidden"
-				value={watch('restaurant_outlet_table_uuid')}
-				{...register('restaurant_outlet_table_uuid')}
-			/>
 			{loadTable && (
 				<article className="flex h-full items-center justify-center">
 					<Loading size={90} />
@@ -64,9 +58,10 @@ const TableTransactionGridView = ({
 																: `border-neutral-100`
 														}
 									`}
-							onClick={() =>
-								setValue('restaurant_outlet_table_uuid', table.uuid)
-							}
+							onClick={() => {
+								setValue('restaurant_outlet_table_uuid', table.uuid);
+								trigger();
+							}}
 						>
 							<div className="flex items-center justify-center pb-2">
 								<p
