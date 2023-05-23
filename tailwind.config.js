@@ -9,6 +9,7 @@ module.exports = {
 			colors: {
 				'light-red': '#FDECEC',
 				'warning-main': '#CD7B2E',
+				'secondary-hover': '#5440BE',
 			},
 			boxShadow: {
 				modal: '0px -6px 24px rgba(0, 0, 0, 0.15);',
