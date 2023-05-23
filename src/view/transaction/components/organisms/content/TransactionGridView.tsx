@@ -189,11 +189,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				)}
 				{dataSummary && (
 					<aside className="mt-2 flex gap-2 w-full justify-between">
-						<div
-							className={`flex flex-1 max-w-[120px] sm:max-w-[200px] lg:max-w-[470px] xl:max-w-none transition-all overflow-x-auto duration-500 ease-in-out ${
-								openSearch ? 'pl-12' : 'gap-x-2'
-							}`}
-						>
+						<div className="flex gap-2 max-w-[100px] md:max-w-[285px] lg:max-w-xs xl:max-w-none overflow-auto">
 							<FilterChip
 								label={`Waiting Food: ${dataSummary?.waiting_food}`}
 								openSearch={openSearch}
@@ -252,7 +248,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				)}
 			</article>
 
-			<article className="h-[80%] w-full overflow-y-auto">
+			<article className="h-[80%] w-full overflow-y-auto mb-8">
 				{loadData && (
 					<article className="flex h-full items-center justify-center">
 						<Loading size={90} />
@@ -321,7 +317,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				)}
 			</article>
 
-			<article className="absolute bottom-0 mb-5 flex w-full gap-4">
+			<article className="absolute bottom-0 py-3 flex w-[91%] gap-4 border-t">
 				<div className="flex items-center gap-1">
 					<div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
 					<p className="text-s-semibold">Waiting Food</p>
