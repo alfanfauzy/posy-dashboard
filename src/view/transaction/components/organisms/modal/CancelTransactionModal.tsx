@@ -4,6 +4,8 @@ import {
 	CancelTransaction,
 	CreateCancelTransactionInput,
 } from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
+import {useAppDispatch} from '@/view/common/store/hooks';
+import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
@@ -25,6 +27,7 @@ const CancelTransactionModal = ({
 	close,
 	value,
 }: CancelTransactionModalProps) => {
+	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 
 	const {createCancelTransaction, isLoading} =
@@ -34,6 +37,7 @@ const CancelTransactionModal = ({
 				if (data) {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+					dispatch(onChangeSelectedTrxId({id: ''}));
 					close();
 				}
 			},

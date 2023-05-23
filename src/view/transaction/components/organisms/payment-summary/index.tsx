@@ -2,11 +2,10 @@ import {Orders} from '@/domain/order/model';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangePayment} from '@/view/common/store/slices/transaction';
 import {toRupiah} from '@/view/common/utils/common';
+import {generateStatusOrder} from '@/view/common/utils/UtilsGenerateOrderStatus';
 import {useGetPaymentSummaryViewModel} from '@/view/transaction/view-models/GetPaymentSummaryViewModel';
 import {Loading} from 'posy-fnb-core';
 import React from 'react';
-
-import {generateStatusOrder} from '../order-details';
 
 type PaymentSummaryProps = {
 	dataOrder: Orders;
