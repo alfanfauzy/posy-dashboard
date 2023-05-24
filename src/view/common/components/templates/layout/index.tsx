@@ -95,7 +95,11 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 					<div className="py-4">
 						<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
 					</div>
-					<div className="h-full flex-1 overflow-y-scroll">
+					<div
+						className={`h-full flex-1 overflow-y-scroll ${
+							pathname !== '/transaction' ? 'py-4' : ''
+						}`}
+					>
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>
 				</section>

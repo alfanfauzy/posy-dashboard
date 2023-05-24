@@ -10,6 +10,7 @@ type AtomsInputSearchProps = {
 	onSearch?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onClearSearch?: () => void;
 	placeholder?: string;
+	isTransaction?: boolean;
 };
 const AtomsInputSearch = ({
 	isOpen,
@@ -18,10 +19,11 @@ const AtomsInputSearch = ({
 	onClearSearch,
 	placeholder,
 	search,
+	isTransaction,
 }: AtomsInputSearchProps) => (
 	<div
-		className={`transition-all duration-500 ease-in-out ${
-			isOpen ? 'ml-3 w-full' : 'w-fit'
+		className={`transition-all duration-100 ease-in-out ${
+			isOpen && isTransaction ? 'ml-10 mb-4 xl:mb-0 w-full' : 'w-full'
 		}`}
 	>
 		<span className="relative flex h-full items-center justify-start">
@@ -42,7 +44,7 @@ const AtomsInputSearch = ({
 				type="text"
 				placeholder={placeholder || ''}
 				className={`h-8 rounded-full border border-neutral-40 pl-10 text-m-medium placeholder:text-neutral-80 focus:outline-neutral-50 ${
-					isOpen ? 'w-full pr-10' : 'w-10'
+					isOpen ? 'w-full' : 'w-10'
 				} `}
 			/>
 			{search?.length > 0 && (

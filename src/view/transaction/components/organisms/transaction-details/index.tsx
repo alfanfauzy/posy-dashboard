@@ -5,27 +5,15 @@ import CountUpTimer from '@/view/common/components/atoms/countup';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
-import {generateStatusOrderDetail} from '@/view/common/utils/UtilsGenerateOrderStatus';
 import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
-import {Checkbox, Divider, Select} from 'antd';
-import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
-import {Button} from 'posy-fnb-core';
 import React, {useState} from 'react';
-import {AiOutlineInfoCircle} from 'react-icons/ai';
 import {CgTrash} from 'react-icons/cg';
 import {FiEdit} from 'react-icons/fi';
-import {IoIosArrowDown, IoIosArrowUp, IoMdArrowBack} from 'react-icons/io';
+import {IoIosArrowDown, IoIosArrowUp} from 'react-icons/io';
 
+import CancelOrderBottomsheet from '../cancel-order/CancelOrderBottomsheet';
 import CancelTransactionModal from '../modal/CancelTransactionModal';
 import CreateTransactionModal from '../modal/CreateTransactionModal';
-
-const BottomSheet = dynamic(
-	() => import('posy-fnb-core').then(el => el.BottomSheet),
-	{
-		loading: () => <div />,
-	},
-);
 
 type TransactionDetailsProps = {
 	dataTransaction: Transaction | undefined;
@@ -36,7 +24,6 @@ const TransactionDetails = ({
 	dataTransaction,
 	dataOrder,
 }: TransactionDetailsProps) => {
-	const router = useRouter();
 	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 	const {outletId} = useAppSelector(state => state.auth);
 	const [
@@ -63,17 +50,6 @@ const TransactionDetails = ({
 
 	const handleCloseModalCreateTransaction = (value: boolean) => {
 		setOpenModalTransaction(value);
-	};
-
-	const [selectedOrder, setSelectedOrder] = useState('');
-
-	const handleCloseCancelOrder = async () => {
-		closeCancelOrder();
-		setSelectedOrder('');
-		await router.push({
-			pathname: '/transaction',
-			hash: '',
-		});
 	};
 
 	return (
@@ -187,158 +163,12 @@ const TransactionDetails = ({
 				/>
 			)}
 
-			<BottomSheet
-				style={{
-					background: '#F7F7F7',
-					padding: '24px 0',
-					height: '100%',
-					borderRadius: 0,
-					zIndex: 10,
-				}}
-				open={isOpenCancelOrder}
-				onClose={handleCloseCancelOrder}
-			>
-				<section className="flex h-full w-full gap-4">
-					<div className="relative w-1/3 rounded-r-2xl bg-neutral-10 p-5 shadow">
-						<section id="filter" className="flex items-center justify-between">
-							<div
-								className="flex items-center gap-[10px]"
-								onClick={handleCloseCancelOrder}
-							>
-								<IoMdArrowBack
-									size={22}
-									className="cursor-pointer hover:opacity-70"
-								/>
-								<p className="cursor-default text-l-bold">Cancel Transaction</p>
-							</div>
-						</section>
-
-						<section className="mt-4 h-2/3 xl:h-4/5 pb-10 overflow-y-auto w-full">
-							<div className="text-m-regular">Choose group order</div>
-							{dataOrder && (
-								<aside className="mt-4 flex flex-col gap-3">
-									{dataOrder.map((order, idx) => (
-										<div
-											key={order.uuid}
-											className={`h-14 w-full cursor-pointer rounded-2xl p-4 shadow-sm duration-300 ease-in-out hover:border-secondary-hover hover:border active:shadow-md flex items-center justify-center justify-self-center bg-white  ${
-												selectedOrder === order.uuid
-													? `border-secondary-hover border !bg-secondary-border`
-													: `border-neutral-30 border`
-											}
-									`}
-											onClick={() => {
-												router.push({
-													hash: order.uuid,
-												});
-												setSelectedOrder(order.uuid);
-											}}
-										>
-											<div className="flex items-center justify-center">
-												<p>Order {idx + 1}</p>
-											</div>
-										</div>
-									))}
-								</aside>
-							)}
-						</section>
-						<aside className="absolute bottom-0 pr-5 pt-5 mb-5">
-							<div
-								className={`h-14 w-full cursor-pointer rounded-2xl p-4 shadow-sm duration-300 ease-in-out hover:border-secondary-hover hover:border active:shadow-md flex items-center justify-center justify-self-center bg-white border-neutral-30 border`}
-							>
-								<div className="flex items-center justify-center">
-									<p>Cancel Table</p>
-								</div>
-							</div>
-							<div className="mt-2 flex gap-1">
-								<AiOutlineInfoCircle
-									className="text-error rotate-180"
-									size={18}
-								/>
-								<p className="text-error text-s-regular">
-									Cancel transaction means all order at this table will be
-									deleted permanently.
-								</p>
-							</div>
-						</aside>
-					</div>
-
-					<div className="relative flex flex-1 flex-col rounded-l-2xl bg-neutral-10 shadow">
-						<aside className="w-full px-5 pt-5">
-							<p className="text-l-bold">Choose order below</p>
-						</aside>
-
-						<aside className="h-4/5 overflow-y-auto mt-4 pb-10 px-5 flex flex-col gap-4">
-							{dataOrder &&
-								dataOrder.map((order, idx) => (
-									<div
-										id={order.uuid}
-										key={order.uuid}
-										className="border border-neutral-30 rounded-md shadow-sm"
-									>
-										<div className="flex justify-between items-center bg-neutral-20 px-4 py-3 rounded-t-md">
-											<div className="flex-1">
-												<Checkbox onChange={() => undefined} className="w-full">
-													<p className="text-m-bold">Order {idx + 1} </p>
-												</Checkbox>
-											</div>
-											<div className="w-60">
-												<Select
-													className="w-full"
-													options={[{label: 'Cancel', value: 'cancel'}]}
-												/>
-											</div>
-										</div>
-										{order.order_detail.map((detail, detailIdx) => (
-											<div key={detail.uuid}>
-												<div className="flex justify-between items-center bg-neutral-10 px-4 py-4 rounded-b-md">
-													<div className="flex-1">
-														<Checkbox
-															onChange={() => undefined}
-															className="w-full"
-														>
-															<p className="text-m-regular">
-																{detail.product_name} x{detail.qty}
-															</p>
-															<div className="mt-1 text-m-medium flex gap-2">
-																Current status
-																{generateStatusOrderDetail(detail.status)}
-															</div>
-														</Checkbox>
-													</div>
-													<div className="w-60">
-														<Select
-															className="w-full"
-															options={[{label: 'Cancel', value: 'cancel'}]}
-														/>
-													</div>
-												</div>
-												{detailIdx !== order.order_detail.length - 1 && (
-													<div className="px-4">
-														<Divider className="my-0" />
-													</div>
-												)}
-											</div>
-										))}
-									</div>
-								))}
-						</aside>
-
-						<aside className="absolute bottom-0 w-full flex gap-2 rounded-bl-2xl bg-neutral-10 p-4 shadow-basic">
-							<Button
-								variant="secondary"
-								fullWidth
-								size="m"
-								onClick={handleCloseCancelOrder}
-							>
-								Back to transaction
-							</Button>
-							<Button variant="primary" fullWidth size="m">
-								Confirm
-							</Button>
-						</aside>
-					</div>
-				</section>
-			</BottomSheet>
+			<CancelOrderBottomsheet
+				dataOrder={dataOrder}
+				closeCancelOrder={closeCancelOrder}
+				isOpenCancelOrder={isOpenCancelOrder}
+				dataTransaction={dataTransaction}
+			/>
 		</section>
 	);
 };

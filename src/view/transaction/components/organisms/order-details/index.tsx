@@ -155,7 +155,10 @@ const OrderDetails = ({
 													}
 												/>
 											) : (
-												<div key={orderDetail.uuid} className="text-m-regular">
+												<div
+													key={orderDetail.uuid}
+													className="text-m-regular my-1"
+												>
 													{orderDetail.product_name} x{orderDetail.qty}
 												</div>
 											),

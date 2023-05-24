@@ -57,7 +57,7 @@ const CancelTransactionModal = ({
 			<section className="flex w-[380px] flex-col items-center justify-center p-4">
 				<div className="px-16">
 					<p className="text-center text-l-semibold line-clamp-2">
-						Are you sure you want to delete this transaction?
+						Are you sure you want to cancel this transaction?
 					</p>
 				</div>
 				<div className="mt-8 flex w-full gap-3">
@@ -77,7 +77,7 @@ const CancelTransactionModal = ({
 						fullWidth
 						onClick={onCancelTransaction}
 					>
-						Delete Trx
+						Cancel
 					</Button>
 				</div>
 			</section>

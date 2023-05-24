@@ -47,12 +47,10 @@ const ViewTransactionPage = () => {
 
 			{selectedTrxId && (
 				<section
-					className={`duration-300${
+					className={`duration-300 ${
 						width <= 1280 && !collapsed ? 'translate-x-60 opacity-0 hidden' : ''
 					} `}
 				>
-					{/* {width > 1280 && <TransactionSidebaBar />}
-				{width <= 1280 && selectedTrxId && <TransactionSidebaBar />} */}
 					<TransactionSidebaBar />
 				</section>
 			)}
