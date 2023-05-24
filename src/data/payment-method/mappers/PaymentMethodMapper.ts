@@ -16,6 +16,7 @@ export const mapToPaymentMethodCategoriesModel = (
 		description: data.description,
 		logo_url: data.logo_url,
 		is_show: data.is_show,
+		is_integration: data.is_integration,
 	}));
 
 export const mapToPaymentMethodsModel = (

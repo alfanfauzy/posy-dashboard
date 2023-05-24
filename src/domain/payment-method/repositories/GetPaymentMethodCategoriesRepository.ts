@@ -7,7 +7,7 @@ import {PaymentMethodCategories, PaymentMethodCategory} from '../model';
 
 export type GetPaymentMethodCategoriesInput = InputVariables<
 	keyof Metadata,
-	keyof Pick<PaymentMethodCategory, 'name'>
+	keyof Pick<PaymentMethodCategory, 'name' | 'is_integration'>
 >;
 
 export type GetPaymentMethodCategoriesResult = ResultQuery<
