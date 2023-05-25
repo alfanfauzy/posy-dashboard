@@ -79,11 +79,11 @@ export const mapToCreateCancelOrderPayload = (
 	transaction_uuid,
 	restaurant_outlet_uuid,
 	order: payload.order
-		.filter(order => order.uuid !== '')
+		.filter(order => order.uuid && order.uuid !== '')
 		.map(order => ({
 			uuid: order.uuid,
 			order_detail: order.order_detail
-				.filter(detail => detail.uuid !== '')
+				.filter(detail => detail.uuid && detail.uuid !== '')
 				.map(orderDetail => ({
 					uuid: orderDetail.uuid,
 					cancel_reason_status: orderDetail.cancel_reason_status,
