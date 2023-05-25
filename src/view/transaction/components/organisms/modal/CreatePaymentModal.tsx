@@ -60,6 +60,7 @@ const CreatePaymentModal = ({
 		isLoading: loadPaymentMethodCategories,
 	} = useGetPaymentMethodCategoriesViewModel({
 		sort: {field: 'created_at', value: 'asc'},
+		search: [{field: 'is_integration', value: 'false'}],
 		page: 1,
 		limit: 50,
 	});
