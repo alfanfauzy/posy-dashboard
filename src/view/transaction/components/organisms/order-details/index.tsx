@@ -118,13 +118,13 @@ const OrderDetails = ({
 						)}
 
 						{dataOrder &&
-							dataOrder.map((order, idx) => (
+							dataOrder.map(order => (
 								<div
 									key={order.uuid}
 									className="my-4 p-4 border border-neutral-40 rounded-lg w-full"
 								>
 									<div className="flex items-center justify-between text-m-semibold pb-2 mb-2.5 border-b border-neutral-30">
-										<p>{`Order ${idx + 1}`}</p>
+										<p>{`Order ${order.order_number}`}</p>
 										<div
 											onClick={
 												order.status === OrderStatus.ORDER_NEED_TO_PRINT

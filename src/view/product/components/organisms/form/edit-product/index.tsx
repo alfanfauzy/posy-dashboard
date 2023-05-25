@@ -12,7 +12,7 @@ import {
 import {useGetOutletProductViewModel} from '@/view/product/view-models/GetOutletProductViewModel';
 import {useUpdateOutletProductViewModel} from '@/view/product/view-models/UpdateOutletProductViewModel';
 import {useQueryClient} from '@tanstack/react-query';
-import Image from 'next/image';
+import {Image} from 'antd';
 import {Button, Input, Modal, Textarea, Toggle} from 'posy-fnb-core';
 import React from 'react';
 import {Controller, FormProvider, useFieldArray} from 'react-hook-form';
@@ -34,7 +34,6 @@ const OrganismsFormEditProduct = ({
 	const {selectedProductId} = useAppSelector(state => state.product);
 
 	const onCloseEditProduct = () => {
-		// dispatch(onChangeProductId(''));
 		closeEditProduct();
 	};
 
@@ -92,43 +91,6 @@ const OrganismsFormEditProduct = ({
 								})),
 							})),
 						});
-						// setValue('price', mappedData.price.toString());
-						// setValue('is_discount', mappedData.is_discount);
-						// setValue('is_show', mappedData.is_show);
-						// setValue('is_available', mappedData.is_available);
-						// setValue('is_favourite', mappedData.is_favourite);
-						// setValue('is_favourite', mappedData.is_favourite);
-						// setValue(
-						// 	'cooking_duration',
-						// 	mappedData.cooking_duration.toString(),
-						// );
-						// setValue(
-						// 	'is_active_cooking_duration',
-						// 	mappedData.cooking_duration > 0,
-						// );
-						// setValue(
-						// 	'price_after_discount',
-						// 	mappedData.price_after_discount.toString(),
-						// );
-						// setValue(
-						// 	'price_discount_percentage',
-						// 	mappedData.price_discount_percentage.toString(),
-						// );
-						// if (mappedData?.addons) {
-						// 	mappedData?.addons.forEach(addon => {
-						// 		append({
-						// 			addon_name: addon.addon_name,
-						// 			can_choose_multiple: addon.can_choose_multiple,
-						// 			is_required: !addon.is_optional,
-						// 			addon_variants: addon.variants.map(variant => ({
-						// 				variant_name: variant.variant_name,
-						// 				variant_price: variant?.variant_price
-						// 					? variant?.variant_price.toString()
-						// 					: '0',
-						// 			})),
-						// 		});
-						// 	});
-						// }
 					}
 				},
 			},
@@ -149,8 +111,6 @@ const OrganismsFormEditProduct = ({
 
 	const onToggleActiveDiscount = (value: boolean) => {
 		setValue('is_discount', !value);
-		// resetField('price_after_discount');
-		// resetField('price_discount_percentage');
 		setValue('price_after_discount', '');
 		setValue('price_discount_percentage', '', {shouldValidate: true});
 	};
@@ -195,8 +155,9 @@ const OrganismsFormEditProduct = ({
 				<FormProvider {...methods}>
 					<div className="px-6 py-4">
 						<aside className="flex gap-6">
-							<div className="rounded-lg shadow-sm">
+							<div>
 								<Image
+									className="rounded-lg shadow-md object-cover object-center"
 									src={dataProduct.product_image_url}
 									alt={dataProduct.product_name}
 									width={142}

@@ -66,6 +66,7 @@ type GetOrdersDataResponseBased = {
 	};
 	metadata: Metadata;
 	order_detail: Array<OrderDetail>;
+	order_number: string;
 };
 
 export type GetOrdersDataResponse = GetOrdersDataResponseBased;

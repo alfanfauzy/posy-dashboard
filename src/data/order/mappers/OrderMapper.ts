@@ -32,6 +32,7 @@ export const mapToOrdersModel = (datas: Array<GetOrdersDataResponse>): Orders =>
 			created_at: data.metadata.created_at.seconds,
 		},
 		order_detail: data.order_detail,
+		order_number: data.order_number,
 	}));
 
 export const mapToCreateOrderManualModel = (
