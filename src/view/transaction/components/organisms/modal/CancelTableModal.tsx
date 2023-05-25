@@ -1,10 +1,7 @@
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
-import {
-	CancelTransaction,
-	CreateCancelTransactionInput,
-} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
-import {useAppDispatch} from '@/view/common/store/hooks';
+import {CancelTransaction} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
@@ -22,12 +19,13 @@ const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 type CancelTableModalProps = {
 	close: () => void;
 	isOpen: boolean;
-	// dataTransaction: CreateCancelTransactionInput | undefined;
+	value: {transaction_uuid: string};
 };
 
-const CancelTableModal = ({isOpen, close}: CancelTableModalProps) => {
+const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
+	const {outletId} = useAppSelector(state => state.auth);
 
 	const [reason, setReason] = useState({label: '', value: ''});
 	const [reasonOther, setReasonOther] = useState('');
@@ -46,12 +44,14 @@ const CancelTableModal = ({isOpen, close}: CancelTableModalProps) => {
 		});
 
 	const onCancelTransaction = () => {
-		// if (value) {
-		// 	createCancelTransaction({
-		// 		transaction_uuid: value.transaction_uuid,
-		// 		restaurant_outlet_uuid: value.restaurant_outlet_uuid,
-		// 	});
-		// }
+		if (value) {
+			createCancelTransaction({
+				transaction_uuid: value.transaction_uuid,
+				restaurant_outlet_uuid: outletId,
+				cancel_reason: reason.value,
+				cancel_reason_other: reasonOther,
+			});
+		}
 	};
 
 	return (

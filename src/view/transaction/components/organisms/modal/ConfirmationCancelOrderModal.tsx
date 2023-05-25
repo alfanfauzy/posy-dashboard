@@ -37,7 +37,10 @@ const ConfirmationCancelOrderModal = ({
 			const data = _data as CancelOrder;
 			if (data) {
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
-				handleCloseCancelOrder();
+				close();
+				setTimeout(() => {
+					handleCloseCancelOrder();
+				}, 300);
 			}
 		},
 	});

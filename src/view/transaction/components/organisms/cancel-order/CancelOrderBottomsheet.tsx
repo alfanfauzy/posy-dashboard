@@ -1,18 +1,12 @@
-import {mapToCreateCancelOrderPayload} from '@/data/order/mappers/OrderMapper';
-import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {Orders} from '@/domain/order/model';
-import {CancelOrder} from '@/domain/order/repositories/CreateCancelOrderRepository';
 import {Transaction} from '@/domain/transaction/model';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
-import {useAppSelector} from '@/view/common/store/hooks';
-import {useCreateCancelOrderViewModel} from '@/view/order/view-models/CreateCancelOrderViewModel';
 import {
 	ValidationSchemaCancelOrderType,
 	validationSchemaCancelOrder,
 } from '@/view/transaction/schemas/cancel-order';
-import {useQueryClient} from '@tanstack/react-query';
 import {Checkbox, Select} from 'antd';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
@@ -23,6 +17,7 @@ import {AiOutlineInfoCircle} from 'react-icons/ai';
 import {IoMdArrowBack} from 'react-icons/io';
 
 import CancelTableModal from '../modal/CancelTableModal';
+import ConfirmationCancelOrderModal from '../modal/ConfirmationCancelOrderModal';
 import CancelDetailOrder from './CancelDetailOrder';
 
 export const CancelOptions = [
@@ -69,15 +64,24 @@ const CancelOrderBottomsheet = ({
 	dataTransaction,
 }: CancelOrderBottomsheetProps) => {
 	const router = useRouter();
-	const queryClient = useQueryClient();
 	const {width} = useViewportListener();
-	const {outletId} = useAppSelector(state => state.auth);
 
 	const [selectedOrder, setSelectedOrder] = useState('');
 	const [isOpenCancelTable, {close: closeCancelTable, open: openCancelTable}] =
 		useDisclosure({
 			initialState: false,
 		});
+
+	const [
+		isOpenConfirmCancelOrder,
+		{close: closeConfirmCancelOrder, open: openConfirmCancelOrder},
+		{
+			valueState: valueConfirmCancelOrder,
+			setValueState: setValueConfirmCancelOrder,
+		},
+	] = useDisclosure<ValidationSchemaCancelOrderType>({
+		initialState: false,
+	});
 
 	const methods = useForm({
 		schema: validationSchemaCancelOrder,
@@ -89,7 +93,7 @@ const CancelOrderBottomsheet = ({
 		},
 	});
 
-	const {setValue, getValues, control, reset, handleSubmit, watch} = methods;
+	const {setValue, getValues, control, reset, watch} = methods;
 
 	const {update} = useFieldArray({
 		control,
@@ -106,25 +110,14 @@ const CancelOrderBottomsheet = ({
 		});
 	};
 
-	const {createCancelOrder, isLoading} = useCreateCancelOrderViewModel({
-		onSuccess: _data => {
-			const data = _data as CancelOrder;
-			if (data) {
-				queryClient.invalidateQueries([GetOrdersQueryKey]);
-				handleCloseCancelOrder();
-			}
-		},
-	});
-
-	const onSubmit = (e: any, form: ValidationSchemaCancelOrderType) => {
+	const onSubmit = (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+		form: ValidationSchemaCancelOrderType,
+	) => {
 		e.preventDefault();
-		if (dataTransaction) {
-			createCancelOrder(
-				mapToCreateCancelOrderPayload(dataTransaction.uuid, outletId, form),
-			);
-		}
+		openConfirmCancelOrder();
+		setValueConfirmCancelOrder(form);
 	};
-	console.log(watch());
 
 	useEffect(() => {
 		watch();
@@ -133,9 +126,26 @@ const CancelOrderBottomsheet = ({
 
 	return (
 		<>
-			{isOpenCancelTable && (
-				<CancelTableModal isOpen={isOpenCancelTable} close={closeCancelTable} />
+			{isOpenCancelTable && dataTransaction && (
+				<CancelTableModal
+					value={{
+						transaction_uuid: dataTransaction?.uuid,
+					}}
+					isOpen={isOpenCancelTable}
+					close={closeCancelTable}
+				/>
 			)}
+			{isOpenConfirmCancelOrder &&
+				dataTransaction &&
+				valueConfirmCancelOrder && (
+					<ConfirmationCancelOrderModal
+						close={closeConfirmCancelOrder}
+						isOpen={isOpenConfirmCancelOrder}
+						dataTransaction={dataTransaction}
+						form={valueConfirmCancelOrder}
+						handleCloseCancelOrder={handleCloseCancelOrder}
+					/>
+				)}
 			<BottomSheet
 				style={{
 					background: '#F7F7F7',
@@ -148,10 +158,7 @@ const CancelOrderBottomsheet = ({
 				onClose={handleCloseCancelOrder}
 			>
 				<FormProvider {...methods}>
-					<form
-						// onSubmit={handleSubmit(onSubmit)}
-						className="flex h-full w-full gap-4"
-					>
+					<div className="flex h-full w-full gap-4">
 						<div className="relative w-1/3 rounded-r-2xl bg-neutral-10 p-5 shadow">
 							<section
 								id="filter"
@@ -358,8 +365,6 @@ const CancelOrderBottomsheet = ({
 								<Button
 									variant="primary"
 									fullWidth
-									isLoading={isLoading}
-									// type="submit"
 									onClick={e => onSubmit(e, watch())}
 									size={width > 1024 ? 'l' : 'm'}
 								>
@@ -367,7 +372,7 @@ const CancelOrderBottomsheet = ({
 								</Button>
 							</aside>
 						</div>
-					</form>
+					</div>
 				</FormProvider>
 			</BottomSheet>
 		</>
