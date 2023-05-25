@@ -92,7 +92,7 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 						onClick={close}
 						className="whitespace-nowrap"
 					>
-						No, Maybe Later
+						No
 					</Button>
 					<Button
 						isLoading={isLoading}
@@ -101,7 +101,7 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 						fullWidth
 						onClick={onCancelTransaction}
 					>
-						Cancel
+						Yes
 					</Button>
 				</div>
 			</section>

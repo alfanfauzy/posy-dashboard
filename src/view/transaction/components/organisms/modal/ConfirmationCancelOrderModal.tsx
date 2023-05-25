@@ -67,7 +67,7 @@ const ConfirmationCancelOrderModal = ({
 						onClick={close}
 						className="whitespace-nowrap"
 					>
-						No, Maybe Later
+						No
 					</Button>
 					<Button
 						isLoading={isLoading}
@@ -76,7 +76,7 @@ const ConfirmationCancelOrderModal = ({
 						fullWidth
 						onClick={onCancelTransaction}
 					>
-						Cancel
+						Yes
 					</Button>
 				</div>
 			</section>

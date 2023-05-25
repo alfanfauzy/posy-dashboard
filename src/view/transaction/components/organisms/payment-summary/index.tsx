@@ -88,7 +88,7 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 						<p>{toRupiah(dataPayment.tax_and_charge.service_charge_price)}</p>
 					</div>
 					<div className="flex items-center justify-between text-m-medium">
-						<p>PB1</p>
+						<p>PB1 {dataPayment.tax_and_charge.tax_percentage}%</p>
 						<p>{toRupiah(dataPayment.tax_and_charge.tax_price)}</p>
 					</div>
 					<div className="flex items-center justify-between text-l-semibold">
