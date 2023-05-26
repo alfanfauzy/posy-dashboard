@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import CancelIcon from '@/view/common/assets/icons/cancel';
@@ -95,6 +96,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 				handlePlayAudio(play);
 
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
+				queryClient.invalidateQueries([GetTransactionQueryKey]);
 				queryClient.invalidateQueries([
 					GetOrdersQueryKey,
 					{transaction_uuid: message?.data.transaction_uuid},
