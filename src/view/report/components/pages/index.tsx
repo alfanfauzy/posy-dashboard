@@ -1,4 +1,6 @@
 import {GetDownloadTransactionReportInput} from '@/domain/report/repositories/GetDownloadReportsRepository';
+import {GetTransactionReportsInput} from '@/domain/report/repositories/GetTransactionReportsRepository';
+import {GetTransactionReportSummaryInput} from '@/domain/report/repositories/GetTransactionReportSummaryRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
@@ -63,19 +65,14 @@ const ViewReportPage = () => {
 		};
 	}, [outletId, date]);
 
-	const {
-		data: dataReports,
-		isLoading: loadDataReports,
-		pagination,
-	} = useGetTransactionReportsViewModel(
-		{
+	const queryReport = useMemo(() => {
+		return {
 			limit: Number(query.limit) || 10,
 			page: Number(query.page) || 1,
 			search: [
 				{
 					field: 'status',
-					value:
-						'WAITING_ORDER|WAITING_FOOD|FOOD_SERVED|WAITING_PAYMENT|PAID|REFUND',
+					value: 'PAID|REFUND',
 				},
 				{
 					field: 'keyword',
@@ -90,7 +87,15 @@ const ViewReportPage = () => {
 					value: outletId,
 				},
 			],
-		},
+		};
+	}, [query, outletId, date]);
+
+	const {
+		data: dataReports,
+		isLoading: loadDataReports,
+		pagination,
+	} = useGetTransactionReportsViewModel(
+		queryReport as GetTransactionReportsInput,
 		{
 			enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 		},
@@ -98,29 +103,7 @@ const ViewReportPage = () => {
 
 	const {data: dataSummary, isLoading: loadSummary} =
 		useGetTransactionReportSummaryViewModel(
-			{
-				limit: Number(query.limit) || 10,
-				page: Number(query.page) || 1,
-				search: [
-					{
-						field: 'status',
-						value:
-							'WAITING_ORDER|WAITING_FOOD|FOOD_SERVED|WAITING_PAYMENT|PAID|REFUND',
-					},
-					{
-						field: 'keyword',
-						value: (query.search as string) || '',
-					},
-					{
-						field: 'created_at',
-						value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
-					},
-					{
-						field: 'restaurant_outlet_uuid',
-						value: outletId,
-					},
-				],
-			},
+			queryReport as GetTransactionReportSummaryInput,
 			{
 				enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 			},
