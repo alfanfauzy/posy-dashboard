@@ -154,6 +154,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>
 				</section>
+				<audio ref={audioRef} src="/sounds/notif.mp3" />
 			</main>
 		</ProSidebarProvider>
 	);
