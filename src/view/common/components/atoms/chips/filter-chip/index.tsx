@@ -18,7 +18,7 @@ const AtomsFilterChip = ({
 		role="button"
 		onClick={onClick}
 		onKeyDown={onClick}
-		className={`${className} rounded-full border px-4 py-[6px] text-m-semibold bg-neutral-10 text-neutral-80 transition-all duration-100 ease-in-out ${
+		className={`${className} rounded-full border px-4 py-[6px] text-s-semibold bg-neutral-10 text-neutral-80 transition-all duration-100 ease-in-out ${
 			openSearch ? '-ml-40 opacity-0 ' : 'w-fit'
 		}`}
 	>

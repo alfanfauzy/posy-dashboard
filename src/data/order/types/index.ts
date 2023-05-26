@@ -1,12 +1,20 @@
 import {Metadata} from '@/data/common/types/metadata';
 
-type OrderStatus =
-	| 'ORDER_RECEIVED'
-	| 'ORDER_PROCESS'
-	| 'ORDER_SERVED'
-	| 'ORDER_CANCELLED';
+enum OrderStatus {
+	ORDER_NOT_SELECTED,
+	ORDER_NEED_TO_PRINT,
+	ORDER_ON_KITCHEN,
+	ORDER_SERVED,
+	ORDER_CANCELLED,
+}
 
-type OrderDetailStatus = 'RECEIVED' | 'PROCESS' | 'SERVED' | 'CANCEL';
+enum OrderDetailStatus {
+	NOT_SELECTED,
+	NEED_TO_PRINT,
+	ON_KITCHEN,
+	SERVED,
+	CANCEL,
+}
 
 type AddonInformation = {
 	addon_name: string;

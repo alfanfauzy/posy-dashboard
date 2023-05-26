@@ -6529,10 +6529,10 @@ postcss@^8.0.9, postcss@^8.4.21, postcss@^8.4.4:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-posy-fnb-core@^1.1.7:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/posy-fnb-core/-/posy-fnb-core-1.1.7.tgz#8d3478af9032e1d4fcc98c299cb25ee5e41be786"
-  integrity sha512-dOtzgbeuJugRrAqnSZ1iVPyi/W9vXuJCuQiLQKc2sj6NLqAejysc4e71559SiKXZZ3XtGfS098dWX1kcSPXPOg==
+posy-fnb-core@^1.1.10:
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/posy-fnb-core/-/posy-fnb-core-1.1.10.tgz#1ef3b3fed48150cfe7b93495bb5c899bb0aa00bd"
+  integrity sha512-4QnlVZcK2aqpKh9/ja/32pIj2IbhHMBrfYPFIuA85pfwF2AeIUrDlwdJOcDj6JdP6Bf9HjQLWE0nKprc4fmHXw==
   dependencies:
     "@emotion/react" "^11.10.5"
     "@emotion/styled" "^11.10.5"
@@ -7213,6 +7213,21 @@ react-select@^5.7.0:
   version "5.7.2"
   resolved "https://registry.npmjs.org/react-select/-/react-select-5.7.2.tgz"
   integrity sha512-cTlJkQ8YjV6T/js8wW0owTzht0hHGABh29vjLscY4HfZGkv7hc3FFTmRp9NzY/Ib1uQ36GieAKEjxpHdpCFpcA==
+  dependencies:
+    "@babel/runtime" "^7.12.0"
+    "@emotion/cache" "^11.4.0"
+    "@emotion/react" "^11.8.1"
+    "@floating-ui/dom" "^1.0.1"
+    "@types/react-transition-group" "^4.4.0"
+    memoize-one "^6.0.0"
+    prop-types "^15.6.0"
+    react-transition-group "^4.3.0"
+    use-isomorphic-layout-effect "^1.1.2"
+
+react-select@^5.7.3:
+  version "5.7.3"
+  resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.7.3.tgz#fa0dc9a23cad6ff3871ad3829f6083a4b54961a2"
+  integrity sha512-z8i3NCuFFWL3w27xq92rBkVI2onT0jzIIPe480HlBjXJ3b5o6Q+Clp4ydyeKrj9DZZ3lrjawwLC5NGl0FSvUDg==
   dependencies:
     "@babel/runtime" "^7.12.0"
     "@emotion/cache" "^11.4.0"

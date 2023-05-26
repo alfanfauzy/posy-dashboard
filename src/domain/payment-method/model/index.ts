@@ -23,6 +23,7 @@ type PaymentMethodCategoryBased = {
 	logo_url: string;
 	priority: number;
 	is_show: boolean;
+	is_integration: boolean;
 };
 
 export type PaymentMethodCategory = {

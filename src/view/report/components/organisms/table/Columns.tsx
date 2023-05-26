@@ -133,7 +133,7 @@ const defCol = ({
 		width: 120,
 		key: 'order_time',
 		render: text => (
-			<p className="whitespace-nowrap text-m-regular">{`${text % 60} min`}</p>
+			<p className="whitespace-nowrap text-m-regular">{text} min</p>
 		),
 	},
 	{

@@ -10,14 +10,12 @@ export type AuthState = {
 	isLoggedIn: boolean;
 	isSubscription: boolean;
 	authData: Login;
-	showSidebar: boolean;
 	outletId: string;
 };
 
 const initialState: AuthState = {
 	isLoggedIn: false,
 	isSubscription: false,
-	showSidebar: false,
 	outletId: '',
 	authData: {
 		user_info: {
@@ -71,9 +69,6 @@ export const AuthSlice = createSlice({
 				accesses: [],
 			};
 		},
-		setShowSidebar: (state: AuthState, action: PayloadAction<boolean>) => {
-			state.showSidebar = action.payload;
-		},
 		setRestaurantOutletId: (
 			state: AuthState,
 			action: PayloadAction<string>,
@@ -89,7 +84,6 @@ export const AuthSlice = createSlice({
 export const {
 	onLogout,
 	onLoginSuccess,
-	setShowSidebar,
 	setRestaurantOutletId,
 	setIsSubscription,
 	onSetCredentials,

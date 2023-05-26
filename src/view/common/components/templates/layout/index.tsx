@@ -83,16 +83,18 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	if (loading) {
 		return (
 			<main className="flex h-screen w-full items-center justify-center">
-				<Loading backgroundColor="#2F265B" color="#2F265B" size={100} />
+				<Loading size={100} />
 			</main>
 		);
 	}
 
 	return (
 		<ProSidebarProvider>
-			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30 py-4">
+			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30">
 				<section className="flex h-full w-full gap-4">
-					<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
+					<div className="py-4">
+						<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
+					</div>
 					<div className="h-full flex-1 overflow-y-scroll">
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>
