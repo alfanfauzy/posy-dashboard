@@ -90,18 +90,6 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	useEffect(() => {
 		const messaging = getMessaging(firebaseApp);
 
-		// const activateMessages = async () => {
-		// 	const token = await getToken(messaging, {
-		// 		vapidKey:
-		// 			'BPgeNUCEM49qqghR-3FUyfnM4grr7JYxOEsQDvKvZ9UvciADKNgwtxH1EQnk-CI0ZJ8uJI5W6h7phkeehYPL424',
-		// 	}).catch(() => console.log('error generating token'));
-
-		// 	if (token) console.log('token', token);
-		// 	if (!token) console.log('no token');
-		// };
-
-		// activateMessages();
-
 		onMessage(messaging, message => {
 			if (message.data) {
 				handlePlayAudio(play);
@@ -114,7 +102,11 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				enqueueSnackbar({
 					className: 'border-t-8 border-blue-success',
-					style: {borderRadius: '8px', background: '#ffffff', color: '#0A0A0A'},
+					style: {
+						borderRadius: '8px',
+						background: '#ffffff',
+						color: '#0A0A0A',
+					},
 					action: snackbarId => (
 						<div className="mr-2">
 							<CancelIcon

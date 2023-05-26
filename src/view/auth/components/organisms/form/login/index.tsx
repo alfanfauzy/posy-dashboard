@@ -69,9 +69,10 @@ const OrganismsFormLogin = () => {
 
 	useEffect(() => {
 		const message = getMessaging(firebaseApp);
+		console.log(process.env.NEXT_PUBLIC_VAPID_KEY);
 
 		getToken(message, {
-			vapidKey: process.env.NEXT_APP_VAPID_KEY,
+			vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
 		})
 			.then(currentToken => {
 				if (currentToken) {
