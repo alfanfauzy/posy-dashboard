@@ -1,4 +1,5 @@
 import {GetCancellationReportsInput} from '@/domain/report-cancellation/repositories/GetCancellationReportRepository';
+import {GetCancellationReportSummaryInput} from '@/domain/report-cancellation/repositories/GetCancellationSummaryRepository';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import AtomSelect from '@/view/common/components/atoms/select';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
@@ -49,6 +50,11 @@ const ViewReportCancellationPage = () => {
 					value: outletOpt,
 				},
 				{
+					field: 'cancel_reason',
+					value:
+						'CUSTOMER_CANCELLATION|OUT_OF_STOCK|LONG_WAITING|WRONG_ORDER|OTHER',
+				},
+				{
 					field: 'created_at',
 					value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,
 				},
@@ -69,9 +75,12 @@ const ViewReportCancellationPage = () => {
 	});
 
 	const {data: dataSummary, isLoading: loadSummary} =
-		useGetCancellationReportSummaryViewModel(queryCancellationReport, {
-			enabled: outletOpt !== '' && isSubscription && isLoggedIn,
-		});
+		useGetCancellationReportSummaryViewModel(
+			queryCancellationReport as GetCancellationReportSummaryInput,
+			{
+				enabled: outletOpt !== '' && isSubscription && isLoggedIn,
+			},
+		);
 
 	const {data: dataOutletSelection} = useGetOutletSelectionViewModel({
 		enabled: isLoggedIn && isSubscription,
@@ -85,7 +94,7 @@ const ViewReportCancellationPage = () => {
 			value: outlet.uuid,
 		}));
 
-		return [{label: 'Outlet: All', value: 'ALL'}, ...outlets];
+		return [{label: 'Outlet: All', value: 'all'}, ...outlets];
 	}, [dataOutletSelection]);
 
 	const handleSelectChange = (value: string) => {

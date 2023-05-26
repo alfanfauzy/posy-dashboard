@@ -74,7 +74,8 @@ const ViewReportPage = () => {
 			search: [
 				{
 					field: 'status',
-					value: 'PAID|CANCELLED|REFUND',
+					value:
+						'WAITING_ORDER|WAITING_FOOD|FOOD_SERVED|WAITING_PAYMENT|PAID|REFUND',
 				},
 				{
 					field: 'keyword',
@@ -103,7 +104,8 @@ const ViewReportPage = () => {
 				search: [
 					{
 						field: 'status',
-						value: 'PAID|CANCELLED|REFUND',
+						value:
+							'WAITING_ORDER|WAITING_FOOD|FOOD_SERVED|WAITING_PAYMENT|PAID|REFUND',
 					},
 					{
 						field: 'keyword',

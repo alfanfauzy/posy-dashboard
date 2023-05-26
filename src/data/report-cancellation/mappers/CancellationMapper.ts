@@ -20,6 +20,7 @@ export const mapToCancellationReportModel = (
 		cashier: data.cashier,
 		waiter: data.waiter,
 		cancel_reason: data.cancel_reason,
+		cancel_reason_other: data.cancel_reason_other,
 		outlet_uuid: data.outlet_uuid,
 		order_uuid: data.order_uuid,
 		product_uuid: data.product_uuid,

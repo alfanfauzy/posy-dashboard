@@ -6,7 +6,7 @@ import {CancellationReport, CancellationReports} from '../model';
 
 export type GetCancellationReportsInput = InputVariables<
 	keyof CancellationReport,
-	'created_at' | keyof FilterBased
+	'created_at' | keyof FilterBased | keyof CancellationReport
 >;
 
 export type GetCancellationReportsResult = ResultQuery<

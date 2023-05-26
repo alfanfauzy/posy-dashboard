@@ -1,5 +1,6 @@
 import {CancellationReport} from '@/domain/report-cancellation/model';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
+import {generateCancelReason} from '@/view/history/components/organisms/table/Columns';
 import {ColumnsType} from 'antd/es/table';
 
 export const Columns: ColumnsType<CancellationReport> = [
@@ -77,6 +78,13 @@ export const Columns: ColumnsType<CancellationReport> = [
 		dataIndex: 'cancel_reason',
 		key: 'cancel_reason',
 		width: 150,
-		render: text => <p className="whitespace-nowrap text-m-regular">{text}</p>,
+		render: (data, text) => {
+			const reasonText =
+				data === 'OTHER'
+					? text.cancel_reason_other || '-'
+					: generateCancelReason(data);
+
+			return <p className="whitespace-nowrap text-m-regular">{reasonText}</p>;
+		},
 	},
 ];

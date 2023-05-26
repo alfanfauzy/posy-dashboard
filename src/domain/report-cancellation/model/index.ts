@@ -23,6 +23,7 @@ export type CancellationReportBased = {
 	order_note: string;
 	status: string;
 	cancel_reason: string;
+	cancel_reason_other: string;
 };
 
 export type CancellationReport = CancellationReportBased;

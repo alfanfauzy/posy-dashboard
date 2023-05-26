@@ -1,7 +1,7 @@
 import {
 	GetCancellationReportSummaryInput,
 	GetCancellationReportSummaryResult,
-} from '@/domain/report-cancellation/repositories/GetCancellationSummaryRepository copy';
+} from '@/domain/report-cancellation/repositories/GetCancellationSummaryRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

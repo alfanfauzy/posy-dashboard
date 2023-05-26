@@ -1,7 +1,10 @@
 import {Report} from '@/domain/report/model';
 import {toRupiah} from '@/view/common/utils/common';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
-import {generateStatusTransaction} from '@/view/history/components/organisms/table/Columns';
+import {
+	generateStatusTransaction,
+	generateTypeOfOrder,
+} from '@/view/history/components/organisms/table/Columns';
 import {ColumnsType} from 'antd/es/table';
 import {BiFilter} from 'react-icons/bi';
 
@@ -112,7 +115,7 @@ const defCol = ({
 		width: 150,
 		render: (_, record) => (
 			<p className="whitespace-nowrap text-m-regular">
-				{dateFormatter(record.created_at || 0, 'dd MMM, HH:mm')}
+				{dateFormatter(record.created_at || 0, 'dd/MM/yyyy, HH:mm')}
 			</p>
 		),
 	},
@@ -123,7 +126,7 @@ const defCol = ({
 		width: 170,
 		render: (_, record) => (
 			<p className="whitespace-nowrap text-m-regular">
-				{dateFormatter(record.paid_at || 0, 'dd MMM, HH:mm')}
+				{dateFormatter(record.paid_at || 0, 'dd/MM/yyyy, HH:mm')}
 			</p>
 		),
 	},
@@ -160,8 +163,8 @@ const defCol = ({
 		key: 'transaction_category',
 		width: 150,
 		render: text => (
-			<p className="whitespace-nowrap text-m-regular lowercase">
-				{text.split('_').join(' ') || '-'}
+			<p className="whitespace-nowrap text-m-medium">
+				{generateTypeOfOrder(text)}
 			</p>
 		),
 	},

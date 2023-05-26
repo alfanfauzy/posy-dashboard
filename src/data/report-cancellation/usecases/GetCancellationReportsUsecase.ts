@@ -1,5 +1,5 @@
 import {GetCancellationReportsResult} from '@/domain/report-cancellation/repositories/GetCancellationReportRepository';
-import {GetCancellationReportSummaryInput} from '@/domain/report-cancellation/repositories/GetCancellationSummaryRepository copy';
+import {GetCancellationReportSummaryInput} from '@/domain/report-cancellation/repositories/GetCancellationSummaryRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

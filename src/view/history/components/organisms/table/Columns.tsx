@@ -1,4 +1,9 @@
-import {Transaction, TransactionStatus} from '@/domain/transaction/model';
+import {
+	CancelReason,
+	Transaction,
+	TransactionCategory,
+	TransactionStatus,
+} from '@/domain/transaction/model';
 import {toRupiah} from '@/view/common/utils/common';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {ColumnsType} from 'antd/es/table';
@@ -23,6 +28,27 @@ export const generateStatusTransaction = (status: TransactionStatus) => {
 	};
 
 	return <p className={`${statusColor[status]}`}>{statusText[status]}</p>;
+};
+
+export const generateTypeOfOrder = (typeOrder: TransactionCategory) => {
+	const typeOfOrder = {
+		DINE_IN: 'Dine In',
+		TAKE_AWAY: 'Take Away',
+	};
+
+	return <p>{typeOfOrder[typeOrder]}</p>;
+};
+
+export const generateCancelReason = (cancelReason: CancelReason) => {
+	const cancelReasonList = {
+		OUT_OF_STOCK: 'Out of stock',
+		CUSTOMER_CANCELLATION: 'Customer cancellation',
+		LONG_WAITING: 'Long waiting time',
+		WRONG_ORDER: 'Wrong order',
+		OTHER: 'Others',
+	};
+
+	return <p>{cancelReasonList[cancelReason]}</p>;
 };
 
 type ColumnsProps = {
