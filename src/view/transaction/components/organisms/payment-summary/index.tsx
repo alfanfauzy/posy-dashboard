@@ -44,10 +44,10 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 
 	return (
 		<div className="mb-20">
-			{dataOrder.map((order, idx) => (
+			{dataOrder.map(order => (
 				<div key={order.uuid} className="my-4 w-full">
 					<div className="flex items-center justify-between text-m-semibold">
-						<p>{`Order ${idx + 1}`}</p>
+						<p>{`Order ${order.order_number}`}</p>
 						{generateStatusOrder(order.status)}
 					</div>
 					<div className="mt-2 flex w-full flex-col gap-2">
