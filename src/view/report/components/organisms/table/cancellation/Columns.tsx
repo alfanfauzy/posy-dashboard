@@ -84,7 +84,7 @@ export const Columns: ColumnsType<CancellationReport> = [
 					? text.cancel_reason_other || '-'
 					: generateCancelReason(data);
 
-			return <p className="whitespace-nowrap text-m-regular">{reasonText}</p>;
+			return <p className="whitespace-normal text-m-regular">{reasonText}</p>;
 		},
 	},
 ];
