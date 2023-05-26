@@ -34,6 +34,7 @@ const defaultFormat: Partial<NumericFormatProps> = {
 	fixedDecimalScale: true,
 	allowNegative: false,
 };
+
 export const removeFormatRupiah = (value: string) =>
 	removeNumericFormat(
 		value,

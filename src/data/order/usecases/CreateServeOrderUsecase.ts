@@ -24,13 +24,24 @@ export const useCreateServeOrderUsecase = ({
 		error: _error,
 		...rest
 	} = useCreateServeOrderMutation({
-		onSuccess: (dataSuccess, ...args) => {
+		onSuccess: (dataSuccess, vars, ...args) => {
 			if (dataSuccess) {
-				onSuccess?.(mapToCreateServeOrderModel(dataSuccess?.data), ...args);
-				enqueueSnackbar({
-					message: 'Order Served Successfully',
-					variant: 'success',
-				});
+				onSuccess?.(
+					mapToCreateServeOrderModel(dataSuccess?.data),
+					vars,
+					...args,
+				);
+				if (vars.rollback_to_kitchen) {
+					enqueueSnackbar({
+						message: 'Rollback to kitchen successfully',
+						variant: 'success',
+					});
+				} else {
+					enqueueSnackbar({
+						message: 'Order served successfully',
+						variant: 'success',
+					});
+				}
 			}
 		},
 		onError: (dataError, ...args) => {

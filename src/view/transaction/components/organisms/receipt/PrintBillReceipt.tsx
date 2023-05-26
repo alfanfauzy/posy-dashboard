@@ -13,12 +13,12 @@ type PrintBillReceiptProps = {
 
 const PrintBillReceipt = ({data, printReceiptRef}: PrintBillReceiptProps) => {
 	return (
-		<article className="hidden">
+		<article className="hidden w-fit">
 			<div
 				ref={printReceiptRef}
-				className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12"
+				className="relative flex w-fit flex-col justify-center"
 			>
-				<div className="relative bg-white px-6 pb-14 pt-5 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:px-10">
+				<div className="relative bg-white px-6 pb-14 pt-5 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-sm sm:px-10">
 					<div className="mx-auto max-w-md">
 						<div className="flex items-center justify-center pb-4 pt-3">
 							<Image
@@ -120,7 +120,9 @@ const PrintBillReceipt = ({data, printReceiptRef}: PrintBillReceiptProps) => {
 									</p>
 								</div>
 								<div className="flex justify-between pb-2">
-									<p className="text-m-regular">PB 1</p>
+									<p className="text-m-regular">
+										PB1 {data.payment_summary.tax_and_charge.tax_percentage}%
+									</p>
 									<p className="text-m-regular">
 										{toRupiah(data.payment_summary.tax_and_charge.tax_price)}
 									</p>

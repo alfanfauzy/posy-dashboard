@@ -1,6 +1,6 @@
 import {QrCode} from '@/domain/qr-code/model';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
-import NoOrderIcon from '@/view/common/assets/icons/noOrder';
+import {Can} from '@/view/auth/components/organisms/rbac';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
@@ -9,11 +9,10 @@ import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/upda
 import {useGetQrCodeViewModel} from '@/view/transaction/view-models/GetQrCodeViewModel';
 import {useGetTransactionViewModel} from '@/view/transaction/view-models/GetTransactionViewModel';
 import {Button, Loading} from 'posy-fnb-core';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
 import {useReactToPrint} from 'react-to-print';
 
-import EditTransactionForm from '../../organisms/form/EditTransactionForm';
 import ApplyDiscountModal from '../../organisms/modal/ApplyDiscountModal';
 import CreatePaymentModal from '../../organisms/modal/CreatePaymentModal';
 import PaymentConfirmationModal from '../../organisms/modal/PaymentConfirmationModal';
@@ -40,13 +39,6 @@ const TransactionSidebar = () => {
 		isOpenPrintToKitchen,
 		{open: openPrintToKitchen, close: closePrintToKitchen},
 	] = useDisclosure({initialState: false});
-
-	const [
-		isShowDeleteOrder,
-		{toggle: toggleShowDeleteOrder, close: closeShowDeleteOrder},
-	] = useDisclosure({
-		initialState: false,
-	});
 
 	const [
 		isOpenCreatePayment,
@@ -81,12 +73,6 @@ const TransactionSidebar = () => {
 				onSuccess: data => {
 					if (data.message === 'OK' && data.data.table_number) {
 						setValue('customer_name', data?.data?.customer_name);
-						if (data?.data?.restaurant_outlet_table_uuid) {
-							setValue('restaurant_outlet_table_uuid', {
-								label: data?.data?.table_number,
-								value: data?.data?.restaurant_outlet_table_uuid,
-							});
-						}
 						if (data?.data?.total_pax > 0) {
 							setValue('total_pax', data?.data?.total_pax.toString());
 						}
@@ -139,93 +125,70 @@ const TransactionSidebar = () => {
 		},
 	});
 
-	useEffect(() => {
-		setTabValueOrder(0);
-		closeShowDeleteOrder();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedTrxId]);
-
 	return (
-		<main className="relative w-[340px] rounded-l-2xl bg-neutral-10">
-			{!selectedTrxId && (
-				<div className="h-full w-full p-6">
-					<p className="text-xxl-bold">Transaction Details</p>
-
-					<div className="flex h-full w-full flex-col items-center justify-center gap-4">
-						<NoOrderIcon />
-						<p className="text-l-medium">There’s no order yet</p>
-					</div>
-				</div>
-			)}
-
+		<main className="relative min-w-[380px] max-w-[380px] h-full rounded-l-2xl bg-neutral-10">
 			{loadTransaction && (
-				<div className="-mt-10 flex h-full w-full items-center justify-center">
+				<div className="flex h-full w-full items-center justify-center">
 					<Loading size={75} />
 				</div>
 			)}
 
-			{selectedTrxId && (
+			{dataTransaction && (
 				<article className="flex h-full flex-col">
-					<section className="h-full px-4 py-6">
-						<TransactionDetails dataTransaction={dataTransaction} />
+					<section className="h-full">
+						<TransactionDetails
+							dataTransaction={dataTransaction}
+							dataOrder={dataOrder}
+						/>
 
-						<div className="h-full overflow-y-auto">
-							<EditTransactionForm methods={methods} />
-
+						<div className="h-full overflow-y-auto p-4">
 							<OrderDetails
 								dataTransaction={dataTransaction}
 								setTabValueOrder={setTabValueOrder}
 								tabValueOrder={tabValueorder}
 								openCreateOrder={openCreateOrder}
-								showDeleteOrder={isShowDeleteOrder}
-								toggleShowDeleteOrder={toggleShowDeleteOrder}
 								dataOrder={dataOrder}
 								loadOrder={loadOrder}
+								openPrintToKitchen={openPrintToKitchen}
 							/>
 						</div>
 					</section>
 
-					<section className="absolute bottom-0 w-full rounded-bl-2xl bg-white p-4 shadow-basic">
-						{isShowDeleteOrder && (
-							<Button
-								variant="secondary"
-								onClick={closeShowDeleteOrder}
-								fullWidth
-							>
-								<p className="whitespace-nowrap text-m-semibold">
-									Back to order details
-								</p>
-							</Button>
-						)}
-						{!isShowDeleteOrder && tabValueorder === 0 && (
+					<section className="absolute bottom-0 w-full rounded-bl-2xl p-4 shadow-basic bg-neutral-10">
+						{tabValueorder === 0 && (
 							<div className="flex gap-2">
-								<Button
-									fullWidth
-									variant="secondary"
-									onClick={() =>
-										getQrCode({
-											transaction_uuid: selectedTrxId,
-										})
-									}
-									isLoading={loadQrCode}
-								>
-									<p className="whitespace-nowrap text-m-semibold">
-										Reprint QR
-									</p>
-								</Button>
-								{dataOrder && dataOrder?.length > 0 && (
+								<Can I="reprint-qrcode" an="transaction">
 									<Button
-										variant="primary"
 										fullWidth
-										onClick={openPrintToKitchen}
-										className="whitespace-nowrap text-m-semibold"
+										variant="secondary"
+										onClick={() =>
+											getQrCode({
+												transaction_uuid: selectedTrxId,
+											})
+										}
+										isLoading={loadQrCode}
 									>
-										Print to kitchen
+										<p className="whitespace-nowrap text-m-semibold">
+											Reprint QR
+										</p>
 									</Button>
+								</Can>
+								{dataOrder && dataOrder?.length > 0 && (
+									<Can I="print_to_kitchen" an="order">
+										<Button
+											variant="primary"
+											fullWidth
+											onClick={openPrintToKitchen}
+											className="whitespace-nowrap text-m-semibold"
+										>
+											Print to Kitchen
+										</Button>
+									</Can>
 								)}
 							</div>
 						)}
-						{!isShowDeleteOrder && tabValueorder === 1 && (
+
+						{tabValueorder === 1 && (
 							<div className="flex gap-2">
 								<Button
 									variant="secondary"
@@ -238,14 +201,16 @@ const TransactionSidebar = () => {
 										<AiOutlinePercentage />
 									</div>
 								</Button>
-								<Button
-									variant="primary"
-									fullWidth
-									onClick={openCreatePayment}
-									className="whitespace-nowrap text-m-semibold"
-								>
-									Payment
-								</Button>
+								<Can I="payment" an="transaction">
+									<Button
+										variant="primary"
+										fullWidth
+										onClick={openCreatePayment}
+										className="whitespace-nowrap text-m-semibold"
+									>
+										Payment
+									</Button>
+								</Can>
 							</div>
 						)}
 					</section>
@@ -281,6 +246,7 @@ const TransactionSidebar = () => {
 					closeCreateOrder={closeCreateOrder}
 					isOpenCreateOrder={isOpenCreateOrder}
 					dataTransaction={dataTransaction}
+					openPrintToKitchen={openPrintToKitchen}
 				/>
 			)}
 

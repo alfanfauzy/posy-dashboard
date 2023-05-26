@@ -10,8 +10,11 @@ export const GetOrdersQueryKey = 'Orders/list' as const;
 const GetOrders = async (
 	input: GetOrdersInput,
 ): Promise<Response<DataList<GetOrdersDataResponse>>> => {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const {transaction_uuid, ...params} = input;
 	const response = await Get({
 		endpoint: `/order-service/order/get-list/${input.transaction_uuid}`,
+		params,
 	});
 
 	return {

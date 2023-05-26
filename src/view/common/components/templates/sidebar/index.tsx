@@ -9,12 +9,9 @@ import {PROTECT_ROUTES} from '@/view/common/config/link';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {
-	onLogout,
-	setRestaurantOutletId,
-	setShowSidebar,
-} from '@/view/common/store/slices/auth';
+import {onLogout, setRestaurantOutletId} from '@/view/common/store/slices/auth';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {Select} from 'antd';
 import dynamic from 'next/dynamic';
@@ -47,7 +44,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 		isSubscription,
 		isLoggedIn,
 		authData: {
-			user_info: {fullname, user_uuid},
+			user_info: {full_name, uuid},
 			token,
 		},
 	} = useAppSelector(state => state.auth);
@@ -73,11 +70,6 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 		}
 	}, [dataOutletSelection, outletId.length]);
 
-	const onCollapse = () => {
-		dispatch(setShowSidebar(collapsed));
-		collapseSidebar();
-	};
-
 	const onChangeOutlet = (e: string) => {
 		dispatch(setRestaurantOutletId(e));
 		dispatch(onChangeSelectedTrxId({id: ''}));
@@ -96,28 +88,33 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 	const handleLogout = () => {
 		logout({
 			token,
-			user_uuid,
+			user_uuid: uuid,
 		});
+	};
+
+	const onCollapseSidebar = () => {
+		collapseSidebar();
+		dispatch(onChangeSelectedTrxId({id: ''}));
 	};
 
 	return (
 		<>
 			<Sidebar
-				defaultCollapsed={width < 1200}
+				defaultCollapsed={width <= 1280}
 				className="relative z-0 h-full overflow-hidden rounded-r-2xl bg-neutral-10"
-				width="250px"
+				width="200px"
 			>
 				<aside
-					className={`flex h-24 w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
-						collapsed ? 'px-6' : 'pl-12 pt-2'
+					className={`flex h-[12%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
+						collapsed ? 'pl-3.5 pt-2' : 'pl-5 pt-2'
 					}`}
 				>
 					{!collapsed ? (
-						<Logo onClick={onCollapse} titleProps="text-xl" />
+						<Logo onClick={onCollapseSidebar} titleProps="text-xl" />
 					) : (
 						<BsList
-							size={28}
-							onClick={onCollapse}
+							size={24}
+							onClick={() => onCollapseSidebar()}
 							className="fill-primary cursor-pointer"
 						/>
 					)}
@@ -128,9 +125,12 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 						dataSubscriptionReminder?.is_show ? 'h-[60%]' : 'h-[70%]'
 					} overflow-y-auto pb-24`}
 				>
-					{PROTECT_ROUTES.map(route => (
-						<Menu key={route.title} item={route} collapse={collapsed} />
-					))}
+					{PROTECT_ROUTES.map(
+						route =>
+							CheckPermission(route.permission) && (
+								<Menu key={route.title} item={route} collapse={collapsed} />
+							),
+					)}
 				</aside>
 
 				<aside className="absolute bottom-0 w-full items-center">
@@ -142,7 +142,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 					<aside
 						className={`w-full ${
 							collapsed ? 'items-center' : 'items-start'
-						} flex h-[140px] flex-col justify-start rounded-t-2xl bg-[#F2F1F9] p-6`}
+						} flex h-[140px] flex-col justify-start rounded-t-md rounded-b-none bg-[#F2F1F9] p-6`}
 					>
 						<div
 							className={`flex items-center gap-2 ${
@@ -150,28 +150,28 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 							}`}
 						>
 							<div>
-								<PersonIcon height={24} width={24} />
+								<PersonIcon height={20} width={20} />
 							</div>
 							{!collapsed && (
-								<div className="text-m-semibold line-clamp-1">{fullname}</div>
+								<div className="text-m-semibold line-clamp-1">{full_name}</div>
 							)}
 						</div>
-						{dataOutletSelection && (
-							<Select
-								className={`mt-2.5 ${collapsed ? 'w-16' : '!w-[164px]'}`}
-								options={outletOpt}
-								value={outletId}
-								onChange={onChangeOutlet}
-								disabled={!isSubscription}
-							/>
-						)}
+
+						<Select
+							className={`mt-2.5 ${collapsed ? 'w-10' : '!w-[164px]'}`}
+							options={outletOpt}
+							value={outletId}
+							onChange={onChangeOutlet}
+							disabled={!isSubscription}
+						/>
+
 						<div
 							role="button"
 							onClick={openLogout}
 							onKeyDown={openLogout}
 							className="mt-2.5 flex cursor-pointer gap-4 hover:opacity-70"
 						>
-							<FiLogOut className="text-neutral-90" size={20} />
+							<FiLogOut className="text-neutral-90" size={18} />
 							{!collapsed && <p className="text-m-regular">Logout</p>}
 						</div>
 					</aside>

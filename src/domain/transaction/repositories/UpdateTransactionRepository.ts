@@ -5,7 +5,7 @@ export type UpdateTransactionInput = {
 	restaurant_outlet_table_uuid: string;
 	transaction_category: number;
 	total_pax: number;
-	customer_name: string;
+	customer_name: string | undefined;
 } & UpdateTransactionInputBased;
 
 export type UpdateTransactionInputBased = {

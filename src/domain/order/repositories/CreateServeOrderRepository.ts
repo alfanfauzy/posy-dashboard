@@ -5,6 +5,7 @@ export type CreateServeOrderInput = {
 	order_uuid: string;
 	order_detail_uuid: string;
 	restaurant_outlet_uuid: string;
+	rollback_to_kitchen?: boolean;
 };
 
 export type ServeOrder = {uuid: string; metadata: Metadata};

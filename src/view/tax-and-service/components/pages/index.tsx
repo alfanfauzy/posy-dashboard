@@ -5,6 +5,7 @@ import {
 } from '@/data/tax/mappers/TaxMapper';
 import {GetTaxQueryKey} from '@/data/tax/sources/GetTaxQuery';
 import {UpdateTax} from '@/domain/tax/repositories/TaxRepository';
+import {useAbility} from '@/view/auth/components/organisms/rbac';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {
@@ -23,6 +24,7 @@ import * as reactHookForm from 'react-hook-form';
 const ViewTaxAndServicePage = () => {
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
+	const ability = useAbility();
 
 	const {
 		register,
@@ -106,6 +108,9 @@ const ViewTaxAndServicePage = () => {
 											name="is_tax"
 											render={({field: {value}}) => (
 												<Toggle
+													disabled={
+														!ability.can('update', 'setting_tax_service')
+													}
 													onChange={() => setValue('is_tax', !value)}
 													value={value}
 												/>
@@ -117,7 +122,10 @@ const ViewTaxAndServicePage = () => {
 											size="m"
 											labelText="Input amount"
 											helperText="Some restaurants may be subject to custom tax percentages that vary depending on their location and other factors."
-											disabled={!watch('is_tax')}
+											disabled={
+												!watch('is_tax') ||
+												!ability.can('update', 'setting_tax_service')
+											}
 											{...register('tax_percentage')}
 											error={!!errors.tax_percentage}
 										/>
@@ -136,6 +144,9 @@ const ViewTaxAndServicePage = () => {
 												<Toggle
 													onChange={() => setValue('is_service_charge', !value)}
 													value={value}
+													disabled={
+														!ability.can('update', 'setting_tax_service')
+													}
 												/>
 											)}
 										/>
@@ -147,7 +158,10 @@ const ViewTaxAndServicePage = () => {
 											helperText="Some restaurants may be subject to custom service percentages that vary depending on their location and other factors."
 											{...register('service_charge_percentage')}
 											error={!!errors.service_charge_percentage}
-											disabled={!watch('is_service_charge')}
+											disabled={
+												!watch('is_service_charge') ||
+												!ability.can('update', 'setting_tax_service')
+											}
 										/>
 									</div>
 								</aside>
@@ -168,12 +182,15 @@ const ViewTaxAndServicePage = () => {
 									}
 									variant="secondary"
 									size="m"
+									disabled={!ability.can('update', 'setting_tax_service')}
 								>
 									Discard
 								</Button>
 								<Button
 									type="submit"
-									disabled={!isValid}
+									disabled={
+										!isValid || !ability.can('update', 'setting_tax_service')
+									}
 									isLoading={loadUpdateTax}
 									variant="primary"
 									size="m"

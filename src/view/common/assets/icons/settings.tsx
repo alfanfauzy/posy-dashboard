@@ -3,8 +3,8 @@ import React from 'react';
 
 export const SettinsIcon = ({
 	stroke = '#404040',
-	width = 24,
-	height = 24,
+	width = 18,
+	height = 18,
 	onClick,
 	className,
 }: IconType) => (

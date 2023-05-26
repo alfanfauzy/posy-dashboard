@@ -5,4 +5,5 @@ export type GetPaymentMethodCategoriesDataResponse = {
 	logo_url: string;
 	priority: number;
 	is_show: boolean;
+	is_integration: boolean;
 };

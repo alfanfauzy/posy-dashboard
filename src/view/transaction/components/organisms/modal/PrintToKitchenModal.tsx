@@ -1,14 +1,15 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
-import {Orders} from '@/domain/order/model';
+import {OrderStatus, Orders} from '@/domain/order/model';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {generateStatusOrder} from '@/view/common/utils/UtilsGenerateOrderStatus';
 import {useCreatePrintOrderToKitchenViewModel} from '@/view/order/view-models/CreatePrintOrderToKitchenViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import {Button, Checkbox} from 'posy-fnb-core';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useReactToPrint} from 'react-to-print';
 
 import PrintToKitchenReceipt from '../receipt/PrintToKitchenReceipt';
@@ -16,6 +17,44 @@ import PrintToKitchenReceipt from '../receipt/PrintToKitchenReceipt';
 const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,
 });
+
+const generateBgColor = (status: OrderStatus) => {
+	switch (status) {
+		case '0':
+			return 'bg-neutral-10';
+		case '1':
+			return 'bg-neutral-10';
+		case '2':
+			return 'bg-[#FFFCF0]';
+		case '3':
+			return 'bg-[#EEFFEF]';
+		case '4':
+			return 'bg-red-caution/10';
+		default:
+			return 'bg-blue-success';
+	}
+};
+
+const generateBorderColor = (status: OrderStatus, isChecked: boolean) => {
+	if (isChecked) {
+		switch (status) {
+			case '0':
+				return 'bg-neutral-10 border-2 border-secondary-main';
+			case '1':
+				return 'bg-neutral-10 border-2 border-secondary-main';
+			case '2':
+				return 'border-2 border-[#C69A00]';
+			case '3':
+				return 'border-2 border-green-success';
+			case '4':
+				return 'bg-red-caution/10 border-2 border-red-caution';
+			default:
+				return 'bg-blue-success border-2 border-secondary-main';
+		}
+	}
+
+	return 'border border-neutral-40';
+};
 
 type PrintToKitchenModalProps = {
 	isOpenPrintToKitchen: boolean;
@@ -32,6 +71,8 @@ const PrintToKitchenModal = ({
 	const {outletId} = useAppSelector(state => state.auth);
 	const {selectedTrxId} = useAppSelector(state => state.transaction);
 
+	const [loading, setLoading] = useState<boolean>(false);
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const printToKitchenRef = useRef<any>();
 
@@ -40,6 +81,11 @@ const PrintToKitchenModal = ({
 	const handlePrintToKitchen = useReactToPrint({
 		content: () => printToKitchenRef.current,
 	});
+
+	const handleClosePrintToKitchen = () => {
+		onClosePrintToKitchen();
+		setSelectedOrder([]);
+	};
 
 	const {
 		createPrintOrderToKitchen,
@@ -51,7 +97,7 @@ const PrintToKitchenModal = ({
 			if (data) {
 				setTimeout(() => {
 					handlePrintToKitchen();
-					onClosePrintToKitchen();
+					handleClosePrintToKitchen();
 				}, 100);
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
@@ -66,27 +112,39 @@ const PrintToKitchenModal = ({
 				createPrintOrderToKitchen({
 					transaction_uuid: selectedTrxId,
 					restaurant_outlet_uuid: outletId,
-					order_uuids: selectedOrder,
+					order_uuids: Array.from(new Set(selectedOrder)),
 				});
 		}
 	};
+
+	useEffect(() => {
+		if (dataOrder) {
+			dataOrder.map(order =>
+				order.status === OrderStatus.ORDER_NEED_TO_PRINT
+					? setSelectedOrder(prev => Array.from(new Set([...prev, order.uuid])))
+					: () => undefined,
+			);
+		}
+	}, [dataOrder]);
 
 	return (
 		<>
 			<Modal
 				open={isOpenPrintToKitchen}
-				handleClose={onClosePrintToKitchen}
+				handleClose={handleClosePrintToKitchen}
 				style={{
 					maxWidth: '40%',
 					width: '80%',
 					padding: 0,
 				}}
+				closeOverlay
 				showCloseButton
+				title="Print to kitchen"
 				confirmButton={
 					<div className="flex w-full items-center justify-center gap-4">
 						<Button
 							variant="secondary"
-							onClick={onClosePrintToKitchen}
+							onClick={handleClosePrintToKitchen}
 							fullWidth
 						>
 							Cancel
@@ -99,55 +157,96 @@ const PrintToKitchenModal = ({
 							disabled={selectedOrder.length === 0}
 							fullWidth
 						>
-							Printed to kitchen
+							Print to kitchen
 						</Button>
 					</div>
 				}
 			>
 				<section className="px-8 pb-2">
-					{dataOrder.map((order, idx) => (
-						<div key={order.uuid} className="my-4 w-full">
-							<div className="flex items-center justify-between text-m-semibold">
-								<p>{`Order ${idx + 1}`}</p>
-								<div className="cursor-pointer">
-									<Checkbox
-										size="m"
-										onChange={() => {
-											if (!selectedOrder.includes(order.uuid))
-												setSelectedOrder(prev => [...prev, order.uuid]);
-											else
-												setSelectedOrder(prev =>
-													prev.filter(item => item !== order.uuid),
-												);
-										}}
-										checked={selectedOrder.includes(order.uuid)}
-									/>
-								</div>
+					{!loading && (
+						<>
+							<div className="mt-4 border border-neutral-40 rounded-lg px-4 py-2">
+								<Checkbox
+									className="w-full"
+									title="Select all"
+									size="m"
+									onChange={() => {
+										setLoading(true);
+										if (selectedOrder.length === dataOrder.length) {
+											setSelectedOrder(() => []);
+											setTimeout(() => {
+												setLoading(false), 100;
+											});
+										} else {
+											setSelectedOrder(() => dataOrder.map(item => item.uuid));
+											setTimeout(() => {
+												setLoading(false), 100;
+											});
+										}
+									}}
+									checked={selectedOrder.length === dataOrder.length}
+								/>
 							</div>
-							<div className="mt-1 w-full">
-								{order.order_detail?.map(orderDetail => (
-									<div
-										key={orderDetail.uuid}
-										className="my-2 flex items-center justify-between"
-									>
-										<p className="text-m-regular">{`${orderDetail.product_name} x${orderDetail.qty}`}</p>
+							{dataOrder.map((order, idx) => (
+								<div
+									onClick={() => {
+										setLoading(true);
+
+										if (!selectedOrder.includes(order.uuid)) {
+											setSelectedOrder(prev => [...prev, order.uuid]);
+											setTimeout(() => {
+												setLoading(false);
+											}, 100);
+										} else {
+											setSelectedOrder(prev =>
+												prev.filter(item => item !== order.uuid),
+											);
+											setTimeout(() => {
+												setLoading(false);
+											}, 100);
+										}
+									}}
+									key={order.uuid}
+									className={`my-4 px-4 pb-4 pt-2  w-full rounded-lg ${generateBorderColor(
+										order.status,
+										selectedOrder.includes(order.uuid),
+									)} ${generateBgColor(order.status)}`}
+								>
+									<div className="flex items-center justify-between text-m-semibold">
+										<div className="cursor-pointer w-full">
+											<Checkbox
+												title={
+													<span className="text-m-bold">
+														{`Order ${idx + 1}`}
+													</span>
+												}
+												size="m"
+												onChange={() => undefined}
+												checked={selectedOrder.includes(order.uuid)}
+											/>
+										</div>
 									</div>
-								))}
-								<div className="flex items-center justify-between">
-									<p className="text-m-regular">status</p>
-									{order.is_printed ? (
-										<p className="text-m-regular text-green-success">
-											Printed to kitchen
-										</p>
-									) : (
-										<p>-</p>
-									)}
+									<div className="mt-1 w-full">
+										<div className="flex items-center justify-between">
+											<p className="text-m-regular">status</p>
+											{generateStatusOrder(order.status)}
+										</div>
+										{order.order_detail?.map(orderDetail => (
+											<div
+												key={orderDetail.uuid}
+												className="my-2 flex items-center justify-between"
+											>
+												<p className="text-m-regular">{`${orderDetail.product_name} x${orderDetail.qty}`}</p>
+											</div>
+										))}
+									</div>
 								</div>
-							</div>
-						</div>
-					))}
+							))}
+						</>
+					)}
 				</section>
 			</Modal>
+
 			{dataPrintToKitchen && (
 				<PrintToKitchenReceipt
 					dataPrintToKitchen={dataPrintToKitchen}

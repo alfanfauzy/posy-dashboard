@@ -4,7 +4,7 @@ import React from 'react';
 export const ProductIcon = ({
 	fill = '#424242',
 	width = 18,
-	height = 22,
+	height = 18,
 	onClick,
 	className,
 }: IconType) => (

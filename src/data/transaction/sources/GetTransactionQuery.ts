@@ -5,8 +5,7 @@ import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 
 import {GetTransactionDataResponse} from '../types';
 
-export const GetTransactionQueryKey = (input?: GetTransactionInput) =>
-	['transactions/detail', input] as const;
+export const GetTransactionQueryKey = ['transactions/detail'] as const;
 
 const GetTransaction = async (
 	input: GetTransactionInput,
@@ -28,7 +27,7 @@ export const useGetTransactionQuery = (
 	options?: UseQueryOptions<Response<GetTransactionDataResponse>>,
 ) =>
 	useQuery<Response<GetTransactionDataResponse>>(
-		GetTransactionQueryKey(input),
+		[GetTransactionQueryKey, input],
 		() => GetTransaction(input),
 		{
 			refetchOnWindowFocus: false,

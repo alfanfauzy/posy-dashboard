@@ -1,5 +1,6 @@
 import {Products} from '@/domain/product/model/ProductOutlet';
 import {Pagination} from '@/domain/vo/BasePagination';
+import {useAbility} from '@/view/auth/components/organisms/rbac';
 import Table from '@/view/common/components/atoms/table';
 import React, {Key} from 'react';
 
@@ -22,6 +23,7 @@ const OrganismsTableProduct = ({
 	loadProduct,
 	pagination,
 }: OrganismsTableProductProps) => {
+	const ability = useAbility();
 	const onSelectChange = (newSelectedRowKeys: Array<Key>) => {
 		setSelectedRowKeys(newSelectedRowKeys);
 	};
@@ -38,7 +40,12 @@ const OrganismsTableProduct = ({
 				dataSource={dataProduct}
 				paginationData={pagination}
 				rowKey={record => record.uuid}
-				rowSelection={rowSelection}
+				rowSelection={
+					ability.can('change_available_product', 'product_outlet') ||
+					ability.can('change_show_product', 'product_outlet')
+						? rowSelection
+						: undefined
+				}
 				scroll={{y: '54vh', x: 1100}}
 				loading={loadProduct}
 			/>

@@ -1,13 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-nested-ternary */
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
+import {QrCode} from '@/domain/qr-code/model';
 import {TransactionStatus} from '@/domain/transaction/model';
+import {Can} from '@/view/auth/components/organisms/rbac';
 import CancelIcon from '@/view/common/assets/icons/cancel';
 import PlusCircleIcon from '@/view/common/assets/icons/plusCircle';
 import FilterChip from '@/view/common/components/atoms/chips/filter-chip';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import {handlePlayAudio} from '@/view/common/components/templates/layout';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
+import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
 	onChangePayment,
@@ -24,8 +28,10 @@ import {closeSnackbar, useSnackbar} from 'notistack';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {useEffect, useRef, useState} from 'react';
 import {AiOutlineFullscreen} from 'react-icons/ai';
+import {useProSidebar} from 'react-pro-sidebar';
 import {useReactToPrint} from 'react-to-print';
 
+import CreateTransactionModal from '../modal/CreateTransactionModal';
 import PrintQrCodeReceipt from '../receipt/PrintQrCodeReceipt';
 
 const generateBorderColor = (
@@ -66,7 +72,11 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
 	);
+	const {collapseSidebar, collapsed} = useProSidebar();
+	const {width} = useViewportListener();
+
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
+	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 
 	const [status, setStatus] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,12 +100,15 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		isLoading: loadCreateTransaction,
 	} = useCreateTransactionViewModel({
 		onSuccess: data => {
+			const dt = data as QrCode;
 			if (data) {
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				setTimeout(() => {
 					handlePrint();
+					setOpenModalTransaction(true);
 				}, 100);
+				dispatch(onChangeSelectedTrxId({id: dt.uuid}));
 			}
 		},
 	});
@@ -108,6 +121,10 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		{
 			limit: 100,
 			page: 1,
+			sort: {
+				field: 'table_number',
+				value: 'asc',
+			},
 			search: [
 				{
 					field: 'status',
@@ -159,6 +176,9 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	};
 
 	const handleSelectTrx = (trxId: string) => {
+		if (width <= 1280) {
+			collapseSidebar(true);
+		}
 		dispatch(onChangeSelectedTrxId({id: trxId}));
 		dispatch(
 			onChangePayment({
@@ -272,9 +292,13 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 		return () => clearInterval(interval);
 	}, [data]);
 
+	const handleCloseModalCreateTransaction = (value: boolean) => {
+		setOpenModalTransaction(value);
+	};
+
 	return (
-		<section className="relative h-full flex-1 flex flex-col md:gap-4 overflow-hidden rounded-2xl bg-neutral-10">
-			<article className="h-fit p-6 pb-0">
+		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-6">
+			<article className="h-fit">
 				<aside className="flex items-start justify-between">
 					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
 						Restaurant Transaction
@@ -295,12 +319,8 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 					</div>
 				)}
 				{dataSummary && (
-					<aside className="mt-4 flex gap-2">
-						<div
-							className={`flex flex-1 overflow-x-auto transition-all duration-500 ease-in-out ${
-								openSearch ? '' : 'gap-2'
-							}`}
-						>
+					<aside className="mt-2 flex gap-2 w-full justify-between">
+						<div className="flex gap-2 max-w-[100px] md:max-w-[285px] lg:max-w-xs xl:max-w-none overflow-auto">
 							<FilterChip
 								label={`Waiting Food: ${dataSummary?.waiting_food}`}
 								openSearch={openSearch}
@@ -331,6 +351,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 								onClick={openTableCapacity}
 							/>
 							<InputSearch
+								isTransaction
 								isOpen={openSearch}
 								open={open}
 								onSearch={onSearch}
@@ -339,22 +360,27 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 							/>
 						</div>
 
-						<div className="w-1/4">
-							<Button
-								onClick={() => handleCreateTransaction(outletId)}
-								size="m"
-								fullWidth
-								variant="primary"
-								isLoading={loadCreateTransaction}
-							>
-								<p className="whitespace-nowrap">+ New Trx</p>
-							</Button>
+						<div className="w-36">
+							<Can I="create" an="transaction">
+								<Button
+									onClick={() => handleCreateTransaction(outletId)}
+									size="m"
+									fullWidth
+									variant="primary"
+									isLoading={loadCreateTransaction}
+									className="!px-0"
+								>
+									<p className="whitespace-nowrap text-s-semibold">
+										+ New transaction
+									</p>
+								</Button>
+							</Can>
 						</div>
 					</aside>
 				)}
 			</article>
 
-			<article className="h-[80%] w-full overflow-y-auto pb-20 px-6">
+			<article className="h-[80%] w-full overflow-y-auto mb-8">
 				{loadData && (
 					<article className="flex h-full items-center justify-center">
 						<Loading size={90} />
@@ -373,7 +399,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 						>
 							<PlusCircleIcon className="cursor-pointer transition-all duration-300 ease-in-out hover:opacity-60" />
 							<p className="cursor-pointer text-l-medium text-neutral-60 transition-all duration-300 ease-in-out hover:opacity-60">
-								Create New Transaction
+								Create new transaction
 							</p>
 						</div>
 					</article>
@@ -383,7 +409,15 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 						className={`${
 							data.length === 0
 								? 'flex items-center justify-center bg-neutral-20'
-								: 'grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+								: `grid gap-3 ${
+										width > 1280 && !collapsed
+											? 'grid-cols-5'
+											: width > 1280 && collapsed
+											? 'grid-cols-6'
+											: selectedTrxId?.length > 0 && width <= 1280
+											? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+											: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
+								  }`
 						}`}
 					>
 						{data.length > 0 &&
@@ -421,7 +455,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				)}
 			</article>
 
-			<article className="absolute bottom-0 p-5 flex w-full gap-4 bg-white">
+			<article className="absolute bottom-0 py-3 flex w-[91%] gap-4 border-t">
 				<div className="flex items-center gap-1">
 					<div className="h-[13.3px] w-[13.3px] rounded-full border-[3px] border-blue-success" />
 					<p className="text-s-semibold">Waiting Food</p>
@@ -440,6 +474,13 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 
 			{dataQr && <PrintQrCodeReceipt data={dataQr} printReceiptRef={qrRef} />}
 			<audio ref={audioRef} src="/sounds/notif.mp3" />
+
+			{openModalTransaction && (
+				<CreateTransactionModal
+					open={openModalTransaction}
+					handleClose={handleCloseModalCreateTransaction}
+				/>
+			)}
 		</section>
 	);
 };

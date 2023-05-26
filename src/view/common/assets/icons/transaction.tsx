@@ -3,8 +3,8 @@ import React from 'react';
 
 export const TransactionIcon = ({
 	fill = '#424242',
-	width = 24,
-	height = 24,
+	width = 20,
+	height = 20,
 	onClick,
 	className,
 }: IconType) => (
