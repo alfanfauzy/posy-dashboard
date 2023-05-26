@@ -217,6 +217,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 								onClick={openTableCapacity}
 							/>
 							<InputSearch
+								isTransaction
 								isOpen={openSearch}
 								open={open}
 								onSearch={onSearch}

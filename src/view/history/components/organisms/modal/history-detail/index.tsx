@@ -52,6 +52,7 @@ const HistoryDetailModal = ({
 	const {data: dataOrder, isLoading: loadDataorder} = useGetOrdersViewModel(
 		{
 			transaction_uuid: record && record?.uuid,
+			show_cancel: true,
 		},
 		{
 			enabled: !!record,

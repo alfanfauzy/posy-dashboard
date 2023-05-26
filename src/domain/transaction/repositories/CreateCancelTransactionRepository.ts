@@ -4,6 +4,8 @@ import {ResultMutation} from '@/domain/vo/BaseResponse';
 export type CreateCancelTransactionInput = {
 	transaction_uuid: string;
 	restaurant_outlet_uuid: string;
+	cancel_reason?: string;
+	cancel_reason_other?: string;
 };
 
 export type CancelTransaction = {uuid: string; metadata: Metadata};

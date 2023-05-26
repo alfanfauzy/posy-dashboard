@@ -3,6 +3,7 @@ import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTrans
 import {OrderStatus, Orders} from '@/domain/order/model';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {generateStatusOrder} from '@/view/common/utils/UtilsGenerateOrderStatus';
 import {useCreatePrintOrderToKitchenViewModel} from '@/view/order/view-models/CreatePrintOrderToKitchenViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
@@ -10,7 +11,6 @@ import {Button, Checkbox} from 'posy-fnb-core';
 import React, {useEffect, useRef, useState} from 'react';
 import {useReactToPrint} from 'react-to-print';
 
-import {generateStatusOrder} from '../order-details';
 import PrintToKitchenReceipt from '../receipt/PrintToKitchenReceipt';
 
 const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {

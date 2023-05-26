@@ -120,7 +120,9 @@ const PrintBillReceipt = ({data, printReceiptRef}: PrintBillReceiptProps) => {
 									</p>
 								</div>
 								<div className="flex justify-between pb-2">
-									<p className="text-m-regular">PB 1</p>
+									<p className="text-m-regular">
+										PB1 {data.payment_summary.tax_and_charge.tax_percentage}%
+									</p>
 									<p className="text-m-regular">
 										{toRupiah(data.payment_summary.tax_and_charge.tax_price)}
 									</p>

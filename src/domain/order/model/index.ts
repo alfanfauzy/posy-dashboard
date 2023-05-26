@@ -63,6 +63,7 @@ type OrderBased = {
 	first_print_at: number;
 	metadata: Metadata;
 	order_detail: Array<OrderDetail>;
+	order_number: string;
 };
 
 export type Order = OrderBased;

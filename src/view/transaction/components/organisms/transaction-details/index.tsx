@@ -1,3 +1,4 @@
+import {Orders} from '@/domain/order/model';
 import {Transaction} from '@/domain/transaction/model';
 import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import CountUpTimer from '@/view/common/components/atoms/countup';
@@ -10,14 +11,19 @@ import {CgTrash} from 'react-icons/cg';
 import {FiEdit} from 'react-icons/fi';
 import {IoIosArrowDown, IoIosArrowUp} from 'react-icons/io';
 
+import CancelOrderBottomsheet from '../cancel-order/CancelOrderBottomsheet';
 import CancelTransactionModal from '../modal/CancelTransactionModal';
 import CreateTransactionModal from '../modal/CreateTransactionModal';
 
 type TransactionDetailsProps = {
 	dataTransaction: Transaction | undefined;
+	dataOrder: Orders | undefined;
 };
 
-const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
+const TransactionDetails = ({
+	dataTransaction,
+	dataOrder,
+}: TransactionDetailsProps) => {
 	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 	const {outletId} = useAppSelector(state => state.auth);
 	const [
@@ -25,6 +31,9 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 		{open: openCancelTransaction, close: closeCancelTransaction},
 		{valueState, setValueState},
 	] = useDisclosure<CreateCancelTransactionInput>({initialState: false});
+
+	const [isOpenCancelOrder, {open: openCancelOrder, close: closeCancelOrder}] =
+		useDisclosure({initialState: false});
 
 	const [isOpenTransactionDetail, {toggle: toggleTransactionDetail}] =
 		useDisclosure({
@@ -61,11 +70,14 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 							<CgTrash
 								className="cursor-pointer text-neutral-10"
 								size={20}
-								onClick={() =>
-									onOpenCancelTransaction({
-										restaurant_outlet_uuid: outletId,
-										transaction_uuid: dataTransaction.uuid,
-									})
+								onClick={
+									dataTransaction.total_order > 0
+										? () => openCancelOrder()
+										: () =>
+												onOpenCancelTransaction({
+													restaurant_outlet_uuid: outletId,
+													transaction_uuid: dataTransaction.uuid,
+												})
 								}
 							/>
 						</div>
@@ -135,7 +147,6 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 					</div>
 				)}
 			</aside>
-
 			{isOpenCancelTransaction && (
 				<CancelTransactionModal
 					isOpen={isOpenCancelTransaction}
@@ -143,7 +154,6 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 					value={valueState}
 				/>
 			)}
-
 			{openModalTransaction && (
 				<CreateTransactionModal
 					open={openModalTransaction}
@@ -152,6 +162,13 @@ const TransactionDetails = ({dataTransaction}: TransactionDetailsProps) => {
 					dataTransaction={dataTransaction}
 				/>
 			)}
+
+			<CancelOrderBottomsheet
+				dataOrder={dataOrder}
+				closeCancelOrder={closeCancelOrder}
+				isOpenCancelOrder={isOpenCancelOrder}
+				dataTransaction={dataTransaction}
+			/>
 		</section>
 	);
 };

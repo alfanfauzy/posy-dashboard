@@ -10,7 +10,7 @@ const CreateCancelOrder = async (
 	input: CreateCancelOrderInput,
 ): Promise<Response<CreateCancelOrderDataResponse>> => {
 	const response = await Post({
-		endpoint: `/order-service/order/cancel/${input.order_uuid}`,
+		endpoint: `/order-service/v2/order/cancel`,
 		data: input,
 	});
 

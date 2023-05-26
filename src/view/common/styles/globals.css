@@ -72,7 +72,7 @@ thead > tr > th {
 }
 
 :where(.ant-checkbox-checked .ant-checkbox-inner) {
-	background-color: #404040 !important;
+	background-color: #654de4 !important;
 	border-color: #c2c2c2 !important;
 }
 
@@ -89,7 +89,7 @@ thead > tr > th {
 
 .ant-checkbox-indeterminate .ant-checkbox-inner:after {
 	border: 2px solid #404040;
-	background-color: #404040;
+	background-color: #654de4;
 }
 
 .ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover

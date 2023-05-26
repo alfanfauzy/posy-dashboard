@@ -169,6 +169,12 @@ const CreateTransactionModal = ({
 			</div>
 			{watch('transaction_category.value') === 0 && (
 				<div className="bg-gradient-to-r from-[#CBC7DD] to-neutral-10 mx-auto p-4 max-h-[300px] overflow-auto">
+					<Input
+						size="m"
+						className="hidden"
+						{...register('restaurant_outlet_table_uuid')}
+						error={!!errors.restaurant_outlet_table_uuid}
+					/>
 					<TableTransactionGridView
 						orderType={watch('transaction_category.value')}
 						methods={methods}

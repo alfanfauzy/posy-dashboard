@@ -1,7 +1,6 @@
 import {QrCode} from '@/domain/qr-code/model';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {Can} from '@/view/auth/components/organisms/rbac';
-// import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import useClickOutside from '@/view/common/hooks/useClickOutside';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
@@ -19,7 +18,6 @@ import React, {useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
 import {useReactToPrint} from 'react-to-print';
 
-// import EditTransactionForm from '../../organisms/form/EditTransactionForm';
 import ApplyDiscountModal from '../../organisms/modal/ApplyDiscountModal';
 import CreatePaymentModal from '../../organisms/modal/CreatePaymentModal';
 import PaymentConfirmationModal from '../../organisms/modal/PaymentConfirmationModal';
@@ -47,13 +45,6 @@ const TransactionSidebar = () => {
 		isOpenPrintToKitchen,
 		{open: openPrintToKitchen, close: closePrintToKitchen},
 	] = useDisclosure({initialState: false});
-
-	// const [
-	// 	showDeleteOrder,
-	// 	{toggle: toggleShowDeleteOrder, close: closeDeleteOrder},
-	// ] = useDisclosure({
-	// 	initialState: false,
-	// });
 
 	const [
 		isOpenCreatePayment,
@@ -162,21 +153,7 @@ const TransactionSidebar = () => {
 	});
 
 	return (
-		<main
-			// ref={divRef}
-			className="relative min-w-[380px] max-w-[380px] h-full rounded-l-2xl bg-neutral-10"
-		>
-			{/* {!selectedTrxId && (
-				<div className="h-full w-full p-6">
-					<p className="text-xxl-bold">Transaction Details</p>
-
-					<div className="flex h-full w-full flex-col items-center justify-center gap-4">
-						<NoOrderIcon />
-						<p className="text-l-medium">There’s no order yet</p>
-					</div>
-				</div>
-			)} */}
-
+		<main className="relative min-w-[380px] max-w-[380px] h-full rounded-l-2xl bg-neutral-10">
 			{loadTransaction && (
 				<div className="flex h-full w-full items-center justify-center">
 					<Loading size={75} />
@@ -186,18 +163,17 @@ const TransactionSidebar = () => {
 			{dataTransaction && (
 				<article className="flex h-full flex-col">
 					<section className="h-full">
-						<TransactionDetails dataTransaction={dataTransaction} />
+						<TransactionDetails
+							dataTransaction={dataTransaction}
+							dataOrder={dataOrder}
+						/>
 
 						<div className="h-full overflow-y-auto p-4">
-							{/* <EditTransactionForm methods={methods} /> */}
-
 							<OrderDetails
 								dataTransaction={dataTransaction}
 								setTabValueOrder={setTabValueOrder}
 								tabValueOrder={tabValueorder}
 								openCreateOrder={openCreateOrder}
-								// showDeleteOrder={showDeleteOrder}
-								// toggleShowDeleteOrder={toggleShowDeleteOrder}
 								dataOrder={dataOrder}
 								loadOrder={loadOrder}
 								openPrintToKitchen={openPrintToKitchen}
@@ -206,13 +182,6 @@ const TransactionSidebar = () => {
 					</section>
 
 					<section className="absolute bottom-0 w-full rounded-bl-2xl p-4 shadow-basic bg-neutral-10">
-						{/* {showDeleteOrder && (
-							<Button variant="secondary" onClick={closeDeleteOrder} fullWidth>
-								<p className="whitespace-nowrap text-m-semibold">
-									Back to order details
-								</p>
-							</Button>
-						)} */}
 						{tabValueorder === 0 && (
 							<div className="flex gap-2">
 								<Can I="reprint-qrcode" an="transaction">

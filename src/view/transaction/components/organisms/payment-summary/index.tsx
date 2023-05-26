@@ -2,11 +2,10 @@ import {Orders} from '@/domain/order/model';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangePayment} from '@/view/common/store/slices/transaction';
 import {toRupiah} from '@/view/common/utils/common';
+import {generateStatusOrder} from '@/view/common/utils/UtilsGenerateOrderStatus';
 import {useGetPaymentSummaryViewModel} from '@/view/transaction/view-models/GetPaymentSummaryViewModel';
 import {Loading} from 'posy-fnb-core';
 import React from 'react';
-
-import {generateStatusOrder} from '../order-details';
 
 type PaymentSummaryProps = {
 	dataOrder: Orders;
@@ -45,10 +44,10 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 
 	return (
 		<div className="mb-20">
-			{dataOrder.map((order, idx) => (
+			{dataOrder.map(order => (
 				<div key={order.uuid} className="my-4 w-full">
 					<div className="flex items-center justify-between text-m-semibold">
-						<p>{`Order ${idx + 1}`}</p>
+						<p>{`Order ${order.order_number}`}</p>
 						{generateStatusOrder(order.status)}
 					</div>
 					<div className="mt-2 flex w-full flex-col gap-2">
@@ -89,7 +88,7 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 						<p>{toRupiah(dataPayment.tax_and_charge.service_charge_price)}</p>
 					</div>
 					<div className="flex items-center justify-between text-m-medium">
-						<p>PB1</p>
+						<p>PB1 {dataPayment.tax_and_charge.tax_percentage}%</p>
 						<p>{toRupiah(dataPayment.tax_and_charge.tax_price)}</p>
 					</div>
 					<div className="flex items-center justify-between text-l-semibold">

@@ -4,6 +4,8 @@ import {
 	CancelTransaction,
 	CreateCancelTransactionInput,
 } from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
+import {useAppDispatch} from '@/view/common/store/hooks';
+import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
@@ -25,6 +27,7 @@ const CancelTransactionModal = ({
 	close,
 	value,
 }: CancelTransactionModalProps) => {
+	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 
 	const {createCancelTransaction, isLoading} =
@@ -34,6 +37,7 @@ const CancelTransactionModal = ({
 				if (data) {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+					dispatch(onChangeSelectedTrxId({id: ''}));
 					close();
 				}
 			},
@@ -53,7 +57,7 @@ const CancelTransactionModal = ({
 			<section className="flex w-[380px] flex-col items-center justify-center p-4">
 				<div className="px-16">
 					<p className="text-center text-l-semibold line-clamp-2">
-						Are you sure you want to delete this transaction?
+						Are you sure you want to cancel this transaction?
 					</p>
 				</div>
 				<div className="mt-8 flex w-full gap-3">
@@ -64,7 +68,7 @@ const CancelTransactionModal = ({
 						onClick={close}
 						className="whitespace-nowrap"
 					>
-						No, Maybe Later
+						No
 					</Button>
 					<Button
 						isLoading={isLoading}
@@ -73,7 +77,7 @@ const CancelTransactionModal = ({
 						fullWidth
 						onClick={onCancelTransaction}
 					>
-						Delete Trx
+						Yes
 					</Button>
 				</div>
 			</section>

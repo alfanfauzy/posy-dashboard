@@ -1,7 +1,11 @@
 import {Orders} from '@/domain/order/model';
-import {CancelOrder} from '@/domain/order/repositories/CreateCancelOrderRepository';
+import {
+	CancelOrder,
+	CreateCancelOrderInput,
+} from '@/domain/order/repositories/CreateCancelOrderRepository';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {Metadata} from '@/domain/vo/BaseMetadata';
+import {ValidationSchemaCancelOrderType} from '@/view/transaction/schemas/cancel-order';
 
 import {CreateOrderManualDataResponse, GetOrdersDataResponse} from '../types';
 import {CreateCancelOrderDataResponse} from '../types/CreateCancelOrderType';
@@ -28,6 +32,7 @@ export const mapToOrdersModel = (datas: Array<GetOrdersDataResponse>): Orders =>
 			created_at: data.metadata.created_at.seconds,
 		},
 		order_detail: data.order_detail,
+		order_number: data.order_number,
 	}));
 
 export const mapToCreateOrderManualModel = (
@@ -65,4 +70,25 @@ export const mapToCreateCancelOrderModel = (
 	metadata: {
 		updated_at: data.metadata.updated_at.seconds,
 	},
+});
+
+export const mapToCreateCancelOrderPayload = (
+	transaction_uuid: string,
+	restaurant_outlet_uuid: string,
+	payload: ValidationSchemaCancelOrderType,
+): CreateCancelOrderInput => ({
+	transaction_uuid,
+	restaurant_outlet_uuid,
+	order: payload.order
+		.filter(order => order.uuid && order.uuid !== '')
+		.map(order => ({
+			uuid: order.uuid,
+			order_detail: order.order_detail
+				.filter(detail => detail.uuid && detail.uuid !== '')
+				.map(orderDetail => ({
+					uuid: orderDetail.uuid,
+					cancel_reason_status: orderDetail.cancel_reason_status,
+					cancel_reason_other: orderDetail.cancel_reason_other,
+				})),
+		})),
 });
