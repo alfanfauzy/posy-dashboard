@@ -28,10 +28,10 @@ variables: &build_variables
   NEXT_PUBLIC_API_PROD: $NEXT_PUBLIC_API_PROD
   NEXT_APP_NAME: $NEXT_APP_NAME
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
-  NEXT_APP_VAPID_KEY_STAGE: $NEXT_APP_VAPID_KEY_STAGE
-  NEXT_APP_API_KEY_STAGE: $NEXT_APP_API_KEY_STAGE
-  NEXT_APP_VAPID_KEY_PROD: $NEXT_APP_VAPID_KEY_PROD
-  NEXT_APP_API_KEY_PROD: $NEXT_APP_API_KEY_PROD
+  NEXT_PUBLIC_VAPID_KEY_STAGE: $NEXT_PUBLIC_VAPID_KEY_STAGE
+  NEXT_PUBLIC_API_KEY_STAGE: $NEXT_PUBLIC_API_KEY_STAGE
+  NEXT_PUBLIC_VAPID_KEY_PROD: $NEXT_PUBLIC_VAPID_KEY_PROD
+  NEXT_PUBLIC_API_KEY_PROD: $NEXT_PUBLIC_API_KEY_PROD
 
 test:
   stage: test
@@ -95,14 +95,14 @@ build_image:
     - npm install -g yarn
   script:
     - export NEXT_PUBLIC_API=$NEXT_PUBLIC_API
-    - export NEXT_APP_VAPID_KEY=$NEXT_APP_VAPID_KEY_STAGE
-    - export NEXT_APP_API_KEY=$NEXT_APP_API_KEY_STAGE
-    - export NEXT_APP_AUTH_DOMAIN='posy-fnb-staging.firebaseapp.com'
-    - export NEXT_APP_PROJECT_ID='posy-fnb-staging'
-    - export NEXT_APP_STORAGE_BUCKET='posy-fnb-staging.appspot.com'
-    - export NEXT_APP_MESSAGING_SENDER_ID='408454494774'
-    - export NEXT_APP_APP_ID='1:408454494774:web:5e6a6cd83b335f0cf6f697'
-    - export NEXT_APP_MEASUREMENT_ID='G-KSJER3D771'
+    - export NEXT_PUBLIC_VAPID_KEY=$NEXT_PUBLIC_VAPID_KEY_STAGE
+    - export NEXT_PUBLIC_API_KEY=$NEXT_PUBLIC_API_KEY_STAGE
+    - export NEXT_PUBLIC_AUTH_DOMAIN='posy-fnb-staging.firebaseapp.com'
+    - export NEXT_PUBLIC_PROJECT_ID='posy-fnb-staging'
+    - export NEXT_PUBLIC_STORAGE_BUCKET='posy-fnb-staging.appspot.com'
+    - export NEXT_PUBLIC_MESSAGING_SENDER_ID='408454494774'
+    - export NEXT_PUBLIC_APP_ID='1:408454494774:web:5e6a6cd83b335f0cf6f697'
+    - export NEXT_PUBLIC_MEASUREMENT_ID='G-KSJER3D771'
     - |
       if [ "$CI_COMMIT_BRANCH" != master ]; then
         export IMAGE_TAG=dev-$CI_COMMIT_SHORT_SHA
@@ -116,14 +116,14 @@ build_image:
         --build-arg IMG_NAME="$DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME" \
         --build-arg NEXT_APP_NAME="$NEXT_APP_NAME" \
         --build-arg NEXT_PUBLIC_API="$NEXT_PUBLIC_API" \
-        --build-arg NEXT_APP_VAPID_KEY=$NEXT_APP_VAPID_KEY \
-        --build-arg NEXT_APP_API_KEY=$NEXT_APP_API_KEY \
-        --build-arg NEXT_APP_AUTH_DOMAIN='posy-fnb-staging.firebaseapp.com' \
-        --build-arg NEXT_APP_PROJECT_ID='posy-fnb-staging' \
-        --build-arg NEXT_APP_STORAGE_BUCKET='posy-fnb-staging.appspot.com' \
-        --build-arg NEXT_APP_MESSAGING_SENDER_ID='408454494774' \
-        --build-arg NEXT_APP_APP_ID='1:408454494774:web:5e6a6cd83b335f0cf6f697' \
-        --build-arg NEXT_APP_MEASUREMENT_ID='G-KSJER3D771' \
+        --build-arg NEXT_PUBLIC_VAPID_KEY=$NEXT_PUBLIC_VAPID_KEY \
+        --build-arg NEXT_PUBLIC_API_KEY=$NEXT_PUBLIC_API_KEY \
+        --build-arg NEXT_PUBLIC_AUTH_DOMAIN='posy-fnb-staging.firebaseapp.com' \
+        --build-arg NEXT_PUBLIC_PROJECT_ID='posy-fnb-staging' \
+        --build-arg NEXT_PUBLIC_STORAGE_BUCKET='posy-fnb-staging.appspot.com' \
+        --build-arg NEXT_PUBLIC_MESSAGING_SENDER_ID='408454494774' \
+        --build-arg NEXT_PUBLIC_APP_ID='1:408454494774:web:5e6a6cd83b335f0cf6f697' \
+        --build-arg NEXT_PUBLIC_MEASUREMENT_ID='G-KSJER3D771' \
         $DOCKER_BUILD_OPTS \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$IMAGE_TAG \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:latest \
@@ -158,14 +158,14 @@ build_image_tagged:
     - npm install -g yarn
   script:
     - export NEXT_PUBLIC_API=$NEXT_PUBLIC_API_PROD
-    - export NEXT_APP_VAPID_KEY=$NEXT_APP_VAPID_KEY_PROD
-    - export NEXT_APP_API_KEY=$NEXT_APP_API_KEY_PROD
-    - export NEXT_APP_AUTH_DOMAIN='posy-fnb-production.firebaseapp.com'
-    - export NEXT_APP_PROJECT_ID='posy-fnb-production'
-    - export NEXT_APP_STORAGE_BUCKET='posy-fnb-production.appspot.com'
-    - export NEXT_APP_MESSAGING_SENDER_ID='594396546324'
-    - export NEXT_APP_APP_ID='1:594396546324:web:b0aae5c38ab315d89a6e01'
-    - export NEXT_APP_MEASUREMENT_ID='G-6R76EC7B7Z'
+    - export NEXT_PUBLIC_VAPID_KEY=$NEXT_PUBLIC_VAPID_KEY_PROD
+    - export NEXT_PUBLIC_API_KEY=$NEXT_PUBLIC_API_KEY_PROD
+    - export NEXT_PUBLIC_AUTH_DOMAIN='posy-fnb-production.firebaseapp.com'
+    - export NEXT_PUBLIC_PROJECT_ID='posy-fnb-production'
+    - export NEXT_PUBLIC_STORAGE_BUCKET='posy-fnb-production.appspot.com'
+    - export NEXT_PUBLIC_MESSAGING_SENDER_ID='594396546324'
+    - export NEXT_PUBLIC_APP_ID='1:594396546324:web:b0aae5c38ab315d89a6e01'
+    - export NEXT_PUBLIC_MEASUREMENT_ID='G-6R76EC7B7Z'
     - |
       docker build --progress=plain \
         --build-arg GIT_REPO="$CI_PROJECT_URL" \
@@ -174,14 +174,14 @@ build_image_tagged:
         --build-arg IMG_NAME="$DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME" \
         --build-arg NEXT_APP_NAME="$NEXT_APP_NAME" \
         --build-arg NEXT_PUBLIC_API="$NEXT_PUBLIC_API" \
-        --build-arg NEXT_APP_VAPID_KEY=$NEXT_APP_VAPID_KEY \
-        --build-arg NEXT_APP_API_KEY=$NEXT_APP_API_KEY \
-        --build-arg NEXT_APP_AUTH_DOMAIN='posy-fnb-production.firebaseapp.com' \
-        --build-arg NEXT_APP_PROJECT_ID='posy-fnb-production' \
-        --build-arg NEXT_APP_STORAGE_BUCKET='posy-fnb-production.appspot.com' \
-        --build-arg NEXT_APP_MESSAGING_SENDER_ID='594396546324' \
-        --build-arg NEXT_APP_APP_ID='1:594396546324:web:b0aae5c38ab315d89a6e01' \
-        --build-arg NEXT_APP_MEASUREMENT_ID='G-6R76EC7B7Z' \
+        --build-arg NEXT_PUBLIC_VAPID_KEY=$NEXT_PUBLIC_VAPID_KEY \
+        --build-arg NEXT_PUBLIC_API_KEY=$NEXT_PUBLIC_API_KEY \
+        --build-arg NEXT_PUBLIC_AUTH_DOMAIN='posy-fnb-production.firebaseapp.com' \
+        --build-arg NEXT_PUBLIC_PROJECT_ID='posy-fnb-production' \
+        --build-arg NEXT_PUBLIC_STORAGE_BUCKET='posy-fnb-production.appspot.com' \
+        --build-arg NEXT_PUBLIC_MESSAGING_SENDER_ID='594396546324' \
+        --build-arg NEXT_PUBLIC_APP_ID='1:594396546324:web:b0aae5c38ab315d89a6e01' \
+        --build-arg NEXT_PUBLIC_MEASUREMENT_ID='G-6R76EC7B7Z' \
         $DOCKER_BUILD_OPTS \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$IMAGE_TAG \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:latest \

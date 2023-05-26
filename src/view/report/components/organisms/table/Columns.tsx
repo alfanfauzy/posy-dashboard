@@ -102,8 +102,8 @@ const defCol = ({
 		title: 'Outlet',
 		dataIndex: 'restaurant_outlet_name',
 		key: 'restaurant_outlet_name',
-		width: 120,
-		render: text => <p className="whitespace-nowrap text-m-regular">{text}</p>,
+		width: 150,
+		render: text => <p className="text-m-regular break-words">{text}</p>,
 	},
 	{
 		title: 'Transaction start',

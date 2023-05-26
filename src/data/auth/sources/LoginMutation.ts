@@ -9,9 +9,16 @@ import {LoginDataResponse} from '../types';
 const Login = async (
 	input: LoginInput,
 ): Promise<Response<LoginDataResponse>> => {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const {notif_token, ...data} = input;
+
 	const response = await Post({
 		endpoint: `/user-service/v1/user/login`,
-		data: input,
+		data,
+		headers: {
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			'Notification-Token': input.notif_token,
+		},
 	});
 
 	return {

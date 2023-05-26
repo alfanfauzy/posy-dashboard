@@ -123,7 +123,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 				<aside
 					className={`${
 						dataSubscriptionReminder?.is_show ? 'h-[60%]' : 'h-[70%]'
-					} overflow-y-auto pb-6`}
+					} overflow-y-auto pb-24`}
 				>
 					{PROTECT_ROUTES.map(
 						route =>

@@ -1,4 +1,5 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {OrderStatus, Orders} from '@/domain/order/model';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
@@ -100,6 +101,7 @@ const PrintToKitchenModal = ({
 				}, 100);
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 			}
 		},
 	});
@@ -148,6 +150,7 @@ const PrintToKitchenModal = ({
 							Cancel
 						</Button>
 						<Button
+							className="whitespace-nowrap"
 							variant="primary"
 							onClick={onPrintToKitchen}
 							isLoading={loadPrintToKitchen}

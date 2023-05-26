@@ -6,15 +6,17 @@ import {
 } from '@/view/auth/schemas';
 import {useLoginViewModel} from '@/view/auth/view-models/LoginViewModel';
 import Logo from '@/view/common/components/atoms/logo';
+import firebaseApp from '@/view/common/config/firebase';
 import {whatsapp} from '@/view/common/constants/contact';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {onLoginSuccess} from '@/view/common/store/slices/auth';
+import {getMessaging, getToken} from 'firebase/messaging';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {Button, Input} from 'posy-fnb-core';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import * as reactHookForm from 'react-hook-form';
 import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 import {IoIosAlert} from 'react-icons/io';
@@ -23,6 +25,7 @@ const OrganismsFormLogin = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const [showPassword, {toggle}] = useDisclosure({initialState: false});
+	const [notifToken, setNotifToken] = useState<string>('');
 
 	const {
 		register,
@@ -64,10 +67,32 @@ const OrganismsFormLogin = () => {
 		},
 	});
 
+	useEffect(() => {
+		const message = getMessaging(firebaseApp);
+		console.log(process.env.NEXT_PUBLIC_VAPID_KEY);
+
+		getToken(message, {
+			vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
+		})
+			.then(currentToken => {
+				if (currentToken) {
+					setNotifToken(currentToken);
+				} else {
+					// Show permission request.
+					console.log(
+						'No registration token available. Request permission to generate one.',
+					);
+				}
+			})
+			.catch(err => {
+				console.log('An error occurred while retrieving token. ', err);
+			});
+	}, []);
+
 	const onSubmit: reactHookForm.SubmitHandler<
 		ValidationSchemaLoginType
 	> = form => {
-		login(form);
+		login({...form, notif_token: notifToken});
 	};
 
 	return (

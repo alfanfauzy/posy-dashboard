@@ -41,11 +41,11 @@ export const HistoryTablecolumns = ({
 	},
 	{
 		title: 'Date',
-		dataIndex: 'created_at',
+		dataIndex: 'paid_at',
 		key: 'date',
 		render: (_, record) => (
 			<p className="whitespace-nowrap text-m-regular">
-				{dateFormatter(record.created_at || 0, 'dd MMM, HH:mm')}
+				{dateFormatter(record.paid_at || 0, 'dd MMM, HH:mm')}
 			</p>
 		),
 	},
@@ -61,6 +61,7 @@ export const HistoryTablecolumns = ({
 		title: <p className="whitespace-nowrap">Total order</p>,
 		dataIndex: 'total_order',
 		key: 'total_order',
+		align: 'center',
 		render: text => <p className="whitespace-nowrap text-m-regular">{text}</p>,
 	},
 	{

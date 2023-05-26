@@ -1,14 +1,9 @@
 import {QrCode} from '@/domain/qr-code/model';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {Can} from '@/view/auth/components/organisms/rbac';
-import useClickOutside from '@/view/common/hooks/useClickOutside';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
-import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {
-	onChangePayment,
-	onChangeSelectedTrxId,
-} from '@/view/common/store/slices/transaction';
+import {useAppSelector} from '@/view/common/store/hooks';
 import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
 import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/update-transaction';
 import {useGetQrCodeViewModel} from '@/view/transaction/view-models/GetQrCodeViewModel';
@@ -28,7 +23,6 @@ import TransactionDetails from '../../organisms/transaction-details';
 import ManualSubmitOrder from '../manual-order';
 
 const TransactionSidebar = () => {
-	const dispatch = useAppDispatch();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const qrRef = useRef<any>();
 	const {
@@ -128,27 +122,6 @@ const TransactionSidebar = () => {
 					handlePrintQr();
 				}, 100);
 			}
-		},
-	});
-
-	const handleSelectTrx = (trxId: string) => {
-		dispatch(onChangeSelectedTrxId({id: trxId}));
-		dispatch(
-			onChangePayment({
-				payment: {
-					discount_percentage: 0,
-					subtotal: 0,
-					total: 0,
-				},
-			}),
-		);
-	};
-
-	const divRef = useRef(null);
-	useClickOutside({
-		ref: divRef,
-		handleClick: () => {
-			handleSelectTrx('');
 		},
 	});
 

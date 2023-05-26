@@ -7,6 +7,7 @@ enum TransactionStatus {
 	WAITING_FOOD = 'WAITING_FOOD',
 	PAID = 'PAID',
 	CANCELLED = 'CANCELLED',
+	REFUND = 'REFUND',
 }
 
 enum TransactionCategory {
@@ -66,6 +67,7 @@ type GetTransactionsDataResponseBased = {
 	cashier_by: string;
 	served_by: string;
 	time_spent: number;
+	need_print_to_kitchen: boolean;
 };
 
 export type GetTransactionsDataResponse = GetTransactionsDataResponseBased;

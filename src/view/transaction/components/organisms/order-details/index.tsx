@@ -1,4 +1,5 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {OrderDetailStatus, OrderStatus, Orders} from '@/domain/order/model';
 import {ServeOrder} from '@/domain/order/repositories/CreateServeOrderRepository';
@@ -44,6 +45,7 @@ const OrderDetails = ({
 			if (data) {
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 			}
 		},
 	});

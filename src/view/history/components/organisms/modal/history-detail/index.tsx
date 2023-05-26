@@ -1,4 +1,4 @@
-import {Transaction} from '@/domain/transaction/model';
+import {Transaction, TransactionStatus} from '@/domain/transaction/model';
 import {Can} from '@/view/auth/components/organisms/rbac';
 import {toRupiah} from '@/view/common/utils/common';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
@@ -105,15 +105,17 @@ const HistoryDetailModal = ({
 				confirmButton={
 					dataOrder && dataTransaction ? (
 						<div className="mx-4 flex w-full items-center justify-center gap-4">
-							<Can I="create" an="refund">
-								<Button
-									variant="secondary"
-									onClick={() => handleOpenRefund(dataTransaction)}
-									fullWidth
-								>
-									Refund
-								</Button>
-							</Can>
+							{dataTransaction.status !== TransactionStatus.REFUND && (
+								<Can I="create" an="refund">
+									<Button
+										variant="secondary"
+										onClick={() => handleOpenRefund(dataTransaction)}
+										fullWidth
+									>
+										Refund
+									</Button>
+								</Can>
+							)}
 							<Button
 								variant="primary"
 								isLoading={loadReceipt}
