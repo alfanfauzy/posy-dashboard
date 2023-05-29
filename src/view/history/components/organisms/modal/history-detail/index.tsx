@@ -193,7 +193,7 @@ const HistoryDetailModal = ({
 													{`Order ${idx + 1}`}
 												</p>
 											</div>
-											{order.order_detail.map(item => (
+											{order?.order_detail.map(item => (
 												<div key={item.uuid} className="mt-4">
 													<div className="flex items-start justify-between">
 														<div className="flex w-3/4 items-start break-words lg:w-1/2">
