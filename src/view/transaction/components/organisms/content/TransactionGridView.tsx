@@ -34,6 +34,21 @@ import {useReactToPrint} from 'react-to-print';
 import CreateTransactionModal from '../modal/CreateTransactionModal';
 import PrintQrCodeReceipt from '../receipt/PrintQrCodeReceipt';
 
+export const requestFullScreen = () => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const element: any = document.body;
+
+	const requestMethod =
+		element.requestFullscreen ||
+		element.webkitRequestFullScreen ||
+		element.mozRequestFullScreen ||
+		element.msRequestFullScreen;
+
+	if (requestMethod) {
+		requestMethod.call(element);
+	}
+};
+
 const generateBorderColor = (
 	status: string,
 	trxId: string,
@@ -189,21 +204,6 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				},
 			}),
 		);
-	};
-
-	const requestFullScreen = () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const element: any = document.body;
-
-		const requestMethod =
-			element.requestFullscreen ||
-			element.webkitRequestFullScreen ||
-			element.mozRequestFullScreen ||
-			element.msRequestFullScreen;
-
-		if (requestMethod) {
-			requestMethod.call(element);
-		}
 	};
 
 	useEffect(() => {

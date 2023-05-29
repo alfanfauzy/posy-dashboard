@@ -57,7 +57,7 @@ const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
 									{orderDetail.product_name} x{orderDetail.qty}
 								</p>
 								<p className="text-m-regular">
-									{toRupiah(orderDetail.price_final)}
+									{toRupiah(orderDetail.price_subtotal)}
 								</p>
 							</div>
 						))}

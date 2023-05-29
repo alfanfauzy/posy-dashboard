@@ -59,15 +59,16 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 			<section className="flex w-[380px] flex-col items-center justify-center">
 				<div className="px-16 flex flex-col items-center">
 					<AiOutlineInfoCircle
-						size={70}
+						size={65}
 						className="rotate-180 text-red-accent"
 					/>
-					<p className="mt-4 text-center text-l-semibold line-clamp-2">
+					<p className="mt-2 text-center text-l-semibold line-clamp-2">
 						Are you sure you want to cancel this table?
 					</p>
 				</div>
 				<div className="mt-3 w-full">
 					<Select
+						isSearchable={false}
 						className="w-full"
 						size="l"
 						options={CancelOptions}
@@ -76,9 +77,10 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 					/>
 				</div>
 				{reason.value === 'OTHERS' && (
-					<div className="mt-6">
+					<div className="mt-4 w-full">
 						<label>Other Reason: </label>
 						<Textarea
+							className="w-full"
 							placeholder="Input other reason"
 							onChange={e => setReasonOther(e.target.value)}
 						/>

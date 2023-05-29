@@ -13,6 +13,7 @@ import React, {useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
 import {useReactToPrint} from 'react-to-print';
 
+import {requestFullScreen} from '../../organisms/content/TransactionGridView';
 import ApplyDiscountModal from '../../organisms/modal/ApplyDiscountModal';
 import CreatePaymentModal from '../../organisms/modal/CreatePaymentModal';
 import PaymentConfirmationModal from '../../organisms/modal/PaymentConfirmationModal';
@@ -121,6 +122,9 @@ const TransactionSidebar = () => {
 				setTimeout(() => {
 					handlePrintQr();
 				}, 100);
+				setTimeout(() => {
+					requestFullScreen();
+				}, 1000);
 			}
 		},
 	});

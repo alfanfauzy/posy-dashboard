@@ -1,7 +1,12 @@
+import {OrderDetailStatus} from '@/domain/order/model';
 import {Transaction, TransactionStatus} from '@/domain/transaction/model';
 import {Can} from '@/view/auth/components/organisms/rbac';
 import {toRupiah} from '@/view/common/utils/common';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
+import {
+	generateStatusOrder,
+	generateStatusOrderDetail,
+} from '@/view/common/utils/UtilsGenerateOrderStatus';
 import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
 import PrintBillReceipt from '@/view/transaction/components/organisms/receipt/PrintBillReceipt';
 import {useCreatePrintReceiptViewModel} from '@/view/transaction/view-models/CreatePrintReceiptViewModel';
@@ -186,11 +191,14 @@ const HistoryDetailModal = ({
 						{dataOrder && (
 							<>
 								<aside className="border-b border-neutral-40 py-4">
-									{dataOrder.map((order, idx) => (
+									{dataOrder.map(order => (
 										<aside key={order.uuid} className="last:mb-0 mb-4">
-											<div>
+											<div className="flex justify-between items-center">
 												<p className="text-xl-semibold text-primary-main">
-													{`Order ${idx + 1}`}
+													{`Order ${order.order_number}`}
+												</p>
+												<p>
+													<p>{generateStatusOrder(order.status)}</p>
 												</p>
 											</div>
 											{order?.order_detail.map(item => (
@@ -203,8 +211,10 @@ const HistoryDetailModal = ({
 															</p>
 														</div>
 														<div className="flex flex-col items-end">
-															<p className="text-l-regular">
-																{toRupiah(item.price_subtotal)}
+															<p className="text-l-regular text-neutral-60">
+																{item.status === OrderDetailStatus.CANCEL
+																	? generateStatusOrderDetail(item.status)
+																	: toRupiah(item.price_subtotal)}
 															</p>
 														</div>
 													</div>
@@ -214,19 +224,27 @@ const HistoryDetailModal = ({
 															className="ml-10 flex flex-col gap-1"
 														>
 															<div className="flex items-start justify-between">
-																<p className="w-3/4 text-l-regular line-clamp-2">
-																	{item.addon_information
-																		.map(
-																			el =>
-																				`${el.addon_name}: ${el.addon_variants
-																					.map(variant => variant.variant_name)
-																					.join(', ')}`,
-																		)
-																		.join(', ')}
-																</p>
-																<p className="text-l-regular text-neutral-60">
-																	{toRupiah(item.price_addon)}
-																</p>
+																{item.status !== OrderDetailStatus.CANCEL && (
+																	<>
+																		<p className="w-3/4 text-l-regular line-clamp-2">
+																			{item.addon_information
+																				.map(
+																					el =>
+																						`${
+																							el.addon_name
+																						}: ${el.addon_variants
+																							.map(
+																								variant => variant.variant_name,
+																							)
+																							.join(', ')}`,
+																				)
+																				.join(', ')}
+																		</p>
+																		<p className="text-l-regular text-neutral-60">
+																			{toRupiah(item.price_addon)}
+																		</p>
+																	</>
+																)}
 															</div>
 														</div>
 													)}
@@ -246,10 +264,12 @@ const HistoryDetailModal = ({
 										<p>Subtotal</p>
 										<p>{toRupiah(dataPayment.subtotal_price)}</p>
 									</div>
-									<div className="flex items-center justify-between text-m-medium">
-										<p>Discount</p>
-										<p>{toRupiah(dataPayment.discount_general_price)}</p>
-									</div>
+									{dataPayment.discount_general_percentage > 0 && (
+										<div className="flex items-center justify-between text-m-medium">
+											<p>Discount</p>
+											<p>{toRupiah(dataPayment.discount_general_price)}</p>
+										</div>
+									)}
 									<div className="flex items-center justify-between text-m-medium">
 										<p>Service</p>
 										<p>
