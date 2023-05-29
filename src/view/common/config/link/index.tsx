@@ -31,6 +31,18 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 		path: 'report',
 		icon: <ReportIcon />,
 		permission: ['transaction_report'],
+		subMenu: [
+			{
+				title: 'Report Summary',
+				path: 'report/summary',
+				permission: ['transaction_report'],
+			},
+			{
+				title: 'Cancellation Report',
+				path: 'report/cancellation',
+				permission: ['transaction_report'],
+			},
+		],
 	},
 	{
 		title: 'History',

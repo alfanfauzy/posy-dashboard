@@ -13,6 +13,14 @@ export enum TransactionCategory {
 	TAKE_AWAY = 'TAKE_AWAY',
 }
 
+export enum CancelReason {
+	OUT_OF_STOCK = 'OUT_OF_STOCK',
+	CUSTOMER_CANCELLATION = 'CUSTOMER_CANCELLATION',
+	LONG_WAITING = 'LONG_WAITING',
+	WRONG_ORDER = 'WRONG_ORDER',
+	OTHER = 'OTHER',
+}
+
 type TransactionBased = {
 	uuid: string;
 	transaction_code: string;

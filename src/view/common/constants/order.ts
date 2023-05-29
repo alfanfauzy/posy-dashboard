@@ -1,23 +1,23 @@
 export const listCancelReason = [
 	{
 		label: 'Out of stock',
-		value: 'Out of stock',
+		value: 'OUT_OF_STOCK',
 	},
 	{
 		label: 'Customer cancellation',
-		value: 'Customer cancellation',
+		value: 'CUSTOMER_CANCELLATION',
 	},
 	{
 		label: 'Long waiting time',
-		value: 'Long waiting time',
+		value: 'LONG_WAITING',
 	},
 	{
 		label: 'Wrong order',
-		value: 'Wrong order',
+		value: 'WRONG_ORDER',
 	},
 	{
 		label: 'Others',
-		value: 'Others',
+		value: 'OTHERS',
 	},
 ];
 

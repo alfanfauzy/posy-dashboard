@@ -45,6 +45,7 @@ type OrderDetail = {
 	order_note: string;
 	status: OrderDetailStatus;
 	cancel_reason: string;
+	cancel_reason_other: string;
 };
 
 type GetOrdersDataResponseBased = {
