@@ -68,7 +68,7 @@ const OrganismsFormLogin = () => {
 	});
 
 	useEffect(() => {
-		const message = getMessaging(firebaseApp);
+		// const message = getMessaging(firebaseApp);
 		console.log(process.env.NEXT_PUBLIC_VAPID_KEY);
 		console.log(process.env.NEXT_PUBLIC_API_KEY);
 		console.log(process.env.NEXT_PUBLIC_AUTH_DOMAIN);
@@ -78,22 +78,22 @@ const OrganismsFormLogin = () => {
 		console.log(process.env.NEXT_PUBLIC_APP_ID);
 		console.log(process.env.NEXT_PUBLIC_MEASUREMENT_ID);
 
-		getToken(message, {
-			vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
-		})
-			.then(currentToken => {
-				if (currentToken) {
-					setNotifToken(currentToken);
-				} else {
-					// Show permission request.
-					console.log(
-						'No registration token available. Request permission to generate one.',
-					);
-				}
-			})
-			.catch(err => {
-				console.log('An error occurred while retrieving token. ', err);
-			});
+		// getToken(message, {
+		// 	vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
+		// })
+		// 	.then(currentToken => {
+		// 		if (currentToken) {
+		// 			setNotifToken(currentToken);
+		// 		} else {
+		// 			// Show permission request.
+		// 			console.log(
+		// 				'No registration token available. Request permission to generate one.',
+		// 			);
+		// 		}
+		// 	})
+		// 	.catch(err => {
+		// 		console.log('An error occurred while retrieving token. ', err);
+		// 	});
 	}, []);
 
 	const onSubmit: reactHookForm.SubmitHandler<
