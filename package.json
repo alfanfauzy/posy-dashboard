@@ -5,7 +5,8 @@
 	"author": "zaidanammar",
 	"scripts": {
 		"dev": "next dev -p 9994",
-		"build": "rm -rf .next && next build",
+		"generate:sw": "node ./generate-sw.js",
+		"build": "rm -rf .next && yarn run generate:sw && next build",
 		"start": "next start -p 8080",
 		"test": "jest",
 		"test:coverage": "jest --coverage",

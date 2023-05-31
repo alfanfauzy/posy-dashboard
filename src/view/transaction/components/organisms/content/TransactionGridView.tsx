@@ -156,7 +156,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 			],
 		},
 		{
-			enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+			enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 		},
 	);
 
@@ -166,7 +166,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				restaurant_outlet_uuid: outletId,
 			},
 			{
-				enabled: outletId.length > 0 && isSubscription && isLoggedIn,
+				enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 			},
 		);
 

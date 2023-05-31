@@ -64,11 +64,11 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 				label: item.outlet_name,
 			}));
 			setOutletOpt(opts);
-			if (outletId.length === 0) {
+			if (outletId?.length === 0) {
 				dispatch(setRestaurantOutletId(dataOutletSelection[0].uuid));
 			}
 		}
-	}, [dataOutletSelection, outletId.length]);
+	}, [dataOutletSelection, outletId?.length]);
 
 	const onChangeOutlet = (e: string) => {
 		dispatch(setRestaurantOutletId(e));
