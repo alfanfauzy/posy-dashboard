@@ -149,9 +149,9 @@ build_image_tagged:
   stage: build-image
   extends: .k8s_docker_runner
   tags: ['pvg']
-  only:
+  when: manual
+  # only:
     # - tags
-    - manual
   variables:
     <<: *build_variables
   before_script:
