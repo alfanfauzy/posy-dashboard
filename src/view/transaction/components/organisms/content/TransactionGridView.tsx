@@ -45,7 +45,7 @@ export const requestFullScreen = () => {
 		element.msRequestFullScreen;
 
 	if (requestMethod) {
-		requestMethod.call(element);
+		requestMethod?.call(element);
 	}
 };
 

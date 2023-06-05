@@ -21,7 +21,7 @@ export const store = configureStore({
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
 		}).concat(logger),
-	// devTools: process.env.NODE_ENV !== 'production',
+	devTools: process.env.NODE_ENV === 'development',
 });
 
 const persistor = persistStore(store, null, () => store.getState());
