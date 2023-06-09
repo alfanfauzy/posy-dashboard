@@ -1,12 +1,40 @@
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppSelector} from '@/view/common/store/hooks';
-import TransactionGridView from '@/view/transaction/components/organisms/content/TransactionGridView';
-import TransactionSidebaBar from '@/view/transaction/components/templates/transaction-sidebar';
+import dynamic from 'next/dynamic';
 import React from 'react';
 import {useProSidebar} from 'react-pro-sidebar';
 
-import TableGridView from '../organisms/content/TableGridView';
+const TransactionGridView = dynamic(
+	() =>
+		import(
+			'@/view/transaction/components/organisms/content/TransactionGridView'
+		),
+	{
+		loading: () => <div />,
+	},
+);
+
+const TransactionSidebaBar = dynamic(
+	() => import('../templates/transaction-sidebar'),
+	{
+		loading: () => <div />,
+	},
+);
+
+const TableGridView = dynamic(
+	() => import('../organisms/content/TableGridView'),
+	{
+		loading: () => <div />,
+	},
+);
+
+const NotificationSidebar = dynamic(
+	() => import('../templates/notification-sidebar'),
+	{
+		loading: () => <div />,
+	},
+);
 
 const generateWidth = (
 	width: number,
@@ -33,6 +61,9 @@ const ViewTransactionPage = () => {
 		{open: openTableCapacity, close: closeTableCapacity},
 	] = useDisclosure({initialState: false});
 
+	const [isOpenNotifBar, {open: openNotifBar, close: closeNotifBar}] =
+		useDisclosure({initialState: false});
+
 	return (
 		<main className={`flex h-full gap-4 overflow-x-hidden overflow-y-hidden`}>
 			<section
@@ -42,16 +73,23 @@ const ViewTransactionPage = () => {
 					collapsed,
 				)}`}
 			>
-				<TransactionGridView openTableCapacity={openTableCapacity} />
+				<TransactionGridView
+					openTableCapacity={openTableCapacity}
+					openNotifBar={openNotifBar}
+				/>
 			</section>
 
-			{selectedTrxId && (
+			{(selectedTrxId || isOpenNotifBar) && (
 				<section
 					className={`duration-300 ${
 						width <= 1280 && !collapsed ? 'translate-x-60 opacity-0 hidden' : ''
 					} `}
 				>
-					<TransactionSidebaBar />
+					{isOpenNotifBar ? (
+						<NotificationSidebar closeNotificationSidebar={closeNotifBar} />
+					) : (
+						<TransactionSidebaBar />
+					)}
 				</section>
 			)}
 			{isOpenTableCapacity && (

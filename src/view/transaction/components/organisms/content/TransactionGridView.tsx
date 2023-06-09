@@ -28,6 +28,7 @@ import {closeSnackbar, useSnackbar} from 'notistack';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {useEffect, useRef, useState} from 'react';
 import {AiOutlineFullscreen} from 'react-icons/ai';
+import {IoMdNotificationsOutline} from 'react-icons/io';
 import {useProSidebar} from 'react-pro-sidebar';
 import {useReactToPrint} from 'react-to-print';
 
@@ -77,9 +78,13 @@ const generateBorderColor = (
 
 type TransactionGridViewProps = {
 	openTableCapacity: () => void;
+	openNotifBar: () => void;
 };
 
-const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
+const TransactionGridView = ({
+	openTableCapacity,
+	openNotifBar,
+}: TransactionGridViewProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {enqueueSnackbar} = useSnackbar();
@@ -304,7 +309,13 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 						Restaurant Transaction
 					</p>
 
-					<div>
+					<div className="flex items-center gap-6">
+						<IoMdNotificationsOutline
+							onClick={openNotifBar}
+							className="cursor-pointer hover:opacity-70"
+							size={24}
+						/>
+
 						<AiOutlineFullscreen
 							onClick={requestFullScreen}
 							className="cursor-pointer hover:opacity-70"
