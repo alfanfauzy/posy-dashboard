@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
@@ -102,6 +103,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 					{transaction_uuid: message?.data.transaction_uuid},
 				]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				queryClient.invalidateQueries([GetNotificationsQueryKey]);
 				enqueueSnackbar({
 					className: 'border-t-8 border-blue-success',
 					style: {

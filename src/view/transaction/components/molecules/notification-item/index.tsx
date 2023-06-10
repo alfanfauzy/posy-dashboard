@@ -1,4 +1,10 @@
-import {Notification, NotificationCategory} from '@/domain/notification/model';
+import {
+	Notification,
+	NotificationAction,
+	NotificationCategory,
+} from '@/domain/notification/model';
+import {useAppDispatch} from '@/view/common/store/hooks';
+import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {useCreateSetReadNotificationViewModel} from '@/view/notification/view-models/CreateSetReadNotificationViewModel';
 import {Divider} from 'antd';
@@ -21,9 +27,16 @@ type NotificationitemProps = {
 	item: Notification;
 	lengthData: number;
 	idx: number;
+	closeNotificationSidebar: () => void;
 };
 
-const Notificationitem = ({item, lengthData, idx}: NotificationitemProps) => {
+const Notificationitem = ({
+	item,
+	lengthData,
+	idx,
+	closeNotificationSidebar,
+}: NotificationitemProps) => {
+	const dispatch = useAppDispatch();
 	const {createSetReadNotification} = useCreateSetReadNotificationViewModel({});
 
 	const swipeHandlers = useSwipeable({
@@ -32,6 +45,19 @@ const Notificationitem = ({item, lengthData, idx}: NotificationitemProps) => {
 		// ...config,
 	});
 
+	const onClickNotification = () => {
+		if (item.action === NotificationAction.RECEIVED_NEW_ORDER) {
+			dispatch(
+				onChangeSelectedTrxId({
+					id: item.transaction_uuid,
+				}),
+			);
+			setTimeout(() => {
+				closeNotificationSidebar();
+			}, 300);
+		}
+	};
+
 	return (
 		<>
 			<div
@@ -39,7 +65,7 @@ const Notificationitem = ({item, lengthData, idx}: NotificationitemProps) => {
 				key={item.uuid}
 				className="flex items-start p-3 gap-3"
 			>
-				<div className="flex flex-1 gap-3">
+				<div onClick={onClickNotification} className="flex flex-1 gap-3">
 					<div className="mt-0.5">{generateIcon(item.category)}</div>
 					<div>
 						<p className="text-m-regular">{item.content}</p>

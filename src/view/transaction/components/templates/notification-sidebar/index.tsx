@@ -1,6 +1,7 @@
 import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import {listNotificationTabs} from '@/view/common/constants/notification';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
 import {useGetNotificationsViewModel} from '@/view/notification/view-models/GetNotificationsViewModel';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {useState} from 'react';
@@ -18,6 +19,8 @@ const NotificationSidebar = ({
 	const {outletId} = useAppSelector(state => state.auth);
 
 	const [tabValueOrder, setTabValueOrder] = useState(0);
+
+	const {data: dataCounter} = useGetNotificationCounterViewModel();
 
 	const {data: dataNotification, isLoading: loadNotification} =
 		useGetNotificationsViewModel(
@@ -55,20 +58,23 @@ const NotificationSidebar = ({
 								<div className="flex items-center gap-1 justify-center">
 									<p>{tab.label}</p>
 									<div className="rounded-full w-fit px-2 py-0.5 bg-secondary-main shadow text-s-bold">
-										3
+										2{/* {dataCounter.inbox} */}
 									</div>
 								</div>
 							</Button>
 						) : (
-							<p
+							<div
 								key={tab.value}
 								onClick={() => {
 									setTabValueOrder(tab.value);
 								}}
-								className="w-1/2 flex items-center justify-center text-m-bold cursor-pointer hover:opacity-70 duration-300 ease-in-out"
+								className="w-1/2 flex gap-1 items-center justify-center text-m-bold cursor-pointer hover:opacity-70 duration-300 ease-in-out"
 							>
 								{tab.label}
-							</p>
+								<div className="rounded-full w-fit px-2 py-0.5 bg-secondary-main shadow text-s-bold text-white">
+									2{/* {dataCounter.inbox} */}
+								</div>
+							</div>
 						),
 					)}
 				</section>
@@ -79,7 +85,7 @@ const NotificationSidebar = ({
 					</div>
 				)}
 
-				{!dataNotification && (
+				{!dataNotification && !loadNotification && (
 					<div className="flex h-full w-full flex-col items-center justify-center gap-4">
 						<div className="-mt-24">
 							<NoOrderIcon />
@@ -96,6 +102,7 @@ const NotificationSidebar = ({
 								item={item}
 								idx={idx}
 								lengthData={dataNotification.length}
+								closeNotificationSidebar={closeNotificationSidebar}
 							/>
 						))}
 					</div>
