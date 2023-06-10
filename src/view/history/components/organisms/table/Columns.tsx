@@ -36,7 +36,7 @@ export const generateTypeOfOrder = (typeOrder: TransactionCategory) => {
 		TAKE_AWAY: 'Take Away',
 	};
 
-	return <p>{typeOfOrder[typeOrder]}</p>;
+	return <p>{typeOfOrder[typeOrder] || '-'}</p>;
 };
 
 export const generateCancelReason = (cancelReason: CancelReason) => {
@@ -59,7 +59,7 @@ export const HistoryTablecolumns = ({
 	handleOpenDetails,
 }: ColumnsProps): ColumnsType<Partial<Transaction>> => [
 	{
-		title: 'Trx ID',
+		title: 'Transaction ID',
 		dataIndex: 'transaction_code',
 		key: 'transaction_code',
 		width: 215,
@@ -100,7 +100,7 @@ export const HistoryTablecolumns = ({
 		),
 	},
 	{
-		title: <p className="whitespace-nowrap">Total payment</p>,
+		title: <p className="whitespace-nowrap">Total sales</p>,
 		dataIndex: 'total_price_final',
 		key: 'total_payment',
 		render: text => (
@@ -109,7 +109,7 @@ export const HistoryTablecolumns = ({
 	},
 	{
 		align: 'center',
-		title: 'Trx status',
+		title: 'Status',
 		dataIndex: 'status',
 		key: 'status',
 		render: text => (
@@ -126,7 +126,7 @@ export const HistoryTablecolumns = ({
 			<div
 				role="presentation"
 				onClick={() => handleOpenDetails(record as Transaction)}
-				className="cursor-pointer whitespace-nowrap text-s-regular transition-all duration-300 ease-in-out hover:text-neutral-100 hover:text-opacity-50"
+				className="cursor-pointer whitespace-nowrap text-s-regular transition-all duration-300 ease-in-out text-secondary-main hover:text-opacity-50"
 			>
 				View Details
 			</div>
