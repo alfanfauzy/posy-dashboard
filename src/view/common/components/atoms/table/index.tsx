@@ -56,10 +56,11 @@ const AtomsTable = <TData extends object>({
 				columns={columns}
 				dataSource={dataSource}
 				pagination={{
+					showSizeChanger: false,
 					current: paginationData?.curr_page,
 					position: ['bottomRight'],
 					pageSize: paginationData?.per_page,
-					total: paginationData?.total_page,
+					total: paginationData?.total_objs,
 					showTotal: () => (
 						<Pagination
 							onChange={onChangeLimit}
