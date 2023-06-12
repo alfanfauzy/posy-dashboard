@@ -339,7 +339,7 @@ const CancelOrderBottomsheet = ({
 													/>
 												</div>
 											)}
-											{order?.order_detail.map((detail, detailIdx) => (
+											{order?.order_detail?.map((detail, detailIdx) => (
 												<CancelDetailOrder
 													key={detailIdx}
 													detail={detail}

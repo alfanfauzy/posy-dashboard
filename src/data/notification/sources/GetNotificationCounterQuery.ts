@@ -11,8 +11,7 @@ const GetNotificationCounter = async (): Promise<
 	Response<GetNotificationCounterDataResponse>
 > => {
 	const response = await Get({
-		endpoint: `/notification-service/notification/count
-		`,
+		endpoint: `/notification-service/notification/count`,
 	});
 
 	return {

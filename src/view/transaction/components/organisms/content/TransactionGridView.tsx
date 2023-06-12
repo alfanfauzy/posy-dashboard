@@ -19,6 +19,7 @@ import {
 	onChangeSelectedTrxId,
 	onClearSearch,
 } from '@/view/common/store/slices/transaction';
+import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
 import {useCreateTransactionViewModel} from '@/view/transaction/view-models/CreateTransactionViewModel';
 import {useGetTransactionSummaryViewModel} from '@/view/transaction/view-models/GetTransactionSummaryViewModel';
 import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTransactionsViewModel';
@@ -148,7 +149,7 @@ const TransactionGridView = ({
 			search: [
 				{
 					field: 'status',
-					value: status || 'WAITING_FOOD|WAITING_PAYMENT|WAITING_ORDER',
+					value: status || 'WAITING_FOOD|WAITING_PAYMENT|WAITING_ORDER|PENDING',
 				},
 				{
 					field: 'keyword',
@@ -174,6 +175,8 @@ const TransactionGridView = ({
 				enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 			},
 		);
+
+	const {data: dataCounter} = useGetNotificationCounterViewModel();
 
 	const handleSetStatus = (
 		e: React.MouseEvent<HTMLElement>,
@@ -310,11 +313,18 @@ const TransactionGridView = ({
 					</p>
 
 					<div className="flex items-center gap-6">
-						<IoMdNotificationsOutline
-							onClick={openNotifBar}
-							className="cursor-pointer hover:opacity-70"
-							size={24}
-						/>
+						<div className="relative bg-secondary-border rounded-full p-1">
+							<IoMdNotificationsOutline
+								onClick={openNotifBar}
+								className="cursor-pointer hover:opacity-70"
+								size={28}
+							/>
+							{dataCounter && dataCounter?.transaction > 0 && (
+								<div className="absolute shadow-md top-2.5 right-1 px-[3px] py-[1px] rounded-full w-fit bg-secondary-main text-[7px] font-bold text-white">
+									{dataCounter?.total}
+								</div>
+							)}
+						</div>
 
 						<AiOutlineFullscreen
 							onClick={requestFullScreen}

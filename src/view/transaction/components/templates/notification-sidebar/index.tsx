@@ -57,9 +57,11 @@ const NotificationSidebar = ({
 							>
 								<div className="flex items-center gap-1 justify-center">
 									<p>{tab.label}</p>
-									<div className="rounded-full w-fit px-2 py-0.5 bg-secondary-main shadow text-s-bold">
-										2{/* {dataCounter.inbox} */}
-									</div>
+									{dataCounter && dataCounter?.transaction > 0 && (
+										<div className="rounded-full w-fit px-2 py-0.5 bg-secondary-main shadow text-s-bold">
+											{dataCounter?.transaction}
+										</div>
+									)}
 								</div>
 							</Button>
 						) : (
@@ -71,9 +73,11 @@ const NotificationSidebar = ({
 								className="w-1/2 flex gap-1 items-center justify-center text-m-bold cursor-pointer hover:opacity-70 duration-300 ease-in-out"
 							>
 								{tab.label}
-								<div className="rounded-full w-fit px-2 py-0.5 bg-secondary-main shadow text-s-bold text-white">
-									2{/* {dataCounter.inbox} */}
-								</div>
+								{dataCounter && dataCounter?.inbox > 0 && (
+									<div className="rounded-full w-fit px-2 py-0.5 bg-secondary-main shadow text-s-bold text-white">
+										{dataCounter?.inbox}
+									</div>
+								)}
 							</div>
 						),
 					)}
