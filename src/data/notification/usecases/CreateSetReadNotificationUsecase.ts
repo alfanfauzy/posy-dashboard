@@ -10,6 +10,7 @@ import {useSnackbar} from 'notistack';
 
 import {mapToSetReadNotification} from '../mappers/notificationMapper';
 import {useCreateSetReadNotificationMutation} from '../sources/CreateSetReadNotificationMutation';
+import {GetNotificationCounterQueryKey} from '../sources/GetNotificationCounterQuery';
 import {GetNotificationsQueryKey} from '../sources/GetNotificationsQuery';
 
 export const useCreateSetReadNotificationUsecase = ({
@@ -31,6 +32,7 @@ export const useCreateSetReadNotificationUsecase = ({
 			if (dataSuccess) {
 				onSuccess?.(mapToSetReadNotification(dataSuccess?.data), vars, ...args);
 				queryClient.invalidateQueries([GetNotificationsQueryKey]);
+				queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 			}
 		},
 		onError: (dataError, ...args) => {
