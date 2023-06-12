@@ -20,7 +20,10 @@ const NotificationSidebar = ({
 
 	const [tabValueOrder, setTabValueOrder] = useState(0);
 
-	const {data: dataCounter} = useGetNotificationCounterViewModel();
+	const {data: dataCounter} = useGetNotificationCounterViewModel({
+		parent_type: 'restaurant_outlet_uuid',
+		parent_uuid: outletId,
+	});
 
 	const {data: dataNotification, isLoading: loadNotification} =
 		useGetNotificationsViewModel(

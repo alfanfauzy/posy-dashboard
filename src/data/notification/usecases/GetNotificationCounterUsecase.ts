@@ -1,4 +1,7 @@
-import {GetNotificationCounterResult} from '@/domain/notification/repositories/GetNotificationCounterRepository';
+import {
+	GetNotificationCounterInput,
+	GetNotificationCounterResult,
+} from '@/domain/notification/repositories/GetNotificationCounterRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
@@ -7,9 +10,10 @@ import {useGetNotificationCounterQuery} from '../sources/GetNotificationCounterQ
 import {GetNotificationCounterDataResponse} from '../types/GetNotificationCounterType';
 
 export const useGetNotificationCounterUsecase = (
+	input: GetNotificationCounterInput,
 	options?: UseQueryOptions<Response<GetNotificationCounterDataResponse>>,
 ): GetNotificationCounterResult => {
-	const {data, ...rest} = useGetNotificationCounterQuery(options);
+	const {data, ...rest} = useGetNotificationCounterQuery(input, options);
 
 	if (data?.data) {
 		const dataMapper = mapToNotificationCounterModel(data.data);

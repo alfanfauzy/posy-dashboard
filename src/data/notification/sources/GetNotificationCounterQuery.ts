@@ -1,4 +1,5 @@
-import Get from '@/data/common/api/get';
+import Post from '@/data/common/api/post';
+import {GetNotificationCounterInput} from '@/domain/notification/repositories/GetNotificationCounterRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 
@@ -7,11 +8,12 @@ import {GetNotificationCounterDataResponse} from '../types/GetNotificationCounte
 export const GetNotificationCounterQueryKey =
 	'NotificationCounter/list' as const;
 
-const GetNotificationCounter = async (): Promise<
-	Response<GetNotificationCounterDataResponse>
-> => {
-	const response = await Get({
+const GetNotificationCounter = async (
+	input: GetNotificationCounterInput,
+): Promise<Response<GetNotificationCounterDataResponse>> => {
+	const response = await Post({
 		endpoint: `/notification-service/notification/count`,
+		data: input,
 	});
 
 	return {
@@ -23,11 +25,12 @@ const GetNotificationCounter = async (): Promise<
 };
 
 export const useGetNotificationCounterQuery = (
+	input: GetNotificationCounterInput,
 	options?: UseQueryOptions<Response<GetNotificationCounterDataResponse>>,
 ) =>
 	useQuery<Response<GetNotificationCounterDataResponse>>(
 		[GetNotificationCounterQueryKey],
-		GetNotificationCounter,
+		() => GetNotificationCounter(input),
 		{
 			refetchOnWindowFocus: false,
 			...options,
