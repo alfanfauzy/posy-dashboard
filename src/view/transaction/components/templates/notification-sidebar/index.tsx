@@ -1,4 +1,5 @@
 import NoOrderIcon from '@/view/common/assets/icons/noOrder';
+import Badge from '@/view/common/components/atoms/badge';
 import {listNotificationTabs} from '@/view/common/constants/notification';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
@@ -37,7 +38,7 @@ const NotificationSidebar = ({
 		);
 
 	return (
-		<main className="relative min-w-[380px] max-w-[380px] h-full rounded-l-2xl bg-neutral-10">
+		<main className="relative min-w-[350px] max-w-[350px] h-full rounded-l-2xl bg-neutral-10">
 			<article className="flex h-full flex-col p-4">
 				<section>
 					<div className="flex items-center justify-between">
@@ -54,16 +55,15 @@ const NotificationSidebar = ({
 					{listNotificationTabs.map(tab =>
 						tabValueOrder === tab.value ? (
 							<Button
+								size="m"
 								key={tab.value}
 								className="w-1/2 text-m-bold"
 								onClick={() => setTabValueOrder(tabValueOrder)}
 							>
 								<div className="flex items-center gap-1 justify-center">
 									<p>{tab.label}</p>
-									{dataCounter && dataCounter?.transaction > 0 && (
-										<div className="rounded-full w-fit px-2 py-0.5 bg-secondary-main shadow text-s-bold">
-											{dataCounter?.transaction}
-										</div>
+									{dataCounter && dataCounter[tab.key] > 0 && (
+										<Badge count={dataCounter[tab.key]} />
 									)}
 								</div>
 							</Button>
@@ -76,10 +76,11 @@ const NotificationSidebar = ({
 								className="w-1/2 flex gap-1 items-center justify-center text-m-bold cursor-pointer hover:opacity-70 duration-300 ease-in-out"
 							>
 								{tab.label}
-								{dataCounter && dataCounter?.inbox > 0 && (
-									<div className="rounded-full w-fit px-2 py-0.5 bg-secondary-main shadow text-s-bold text-white">
-										{dataCounter?.inbox}
-									</div>
+								{dataCounter && dataCounter[tab.key] > 0 && (
+									<Badge
+										count={dataCounter[tab.key]}
+										className="text-neutral-10"
+									/>
 								)}
 							</div>
 						),

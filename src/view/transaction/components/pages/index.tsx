@@ -65,17 +65,15 @@ const ViewTransactionPage = () => {
 		useDisclosure({initialState: false});
 
 	return (
-		<main className={`flex h-full gap-4 overflow-x-hidden overflow-y-hidden`}>
+		<main className={`flex h-full gap-2 overflow-x-hidden overflow-y-hidden`}>
 			<section
-				className={`py-4 flex-1 ${generateWidth(
-					width,
-					selectedTrxId,
-					collapsed,
-				)}`}
+				className={`flex-1 ${generateWidth(width, selectedTrxId, collapsed)}`}
 			>
 				<TransactionGridView
 					openTableCapacity={openTableCapacity}
 					openNotifBar={openNotifBar}
+					isOpenNotifBar={isOpenNotifBar}
+					closeNotifBar={closeNotifBar}
 				/>
 			</section>
 

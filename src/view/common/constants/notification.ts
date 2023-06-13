@@ -1,4 +1,8 @@
-export const listNotificationTabs: Array<{label: string; value: number}> = [
-	{label: 'Transaction', value: 0},
-	{label: 'Inbox', value: 1},
+export const listNotificationTabs: Array<{
+	label: string;
+	value: number;
+	key: 'transaction' | 'inbox';
+}> = [
+	{label: 'Transaction', value: 0, key: 'transaction'},
+	{label: 'Inbox', value: 1, key: 'inbox'},
 ];

@@ -80,11 +80,15 @@ const generateBorderColor = (
 type TransactionGridViewProps = {
 	openTableCapacity: () => void;
 	openNotifBar: () => void;
+	closeNotifBar: () => void;
+	isOpenNotifBar: boolean;
 };
 
 const TransactionGridView = ({
 	openTableCapacity,
 	openNotifBar,
+	closeNotifBar,
+	isOpenNotifBar,
 }: TransactionGridViewProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
@@ -215,6 +219,7 @@ const TransactionGridView = ({
 				},
 			}),
 		);
+		closeNotifBar();
 	};
 
 	useEffect(() => {
@@ -224,9 +229,7 @@ const TransactionGridView = ({
 				const diffTime = Math.abs(now - el.first_order_at * 1000);
 				const diffMinutes = Math.floor(diffTime / 60000);
 				const checktime = diffMinutes > 0 && diffMinutes % 2 === 0;
-				// console.log(diffMinutes, checktime, idx);
 				if (el.status === TransactionStatus.WAITING_FOOD && checktime) {
-					// console.log({diffMinutes}, idx);
 					handlePlayAudio(play);
 
 					enqueueSnackbar({
@@ -308,22 +311,26 @@ const TransactionGridView = ({
 	};
 
 	return (
-		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-6">
+		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-4">
 			<article className="h-fit">
 				<aside className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
+					<p className="text-xxl-semibold text-neutral-100">
 						Restaurant Transaction
 					</p>
 
 					<div className="flex items-center gap-6">
-						<div className="relative bg-secondary-border rounded-full p-1">
+						<div
+							className={`${
+								isOpenNotifBar ? 'bg-secondary-border ' : ''
+							} relative hover:bg-secondary-border duration-300 ease-in-out cursor-pointer rounded-full p-1`}
+						>
 							<IoMdNotificationsOutline
 								onClick={openNotifBar}
 								className="cursor-pointer hover:opacity-70"
 								size={28}
 							/>
 							{dataCounter && dataCounter?.transaction > 0 && (
-								<div className="absolute shadow-md top-2.5 right-1 px-[3px] py-[1px] rounded-full w-fit bg-secondary-main text-[7px] font-bold text-white">
+								<div className="absolute shadow-md top-2.5 right-1 px-[3.5px] py-[1px] rounded-full w-fit bg-secondary-main text-[7px] font-bold text-white">
 									{dataCounter?.total}
 								</div>
 							)}

@@ -71,6 +71,7 @@ const OrderDetails = ({
 					{listOrderTabs.map(tab =>
 						tabValueOrder === tab.value ? (
 							<Button
+								size="m"
 								key={tab.value}
 								className="w-1/2 text-m-bold"
 								onClick={() => setTabValueOrder(tabValueOrder)}
@@ -174,7 +175,7 @@ const OrderDetails = ({
 								<Button
 									variant="secondary"
 									fullWidth
-									size="l"
+									size="m"
 									className="mt-2 mb-10"
 									onClick={openCreateOrder}
 								>

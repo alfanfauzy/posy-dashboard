@@ -106,7 +106,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 			>
 				<aside
 					className={`flex h-[12%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
-						collapsed ? 'pl-3.5 pt-2' : 'pl-5 pt-2'
+						collapsed ? 'pl-3.5' : 'pl-4'
 					}`}
 				>
 					{!collapsed ? (

@@ -145,15 +145,11 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	return (
 		<ProSidebarProvider>
 			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30">
-				<section className="flex h-full w-full gap-4">
-					<div className="py-4">
+				<section className="flex h-full w-full gap-2">
+					<div>
 						<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
 					</div>
-					<div
-						className={`h-full flex-1 overflow-y-scroll ${
-							pathname !== '/transaction' ? 'py-4' : ''
-						}`}
-					>
+					<div className="h-full flex-1 overflow-y-scroll">
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>
 				</section>
