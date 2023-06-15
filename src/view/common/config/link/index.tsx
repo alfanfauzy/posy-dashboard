@@ -57,6 +57,11 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 		permission: ['setting_subscription', 'setting_tax_service'],
 		subMenu: [
 			{
+				title: 'Payment Integration',
+				path: 'settings/payment',
+				permission: ['setting_tax_service'],
+			},
+			{
 				title: 'Tax & Service',
 				path: 'settings/tax-and-service',
 				permission: ['setting_tax_service'],

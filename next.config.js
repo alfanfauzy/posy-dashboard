@@ -19,6 +19,14 @@ const nextConfig = {
 				source: '/product-service/:path*',
 				destination: `${process.env.NEXT_PUBLIC_API}/fnb-product-service/:path*`,
 			},
+			{
+				source: '/payment-service/:path*',
+				destination: `${process.env.NEXT_PUBLIC_API}/fnb-payment-service/:path*`,
+			},
+			{
+				source: '/document-service/:path*',
+				destination: `${process.env.NEXT_PUBLIC_API}/fnb-document-service/:path*`,
+			},
 		];
 	},
 	swcMinify: true,
