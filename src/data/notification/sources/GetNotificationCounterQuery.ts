@@ -29,7 +29,7 @@ export const useGetNotificationCounterQuery = (
 	options?: UseQueryOptions<Response<GetNotificationCounterDataResponse>>,
 ) =>
 	useQuery<Response<GetNotificationCounterDataResponse>>(
-		[GetNotificationCounterQueryKey],
+		[GetNotificationCounterQueryKey, input],
 		() => GetNotificationCounter(input),
 		{
 			refetchOnWindowFocus: false,

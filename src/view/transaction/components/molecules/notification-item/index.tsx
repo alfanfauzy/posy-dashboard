@@ -46,6 +46,12 @@ const Notificationitem = ({
 	});
 
 	const onClickNotification = () => {
+		createSetReadNotification({
+			parent_type: item.parent_type,
+			parent_uuid: item.parent_uuid,
+			notification_uuid: item.uuid,
+			notification_type: item.type,
+		});
 		if (item.action === NotificationAction.RECEIVED_NEW_ORDER) {
 			dispatch(
 				onChangeSelectedTrxId({
@@ -70,6 +76,7 @@ const Notificationitem = ({
 					<div>
 						<p className="text-m-regular">{item.content}</p>
 						<p className="text-s-regular text-neutral-80">
+							{dateFormatter(item.created_at, 'dd MMM yyyy')} |{' '}
 							{dateFormatter(item.created_at, 'HH:mm')}
 						</p>
 					</div>
