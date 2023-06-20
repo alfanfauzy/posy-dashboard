@@ -162,8 +162,6 @@ const ViewPaymentSettingPage = () => {
 		],
 	);
 
-	const isLoadingData = isLoading && isLoadingPaymentAccountInfo;
-
 	return (
 		<main className="flex h-full w-full">
 			<article className="flex h-full w-full overflow-auto flex-col rounded-2xl bg-neutral-10 p-6">
@@ -173,13 +171,15 @@ const ViewPaymentSettingPage = () => {
 					</p>
 				</section>
 				<PaymentSettingContext.Provider value={valueProvider}>
-					{isLoadingData ? (
-						<Loading size={30} />
+					{isLoading ? (
+						<div className="m-auto">
+							<Loading size={50} />
+						</div>
 					) : (
 						<>
-							<PaymentBalanceMolecules />
+							{bankAccountData && <PaymentBalanceMolecules />}
 							<PaymentInformationMolecules />
-							<PaymentOptionForm />
+							{bankAccountData && <PaymentOptionForm />}
 						</>
 					)}
 
