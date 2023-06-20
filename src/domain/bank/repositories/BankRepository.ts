@@ -32,7 +32,7 @@ export type CheckBankRepository = {
  */
 
 export type PayloadSaveBankAccount = {
-	password: string;
+	password?: string;
 	account_type: string | undefined;
 	bank_uuid: string | undefined;
 	account_number: string;

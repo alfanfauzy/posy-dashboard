@@ -41,7 +41,7 @@ const PaymentInformationWitDataMolecules = () => {
 	} = useContext(PaymentSettingContext);
 
 	const handleModal = () => {
-		handleIsEdit(true);
+		handleIsEdit();
 		handleOpenModal();
 	};
 

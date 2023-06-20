@@ -33,12 +33,14 @@ const PAYMENT_ACCOUNT_TYPE = [
 const FormPaymentSetting = () => {
 	const {
 		handleOpenModal,
-		handleIsEdit,
 		isOpenModal,
 		isEdit,
+		handleIsEdit,
+		isLoadingSaveBankAccount,
 		setPayloadEditInformation,
 		handleIsOpenPasswordConfirmation,
 		setConfirmationType,
+		saveBankAccount,
 	} = useContext(PaymentSettingContext);
 
 	const [imageURL, setImageURL] = useState('');
@@ -167,7 +169,6 @@ const FormPaymentSetting = () => {
 		});
 		onClearImage();
 		handleOpenModal();
-		handleIsEdit(false);
 	};
 
 	const onImageChange = (
@@ -212,10 +213,16 @@ const FormPaymentSetting = () => {
 	};
 
 	const handleSaveAccount = (data: PaymentBankAccountForm) => {
-		setPayloadEditInformation(data);
-		setConfirmationType('edit-information');
-		handleIsOpenPasswordConfirmation();
-		handleCloseModal();
+		if (!isEdit) {
+			const payload = mapToPayloadSaveBankAccount(data);
+			saveBankAccount(payload);
+			setConfirmationType('edit-information');
+		} else {
+			setConfirmationType('edit-information');
+			setPayloadEditInformation(data);
+			handleCloseModal();
+			handleIsOpenPasswordConfirmation();
+		}
 	};
 
 	const allowOnlyNumber = (value: string) => {
@@ -231,7 +238,10 @@ const FormPaymentSetting = () => {
 	return (
 		<Modal
 			open={isOpenModal}
-			onCancel={() => handleCloseModal()}
+			onCancel={() => {
+				handleCloseModal();
+				handleIsEdit();
+			}}
 			title={
 				<p className="border-b border-neutral-40 p-4 text-xl-semibold">
 					Payment Setting
@@ -422,7 +432,9 @@ const FormPaymentSetting = () => {
 					</div>
 					<div className="border-t border-neutral-40 pt-4"></div>
 
-					<Button fullWidth>Save</Button>
+					<Button fullWidth isLoading={!isEdit && isLoadingSaveBankAccount}>
+						Save
+					</Button>
 				</section>
 			</form>
 		</Modal>

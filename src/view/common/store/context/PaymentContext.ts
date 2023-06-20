@@ -15,7 +15,7 @@ type PaymentSettingContextProps = {
 	isShowModalDifferentPaymentType: boolean;
 	handleIsShowModalDifferentPaymentType: () => void;
 	handleOpenModal: () => void;
-	handleIsEdit: (value: boolean) => void;
+	handleIsEdit: () => void;
 	isOpenModal: boolean;
 	isEdit: boolean;
 	isOpenPasswordConfirmation: boolean;

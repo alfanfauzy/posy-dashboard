@@ -66,8 +66,9 @@ const ViewPaymentSettingPage = () => {
 
 	const {data: bankAccountData, isLoading} = useGetLinkedBankAccountViewModel();
 
-	const {data: paymentAccountInfoData, isLoading: isLoadingPaymentAccountInfo} =
-		useGetPaymentAccountInfoViewModel({enabled: bankAccountData !== undefined});
+	const {data: paymentAccountInfoData} = useGetPaymentAccountInfoViewModel({
+		enabled: bankAccountData !== undefined,
+	});
 
 	const {data: paymentBalanceData, isLoading: isLoadingPaymentBalance} =
 		useGetPaymentBalanceViewModel({enabled: bankAccountData !== undefined});
@@ -79,8 +80,14 @@ const ViewPaymentSettingPage = () => {
 	const {saveBankAccount, isLoading: isLoadingSaveBankAccount} =
 		useSaveAccountBankViewModal({
 			onSuccess() {
-				handleIsOpenPasswordConfirmation();
-				handleIsOpenSuccessConfirmation();
+				if (isEdit) {
+					handleIsEdit();
+					handleIsOpenPasswordConfirmation();
+					handleIsOpenSuccessConfirmation();
+				} else {
+					handleOpenModal();
+					handleIsOpenSuccessConfirmation();
+				}
 				queryClient.invalidateQueries(['linked-bank-account']);
 				queryClient.invalidateQueries(['payment-account-info']);
 			},

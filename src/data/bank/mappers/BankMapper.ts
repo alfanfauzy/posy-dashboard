@@ -25,7 +25,7 @@ export const mapToBankOptions = (
 
 export const mapToPayloadSaveBankAccount = (
 	data: PaymentBankAccountForm,
-	password: string,
+	password?: string,
 ): PayloadSaveBankAccount => ({
 	password: password,
 	account_number: data.account_number,
