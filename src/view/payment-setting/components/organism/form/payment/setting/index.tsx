@@ -15,6 +15,7 @@ import {
 } from '@/view/payment-setting/schemas/payment/setting';
 import {useGetPaymentAccountInfoViewModel} from '@/view/payment-setting/view-models/GetPaymentAccountInfoViewModel';
 import {Image, Modal} from 'antd';
+import {enqueueSnackbar} from 'notistack';
 import {Button, Input, Select} from 'posy-fnb-core';
 import React, {useContext, useMemo, useRef, useState} from 'react';
 import {Controller} from 'react-hook-form';
@@ -72,7 +73,8 @@ const FormPaymentSetting = () => {
 		if (!dataBankList) return [];
 
 		const mapOptionsBankList = mapToBankOptions(dataBankList);
-		return mapOptionsBankList;
+
+		return mapOptionsBankList.sort((a, b) => a.label.localeCompare(b.label));
 	}, [dataBankList]);
 
 	/**
@@ -152,6 +154,7 @@ const FormPaymentSetting = () => {
 		}
 		setValue('bank_proof_url', '');
 		setBankProofURL('');
+		setImageURL('');
 	};
 
 	const handleCloseModal = () => {
@@ -171,7 +174,21 @@ const FormPaymentSetting = () => {
 		event: React.ChangeEvent<HTMLInputElement>,
 		prefix: string,
 	) => {
+		// Max size 2MB
+		const maxSize = 2 * 1024 * 1024;
+
 		if (event.target.files && event.target.files[0]) {
+			const fileSize = event.target.files[0].size;
+
+			// Check filesize, don't allow when file more than 2MB
+			if (fileSize > maxSize) {
+				enqueueSnackbar({
+					message: `File size can't more than 2MB`,
+					variant: 'error',
+				});
+				return;
+			}
+
 			setBankProofURL(URL.createObjectURL(event.target.files[0]));
 
 			const formDataUploadImagePrivate = new FormData();
@@ -262,6 +279,10 @@ const FormPaymentSetting = () => {
 									onChange={e => {
 										setValue('bank_uuid', e);
 										clearErrors('bank_uuid');
+
+										// Clear field account name & account number when change bank
+										setValue('account_name', '');
+										setValue('account_number', '');
 									}}
 									isLoading={isLoadingBankList}
 									options={optionsBankList}
