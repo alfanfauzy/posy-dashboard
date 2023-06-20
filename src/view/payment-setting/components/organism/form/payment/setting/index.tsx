@@ -298,7 +298,11 @@ const FormPaymentSetting = () => {
 					</div>
 
 					<div className="flex flex-col">
-						<div className="flex flex-row items-end gap-2">
+						<div
+							className={`flex flex-row ${
+								errors.account_number ? 'items-center' : 'items-end'
+							} gap-2`}
+						>
 							<Controller
 								name="account_number"
 								control={control}
