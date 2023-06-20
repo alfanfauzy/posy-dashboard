@@ -17,15 +17,6 @@ const PaymentBalanceMolecules = () => {
 
 	return (
 		<section className="h-auto w-auto gap-5 rounded-md border border-gray-200 bg-white p-4 shadow-md mt-4 mb-6">
-			<Image
-				src="https://i.ibb.co/PDw7ZP0/withdraw-example.png"
-				alt="withdraw-example"
-				preview={{
-					visible: isPreviewVisible,
-					onVisibleChange: visible => setPreviewVisible(visible),
-				}}
-				className="hidden"
-			/>
 			<Skeleton loading={isLoadingPaymentBalance}>
 				<div className="mb-4 flex flex-start gap-24">
 					<section>
@@ -53,6 +44,17 @@ const PaymentBalanceMolecules = () => {
 							View example
 						</a>{' '}
 					</h4>
+					{isPreviewVisible && (
+						<Image
+							src="https://i.ibb.co/PDw7ZP0/withdraw-example.png"
+							alt="withdraw-example"
+							preview={{
+								visible: isPreviewVisible,
+								onVisibleChange: visible => setPreviewVisible(visible),
+							}}
+							className="hidden"
+						/>
+					)}
 					<Button onClick={handleIsOpenFormWithdraw}>Withdraw</Button>
 				</div>
 			</Skeleton>

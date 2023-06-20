@@ -318,6 +318,7 @@ const FormPaymentSetting = () => {
 								)}
 							/>
 							<Button
+								type="button"
 								className="flex flex-row items-center gap-3 !rounded-full !text-l-semibold"
 								isLoading={isLoadingCheckBank}
 								disabled={isDisabledButtonCheck}
