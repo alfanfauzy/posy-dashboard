@@ -15,7 +15,7 @@ type PaymentSettingContextProps = {
 	isShowModalDifferentPaymentType: boolean;
 	handleIsShowModalDifferentPaymentType: () => void;
 	handleOpenModal: () => void;
-	handleIsEdit: () => void;
+	setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
 	isOpenModal: boolean;
 	isEdit: boolean;
 	isOpenPasswordConfirmation: boolean;
@@ -62,7 +62,7 @@ export const PaymentSettingContext = createContext<PaymentSettingContextProps>({
 	handleIsOpenPasswordConfirmation: () => {},
 	handleIsShowModalDifferentPaymentType: () => {},
 	handleOpenModal: () => {},
-	handleIsEdit: () => {},
+	setIsEdit: () => {},
 	saveBankAccount: () => {},
 	isLoadingSaveBankAccount: false,
 	isOpenWithdrawConfirmation: false,

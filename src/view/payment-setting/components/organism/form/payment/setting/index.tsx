@@ -35,7 +35,7 @@ const FormPaymentSetting = () => {
 		handleOpenModal,
 		isOpenModal,
 		isEdit,
-		handleIsEdit,
+		setIsEdit,
 		isLoadingSaveBankAccount,
 		setPayloadEditInformation,
 		handleIsOpenPasswordConfirmation,
@@ -240,7 +240,7 @@ const FormPaymentSetting = () => {
 			open={isOpenModal}
 			onCancel={() => {
 				handleCloseModal();
-				handleIsEdit();
+				setIsEdit(false);
 			}}
 			title={
 				<p className="border-b border-neutral-40 p-4 text-xl-semibold">

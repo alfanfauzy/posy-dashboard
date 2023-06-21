@@ -36,9 +36,7 @@ const ViewPaymentSettingPage = () => {
 		initialState: false,
 	});
 
-	const [isEdit, {toggle: handleIsEdit}] = useDisclosure({
-		initialState: false,
-	});
+	const [isEdit, setIsEdit] = useState(false);
 
 	const [
 		isOpenPasswordConfirmation,
@@ -81,7 +79,7 @@ const ViewPaymentSettingPage = () => {
 		useSaveAccountBankViewModal({
 			onSuccess() {
 				if (isEdit) {
-					handleIsEdit();
+					setIsEdit(false);
 					handleIsOpenPasswordConfirmation();
 					handleIsOpenSuccessConfirmation();
 				} else {
@@ -114,7 +112,7 @@ const ViewPaymentSettingPage = () => {
 			isShowModalDifferentPaymentType,
 			handleIsShowModalDifferentPaymentType,
 			handleOpenModal,
-			handleIsEdit,
+			setIsEdit,
 			isOpenModal,
 			isEdit,
 			isOpenPasswordConfirmation,
@@ -144,7 +142,7 @@ const ViewPaymentSettingPage = () => {
 			isShowModalDifferentPaymentType,
 			handleIsShowModalDifferentPaymentType,
 			handleOpenModal,
-			handleIsEdit,
+			setIsEdit,
 			isOpenModal,
 			isEdit,
 			isOpenPasswordConfirmation,
