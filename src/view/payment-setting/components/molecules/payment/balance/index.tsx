@@ -1,3 +1,4 @@
+import {Can} from '@/view/auth/components/organisms/rbac';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
 import {toRupiah} from '@/view/common/utils/common';
 import {Image, Skeleton} from 'antd';
@@ -55,7 +56,9 @@ const PaymentBalanceMolecules = () => {
 							className="hidden"
 						/>
 					)}
-					<Button onClick={handleIsOpenFormWithdraw}>Withdraw</Button>
+					<Can I="create_withdrawal" an="payment_integration">
+						<Button onClick={handleIsOpenFormWithdraw}>Withdraw</Button>
+					</Can>
 				</div>
 			</Skeleton>
 

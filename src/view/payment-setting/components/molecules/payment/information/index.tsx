@@ -1,3 +1,4 @@
+import {Can} from '@/view/auth/components/organisms/rbac';
 import {whatsapp_link} from '@/view/common/constants/contact';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
 import {Button} from 'posy-fnb-core';
@@ -25,7 +26,9 @@ const PaymentInformationEmptyStateMolecules = () => {
 						What`s the different?
 					</span>
 				</p>
-				<Button onClick={handleOpenModal}>Add Bank Account</Button>
+				<Can I="create_bank" an="payment_integration">
+					<Button onClick={handleOpenModal}>Add Bank Account</Button>
+				</Can>
 			</div>
 		</>
 	);
@@ -94,9 +97,11 @@ const PaymentInformationWitDataMolecules = () => {
 				<Button variant="secondary" onClick={() => window.open(whatsapp_link)}>
 					Contact Support
 				</Button>
-				<Button onClick={handleModal} disabled={isLoadingPaymentBalance}>
-					Edit Information
-				</Button>
+				<Can I="update_bank" an="payment_integration">
+					<Button onClick={handleModal} disabled={isLoadingPaymentBalance}>
+						Edit Information
+					</Button>
+				</Can>
 			</div>
 		</div>
 	);

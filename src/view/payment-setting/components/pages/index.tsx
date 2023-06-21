@@ -1,4 +1,5 @@
 import {Response} from '@/domain/vo/BaseResponse';
+import {Can, useAbility} from '@/view/auth/components/organisms/rbac';
 import {useGetLinkedBankAccountViewModel} from '@/view/bank/view-models/GetLinkedBankAccountViewModel';
 import {useSaveAccountBankViewModal} from '@/view/bank/view-models/PostSaveAccountBankViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
@@ -21,8 +22,6 @@ import PasswordConfirmationOrganism from '../organism/form/password-confirmation
 import PaymentOptionForm from '../organism/form/payment/options';
 import FormPaymentSetting from '../organism/form/payment/setting';
 import FormWithdrawOrganism from '../organism/form/withdraw';
-
-type ErrorType = AxiosError<Response<unknown>, any> & {more_info: string};
 
 const ViewPaymentSettingPage = () => {
 	const queryClient = useQueryClient();
@@ -195,7 +194,9 @@ const ViewPaymentSettingPage = () => {
 						<>
 							{bankAccountData && <PaymentBalanceMolecules />}
 							<PaymentInformationMolecules />
-							{bankAccountData && <PaymentOptionForm />}
+							<Can I="manage_payment_method" an="payment_integration">
+								{bankAccountData && <PaymentOptionForm />}
+							</Can>
 						</>
 					)}
 
