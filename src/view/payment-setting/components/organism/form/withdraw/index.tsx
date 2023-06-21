@@ -41,19 +41,21 @@ const FormWithdrawOrganism = () => {
 		if (valueAsNumber < 10000) {
 			setErrorInput(true);
 			setMessageError(ERROR_MESSAGE['minimum']);
+			setPrice(floatValue);
 			return;
 		} else if (valueAsNumber > 10000000) {
 			setErrorInput(true);
 			setMessageError(ERROR_MESSAGE['maximum']);
+			setPrice(floatValue);
 			return;
 		} else if (valueAsNumber > paymentBalanceData.cash) {
 			setErrorInput(true);
 			setMessageError(ERROR_MESSAGE['insufficient']);
+			setPrice(floatValue);
 			return;
 		}
 
 		setErrorInput(false);
-		setPrice(floatValue);
 	};
 
 	const isDisabledButton = price === 0 || price === undefined || errorInput;

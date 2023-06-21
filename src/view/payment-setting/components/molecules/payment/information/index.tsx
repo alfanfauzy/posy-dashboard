@@ -38,6 +38,7 @@ const PaymentInformationWitDataMolecules = () => {
 		bankAccountData,
 		setIsEdit,
 		handleIsShowModalDifferentPaymentType,
+		isLoadingPaymentBalance,
 	} = useContext(PaymentSettingContext);
 
 	const handleModal = () => {
@@ -93,7 +94,9 @@ const PaymentInformationWitDataMolecules = () => {
 				<Button variant="secondary" onClick={() => window.open(whatsapp_link)}>
 					Contact Support
 				</Button>
-				<Button onClick={handleModal}>Edit Information</Button>
+				<Button onClick={handleModal} disabled={isLoadingPaymentBalance}>
+					Edit Information
+				</Button>
 			</div>
 		</div>
 	);
