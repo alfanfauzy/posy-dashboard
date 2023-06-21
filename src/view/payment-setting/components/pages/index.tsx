@@ -1,3 +1,4 @@
+import {Response} from '@/domain/vo/BaseResponse';
 import {useGetLinkedBankAccountViewModel} from '@/view/bank/view-models/GetLinkedBankAccountViewModel';
 import {useSaveAccountBankViewModal} from '@/view/bank/view-models/PostSaveAccountBankViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
@@ -5,6 +6,8 @@ import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext'
 import PaymentInformationMolecules from '@/view/payment-setting/components/molecules/payment/information';
 import {useGetPaymentAccountInfoViewModel} from '@/view/payment-setting/view-models/GetPaymentAccountInfoViewModel';
 import {useQueryClient} from '@tanstack/react-query';
+import {AxiosError} from 'axios';
+import {enqueueSnackbar} from 'notistack';
 import {Loading} from 'posy-fnb-core';
 import React, {useMemo, useState} from 'react';
 
@@ -18,6 +21,8 @@ import PasswordConfirmationOrganism from '../organism/form/password-confirmation
 import PaymentOptionForm from '../organism/form/payment/options';
 import FormPaymentSetting from '../organism/form/payment/setting';
 import FormWithdrawOrganism from '../organism/form/withdraw';
+
+type ErrorType = AxiosError<Response<unknown>, any> & {more_info: string};
 
 const ViewPaymentSettingPage = () => {
 	const queryClient = useQueryClient();
@@ -101,6 +106,12 @@ const ViewPaymentSettingPage = () => {
 				handleIsOpenPasswordConfirmation();
 				handleIsOpenSuccessConfirmation();
 				queryClient.invalidateQueries(['payment-balance']);
+			},
+			onError(response) {
+				enqueueSnackbar({
+					message: `${response.message} : Password is incorrect`,
+					variant: 'error',
+				});
 			},
 		});
 
