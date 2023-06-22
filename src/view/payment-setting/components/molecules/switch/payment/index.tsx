@@ -1,10 +1,10 @@
 import {PaymentMethodBased} from '@/domain/payment/models';
-import AtomSwitch from '@/view/common/components/atoms/switch';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useUpdatePaymentMethodCategoryByRestaurantViewModal} from '@/view/payment-setting/view-models/UpdatePaymentMethodCategoryByRestaurantViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import {useRouter} from 'next/router';
 import {useSnackbar} from 'notistack';
+import {Toggle} from 'posy-fnb-core';
 import React from 'react';
 
 type MoleculesSwitchProps = {
@@ -59,10 +59,9 @@ const MoleculesSwitchStatusPaymentMethod = ({
 	};
 
 	return (
-		<AtomSwitch
+		<Toggle
 			value={statusValue}
-			name="is_show"
-			onChange={handleCheckedChange}
+			onChange={() => handleCheckedChange(!statusValue)}
 		/>
 	);
 };

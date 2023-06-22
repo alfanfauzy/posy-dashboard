@@ -93,6 +93,12 @@ const ViewPaymentSettingPage = () => {
 				queryClient.invalidateQueries(['linked-bank-account']);
 				queryClient.invalidateQueries(['payment-account-info']);
 			},
+			onError(response) {
+				enqueueSnackbar({
+					message: `${response.message} : Password is incorrect`,
+					variant: 'error',
+				});
+			},
 		});
 
 	/**
