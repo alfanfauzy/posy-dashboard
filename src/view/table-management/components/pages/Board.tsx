@@ -1,39 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import type {DragEvent, FC} from 'react';
+import type {DragEvent} from 'react';
 import {useState} from 'react';
 
-import {BoardSquare} from './BoardSquare';
-import type {Game, Position} from './Game';
-import {Piece} from './Piece';
+import {Table} from './Table';
 
-export type BoardProps = {
-	game: Game;
-};
-
-/** Styling properties applied to the board element */
-// const boardStyle: CSSProperties = {
-// 	width: '100%',
-// 	height: '100%',
-// 	display: 'flex',
-// 	flexWrap: 'wrap',
-// };
-/** Styling properties applied to each square element */
-// const squareStyle: CSSProperties = {width: '12.5%', height: '12.5%'};
-
-/**
- * The chessboard component
- * @param props The react props
- */
 const squares = {
 	layout: {
 		type: 'GRID',
-		width: 7,
-		height: 7,
+		width: 8,
+		height: 6,
 	},
 	objs: [
 		[
 			{id: 1, name: 'Table 1'},
 			{id: 2, name: 'Table 2'},
+			null,
 			null,
 			null,
 			null,
@@ -48,9 +29,11 @@ const squares = {
 			null,
 			null,
 			null,
+			null,
 		],
-		[null, null, null, null, null, null, null],
+		[null, null, null, null, null, null, null, null],
 		[
+			null,
 			null,
 			null,
 			null,
@@ -65,8 +48,9 @@ const squares = {
 			null,
 			null,
 			null,
-			{id: 5, name: 'Table 5'},
-			{id: 6, name: 'Table 6'},
+			null,
+			{id: 5, name: 'Table 7'},
+			{id: 6, name: 'Table 8'},
 		],
 		[
 			null,
@@ -74,17 +58,9 @@ const squares = {
 			null,
 			null,
 			null,
-			{id: 5, name: 'Table 5'},
-			{id: 6, name: 'Table 6'},
-		],
-		[
 			null,
-			null,
-			null,
-			null,
-			null,
-			{id: 5, name: 'Table 5'},
-			{id: 6, name: 'Table 6'},
+			{id: 5, name: 'Table 9'},
+			{id: 6, name: 'Table 10'},
 		],
 		// [
 		// 	null,
@@ -92,8 +68,9 @@ const squares = {
 		// 	null,
 		// 	null,
 		// 	null,
-		// 	{id: 5, name: 'Table 5'},
-		// 	{id: 6, name: 'Table 6'},
+		// 	null,
+		// 	{id: 5, name: 'Table 11'},
+		// 	{id: 6, name: 'Table 12'},
 		// ],
 		// [
 		// 	null,
@@ -101,78 +78,95 @@ const squares = {
 		// 	null,
 		// 	null,
 		// 	null,
-		// 	{id: 5, name: 'Table 5'},
-		// 	{id: 6, name: 'Table 6'},
+		// 	null,
+		// 	{id: 5, name: 'Table 13'},
+		// 	{id: 6, name: 'Table 14'},
+		// ],
+		// [
+		// 	null,
+		// 	null,
+		// 	null,
+		// 	null,
+		// 	null,
+		// 	null,
+		// 	{id: 5, name: 'Table 15'},
+		// 	{id: 6, name: 'Table 16'},
 		// ],
 	],
 };
 
-export const Board: FC<BoardProps> = () => {
-	const [knight, setKnightPos] = useState<Position>(squares.objs);
+export type Position = Array<
+	Array<{
+		id: number;
+		name: string;
+	} | null>
+>;
 
-	function renderSquare(i: number) {
+export const Board = () => {
+	const [table, setTablePos] = useState<Position>(squares.objs);
+
+	const renderSquare = (i: number) => {
 		const toY = i % squares.layout.width;
-		const toX = Math.floor(i / squares.layout.height);
+		const toX = Math.floor(i / squares.layout.width);
 
-		console.log(knight[toX][toY], toX, toY);
+		// console.log(squares.layout.width, squares.layout.height, i, 'layout');
 
-		function allowDrop(e: DragEvent<HTMLDivElement>) {
+		console.log(toX, 'x', toY, 'y');
+
+		const allowDrop = (e: DragEvent<HTMLDivElement>) => {
 			e.preventDefault();
-		}
+		};
 
-		function drop(e: any) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const drop = (e: DragEvent<HTMLDivElement> | any) => {
 			e.preventDefault();
 			const data = e.dataTransfer.getData('text');
-			const nodeCopy: any = document.getElementById(data)?.cloneNode(true);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const nodeCopy = document.getElementById(data)?.cloneNode(true) as any;
 			const [x, y] = e.target.id.split(',');
 			const [fromX, fromY] = nodeCopy.id.split(',');
-			const newknight = [...knight];
 
-			newknight[x][y] = {id: 99, name: 'knight'};
-			newknight[fromX][fromY] = null;
-			setKnightPos(newknight);
+			if ((!x && !y) || (x === fromX && y === fromY)) {
+				return;
+			} else {
+				const newTable = [...table];
+				const filteredTable = newTable[fromX][fromY];
+				const swapTable = newTable[x][y];
 
-			// const source = tempArray[idx];
-		}
+				newTable[x][y] = filteredTable;
+				if (swapTable) newTable[fromX][fromY] = swapTable;
+				else newTable[fromX][fromY] = null;
+
+				setTablePos(newTable);
+			}
+		};
 
 		return (
 			<div
 				id={`${toX},${toY}`}
 				onDrop={drop}
 				onDragOver={allowDrop}
-				className="w-[70px] h-[70px]"
+				className="w-[70px] h-[70px] aspect-square border-[0.5px] border-black"
 			>
-				{/* <BoardSquare
-					toX={toX}
-					toY={toY}
-					fromX={toX}
-					fromY={toY}
-					tempArray={tempArr}
-					game={game}
-					idx={i}
-				> */}
-				{knight[toX][toY] && (
+				{table[toX][toY] && (
 					<div className="w-full h-full flex items-center justify-center">
-						<div>
-							<Piece id={`${toX},${toY}`} isKnight />
-						</div>
+						<Table data={table[toX][toY]} id={`${toX},${toY}`} />
 					</div>
 				)}
-				{/* </BoardSquare> */}
 			</div>
 		);
-	}
+	};
 
+	console.log(table);
 	return (
-		<div
-			className={`w-fit mt-16 h-fit grid grid-cols-${squares.layout.width} bg-slate-600`}
-		>
-			{/* {squares.objs.map((row, x) =>
-				row.map((col, y) => renderSquare(x, y, squares.objs, col)),
-			)} */}
-			{new Array(squares.layout.height * squares.layout.width)
-				.fill(0)
-				.map((_, i) => renderSquare(i))}
-		</div>
+		<section className="bg-slate-300 w-full overflow-auto">
+			<div
+				className={`w-fit mt-16 h-fit grid border-[0.5px] border-black grid-cols-${squares.layout.width} `}
+			>
+				{new Array(squares.layout.height * squares.layout.width)
+					.fill(0)
+					.map((_, i) => renderSquare(i))}
+			</div>
+		</section>
 	);
 };
