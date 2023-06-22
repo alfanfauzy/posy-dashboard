@@ -36,7 +36,7 @@ const FormWithdrawOrganism = () => {
 		value: string;
 	}) => {
 		const {floatValue, value} = input;
-		const valueAsNumber = parseInt(value, 10);
+		const valueAsNumber = parseInt(value);
 
 		if (valueAsNumber < 10000) {
 			setErrorInput(true);
@@ -55,6 +55,7 @@ const FormWithdrawOrganism = () => {
 			return;
 		}
 
+		setPrice(floatValue);
 		setErrorInput(false);
 	};
 
