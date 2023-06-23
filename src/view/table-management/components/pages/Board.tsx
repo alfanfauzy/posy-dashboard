@@ -1,14 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {useAppDispatch} from '@/view/common/store/hooks';
+import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import type {DragEvent} from 'react';
 import {useState} from 'react';
+import {BsList} from 'react-icons/bs';
 
 import {Table} from './Table';
 
 const squares = {
 	layout: {
 		type: 'GRID',
-		width: 8,
-		height: 6,
+		width: 6,
+		height: 5,
 	},
 	objs: [
 		[
@@ -103,15 +106,16 @@ export type Position = Array<
 >;
 
 export const Board = () => {
+	const dispatch = useAppDispatch();
 	const [table, setTablePos] = useState<Position>(squares.objs);
 
 	const renderSquare = (i: number) => {
 		const toY = i % squares.layout.width;
 		const toX = Math.floor(i / squares.layout.width);
 
-		// console.log(squares.layout.width, squares.layout.height, i, 'layout');
+		console.log(squares.layout.width, squares.layout.height, i, 'layout');
 
-		console.log(toX, 'x', toY, 'y');
+		// console.log(toX, 'x', toY, 'y');
 
 		const allowDrop = (e: DragEvent<HTMLDivElement>) => {
 			e.preventDefault();
@@ -146,7 +150,7 @@ export const Board = () => {
 				id={`${toX},${toY}`}
 				onDrop={drop}
 				onDragOver={allowDrop}
-				className="w-[70px] h-[70px] aspect-square border-[0.5px] border-black"
+				className="w-[90px] h-[90px] aspect-square border-[0.5px] border-neutral-40"
 			>
 				{table[toX][toY] && (
 					<div className="w-full h-full flex items-center justify-center">
@@ -157,16 +161,27 @@ export const Board = () => {
 		);
 	};
 
-	console.log(table);
 	return (
-		<section className="bg-slate-300 w-full overflow-auto">
-			<div
-				className={`w-fit mt-16 h-fit grid border-[0.5px] border-black grid-cols-${squares.layout.width} `}
-			>
-				{new Array(squares.layout.height * squares.layout.width)
-					.fill(0)
-					.map((_, i) => renderSquare(i))}
-			</div>
+		<section className="h-full overflow-y-hidden overflow-auto p-4 rounded-r-lg bg-neutral-10">
+			<aside className="flex items-center gap-4">
+				<BsList
+					onClick={() => dispatch(setOpenDrawer(true))}
+					size={24}
+					className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
+				/>
+				<p className="text-xxl-bold text-neutral-100">Table Settings</p>
+			</aside>
+			<aside className="flex">
+				<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4">
+					<div
+						className={`w-fit h-fit border-[0.5px] border-neutral-40 grid grid-cols-${squares.layout.width} `}
+					>
+						{new Array(squares.layout.height * squares.layout.width)
+							.fill(0)
+							.map((_, i) => renderSquare(i))}
+					</div>
+				</div>
+			</aside>
 		</section>
 	);
 };

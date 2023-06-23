@@ -9,10 +9,14 @@ import Sidebar from '@/view/common/components/templates/sidebar';
 import firebaseApp from '@/view/common/config/firebase';
 import {UNPROTECT_ROUTES} from '@/view/common/config/link';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {setIsSubscription} from '@/view/common/store/slices/auth';
+import {
+	setIsSubscription,
+	setOpenDrawer,
+} from '@/view/common/store/slices/auth';
 import {useGetOutletSelectionViewModel} from '@/view/outlet/view-models/GetOutletSelectionViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
+import {Drawer} from 'antd';
 import {getMessaging, onMessage} from 'firebase/messaging';
 import {useRouter} from 'next/router';
 import {closeSnackbar, useSnackbar} from 'notistack';
@@ -34,7 +38,9 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {replace, asPath, pathname} = useRouter();
-	const {isLoggedIn, isSubscription} = useAppSelector(state => state.auth);
+	const {isLoggedIn, isSubscription, openDrawer} = useAppSelector(
+		state => state.auth,
+	);
 	const [loading, setLoading] = useState(true);
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const audioRef = useRef<any>();
@@ -138,13 +144,32 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		);
 	}
 
+	const ShowDrawerRoutes = ['/transaction', '/settings/table-management'];
+
 	return (
 		<ProSidebarProvider>
 			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30">
 				<section className="flex h-full w-full gap-4">
-					<div className="py-4">
-						<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
-					</div>
+					{!ShowDrawerRoutes.includes(pathname) ? (
+						<div className="py-4">
+							<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
+						</div>
+					) : (
+						<Drawer
+							placement="left"
+							width={200}
+							onClose={() => dispatch(setOpenDrawer(false))}
+							open={openDrawer}
+							closeIcon={null}
+							headerStyle={{display: 'none'}}
+						>
+							<Sidebar
+								isDrawer
+								dataOutletSelection={dataOutletSelection || undefined}
+							/>
+						</Drawer>
+					)}
+
 					<div
 						className={`h-full flex-1 overflow-y-scroll ${
 							pathname !== '/transaction' ? 'py-4' : ''

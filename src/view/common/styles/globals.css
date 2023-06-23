@@ -166,3 +166,25 @@ select {
 	border-radius: 24px !important;
 	padding: 0 !important;
 }
+
+.grid-cols-6 {
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-cols-8 {
+	grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.ant-drawer-body {
+	padding: 0 !important;
+}
+
+.ant-drawer-content {
+	border-radius: 0 16px 16px 0 !important;
+	box-shadow: 6px 0 16px 0 rgba(0, 0, 0, 0.08),
+		3px 0 6px -4px rgba(0, 0, 0, 0.12), 9px 0 28px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+.ant-drawer-content-wrapper {
+	box-shadow: none !important;
+}

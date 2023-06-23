@@ -28,17 +28,21 @@ const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 
 type TemplatesSidebarProps = {
 	dataOutletSelection: OutletSelection | undefined;
+	isDrawer?: boolean;
 };
 
-const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
+const TemplatesSidebar = ({
+	dataOutletSelection,
+	isDrawer,
+}: TemplatesSidebarProps) => {
 	const router = useRouter();
+	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
 	const {collapseSidebar, collapsed} = useProSidebar();
 	const [isOpenLogout, {open: openLogout, close: closeLogout}] = useDisclosure({
 		initialState: false,
 	});
 
-	const dispatch = useAppDispatch();
 	const {
 		outletId,
 		isSubscription,
@@ -56,6 +60,10 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 	const {data: dataSubscriptionReminder} = useGetSubscriptionReminderViewModel({
 		enabled: isLoggedIn,
 	});
+
+	useEffect(() => {
+		if (isDrawer) collapseSidebar(false);
+	}, [isDrawer]);
 
 	useEffect(() => {
 		if (dataOutletSelection) {
@@ -106,11 +114,14 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 			>
 				<aside
 					className={`flex h-[12%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
-						collapsed ? 'pl-3.5 pt-2' : 'pl-5 pt-2'
+						collapsed ? 'pl-3.5' : 'pl-6'
 					}`}
 				>
 					{!collapsed ? (
-						<Logo onClick={onCollapseSidebar} titleProps="text-xl" />
+						<Logo
+							onClick={isDrawer ? () => undefined : onCollapseSidebar}
+							titleProps="text-xl"
+						/>
 					) : (
 						<BsList
 							size={24}
@@ -142,7 +153,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 					<aside
 						className={`w-full ${
 							collapsed ? 'items-center' : 'items-start'
-						} flex h-[140px] flex-col justify-start rounded-t-md rounded-b-none bg-[#F2F1F9] p-6`}
+						} flex h-[130px] flex-col justify-start rounded-t-md rounded-b-none bg-[#F2F1F9] p-4`}
 					>
 						<div
 							className={`flex items-center gap-2 ${

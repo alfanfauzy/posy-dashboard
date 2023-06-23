@@ -87,7 +87,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
 	);
-	const {collapseSidebar, collapsed} = useProSidebar();
+	// const {collapseSidebar, collapsed} = useProSidebar();
 	const {width} = useViewportListener();
 
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
@@ -191,9 +191,9 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	};
 
 	const handleSelectTrx = (trxId: string) => {
-		if (width <= 1280) {
-			collapseSidebar(true);
-		}
+		// if (width <= 1280) {
+		// 	collapseSidebar(true);
+		// }
 		dispatch(onChangeSelectedTrxId({id: trxId}));
 		dispatch(
 			onChangePayment({
@@ -410,10 +410,8 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 							data.length === 0
 								? 'flex items-center justify-center bg-neutral-20'
 								: `grid gap-3 ${
-										width > 1280 && !collapsed
-											? 'grid-cols-5'
-											: width > 1280 && collapsed
-											? 'grid-cols-6'
+										width > 1280
+											? 'grid-cols-7'
 											: selectedTrxId?.length > 0 && width <= 1280
 											? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
 											: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
