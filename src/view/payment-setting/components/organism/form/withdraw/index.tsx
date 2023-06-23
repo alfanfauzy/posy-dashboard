@@ -1,15 +1,11 @@
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
 import {toRupiah} from '@/view/common/utils/common';
+import {WithdrawForm} from '@/view/payment-setting/schemas/withdraw';
 import {Modal} from 'antd';
 import {Button} from 'posy-fnb-core';
 import React, {useContext, useState} from 'react';
+import {Controller, useFormContext} from 'react-hook-form';
 import {NumericFormat} from 'react-number-format';
-
-const ERROR_MESSAGE = {
-	minimum: 'Minimum withdraw is Rp10.000',
-	insufficient: 'Insufficient balance',
-	maximum: 'Maximum withdraw is Rp10.000.000',
-};
 
 const FormWithdrawOrganism = () => {
 	const {
@@ -21,13 +17,33 @@ const FormWithdrawOrganism = () => {
 	} = useContext(PaymentSettingContext);
 
 	const [price, setPrice] = useState(0);
-	const [errorInput, setErrorInput] = useState(false);
-	const [messageError, setMessageError] = useState('');
 
-	const handleSubmit = () => {
-		setPayloadWithdraw({amount: price});
-		handleIsOpenWithdrawConfirmation();
+	const methods = useFormContext<WithdrawForm>();
+
+	const {
+		control,
+		setValue,
+		setError,
+		formState: {errors},
+		trigger,
+		resetField,
+		getValues,
+	} = methods;
+
+	const handleCloseModal = () => {
+		setPrice(0);
 		handleIsOpenFormWithdraw();
+		resetField('amount');
+		resetField('password');
+	};
+
+	const handleSubmitWithdraw = () => {
+		if (!errors.amount) {
+			setPayloadWithdraw({amount: price});
+			handleIsOpenWithdrawConfirmation();
+			setPrice(0);
+			handleIsOpenFormWithdraw();
+		}
 	};
 
 	const handleChangeInput = (input: {
@@ -36,36 +52,24 @@ const FormWithdrawOrganism = () => {
 		value: string;
 	}) => {
 		const {floatValue, value} = input;
-		const valueAsNumber = parseInt(value);
 
-		if (valueAsNumber < 10000) {
-			setErrorInput(true);
-			setMessageError(ERROR_MESSAGE['minimum']);
-			setPrice(floatValue);
-			return;
-		} else if (valueAsNumber > 10000000) {
-			setErrorInput(true);
-			setMessageError(ERROR_MESSAGE['maximum']);
-			setPrice(floatValue);
-			return;
-		} else if (valueAsNumber > paymentBalanceData.cash) {
-			setErrorInput(true);
-			setMessageError(ERROR_MESSAGE['insufficient']);
-			setPrice(floatValue);
+		if (floatValue > paymentBalanceData.cash && floatValue <= 10000000) {
+			setError('amount', {message: 'Insufficient balance'});
 			return;
 		}
 
+		setValue('amount', value);
 		setPrice(floatValue);
-		setErrorInput(false);
+		trigger();
 	};
 
-	const isDisabledButton = price === 0 || price === undefined || errorInput;
+	const isDisabledButton = !!errors.amount || getValues('amount') === undefined;
 
 	return (
 		<Modal
 			maskClosable={false}
 			open={isOpenFormWithdraw}
-			onCancel={handleIsOpenFormWithdraw}
+			onCancel={handleCloseModal}
 			title={
 				<h1 className="text-xl-semibold border-b border-neutral-40 p-4">
 					Withdraw
@@ -73,7 +77,11 @@ const FormWithdrawOrganism = () => {
 			}
 			footer={
 				<div className="p-4">
-					<Button onClick={handleSubmit} fullWidth disabled={isDisabledButton}>
+					<Button
+						onClick={handleSubmitWithdraw}
+						fullWidth
+						disabled={isDisabledButton}
+					>
 						Submit
 					</Button>
 				</div>
@@ -88,16 +96,27 @@ const FormWithdrawOrganism = () => {
 				</section>
 				<section className="flex flex-col gap-1 mt-4">
 					<label className="text-m-reguler">Enter amount to withdraw</label>
-					<NumericFormat
-						className="flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 px-4 py-2.5 text-center transition-all duration-300 ease-in-out focus:outline-none"
-						thousandSeparator="."
-						decimalSeparator=","
-						prefix="Rp "
-						onValueChange={(e: any) => handleChangeInput(e)}
-						allowNegative={false}
-						value={price}
+
+					<Controller
+						name="amount"
+						control={control}
+						render={({field: {name}}) => (
+							<NumericFormat
+								className="flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border border-neutral-100 px-4 py-2.5 text-center transition-all duration-300 ease-in-out focus:outline-none"
+								name={name}
+								thousandSeparator="."
+								decimalSeparator=","
+								prefix="Rp "
+								onValueChange={(e: any) => handleChangeInput(e)}
+								allowNegative={false}
+								value={price}
+							/>
+						)}
 					/>
-					{errorInput && <p className="text-red-accent">{messageError}</p>}
+
+					{errors.amount && (
+						<p className="text-red-accent">{errors.amount.message}</p>
+					)}
 				</section>
 			</div>
 		</Modal>

@@ -1,17 +1,19 @@
-import {Response} from '@/domain/vo/BaseResponse';
-import {Can, useAbility} from '@/view/auth/components/organisms/rbac';
+import {Can} from '@/view/auth/components/organisms/rbac';
 import {useGetLinkedBankAccountViewModel} from '@/view/bank/view-models/GetLinkedBankAccountViewModel';
 import {useSaveAccountBankViewModal} from '@/view/bank/view-models/PostSaveAccountBankViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
+import {useForm} from '@/view/common/hooks/useForm';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
 import PaymentInformationMolecules from '@/view/payment-setting/components/molecules/payment/information';
 import {useGetPaymentAccountInfoViewModel} from '@/view/payment-setting/view-models/GetPaymentAccountInfoViewModel';
 import {useQueryClient} from '@tanstack/react-query';
-import {AxiosError} from 'axios';
 import {enqueueSnackbar} from 'notistack';
 import {Loading} from 'posy-fnb-core';
 import React, {useMemo, useState} from 'react';
+import {FormProvider} from 'react-hook-form';
 
+import {PaymentBankAccountFormSchema} from '../../schemas/payment/setting';
+import {WithdrawFormSchema} from '../../schemas/withdraw';
 import {useUpdatePaymentWithdrawViewModal} from '../../view-models/CreatePaymentWithdrawViewModel';
 import {useGetPaymentBalanceViewModel} from '../../view-models/GetPaymentBalanceViewModel';
 import DifferentPaymentModalOrganism from '../molecules/modal/different-payment';
@@ -19,6 +21,7 @@ import SuccessUpdateInformationMolecules from '../molecules/modal/success-update
 import WithdrawConfirmationMolecules from '../molecules/modal/withdraw-confirmation';
 import PaymentBalanceMolecules from '../molecules/payment/balance';
 import PasswordConfirmationOrganism from '../organism/form/password-confirmation';
+import PasswordConfirmationBankOrganism from '../organism/form/password-confirmation-bank';
 import PaymentOptionForm from '../organism/form/payment/options';
 import FormPaymentSetting from '../organism/form/payment/setting';
 import FormWithdrawOrganism from '../organism/form/withdraw';
@@ -49,6 +52,13 @@ const ViewPaymentSettingPage = () => {
 		initialState: false,
 	});
 
+	const [
+		isOpenPasswordConfirmationBank,
+		{toggle: handleIsOpenPasswordConfirmationBank},
+	] = useDisclosure({
+		initialState: false,
+	});
+
 	const [isOpenSuccessConfirmation, {toggle: handleIsOpenSuccessConfirmation}] =
 		useDisclosure({
 			initialState: false,
@@ -75,6 +85,17 @@ const ViewPaymentSettingPage = () => {
 	const {data: paymentBalanceData, isLoading: isLoadingPaymentBalance} =
 		useGetPaymentBalanceViewModel({enabled: bankAccountData !== undefined});
 
+	/** Bank Form Management */
+	const methods = useForm({
+		schema: PaymentBankAccountFormSchema,
+		mode: 'all',
+	});
+
+	/** Withdraw Form Management */
+	const methodsWithdraw = useForm({
+		mode: 'all',
+		schema: WithdrawFormSchema,
+	});
 	/**
 	 * Service Save Account Bank
 	 */
@@ -84,7 +105,7 @@ const ViewPaymentSettingPage = () => {
 			onSuccess() {
 				if (isEdit) {
 					setIsEdit(false);
-					handleIsOpenPasswordConfirmation();
+					handleIsOpenPasswordConfirmationBank();
 					handleIsOpenSuccessConfirmation();
 				} else {
 					handleOpenModal();
@@ -150,6 +171,8 @@ const ViewPaymentSettingPage = () => {
 			createPaymentWithdraw,
 			isLoadingPaymentWithdraw,
 			isLoadingPaymentBalance,
+			isOpenPasswordConfirmationBank,
+			handleIsOpenPasswordConfirmationBank,
 		}),
 		[
 			bankAccountData,
@@ -180,6 +203,8 @@ const ViewPaymentSettingPage = () => {
 			createPaymentWithdraw,
 			isLoadingPaymentWithdraw,
 			isLoadingPaymentBalance,
+			isOpenPasswordConfirmationBank,
+			handleIsOpenPasswordConfirmationBank,
 		],
 	);
 
@@ -207,10 +232,17 @@ const ViewPaymentSettingPage = () => {
 					)}
 
 					{isShowModalDifferentPaymentType && <DifferentPaymentModalOrganism />}
-					{isOpenModal && <FormPaymentSetting />}
-					{isOpenFormWithdraw && <FormWithdrawOrganism />}
+					<FormProvider {...methods}>
+						{isOpenModal && <FormPaymentSetting />}
+						{isOpenPasswordConfirmationBank && (
+							<PasswordConfirmationBankOrganism />
+						)}
+					</FormProvider>
+					<FormProvider {...methodsWithdraw}>
+						{isOpenFormWithdraw && <FormWithdrawOrganism />}
+						{isOpenPasswordConfirmation && <PasswordConfirmationOrganism />}
+					</FormProvider>
 					{isOpenWithdrawConfirmation && <WithdrawConfirmationMolecules />}
-					{isOpenPasswordConfirmation && <PasswordConfirmationOrganism />}
 					{isOpenSuccessConfirmation && <SuccessUpdateInformationMolecules />}
 				</PaymentSettingContext.Provider>
 			</article>

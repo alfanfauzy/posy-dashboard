@@ -7,6 +7,7 @@ export const PaymentBankAccountFormSchema = z.object({
 	account_name: z.string().nonempty('Please fill account name'),
 	email: z.string().email('This is not a valid email format'),
 	bank_proof_url: z.string().min(1),
+	password: z.string().nullable(),
 });
 
 export type PaymentBankAccountForm = z.infer<

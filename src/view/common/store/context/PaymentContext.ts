@@ -37,6 +37,8 @@ type PaymentSettingContextProps = {
 	createPaymentWithdraw: (payload: PaymentWithdrawPayload) => void;
 	isLoadingPaymentWithdraw: boolean;
 	isLoadingPaymentBalance: boolean;
+	isOpenPasswordConfirmationBank: boolean;
+	handleIsOpenPasswordConfirmationBank: () => void;
 };
 
 export const PaymentSettingContext = createContext<PaymentSettingContextProps>({
@@ -68,4 +70,6 @@ export const PaymentSettingContext = createContext<PaymentSettingContextProps>({
 	isOpenWithdrawConfirmation: false,
 	handleIsOpenWithdrawConfirmation: () => {},
 	isLoadingPaymentBalance: false,
+	isOpenPasswordConfirmationBank: false,
+	handleIsOpenPasswordConfirmationBank: () => {},
 });

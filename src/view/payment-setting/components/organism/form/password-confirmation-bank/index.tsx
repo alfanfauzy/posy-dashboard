@@ -1,22 +1,25 @@
+import {mapToPayloadSaveBankAccount} from '@/data/bank/mappers/BankMapper';
+import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
-import {WithdrawForm} from '@/view/payment-setting/schemas/withdraw';
+import {PaymentBankAccountForm} from '@/view/payment-setting/schemas/payment/setting';
 import {Modal} from 'antd';
 import {Button, Input} from 'posy-fnb-core';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {useFormContext} from 'react-hook-form';
 import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 
-const PasswordConfirmationOrganism = () => {
+const PasswordConfirmationBankOrganism = () => {
 	const {
-		isOpenPasswordConfirmation,
+		isOpenPasswordConfirmationBank,
 		handleIsOpenPasswordConfirmation,
 		isLoadingSaveBankAccount,
-		createPaymentWithdraw,
+		saveBankAccount,
 		isLoadingPaymentWithdraw,
+		payloadEditInformation,
 	} = useContext(PaymentSettingContext);
 
-	const methodsWithdraw = useFormContext<WithdrawForm>();
+	const methodsWithdraw = useFormContext<PaymentBankAccountForm>();
 
 	const {
 		register,
@@ -29,47 +32,29 @@ const PasswordConfirmationOrganism = () => {
 		watch,
 	} = methodsWithdraw;
 
-	useEffect(() => {
-		unregister('password');
-	}, []);
-
 	const [showPassword, {toggle}] = useDisclosure({initialState: false});
 
 	const handleCloseModal = () => {
 		handleIsOpenPasswordConfirmation();
-		resetField('amount');
 		resetField('password');
 	};
 
 	const handleSubmit = () => {
-		// const newPayloadSaveBankAccount = mapToPayloadSaveBankAccount(
-		// 	payloadEditInformation as PaymentBankAccountForm,
-		// 	getValuesBankAccount('password') as string,
-		// );
+		const newPayloadSaveBankAccount = mapToPayloadSaveBankAccount(
+			payloadEditInformation as PaymentBankAccountForm,
+			getValues('password') as string,
+		);
 
-		const newPayloadWithdraw = {
-			amount: parseInt(getValues('amount')),
-			password: getValues('password'),
-		};
-
-		createPaymentWithdraw(newPayloadWithdraw);
-		// switch (confirmationType) {
-		// 	case 'edit-information':
-		// 		saveBankAccount(newPayloadSaveBankAccount as PayloadSaveBankAccount);
-		// 		break;
-
-		// 	default:
-		// 		break;
-		// }
+		saveBankAccount(newPayloadSaveBankAccount as PayloadSaveBankAccount);
 	};
 
 	const disabled =
-		Object.keys(errors).length !== 0 || getValues('password') === undefined;
+		getValues('password') === undefined || getValues('password') === '';
 
 	return (
 		<Modal
 			maskClosable={false}
-			open={isOpenPasswordConfirmation}
+			open={isOpenPasswordConfirmationBank}
 			onCancel={handleCloseModal}
 			title={
 				<h1 className="text-xl-semibold border-b border-neutral-40 p-4">
@@ -114,4 +99,4 @@ const PasswordConfirmationOrganism = () => {
 	);
 };
 
-export default PasswordConfirmationOrganism;
+export default PasswordConfirmationBankOrganism;
