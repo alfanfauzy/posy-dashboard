@@ -5,7 +5,7 @@ import {AiOutlinePercentage} from 'react-icons/ai';
 
 const TableManagementSidebar = () => {
 	return (
-		<main className="relative w-full flex-1 h-full rounded-l-2xl bg-neutral-10">
+		<main className="relative w-full flex-1 h-full rounded-l-lg bg-neutral-10">
 			{/* {loadTransaction && (
 				<div className="flex h-full w-full items-center justify-center">
 					<Loading size={75} />

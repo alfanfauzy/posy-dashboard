@@ -1,17 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
+import Table from '@/view/table-management/components/molecules/table';
 import type {DragEvent} from 'react';
 import {useState} from 'react';
 import {BsList} from 'react-icons/bs';
 
-import {Table} from './Table';
-
 const squares = {
 	layout: {
 		type: 'GRID',
-		width: 6,
-		height: 5,
+		width: 8,
+		height: 6,
 	},
 	objs: [
 		[
@@ -98,14 +97,14 @@ const squares = {
 	],
 };
 
-export type Position = Array<
+type Position = Array<
 	Array<{
 		id: number;
 		name: string;
 	} | null>
 >;
 
-export const Board = () => {
+const Board = () => {
 	const dispatch = useAppDispatch();
 	const [table, setTablePos] = useState<Position>(squares.objs);
 
@@ -185,3 +184,5 @@ export const Board = () => {
 		</section>
 	);
 };
+
+export default Board;

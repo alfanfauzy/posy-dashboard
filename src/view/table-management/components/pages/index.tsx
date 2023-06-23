@@ -1,5 +1,5 @@
+import Board from '../organisms/board';
 import TableManagementSidebar from '../templates/table-management-sidebar';
-import {Board} from './Board';
 
 const ViewTableManagementPage = () => {
 	return (
