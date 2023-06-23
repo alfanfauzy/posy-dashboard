@@ -3,7 +3,7 @@ const nextConfig = {
 	output: 'standalone',
 	reactStrictMode: true,
 	images: {
-		domains: ['pvpapi.klikoo.co.id'],
+		domains: ['pvpapi.klikoo.co.id', 'ik.imagekit.io'],
 	},
 	rewrites() {
 		return [

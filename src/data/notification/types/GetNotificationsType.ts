@@ -11,7 +11,7 @@ enum NotificationType {
 
 enum NotificationAction {
 	RECEIVED_NEW_ORDER = 'RECEIVED_NEW_ORDER',
-	PAYMENT_SUCCESS = 'PAYMENT_SUCCESS',
+	TRANSACTION_HAS_BEEN_PAID = 'TRANSACTION_HAS_BEEN_PAID',
 }
 
 export type GetNotificationsDataResponse = {

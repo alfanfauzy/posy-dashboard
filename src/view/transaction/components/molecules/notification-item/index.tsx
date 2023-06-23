@@ -1,27 +1,13 @@
-import {
-	Notification,
-	NotificationAction,
-	NotificationCategory,
-} from '@/domain/notification/model';
+import {Notification, NotificationAction} from '@/domain/notification/model';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {useCreateSetReadNotificationViewModel} from '@/view/notification/view-models/CreateSetReadNotificationViewModel';
 import {Divider} from 'antd';
+import Image from 'next/image';
 import React from 'react';
-import {AiFillPrinter} from 'react-icons/ai';
 import {IoMdClose} from 'react-icons/io';
 import {useSwipeable} from 'react-swipeable';
-
-const generateIcon = (category: NotificationCategory) => {
-	const icons = {
-		[NotificationCategory.ORDER]: (
-			<AiFillPrinter className="text-secondary-main" />
-		),
-	};
-
-	return icons[category];
-};
 
 type NotificationitemProps = {
 	item: Notification;
@@ -71,8 +57,13 @@ const Notificationitem = ({
 				key={item.uuid}
 				className="flex items-start p-3 gap-3"
 			>
-				<div onClick={onClickNotification} className="flex flex-1 gap-3">
-					<div className="mt-0.5">{generateIcon(item.category)}</div>
+				<div
+					onClick={onClickNotification}
+					className="flex flex-1 gap-3 cursor-pointer"
+				>
+					<div className="mt-1">
+						<Image alt="icon" src={item.image_url} width={16} height={16} />
+					</div>
 					<div>
 						<p className="text-m-regular">{item.content}</p>
 						<p className="text-s-regular text-neutral-80">
