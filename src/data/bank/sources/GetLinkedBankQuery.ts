@@ -28,5 +28,12 @@ export const useGetLinkedBankAccountQuery = (
 		{
 			refetchOnWindowFocus: false,
 			...options,
+			retry(failureCount, error) {
+				const err = error as AxiosError;
+				if (Number(err.code) === 500) {
+					return failureCount < 3;
+				}
+				return false;
+			},
 		},
 	);
