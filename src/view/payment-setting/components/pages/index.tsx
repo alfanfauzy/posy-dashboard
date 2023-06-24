@@ -7,7 +7,6 @@ import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext'
 import PaymentInformationMolecules from '@/view/payment-setting/components/molecules/payment/information';
 import {useGetPaymentAccountInfoViewModel} from '@/view/payment-setting/view-models/GetPaymentAccountInfoViewModel';
 import {useQueryClient} from '@tanstack/react-query';
-import {enqueueSnackbar} from 'notistack';
 import {Loading} from 'posy-fnb-core';
 import React, {useMemo, useState} from 'react';
 import {FormProvider} from 'react-hook-form';
@@ -85,20 +84,15 @@ const ViewPaymentSettingPage = () => {
 	const {data: paymentBalanceData, isLoading: isLoadingPaymentBalance} =
 		useGetPaymentBalanceViewModel({enabled: bankAccountData !== undefined});
 
-	/** Bank Form Management */
 	const methods = useForm({
 		schema: PaymentBankAccountFormSchema,
 		mode: 'all',
 	});
 
-	/** Withdraw Form Management */
 	const methodsWithdraw = useForm({
 		mode: 'all',
 		schema: WithdrawFormSchema,
 	});
-	/**
-	 * Service Save Account Bank
-	 */
 
 	const {saveBankAccount, isLoading: isLoadingSaveBankAccount} =
 		useSaveAccountBankViewModal({
@@ -114,17 +108,7 @@ const ViewPaymentSettingPage = () => {
 				queryClient.invalidateQueries(['linked-bank-account']);
 				queryClient.invalidateQueries(['payment-account-info']);
 			},
-			onError(response) {
-				enqueueSnackbar({
-					message: `${response.message} : Password is incorrect`,
-					variant: 'error',
-				});
-			},
 		});
-
-	/**
-	 * Create Payment Withdraw
-	 */
 
 	const {createPaymentWithdraw, isLoading: isLoadingPaymentWithdraw} =
 		useUpdatePaymentWithdrawViewModal({
@@ -132,12 +116,6 @@ const ViewPaymentSettingPage = () => {
 				handleIsOpenPasswordConfirmation();
 				handleIsOpenSuccessConfirmation();
 				queryClient.invalidateQueries(['payment-balance']);
-			},
-			onError(response) {
-				enqueueSnackbar({
-					message: `${response.message} : Password is incorrect`,
-					variant: 'error',
-				});
 			},
 		});
 
@@ -219,7 +197,7 @@ const ViewPaymentSettingPage = () => {
 				<PaymentSettingContext.Provider value={valueProvider}>
 					{isLoading ? (
 						<div className="m-auto">
-							<Loading size={50} />
+							<Loading size={100} />
 						</div>
 					) : (
 						<>

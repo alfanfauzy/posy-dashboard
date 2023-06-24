@@ -28,8 +28,6 @@ const PasswordConfirmationBankOrganism = () => {
 		trigger,
 		getValues,
 		resetField,
-		unregister,
-		watch,
 	} = methodsWithdraw;
 
 	const [showPassword, {toggle}] = useDisclosure({initialState: false});
@@ -58,7 +56,7 @@ const PasswordConfirmationBankOrganism = () => {
 			onCancel={handleCloseModal}
 			title={
 				<h1 className="text-xl-semibold border-b border-neutral-40 p-4">
-					Input Password
+					Input password
 				</h1>
 			}
 			footer={

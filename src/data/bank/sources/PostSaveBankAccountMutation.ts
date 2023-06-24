@@ -8,17 +8,17 @@ import {AxiosError} from 'axios';
 export const CreateSaveBankAccount = async (
 	payload: PayloadSaveBankAccount,
 ): Promise<Response<SaveBankAccountResponse>> => {
-	try {
-		const response = await Post({
-			endpoint: `/payment-service/bank/save-account`,
-			data: payload,
-		});
+	const response = await Post({
+		endpoint: `/payment-service/bank/save-account`,
+		data: payload,
+	});
 
-		return response;
-	} catch (error) {
-		const err = error as AxiosError;
-		throw err.response?.data;
-	}
+	return {
+		code: response?.code,
+		data: response?.data,
+		message: response?.message,
+		more_info: response?.more_info,
+	};
 };
 
 export const useCreateSaveBankAccountMutation = (

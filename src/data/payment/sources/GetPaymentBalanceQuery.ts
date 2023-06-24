@@ -25,7 +25,7 @@ export const useGetPaymentBalanceQuery = (
 ) =>
 	useQuery<Response<GetPaymentBalanceResponse>>(
 		['payment-balance'],
-		() => GetPaymentBalance(),
+		GetPaymentBalance,
 		{
 			...options,
 			refetchOnWindowFocus: false,

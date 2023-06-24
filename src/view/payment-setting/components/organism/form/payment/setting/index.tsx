@@ -232,6 +232,9 @@ const FormPaymentSetting = () => {
 
 	return (
 		<Modal
+			style={{
+				top: 20,
+			}}
 			open={isOpenModal}
 			onCancel={() => {
 				handleCloseModal();
@@ -239,7 +242,7 @@ const FormPaymentSetting = () => {
 			}}
 			title={
 				<p className="border-b border-neutral-40 p-4 text-xl-semibold">
-					Payment Setting
+					Payment Settings
 				</p>
 			}
 			footer={null}
