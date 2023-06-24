@@ -3,7 +3,7 @@ const nextConfig = {
 	output: 'standalone',
 	reactStrictMode: true,
 	images: {
-		domains: ['pvpapi.klikoo.co.id'],
+		domains: ['pvpapi.klikoo.co.id', 'ik.imagekit.io'],
 	},
 	rewrites() {
 		return [
@@ -18,6 +18,10 @@ const nextConfig = {
 			{
 				source: '/product-service/:path*',
 				destination: `${process.env.NEXT_PUBLIC_API}/fnb-product-service/:path*`,
+			},
+			{
+				source: '/notification-service/:path*',
+				destination: `${process.env.NEXT_PUBLIC_API}/fnb-notification-service/:path*`,
 			},
 		];
 	},

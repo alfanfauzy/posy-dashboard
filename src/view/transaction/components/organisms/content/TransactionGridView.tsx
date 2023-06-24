@@ -19,6 +19,7 @@ import {
 	onChangeSelectedTrxId,
 	onClearSearch,
 } from '@/view/common/store/slices/transaction';
+import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
 import {useCreateTransactionViewModel} from '@/view/transaction/view-models/CreateTransactionViewModel';
 import {useGetTransactionSummaryViewModel} from '@/view/transaction/view-models/GetTransactionSummaryViewModel';
 import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTransactionsViewModel';
@@ -28,6 +29,7 @@ import {closeSnackbar, useSnackbar} from 'notistack';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {useEffect, useRef, useState} from 'react';
 import {AiOutlineFullscreen} from 'react-icons/ai';
+import {IoMdNotificationsOutline} from 'react-icons/io';
 import {useProSidebar} from 'react-pro-sidebar';
 import {useReactToPrint} from 'react-to-print';
 
@@ -77,9 +79,17 @@ const generateBorderColor = (
 
 type TransactionGridViewProps = {
 	openTableCapacity: () => void;
+	openNotifBar: () => void;
+	closeNotifBar: () => void;
+	isOpenNotifBar: boolean;
 };
 
-const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
+const TransactionGridView = ({
+	openTableCapacity,
+	openNotifBar,
+	closeNotifBar,
+	isOpenNotifBar,
+}: TransactionGridViewProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {enqueueSnackbar} = useSnackbar();
@@ -143,7 +153,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 			search: [
 				{
 					field: 'status',
-					value: status || 'WAITING_FOOD|WAITING_PAYMENT|WAITING_ORDER',
+					value: status || 'WAITING_FOOD|WAITING_PAYMENT|WAITING_ORDER|PENDING',
 				},
 				{
 					field: 'keyword',
@@ -169,6 +179,11 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
 			},
 		);
+
+	const {data: dataCounter} = useGetNotificationCounterViewModel({
+		parent_type: 'restaurant_outlet_uuid',
+		parent_uuid: outletId,
+	});
 
 	const handleSetStatus = (
 		e: React.MouseEvent<HTMLElement>,
@@ -204,6 +219,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				},
 			}),
 		);
+		closeNotifBar();
 	};
 
 	useEffect(() => {
@@ -213,9 +229,7 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 				const diffTime = Math.abs(now - el.first_order_at * 1000);
 				const diffMinutes = Math.floor(diffTime / 60000);
 				const checktime = diffMinutes > 0 && diffMinutes % 2 === 0;
-				// console.log(diffMinutes, checktime, idx);
 				if (el.status === TransactionStatus.WAITING_FOOD && checktime) {
-					// console.log({diffMinutes}, idx);
 					handlePlayAudio(play);
 
 					enqueueSnackbar({
@@ -297,14 +311,31 @@ const TransactionGridView = ({openTableCapacity}: TransactionGridViewProps) => {
 	};
 
 	return (
-		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-6">
+		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-4">
 			<article className="h-fit">
 				<aside className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-neutral-100 lg:text-heading-s-semibold">
+					<p className="text-xxl-semibold text-neutral-100">
 						Restaurant Transaction
 					</p>
 
-					<div>
+					<div className="flex items-center gap-6">
+						<div
+							className={`${
+								isOpenNotifBar ? 'bg-secondary-border ' : ''
+							} relative hover:bg-secondary-border duration-300 ease-in-out cursor-pointer rounded-full p-1`}
+						>
+							<IoMdNotificationsOutline
+								onClick={openNotifBar}
+								className="cursor-pointer hover:opacity-70"
+								size={28}
+							/>
+							{dataCounter && dataCounter?.transaction > 0 && (
+								<div className="absolute shadow-md top-2.5 right-1 px-[3.5px] py-[1px] rounded-full w-fit bg-secondary-main text-[7px] font-bold text-white">
+									{dataCounter?.total}
+								</div>
+							)}
+						</div>
+
 						<AiOutlineFullscreen
 							onClick={requestFullScreen}
 							className="cursor-pointer hover:opacity-70"

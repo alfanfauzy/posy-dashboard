@@ -54,7 +54,7 @@ const TransactionDetails = ({
 
 	return (
 		<section>
-			<aside className="p-4 bg-gradient-to-r from-primary-main to-secondary-main rounded-b-2xl">
+			<aside className="p-4 bg-gradient-to-r from-primary-main to-secondary-main rounded-l-2xl">
 				<div className="flex items-center justify-between">
 					<p className="text-l-bold text-neutral-10">
 						Table {dataTransaction?.table_number}

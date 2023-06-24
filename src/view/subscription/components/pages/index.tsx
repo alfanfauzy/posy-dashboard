@@ -26,9 +26,7 @@ const ViewSubscriptionPage = () => {
 		<main className="flex h-full w-full">
 			<article className="flex h-full w-full flex-col rounded-2xl bg-neutral-10 p-6">
 				<section className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
-						Subscription
-					</p>
+					<p className="text-xxl-semibold text-primary-main ">Subscription</p>
 				</section>
 
 				<section className="mt-6 flex gap-6 xl:w-[90%]">

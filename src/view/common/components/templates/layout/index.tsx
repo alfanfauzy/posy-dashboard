@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
+import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
@@ -102,6 +104,8 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 					{transaction_uuid: message?.data.transaction_uuid},
 				]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
+				queryClient.invalidateQueries([GetNotificationsQueryKey]);
 				enqueueSnackbar({
 					className: 'border-t-8 border-blue-success',
 					style: {
@@ -141,15 +145,11 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	return (
 		<ProSidebarProvider>
 			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30">
-				<section className="flex h-full w-full gap-4">
-					<div className="py-4">
+				<section className="flex h-full w-full gap-2">
+					<div>
 						<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
 					</div>
-					<div
-						className={`h-full flex-1 overflow-y-scroll ${
-							pathname !== '/transaction' ? 'py-4' : ''
-						}`}
-					>
+					<div className="h-full flex-1 overflow-y-scroll">
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>
 				</section>
