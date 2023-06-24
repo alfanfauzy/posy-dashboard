@@ -21,3 +21,10 @@ export type InputVariables<TSort = unknown, TSearch = unknown> = {
 	limit?: number;
 	page?: number;
 };
+
+export type FilterInputVariables<TSort = unknown, TSearch = unknown> = {
+	sort: Sort<TSort>;
+	search: Array<Search<TSearch>>;
+	limit: number;
+	page: number;
+};

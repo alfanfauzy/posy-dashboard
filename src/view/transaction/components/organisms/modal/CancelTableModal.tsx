@@ -68,7 +68,6 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 				</div>
 				<div className="mt-3 w-full">
 					<Select
-						isSearchable={false}
 						className="w-full"
 						size="l"
 						options={CancelOptions}
