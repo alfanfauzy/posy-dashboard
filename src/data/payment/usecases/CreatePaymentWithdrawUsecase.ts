@@ -1,7 +1,7 @@
 import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
 import {PaymentWithdrawPayload} from '@/domain/payment/models';
-import {CreatePaymentWithdrawRepository} from '@/domain/payment/repositories/PaymentRepositories';
+import {CreatePaymentWithdrawRepository} from '@/domain/payment/repositories/CreatePaymentWithdrawRepository';
 import {BaseError} from '@/domain/vo/BaseError';
 import {useSnackbar} from 'notistack';
 

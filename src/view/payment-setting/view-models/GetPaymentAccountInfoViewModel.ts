@@ -1,6 +1,6 @@
 import {GetPaymentAccountInfoResponse} from '@/data/payment/types';
-import {useGetPaymentAccountInfoUsecases} from '@/data/payment/usecases/GetPaymentAccountInfoUsecases';
-import {GetPaymentAccountInfoResult} from '@/domain/payment/repositories/PaymentRepositories';
+import {useGetPaymentAccountInfoUsecases} from '@/data/payment/usecases/GetPaymentAccountInfoUsecase';
+import {GetPaymentAccountInfoResult} from '@/domain/payment/repositories/GetPaymentAccountInfoRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

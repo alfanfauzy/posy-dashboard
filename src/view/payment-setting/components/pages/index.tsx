@@ -90,6 +90,9 @@ const ViewPaymentSettingPage = () => {
 	const methods = useForm({
 		schema: PaymentBankAccountFormSchema,
 		mode: 'all',
+		defaultValues: {
+			password: '',
+		},
 	});
 
 	const methodsWithdraw = useForm({

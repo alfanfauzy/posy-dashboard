@@ -4,7 +4,7 @@ import {GetPaymentMethodListResponse} from '@/data/payment/types';
 import {
 	GetFilterPaymentMethod,
 	GetPaymentMethodsResult,
-} from '@/domain/payment/repositories/PaymentRepositories';
+} from '@/domain/payment/repositories/GetPaymentMethodRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

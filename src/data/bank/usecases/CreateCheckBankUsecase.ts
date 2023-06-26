@@ -1,16 +1,17 @@
-import {useCreateSaveBankAccountMutation} from '@/data/bank/sources/CreateSaveBankAccountMutation';
 import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
-import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {PayloadBankCheck} from '@/domain/bank/repositories/CreateCheckBankRepository';
 import {BaseError} from '@/domain/vo/BaseError';
 import {useSnackbar} from 'notistack';
 
-export const useSaveBankAccountUsecases = ({
+import {useCreateCheckBankMutation} from '../sources/CreateCheckBankMutation';
+
+export const useCheckBankUsecase = ({
 	onSuccess,
 	onError,
 	...options
 }: MutationOptions) => {
-	let error: BaseError | null = null;
+	const error: BaseError | null = null;
 	const {enqueueSnackbar} = useSnackbar();
 
 	const {
@@ -18,7 +19,7 @@ export const useSaveBankAccountUsecases = ({
 		data,
 		error: _error,
 		...rest
-	} = useCreateSaveBankAccountMutation({
+	} = useCreateCheckBankMutation({
 		onSuccess: (dataSuccess, ...args) => {
 			if (dataSuccess) {
 				onSuccess?.(dataSuccess, ...args);
@@ -38,17 +39,13 @@ export const useSaveBankAccountUsecases = ({
 		...options,
 	});
 
-	const saveBankAccount = (payload: PayloadSaveBankAccount) => {
+	const checkBank = (payload: PayloadBankCheck) => {
 		mutate(payload);
 	};
 
-	if (_error) {
-		error = mapToBaseError(_error);
-	}
-
 	if (data?.data) {
 		return {
-			saveBankAccount,
+			checkBank,
 			data: data?.data,
 			error,
 			...rest,
@@ -56,9 +53,8 @@ export const useSaveBankAccountUsecases = ({
 	}
 
 	return {
-		saveBankAccount,
-		data: undefined,
-		error,
+		checkBank,
+		data: data?.data,
 		...rest,
 	};
 };

@@ -11,7 +11,6 @@ const PasswordConfirmationOrganism = () => {
 	const {
 		isOpenPasswordConfirmation,
 		handleIsOpenPasswordConfirmation,
-		isLoadingSaveBankAccount,
 		createPaymentWithdraw,
 		isLoadingPaymentWithdraw,
 	} = useContext(PaymentSettingContext);
@@ -26,6 +25,7 @@ const PasswordConfirmationOrganism = () => {
 		getValues,
 		resetField,
 		unregister,
+		watch,
 	} = methodsWithdraw;
 
 	useEffect(() => {
@@ -41,38 +41,28 @@ const PasswordConfirmationOrganism = () => {
 	};
 
 	const handleSubmit = () => {
-		// const newPayloadSaveBankAccount = mapToPayloadSaveBankAccount(
-		// 	payloadEditInformation as PaymentBankAccountForm,
-		// 	getValuesBankAccount('password') as string,
-		// );
-
 		const newPayloadWithdraw = {
 			amount: parseInt(getValues('amount')),
 			password: getValues('password'),
 		};
 
 		createPaymentWithdraw(newPayloadWithdraw);
-		// switch (confirmationType) {
-		// 	case 'edit-information':
-		// 		saveBankAccount(newPayloadSaveBankAccount as PayloadSaveBankAccount);
-		// 		break;
-
-		// 	default:
-		// 		break;
-		// }
 	};
 
 	const disabled =
 		Object.keys(errors).length !== 0 || getValues('password') === undefined;
 
+	console.log(watch());
+	console.log(errors);
+
 	return (
 		<Modal
 			maskClosable={false}
 			open={isOpenPasswordConfirmation}
-			onCancel={handleCloseModal}
+			onCancel={!isLoadingPaymentWithdraw ? handleCloseModal : undefined}
 			title={
 				<h1 className="text-xl-semibold border-b border-neutral-40 p-4">
-					Input assword
+					Input password
 				</h1>
 			}
 			footer={
@@ -80,7 +70,7 @@ const PasswordConfirmationOrganism = () => {
 					<Button
 						onClick={handleSubmit}
 						fullWidth
-						isLoading={isLoadingSaveBankAccount || isLoadingPaymentWithdraw}
+						isLoading={isLoadingPaymentWithdraw}
 						disabled={disabled}
 					>
 						Submit

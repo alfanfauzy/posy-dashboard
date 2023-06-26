@@ -1,6 +1,6 @@
 import {MutationOptions} from '@/data/common/types';
-import {useUpdatePaymentMethodCategoryByRestaurantUsecases} from '@/data/payment/usecases/UpdatePaymentMethodCategoryByRestaurantUsecases';
-import {UpdatePaymentMethodCategoryRepository} from '@/domain/payment/repositories/PaymentRepositories';
+import {useUpdatePaymentMethodCategoryByRestaurantUsecases} from '@/data/payment/usecases/UpdatePaymentMethodCategoryByRestaurantUsecase';
+import {UpdatePaymentMethodCategoryRepository} from '@/domain/payment/repositories/UpdatePaymentMethodCategoriesRepository';
 
 export const useUpdatePaymentMethodCategoryByRestaurantViewModal = ({
 	...options

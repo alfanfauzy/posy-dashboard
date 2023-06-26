@@ -1,6 +1,6 @@
 import {MutationOptions} from '@/data/common/types';
-import {useCreatePaymentWithdrawUsecases} from '@/data/payment/usecases/CreatePaymentWithdrawUsecases';
-import {CreatePaymentWithdrawRepository} from '@/domain/payment/repositories/PaymentRepositories';
+import {useCreatePaymentWithdrawUsecases} from '@/data/payment/usecases/CreatePaymentWithdrawUsecase';
+import {CreatePaymentWithdrawRepository} from '@/domain/payment/repositories/CreatePaymentWithdrawRepository';
 
 export const useUpdatePaymentWithdrawViewModal = (
 	options: MutationOptions,

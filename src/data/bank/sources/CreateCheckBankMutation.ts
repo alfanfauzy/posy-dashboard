@@ -1,6 +1,6 @@
 import {GetCheckBankResponse} from '@/data/bank/types';
 import Post from '@/data/common/api/post';
-import {PayloadBankCheck} from '@/domain/bank/repositories/BankRepository';
+import {PayloadBankCheck} from '@/domain/bank/repositories/CreateCheckBankRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {useMutation, UseMutationOptions} from '@tanstack/react-query';
 import {AxiosError} from 'axios';

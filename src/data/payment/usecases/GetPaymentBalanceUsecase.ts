@@ -1,6 +1,6 @@
 import {mapToPaymentBalance} from '@/data/payment/mappers/PaymentMethodMapper';
 import {GetPaymentBalanceResponse} from '@/data/payment/types';
-import {GetPaymentBalanceResult} from '@/domain/payment/repositories/PaymentRepositories';
+import {GetPaymentBalanceResult} from '@/domain/payment/repositories/GetPaymentBalanceRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

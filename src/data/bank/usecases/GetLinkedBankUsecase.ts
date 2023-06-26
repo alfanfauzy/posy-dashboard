@@ -1,11 +1,11 @@
 import {mapToLinkedBankAccount} from '@/data/bank/mappers/BankMapper';
 import {useGetLinkedBankAccountQuery} from '@/data/bank/sources/GetLinkedBankQuery';
 import {GetLinkedBankAccountResponse} from '@/data/bank/types';
-import {GetLinkedBankResult} from '@/domain/bank/repositories/BankRepository';
+import {GetLinkedBankResult} from '@/domain/bank/repositories/GetLinkedBankRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
-export const useGetLinkedBankUsecases = (
+export const useGetLinkedBankUsecase = (
 	options?: UseQueryOptions<Response<GetLinkedBankAccountResponse>>,
 ): GetLinkedBankResult => {
 	const {data, ...rest} = useGetLinkedBankAccountQuery(options);

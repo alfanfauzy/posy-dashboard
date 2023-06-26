@@ -1,5 +1,5 @@
 import Post from '@/data/common/api/post';
-import {GetFilterPaymentMethodCategory} from '@/domain/payment/repositories/PaymentRepositories';
+import {GetFilterPaymentMethodCategory} from '@/domain/payment/repositories/GetPaymentMethodCategoriesRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import {AxiosError} from 'axios';

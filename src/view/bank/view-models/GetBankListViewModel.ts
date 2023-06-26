@@ -1,13 +1,13 @@
 import {GetBankListResponse} from '@/data/bank/types';
-import {useGetBankListUsecases} from '@/data/bank/usecases/GetBankListUsecases';
-import {GetBankListsResult} from '@/domain/bank/repositories/BankRepository';
+import {useGetBankListUsecase} from '@/data/bank/usecases/GetBankListUsecase';
+import {GetBankListsResult} from '@/domain/bank/repositories/GetBankListRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
 export const useGetBankListViewModal = (
 	options?: UseQueryOptions<Response<Array<GetBankListResponse>>>,
 ): GetBankListsResult => {
-	const result = useGetBankListUsecases(options);
+	const result = useGetBankListUsecase(options);
 
 	return result;
 };

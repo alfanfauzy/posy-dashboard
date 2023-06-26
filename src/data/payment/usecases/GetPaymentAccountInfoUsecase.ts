@@ -1,7 +1,7 @@
 import {mapToPayemntAccountInfo} from '@/data/payment/mappers/PaymentMethodMapper';
 import {useGetPaymentAccountInfoQuery} from '@/data/payment/sources/GetPaymentAccountInfoQuery';
 import {GetPaymentAccountInfoResponse} from '@/data/payment/types';
-import {GetPaymentAccountInfoResult} from '@/domain/payment/repositories/PaymentRepositories';
+import {GetPaymentAccountInfoResult} from '@/domain/payment/repositories/GetPaymentAccountInfoRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
