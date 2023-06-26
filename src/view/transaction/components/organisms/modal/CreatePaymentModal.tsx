@@ -287,25 +287,28 @@ const CreatePaymentModal = ({
 
 						{selectedPaymentCategory.type !== 'cash' && dataPaymentMethods && (
 							<aside className="grid grid-cols-4 gap-2">
-								{dataPaymentMethods.map(paymentMethod => (
-									<div
-										onClick={() => setSelectedPayment(paymentMethod.uuid)}
-										key={paymentMethod.name}
-										className={`flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border p-4 transition-all duration-300 ease-in-out hover:opacity-70 ${
-											selectedPayment === paymentMethod.uuid
-												? 'border-secondary-main bg-secondary-border'
-												: 'border-neutral-100 bg-neutral-10 hover:border-primary-main hover:bg-secondary-border hover:bg-opacity-70'
-										}`}
-									>
-										<Image
-											alt={paymentMethod.name}
-											width={72}
-											height={28}
-											src={paymentMethod.logo_url}
-											priority
-										/>
-									</div>
-								))}
+								{dataPaymentMethods.map(
+									paymentMethod =>
+										paymentMethod.is_show && (
+											<div
+												onClick={() => setSelectedPayment(paymentMethod.uuid)}
+												key={paymentMethod.name}
+												className={`flex w-full cursor-pointer items-center justify-center gap-3.5 rounded-2xl border p-4 transition-all duration-300 ease-in-out hover:opacity-70 ${
+													selectedPayment === paymentMethod.uuid
+														? 'border-secondary-main bg-secondary-border'
+														: 'border-neutral-100 bg-neutral-10 hover:border-primary-main hover:bg-secondary-border hover:bg-opacity-70'
+												}`}
+											>
+												<Image
+													alt={paymentMethod.name}
+													width={72}
+													height={28}
+													src={paymentMethod.logo_url}
+													priority
+												/>
+											</div>
+										),
+								)}
 							</aside>
 						)}
 

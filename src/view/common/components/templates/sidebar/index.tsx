@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
+import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
 import {OutletSelection} from '@/domain/outlet/models';
 import {useLogoutViewModel} from '@/view/auth/view-models/LogoutViewModel';
 import PersonIcon from '@/view/common/assets/icons/person';
@@ -13,6 +15,7 @@ import {onLogout, setRestaurantOutletId} from '@/view/common/store/slices/auth';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
+import {useQueryClient} from '@tanstack/react-query';
 import {Select} from 'antd';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
@@ -37,6 +40,7 @@ const TemplatesSidebar = ({
 }: TemplatesSidebarProps) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const queryClient = useQueryClient();
 	const {width} = useViewportListener();
 	const {collapseSidebar, collapsed} = useProSidebar();
 	const [isOpenLogout, {open: openLogout, close: closeLogout}] = useDisclosure({
@@ -81,6 +85,8 @@ const TemplatesSidebar = ({
 	const onChangeOutlet = (e: string) => {
 		dispatch(setRestaurantOutletId(e));
 		dispatch(onChangeSelectedTrxId({id: ''}));
+		queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
+		queryClient.invalidateQueries([GetNotificationsQueryKey]);
 	};
 
 	const {logout, isLoading: loadLogout} = useLogoutViewModel({
@@ -114,7 +120,7 @@ const TemplatesSidebar = ({
 			>
 				<aside
 					className={`flex h-[12%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
-						collapsed ? 'pl-3.5' : 'pl-6'
+						collapsed ? 'pl-3.5' : 'pl-4'
 					}`}
 				>
 					{!collapsed ? (

@@ -11,6 +11,7 @@ import {persistor, wrapper} from '@/view/common/store/index';
 import type {NextPageWithLayout} from '@/view/common/types/index';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+import {AxiosError} from 'axios';
 import type {AppProps} from 'next/app';
 import {SnackbarProvider} from 'notistack';
 import {Suspense, useState} from 'react';
@@ -22,7 +23,21 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
-	const [queryClient] = useState(new QueryClient());
+	const [queryClient] = useState(
+		new QueryClient({
+			defaultOptions: {
+				queries: {
+					retry(failureCount, error) {
+						const err = error as AxiosError;
+						if (Number(err.code) === 500) {
+							return failureCount < 3;
+						}
+						return false;
+					},
+				},
+			},
+		}),
+	);
 	const {store} = wrapper.useWrappedStore(rest);
 
 	const getLayout =
@@ -37,8 +52,6 @@ const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
 		<QueryClientProvider client={queryClient}>
 			<SnackbarProvider
 				maxSnack={3}
-				// className="border-t-8 border-blue-success"
-				// style={{borderRadius: '8px', background: '#ffffff', color: '#0A0A0A'}}
 				autoHideDuration={2000}
 				transitionDuration={500}
 				anchorOrigin={{horizontal: 'center', vertical: 'top'}}
