@@ -5,7 +5,7 @@ import {GetLinkedBankResult} from '@/domain/bank/repositories/BankRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
-export const useGetLinkedBankUsecase = (
+export const useGetLinkedBankUsecases = (
 	options?: UseQueryOptions<Response<GetLinkedBankAccountResponse>>,
 ): GetLinkedBankResult => {
 	const {data, ...rest} = useGetLinkedBankAccountQuery(options);

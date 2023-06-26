@@ -21,7 +21,7 @@ export const GetCheckBank = async (
 	}
 };
 
-export const usePostCheckBankMutation = (
+export const useCreateCheckBankMutation = (
 	options?: UseMutationOptions<
 		Response<GetCheckBankResponse>,
 		AxiosError<Response>,

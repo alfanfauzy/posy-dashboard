@@ -2,10 +2,12 @@ import {
 	mapToBankOptions,
 	mapToPayloadSaveBankAccount,
 } from '@/data/bank/mappers/BankMapper';
+import {GetCheckBankResponse} from '@/data/bank/types';
 import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {Response} from '@/domain/vo/BaseResponse';
+import {useCheckBankViewModal} from '@/view/bank/view-models/CreateCheckBankViewModel';
 import {useGetBankListViewModal} from '@/view/bank/view-models/GetBankListViewModel';
 import {useGetLinkedBankAccountViewModel} from '@/view/bank/view-models/GetLinkedBankAccountViewModel';
-import {useCheckBankViewModal} from '@/view/bank/view-models/PostCheckBankViewModel';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
 import {useGetImagePrivateViewModel} from '@/view/file-upload/view-modals/GetImagePrivateViewModels';
 import {useUploadImagePrivateViewModal} from '@/view/file-upload/view-modals/UploadImagePrivateViewModels';
@@ -87,9 +89,11 @@ const FormPaymentSetting = () => {
 	 */
 	const {checkBank, isLoading: isLoadingCheckBank} = useCheckBankViewModal({
 		onSuccess(data) {
+			const response = data as Response<GetCheckBankResponse>;
+
 			const {
 				data: {account_name},
-			} = data;
+			} = response;
 
 			setValue('account_name', account_name);
 			clearErrors('account_name');

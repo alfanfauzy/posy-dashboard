@@ -1,6 +1,9 @@
+import {GetLinkedBankAccountQueryKey} from '@/data/bank/sources/GetLinkedBankQuery';
+import {GetPaymentAccountInfoQueryKey} from '@/data/payment/sources/GetPaymentAccountInfoQuery';
+import {GetPaymentBalanceQueryKey} from '@/data/payment/sources/GetPaymentBalanceQuery';
 import {Can} from '@/view/auth/components/organisms/rbac';
+import {useSaveAccountBankViewModal} from '@/view/bank/view-models/CreateSaveAccountBankViewModel';
 import {useGetLinkedBankAccountViewModel} from '@/view/bank/view-models/GetLinkedBankAccountViewModel';
-import {useSaveAccountBankViewModal} from '@/view/bank/view-models/PostSaveAccountBankViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
@@ -105,8 +108,8 @@ const ViewPaymentSettingPage = () => {
 					handleOpenModal();
 					handleIsOpenSuccessConfirmation();
 				}
-				queryClient.invalidateQueries(['linked-bank-account']);
-				queryClient.invalidateQueries(['payment-account-info']);
+				queryClient.invalidateQueries([GetLinkedBankAccountQueryKey]);
+				queryClient.invalidateQueries([GetPaymentAccountInfoQueryKey]);
 			},
 		});
 
@@ -115,7 +118,7 @@ const ViewPaymentSettingPage = () => {
 			onSuccess() {
 				handleIsOpenPasswordConfirmation();
 				handleIsOpenSuccessConfirmation();
-				queryClient.invalidateQueries(['payment-balance']);
+				queryClient.invalidateQueries([GetPaymentBalanceQueryKey]);
 			},
 		});
 

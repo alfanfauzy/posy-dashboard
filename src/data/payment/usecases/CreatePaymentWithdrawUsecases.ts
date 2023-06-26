@@ -1,15 +1,17 @@
-import {useCreateSaveBankAccountMutation} from '@/data/bank/sources/PostSaveBankAccountMutation';
 import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
-import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {PaymentWithdrawPayload} from '@/domain/payment/models';
+import {CreatePaymentWithdrawRepository} from '@/domain/payment/repositories/PaymentRepositories';
 import {BaseError} from '@/domain/vo/BaseError';
 import {useSnackbar} from 'notistack';
 
-export const useSaveBankAccountUsecase = ({
+import {useCreatePaymentWithdrawMutation} from '../sources/CreatePaymentWithdrawMutation';
+
+export const useCreatePaymentWithdrawUsecases = ({
 	onSuccess,
 	onError,
 	...options
-}: MutationOptions) => {
+}: MutationOptions): CreatePaymentWithdrawRepository => {
 	let error: BaseError | null = null;
 	const {enqueueSnackbar} = useSnackbar();
 
@@ -18,7 +20,7 @@ export const useSaveBankAccountUsecase = ({
 		data,
 		error: _error,
 		...rest
-	} = useCreateSaveBankAccountMutation({
+	} = useCreatePaymentWithdrawMutation({
 		onSuccess: (dataSuccess, ...args) => {
 			if (dataSuccess) {
 				onSuccess?.(dataSuccess, ...args);
@@ -38,7 +40,7 @@ export const useSaveBankAccountUsecase = ({
 		...options,
 	});
 
-	const saveBankAccount = (payload: PayloadSaveBankAccount) => {
+	const createPaymentWithdraw = (payload: PaymentWithdrawPayload) => {
 		mutate(payload);
 	};
 
@@ -48,7 +50,7 @@ export const useSaveBankAccountUsecase = ({
 
 	if (data?.data) {
 		return {
-			saveBankAccount,
+			createPaymentWithdraw,
 			data: data?.data,
 			error,
 			...rest,
@@ -56,7 +58,7 @@ export const useSaveBankAccountUsecase = ({
 	}
 
 	return {
-		saveBankAccount,
+		createPaymentWithdraw,
 		data: undefined,
 		error,
 		...rest,

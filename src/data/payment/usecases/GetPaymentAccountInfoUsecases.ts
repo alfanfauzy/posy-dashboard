@@ -5,7 +5,7 @@ import {GetPaymentAccountInfoResult} from '@/domain/payment/repositories/Payment
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
-export const useGetPaymentAccountInfoUsecase = (
+export const useGetPaymentAccountInfoUsecases = (
 	options?: UseQueryOptions<Response<GetPaymentAccountInfoResponse>>,
 ): GetPaymentAccountInfoResult => {
 	const {data, ...rest} = useGetPaymentAccountInfoQuery(options);

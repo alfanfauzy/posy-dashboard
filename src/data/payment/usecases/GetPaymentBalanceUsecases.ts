@@ -6,7 +6,7 @@ import {UseQueryOptions} from '@tanstack/react-query';
 
 import {useGetPaymentBalanceQuery} from '../sources/GetPaymentBalanceQuery';
 
-export const useGetPaymentBalanceUsecase = (
+export const useGetPaymentBalanceUsecases = (
 	options?: UseQueryOptions<Response<GetPaymentBalanceResponse>>,
 ): GetPaymentBalanceResult => {
 	const {data, ...rest} = useGetPaymentBalanceQuery(options);

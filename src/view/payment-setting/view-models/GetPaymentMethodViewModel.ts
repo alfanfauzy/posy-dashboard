@@ -1,5 +1,5 @@
 import {GetPaymentMethodListResponse} from '@/data/payment/types';
-import {useGetPaymentMethodUsecase} from '@/data/payment/usecases/GetPaymentMethodUsecases';
+import {useGetPaymentMethodUsecases} from '@/data/payment/usecases/GetPaymentMethodUsecases';
 import {
 	GetFilterPaymentMethod,
 	GetPaymentMethodsResult,
@@ -11,7 +11,7 @@ export const useGetPaymentMethodViewModal = (
 	input?: GetFilterPaymentMethod,
 	options?: UseQueryOptions<Response<DataList<GetPaymentMethodListResponse>>>,
 ): GetPaymentMethodsResult => {
-	const result = useGetPaymentMethodUsecase(input, options);
+	const result = useGetPaymentMethodUsecases(input, options);
 
 	return result;
 };

@@ -1,5 +1,5 @@
 import {mapToPaymentMethod} from '@/data/payment/mappers/PaymentMethodMapper';
-import {useGetPaymentMethodQuery} from '@/data/payment/sources/GetPaymentMethod';
+import {useGetPaymentMethodQuery} from '@/data/payment/sources/GetPaymentMethodQuery';
 import {GetPaymentMethodListResponse} from '@/data/payment/types';
 import {
 	GetFilterPaymentMethod,
@@ -8,7 +8,7 @@ import {
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
-export const useGetPaymentMethodUsecase = (
+export const useGetPaymentMethodUsecases = (
 	input?: GetFilterPaymentMethod,
 	options?: UseQueryOptions<Response<DataList<GetPaymentMethodListResponse>>>,
 ): GetPaymentMethodsResult => {
