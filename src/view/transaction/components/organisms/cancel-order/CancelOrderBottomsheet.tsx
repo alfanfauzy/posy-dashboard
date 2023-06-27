@@ -206,7 +206,7 @@ const CancelOrderBottomsheet = ({
 									</aside>
 								)}
 							</section>
-							<aside className="absolute bottom-0 pr-5 pt-5 mb-5">
+							<aside className="absolute w-full bottom-0 pr-10 pt-5 mb-5">
 								<div
 									onClick={openCancelTable}
 									className={`h-14 w-full cursor-pointer rounded-2xl p-4 shadow-sm duration-300 ease-in-out hover:border-secondary-hover hover:border active:shadow-md flex items-center justify-center justify-self-center bg-white border-neutral-30 border`}

@@ -2,7 +2,6 @@
 import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
 import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
 import {OutletSelection} from '@/domain/outlet/models';
-import {useLogoutViewModel} from '@/view/auth/view-models/LogoutViewModel';
 import PersonIcon from '@/view/common/assets/icons/person';
 import Logo from '@/view/common/components/atoms/logo';
 import Menu from '@/view/common/components/molecules/menu';
@@ -11,23 +10,19 @@ import {PROTECT_ROUTES} from '@/view/common/config/link';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onLogout, setRestaurantOutletId} from '@/view/common/store/slices/auth';
+import {setRestaurantOutletId} from '@/view/common/store/slices/auth';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import {Select} from 'antd';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
-import {Button} from 'posy-fnb-core';
 import React, {useEffect, useState} from 'react';
 import {BsList} from 'react-icons/bs';
 import {FiLogOut} from 'react-icons/fi';
 import {Sidebar, useProSidebar} from 'react-pro-sidebar';
 
-const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
-	loading: () => <div />,
-});
+const LogoutModal = dynamic(() => import('../../organisms/modal/LogoutModal'));
 
 type TemplatesSidebarProps = {
 	dataOutletSelection: OutletSelection | undefined;
@@ -38,7 +33,6 @@ const TemplatesSidebar = ({
 	dataOutletSelection,
 	isDrawer,
 }: TemplatesSidebarProps) => {
-	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {width} = useViewportListener();
@@ -52,8 +46,7 @@ const TemplatesSidebar = ({
 		isSubscription,
 		isLoggedIn,
 		authData: {
-			user_info: {full_name, uuid},
-			token,
+			user_info: {full_name},
 		},
 	} = useAppSelector(state => state.auth);
 
@@ -89,23 +82,6 @@ const TemplatesSidebar = ({
 		queryClient.invalidateQueries([GetNotificationsQueryKey]);
 	};
 
-	const {logout, isLoading: loadLogout} = useLogoutViewModel({
-		onSuccess: () => {
-			closeLogout();
-			router.push('auth/login');
-			setTimeout(() => {
-				dispatch(onLogout());
-			}, 500);
-		},
-	});
-
-	const handleLogout = () => {
-		logout({
-			token,
-			user_uuid: uuid,
-		});
-	};
-
 	const onCollapseSidebar = () => {
 		collapseSidebar();
 		dispatch(onChangeSelectedTrxId({id: ''}));
@@ -113,6 +89,7 @@ const TemplatesSidebar = ({
 
 	return (
 		<>
+			<LogoutModal close={closeLogout} isOpen={isOpenLogout} />
 			<Sidebar
 				defaultCollapsed={width <= 1280}
 				className="relative z-0 h-full overflow-hidden rounded-r-lg bg-neutral-10"
@@ -194,35 +171,6 @@ const TemplatesSidebar = ({
 					</aside>
 				</aside>
 			</Sidebar>
-			<Modal open={isOpenLogout} closeOverlay handleClose={closeLogout}>
-				<section className="flex w-[380px] flex-col items-center justify-center p-4">
-					<div className="px-16">
-						<p className="text-center text-l-semibold line-clamp-2">
-							Are you sure you want to logout?
-						</p>
-					</div>
-					<div className="mt-8 flex w-full gap-3">
-						<Button
-							variant="secondary"
-							size="l"
-							fullWidth
-							onClick={closeLogout}
-							className="whitespace-nowrap"
-						>
-							Cancel
-						</Button>
-						<Button
-							isLoading={loadLogout}
-							variant="primary"
-							size="l"
-							fullWidth
-							onClick={handleLogout}
-						>
-							Logout
-						</Button>
-					</div>
-				</section>
-			</Modal>
 		</>
 	);
 };
