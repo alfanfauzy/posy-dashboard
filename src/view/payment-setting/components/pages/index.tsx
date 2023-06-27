@@ -195,11 +195,11 @@ const ViewPaymentSettingPage = () => {
 	return (
 		<main className="flex h-full w-full">
 			<article className="flex h-full w-full overflow-auto flex-col rounded-2xl bg-neutral-10 p-6">
-				<section className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
+				<aside className="flex items-start justify-between">
+					<p className="text-xxl-semibold text-neutral-100">
 						Payment Integration
 					</p>
-				</section>
+				</aside>
 				<PaymentSettingContext.Provider value={valueProvider}>
 					{isLoading ? (
 						<div className="m-auto">

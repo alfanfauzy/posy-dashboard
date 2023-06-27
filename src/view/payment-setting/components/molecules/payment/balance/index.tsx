@@ -57,7 +57,9 @@ const PaymentBalanceMolecules = () => {
 						/>
 					)}
 					<Can I="create_withdrawal" an="payment_integration">
-						<Button onClick={handleIsOpenFormWithdraw}>Withdraw</Button>
+						<Button size="m" onClick={handleIsOpenFormWithdraw}>
+							Withdraw
+						</Button>
 					</Can>
 				</div>
 			</Skeleton>
