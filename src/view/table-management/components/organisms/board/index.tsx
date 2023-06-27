@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import Table from '@/view/table-management/components/molecules/table';
@@ -106,6 +107,7 @@ type Position = Array<
 
 const Board = () => {
 	const dispatch = useAppDispatch();
+	const {width} = useViewportListener();
 	const [table, setTablePos] = useState<Position>(squares.objs);
 
 	const renderSquare = (i: number) => {
@@ -149,7 +151,7 @@ const Board = () => {
 				id={`${toX},${toY}`}
 				onDrop={drop}
 				onDragOver={allowDrop}
-				className="w-[90px] h-[90px] aspect-square border-[0.5px] border-neutral-40"
+				className="lg:w-[90px] w-[72px] lg:h-[90px] h-[72px] aspect-square border-[0.5px] border-neutral-40"
 			>
 				{table[toX][toY] && (
 					<div className="w-full h-full flex items-center justify-center">
@@ -161,14 +163,16 @@ const Board = () => {
 	};
 
 	return (
-		<section className="h-full overflow-y-hidden overflow-auto p-4 rounded-r-lg bg-neutral-10">
+		<section className="h-full overflow-y-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10">
 			<aside className="flex items-center gap-4">
-				<BsList
-					onClick={() => dispatch(setOpenDrawer(true))}
-					size={24}
-					className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
-				/>
-				<p className="text-xxl-bold text-neutral-100">Table Settings</p>
+				{width <= 1280 && (
+					<BsList
+						onClick={() => dispatch(setOpenDrawer(true))}
+						size={24}
+						className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
+					/>
+				)}
+				<p className="text-xxl-semibold text-neutral-100">Table Settings</p>
 			</aside>
 			<aside className="flex">
 				<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4">

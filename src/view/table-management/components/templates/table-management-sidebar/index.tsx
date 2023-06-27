@@ -14,7 +14,7 @@ const TableManagementSidebar = () => {
 
 			<article className="flex h-full flex-col">
 				<section className="p-4">test</section>
-				<section className="absolute bottom-0 w-full rounded-bl-2xl p-4 shadow-basic bg-neutral-10">
+				<section className="absolute bottom-0 w-full rounded-bl-lg p-4 shadow-basic bg-neutral-10">
 					<div className="flex gap-2">
 						<Button
 							variant="secondary"

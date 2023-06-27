@@ -50,7 +50,7 @@ const TableTransactionGridView = ({
 						<div
 							key={table.uuid}
 							role="presentation"
-							className={`h-[110px] w-full cursor-pointer rounded-2xl p-4 shadow-sm duration-300 ease-in-out hover:border-secondary-hover hover:border-4 active:shadow-md flex items-center justify-center justify-self-center
+							className={`h-[110px] w-full cursor-pointer rounded-lg p-4 shadow-sm duration-300 ease-in-out hover:border-secondary-hover hover:border-4 active:shadow-md flex items-center justify-center justify-self-center
                             bg-white ${
 															watch('restaurant_outlet_table_uuid') ===
 															table.uuid

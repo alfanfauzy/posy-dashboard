@@ -115,11 +115,11 @@ const TemplatesSidebar = ({
 		<>
 			<Sidebar
 				defaultCollapsed={width <= 1280}
-				className="relative z-0 h-full overflow-hidden rounded-r-2xl bg-neutral-10"
+				className="relative z-0 h-full overflow-hidden rounded-r-lg bg-neutral-10"
 				width="200px"
 			>
 				<aside
-					className={`flex h-[12%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
+					className={`flex h-[10%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
 						collapsed ? 'pl-3.5' : 'pl-4'
 					}`}
 				>
@@ -140,7 +140,7 @@ const TemplatesSidebar = ({
 				<aside
 					className={`${
 						dataSubscriptionReminder?.is_show ? 'h-[60%]' : 'h-[70%]'
-					} overflow-y-auto pb-24`}
+					} overflow-y-auto pb-4`}
 				>
 					{PROTECT_ROUTES.map(
 						route =>

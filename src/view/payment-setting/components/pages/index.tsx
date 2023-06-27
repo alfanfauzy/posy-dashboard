@@ -188,9 +188,9 @@ const ViewPaymentSettingPage = () => {
 
 	return (
 		<main className="flex h-full w-full">
-			<article className="flex h-full w-full overflow-auto flex-col rounded-2xl bg-neutral-10 p-6">
+			<article className="flex h-full w-full overflow-auto flex-col rounded-lg bg-neutral-10 p-4">
 				<section className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
+					<p className="text-xxl-semibold text-neutral-100">
 						Payment Integration
 					</p>
 				</section>

@@ -59,7 +59,7 @@ const TableGridView = ({closeTableCapacity}: TableGridViewProps) => {
 									<div
 										key={table.table_uuid}
 										role="presentation"
-										className={`h-[124px] w-[130px] cursor-pointer rounded-2xl border  p-4 shadow-sm duration-300 ease-in-out hover:border-primary-main active:shadow-md flex items-center justify-center ${
+										className={`h-[124px] w-[130px] cursor-pointer rounded-lg border p-4 shadow-sm duration-300 ease-in-out hover:border-primary-main active:shadow-md flex items-center justify-center ${
 											table.is_available
 												? 'bg-white border-neutral-100'
 												: 'bg-light-red border-red-caution'

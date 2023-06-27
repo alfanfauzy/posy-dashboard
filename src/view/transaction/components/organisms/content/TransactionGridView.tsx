@@ -30,7 +30,6 @@ import {Button, Loading} from 'posy-fnb-core';
 import React, {useEffect, useRef, useState} from 'react';
 import {AiOutlineFullscreen} from 'react-icons/ai';
 import {IoMdNotificationsOutline} from 'react-icons/io';
-import {useProSidebar} from 'react-pro-sidebar';
 import {useReactToPrint} from 'react-to-print';
 
 import CreateTransactionModal from '../modal/CreateTransactionModal';
@@ -311,7 +310,7 @@ const TransactionGridView = ({
 	};
 
 	return (
-		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-2xl bg-neutral-10 p-4">
+		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-lg bg-neutral-10 p-4">
 			<article className="h-fit">
 				<aside className="flex items-start justify-between">
 					<p className="text-xxl-semibold text-neutral-100">
@@ -440,13 +439,7 @@ const TransactionGridView = ({
 						className={`${
 							data.length === 0
 								? 'flex items-center justify-center bg-neutral-20'
-								: `grid gap-3 ${
-										width > 1280
-											? 'grid-cols-7'
-											: selectedTrxId?.length > 0 && width <= 1280
-											? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-											: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
-								  }`
+								: `grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6`
 						}`}
 					>
 						{data.length > 0 &&

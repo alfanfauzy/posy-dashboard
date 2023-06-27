@@ -15,7 +15,7 @@ const TransactionGridView = dynamic(
 	},
 );
 
-const TransactionSidebaBar = dynamic(
+const TransactionSidebabar = dynamic(
 	() => import('../templates/transaction-sidebar'),
 	{
 		loading: () => <div />,
@@ -77,19 +77,12 @@ const ViewTransactionPage = () => {
 				/>
 			</section>
 
-			{(selectedTrxId || isOpenNotifBar) && (
-				<section
-					className={`duration-300 ${
-						width <= 1280 && !collapsed ? 'translate-x-60 opacity-0 hidden' : ''
-					} `}
-				>
-					{isOpenNotifBar ? (
-						<NotificationSidebar closeNotificationSidebar={closeNotifBar} />
-					) : (
-						<TransactionSidebaBar />
-					)}
-				</section>
-			)}
+			<section>
+				{isOpenNotifBar && (
+					<NotificationSidebar closeNotificationSidebar={closeNotifBar} />
+				)}
+				{selectedTrxId && <TransactionSidebabar />}
+			</section>
 			{isOpenTableCapacity && (
 				<TableGridView closeTableCapacity={closeTableCapacity} />
 			)}

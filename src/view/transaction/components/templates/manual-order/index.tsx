@@ -314,7 +314,7 @@ const ManualSubmitOrder = ({
 			}}
 		>
 			<section className="flex h-full w-full gap-6">
-				<div className="w-1/2 rounded-r-2xl bg-neutral-10 p-6 lg:w-3/5 xl:w-2/3">
+				<div className="w-1/2 rounded-r-2xl bg-neutral-10 p-4 lg:w-3/5 xl:w-2/3">
 					<section id="filter" className="flex items-center justify-between">
 						<div className="flex items-center gap-[10px]">
 							<IoMdArrowBack
@@ -555,7 +555,7 @@ const ManualSubmitOrder = ({
 						)}
 					</section>
 
-					<section className="absolute bottom-0 w-full rounded-bl-2xl bg-neutral-10 p-6 shadow-basic">
+					<section className="absolute bottom-0 w-full rounded-bl-lg bg-neutral-10 p-6 shadow-basic">
 						<Button
 							variant="primary"
 							isLoading={loadCreateOrderManual}

@@ -10,6 +10,7 @@ import Transition from '@/view/common/components/atoms/animations/transition';
 import Sidebar from '@/view/common/components/templates/sidebar';
 import firebaseApp from '@/view/common/config/firebase';
 import {UNPROTECT_ROUTES} from '@/view/common/config/link';
+import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
 	setIsSubscription,
@@ -39,6 +40,7 @@ export const handlePlayAudio = (play: () => void) => {
 const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
+	const {width} = useViewportListener();
 	const {replace, asPath, pathname} = useRouter();
 	const {isLoggedIn, isSubscription, openDrawer} = useAppSelector(
 		state => state.auth,
@@ -148,14 +150,12 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		);
 	}
 
-	const ShowDrawerRoutes = ['/transaction', '/settings/table-management'];
-
 	return (
 		<ProSidebarProvider>
 			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30">
-				<section className="flex h-full w-full gap-4">
-					{!ShowDrawerRoutes.includes(pathname) ? (
-						<div className="py-4">
+				<section className="flex h-full w-full gap-2">
+					{width > 1280 ? (
+						<div>
 							<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
 						</div>
 					) : (
@@ -174,11 +174,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 						</Drawer>
 					)}
 
-					<div
-						className={`h-full flex-1 overflow-y-scroll ${
-							pathname !== '/transaction' ? 'py-4' : ''
-						}`}
-					>
+					<div className="h-full flex-1 overflow-y-scroll">
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>
 				</section>

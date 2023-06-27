@@ -1,4 +1,6 @@
 import {Subjects} from '@/view/auth/types';
+import {useAppDispatch} from '@/view/common/store/hooks';
+import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useRouter} from 'next/router';
 import React from 'react';
@@ -15,10 +17,12 @@ type MoleculesMenuProps = {
 };
 
 const MoleculesMenu = ({item, collapse}: MoleculesMenuProps) => {
+	const dispatch = useAppDispatch();
 	const {pathname, push, asPath} = useRouter();
 
 	const linkTo = (path: string) => {
 		push(`/${path}`);
+		dispatch(setOpenDrawer(false));
 	};
 
 	const [, firstPath] = asPath.split('/');

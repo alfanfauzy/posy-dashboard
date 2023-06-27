@@ -353,7 +353,7 @@ const CancelOrderBottomsheet = ({
 									))}
 							</aside>
 
-							<aside className="absolute bottom-0 w-full flex gap-2 rounded-bl-2xl bg-neutral-10 p-4 shadow-basic">
+							<aside className="absolute bottom-0 w-full flex gap-2 rounded-bl-lg bg-neutral-10 p-4 shadow-basic">
 								<Button
 									variant="secondary"
 									fullWidth

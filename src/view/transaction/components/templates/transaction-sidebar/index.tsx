@@ -130,7 +130,7 @@ const TransactionSidebar = () => {
 	});
 
 	return (
-		<main className="relative min-w-[350px] max-w-[350px] h-full rounded-l-2xl bg-neutral-10">
+		<main className="relative min-w-[350px] max-w-[350px] h-full rounded-l-lg bg-neutral-10">
 			{loadTransaction && (
 				<div className="flex h-full w-full items-center justify-center">
 					<Loading size={75} />
@@ -158,7 +158,7 @@ const TransactionSidebar = () => {
 						</div>
 					</section>
 
-					<section className="absolute bottom-0 w-full rounded-bl-2xl p-4 shadow-basic bg-neutral-10">
+					<section className="absolute bottom-0 w-full rounded-bl-lg p-4 shadow-basic bg-neutral-10">
 						{tabValueorder === 0 && (
 							<div className="flex gap-2">
 								<Can I="reprint-qrcode" an="transaction">
