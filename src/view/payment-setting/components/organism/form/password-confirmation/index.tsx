@@ -25,7 +25,6 @@ const PasswordConfirmationOrganism = () => {
 		getValues,
 		resetField,
 		unregister,
-		watch,
 	} = methodsWithdraw;
 
 	useEffect(() => {
@@ -51,9 +50,6 @@ const PasswordConfirmationOrganism = () => {
 
 	const disabled =
 		Object.keys(errors).length !== 0 || getValues('password') === undefined;
-
-	console.log(watch());
-	console.log(errors);
 
 	return (
 		<Modal

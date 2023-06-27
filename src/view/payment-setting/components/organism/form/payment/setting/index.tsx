@@ -97,7 +97,7 @@ const FormPaymentSetting = () => {
 			} = response;
 
 			setValue('account_name', account_name, {shouldValidate: true});
-			// clearErrors('account_name');
+			setValue('password', '', {shouldValidate: true});
 			setIsErrorCheckBank(false);
 		},
 		onError() {
@@ -130,6 +130,7 @@ const FormPaymentSetting = () => {
 			setValue('account_name', account_name, {shouldValidate: true});
 			setValue('bank_proof_url', bank_proof_url, {shouldValidate: true});
 			setImageURL(responseImageURL);
+			setValue('password', '', {shouldValidate: true});
 		},
 	});
 
@@ -176,9 +177,6 @@ const FormPaymentSetting = () => {
 		onClearImage();
 		handleOpenModal();
 	};
-
-	console.log(watch());
-	console.log(errors);
 
 	const onImageChange = (
 		event: React.ChangeEvent<HTMLInputElement>,
