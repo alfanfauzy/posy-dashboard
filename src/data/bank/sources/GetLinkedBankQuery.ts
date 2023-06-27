@@ -4,7 +4,9 @@ import {Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
-export const GetLinkedBankAccount = async (): Promise<
+export const GetLinkedBankAccountQueryKey = 'linked-bank-account';
+
+const GetLinkedBankAccount = async (): Promise<
 	Response<GetLinkedBankAccountResponse>
 > => {
 	try {
@@ -23,7 +25,7 @@ export const useGetLinkedBankAccountQuery = (
 	options?: UseQueryOptions<Response<GetLinkedBankAccountResponse>>,
 ) =>
 	useQuery<Response<GetLinkedBankAccountResponse>>(
-		['linked-bank-account'],
+		[GetLinkedBankAccountQueryKey],
 		() => GetLinkedBankAccount(),
 		{
 			refetchOnWindowFocus: false,

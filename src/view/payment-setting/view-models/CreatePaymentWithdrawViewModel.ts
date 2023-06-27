@@ -1,11 +1,11 @@
 import {MutationOptions} from '@/data/common/types';
-import {useCreatePaymentWithdrawUsecase} from '@/data/payment/usecases/CreatePaymentWithdrawUsecase';
-import {CreatePaymentWithdrawRepository} from '@/domain/payment/repositories/PaymentRepositories';
+import {useCreatePaymentWithdrawUsecases} from '@/data/payment/usecases/CreatePaymentWithdrawUsecase';
+import {CreatePaymentWithdrawRepository} from '@/domain/payment/repositories/CreatePaymentWithdrawRepository';
 
 export const useUpdatePaymentWithdrawViewModal = (
 	options: MutationOptions,
 ): CreatePaymentWithdrawRepository => {
-	const result = useCreatePaymentWithdrawUsecase(options);
+	const result = useCreatePaymentWithdrawUsecases(options);
 
 	return result;
 };

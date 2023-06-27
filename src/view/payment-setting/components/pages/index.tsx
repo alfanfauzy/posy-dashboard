@@ -1,6 +1,9 @@
+import {GetLinkedBankAccountQueryKey} from '@/data/bank/sources/GetLinkedBankQuery';
+import {GetPaymentAccountInfoQueryKey} from '@/data/payment/sources/GetPaymentAccountInfoQuery';
+import {GetPaymentBalanceQueryKey} from '@/data/payment/sources/GetPaymentBalanceQuery';
 import {Can} from '@/view/auth/components/organisms/rbac';
+import {useSaveAccountBankViewModal} from '@/view/bank/view-models/CreateSaveAccountBankViewModel';
 import {useGetLinkedBankAccountViewModel} from '@/view/bank/view-models/GetLinkedBankAccountViewModel';
-import {useSaveAccountBankViewModal} from '@/view/bank/view-models/PostSaveAccountBankViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
@@ -87,6 +90,9 @@ const ViewPaymentSettingPage = () => {
 	const methods = useForm({
 		schema: PaymentBankAccountFormSchema,
 		mode: 'all',
+		defaultValues: {
+			password: '',
+		},
 	});
 
 	const methodsWithdraw = useForm({
@@ -105,8 +111,8 @@ const ViewPaymentSettingPage = () => {
 					handleOpenModal();
 					handleIsOpenSuccessConfirmation();
 				}
-				queryClient.invalidateQueries(['linked-bank-account']);
-				queryClient.invalidateQueries(['payment-account-info']);
+				queryClient.invalidateQueries([GetLinkedBankAccountQueryKey]);
+				queryClient.invalidateQueries([GetPaymentAccountInfoQueryKey]);
 			},
 		});
 
@@ -115,7 +121,7 @@ const ViewPaymentSettingPage = () => {
 			onSuccess() {
 				handleIsOpenPasswordConfirmation();
 				handleIsOpenSuccessConfirmation();
-				queryClient.invalidateQueries(['payment-balance']);
+				queryClient.invalidateQueries([GetPaymentBalanceQueryKey]);
 			},
 		});
 
@@ -189,11 +195,11 @@ const ViewPaymentSettingPage = () => {
 	return (
 		<main className="flex h-full w-full">
 			<article className="flex h-full w-full overflow-auto flex-col rounded-2xl bg-neutral-10 p-6">
-				<section className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-primary-main lg:text-heading-s-semibold">
+				<aside className="flex items-start justify-between">
+					<p className="text-xxl-semibold text-neutral-100">
 						Payment Integration
 					</p>
-				</section>
+				</aside>
 				<PaymentSettingContext.Provider value={valueProvider}>
 					{isLoading ? (
 						<div className="m-auto">

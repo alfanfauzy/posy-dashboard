@@ -1,6 +1,6 @@
-import {useSaveBankAccountUsecase} from '@/data/bank/usecases/PostSaveBankAccountUsecase';
+import {useSaveBankAccountUsecase} from '@/data/bank/usecases/CreateSaveBankAccountUsecase';
 import {MutationOptions} from '@/data/common/types';
-import {SaveBankAccountRepository} from '@/domain/bank/repositories/BankRepository';
+import {SaveBankAccountRepository} from '@/domain/bank/repositories/CreateSaveBankRepository';
 
 export const useSaveAccountBankViewModal = (
 	options: MutationOptions,
