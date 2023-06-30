@@ -3,10 +3,10 @@ import {useAppSelector} from '@/view/common/store/hooks';
 import {useRouter} from 'next/router';
 import React, {Key, useState} from 'react';
 
-import {useGetOutletProductsViewModel} from '../../view-models/GetOutletProductsViewModel';
-import FormEditProduct from '../organisms/form/edit-product';
-import NavFilterProduct from '../organisms/nav-filter';
-import TableProduct from '../organisms/table';
+import {useGetOutletProductsViewModel} from '../../../view-models/GetOutletProductsViewModel';
+import FormEditProduct from '../../organisms/form/edit-product';
+import NavFilterProduct from '../../organisms/nav-filter';
+import TableProduct from '../../organisms/table';
 
 const ViewProductPage = () => {
 	const {query} = useRouter();

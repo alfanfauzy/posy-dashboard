@@ -24,7 +24,24 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 		title: 'Products',
 		path: 'product',
 		icon: <ProductIcon />,
-		permission: ['product_outlet'],
+		permission: ['product_outlet', 'product', 'product_category'],
+		subMenu: [
+			{
+				title: 'Category',
+				path: 'product/category',
+				permission: ['product_category'],
+			},
+			{
+				title: 'Master Product',
+				path: 'product/master',
+				permission: ['product'],
+			},
+			{
+				title: 'Product Outlet',
+				path: 'product/outlet',
+				permission: ['product_outlet'],
+			},
+		],
 	},
 	{
 		title: 'Report',

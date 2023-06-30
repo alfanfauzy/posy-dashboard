@@ -5,7 +5,7 @@ import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 
 import {GetCategoriesDataResponse} from '../types';
 
-export const GetCategoriesQueryKey = () => ['Categories/list'] as const;
+export const GetCategoriesQueryKey = 'Categories/list';
 
 const GetCategories = async (
 	input?: GetCategoriesInput,
@@ -28,7 +28,7 @@ export const useGetCategoriesQuery = (
 	options?: UseQueryOptions<Response<DataList<GetCategoriesDataResponse>>>,
 ) =>
 	useQuery<Response<DataList<GetCategoriesDataResponse>>>(
-		GetCategoriesQueryKey(),
+		[GetCategoriesQueryKey, JSON.stringify(input)],
 		() => GetCategories(input),
 		{
 			refetchOnWindowFocus: false,
