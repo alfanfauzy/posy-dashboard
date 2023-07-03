@@ -37,16 +37,14 @@ const OrganismsFormForgetPassword = () => {
 		},
 		onError: _error => {
 			const error = _error as BaseError;
-			if (error?.isUnknown()) {
-				setValue('email', '');
-				setError(
-					'email',
-					{message: error.message},
-					{
-						shouldFocus: true,
-					},
-				);
-			}
+			setValue('email', '');
+			setError(
+				'email',
+				{message: error.message},
+				{
+					shouldFocus: true,
+				},
+			);
 		},
 	});
 
