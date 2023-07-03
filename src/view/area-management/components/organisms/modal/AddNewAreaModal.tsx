@@ -56,7 +56,6 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 		getValues,
 		reset,
 		control,
-		watch,
 		formState: {errors, isValid},
 	} = useForm({
 		mode: 'onChange',
@@ -65,8 +64,6 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 			restaurant_outlet_uuid: outletId,
 		},
 	});
-
-	console.log(watch());
 
 	const onClose = () => {
 		reset();

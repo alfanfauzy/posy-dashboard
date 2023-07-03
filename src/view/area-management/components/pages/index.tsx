@@ -1,4 +1,4 @@
-import AreaSettings from '../organisms/area-settings';
+import AreaSettings from '../templates/area-settings';
 
 const ViewAreaManagementPage = () => {
 	return (

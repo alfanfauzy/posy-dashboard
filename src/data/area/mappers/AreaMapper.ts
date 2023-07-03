@@ -1,7 +1,9 @@
 import {Areas} from '@/domain/area/model';
 import {CreateArea} from '@/domain/area/repositories/CreateAreaRepository';
+import {DeleteArea} from '@/domain/area/repositories/DeleteAreaRepository';
 
 import {CreateAreaDataResponse} from '../types/CreateAreaType';
+import {DeleteAreaDataResponse} from '../types/DeleteAreaType';
 import {GetAreasDataResponse} from '../types/GetAreasType';
 
 export const mapToAreasModel = (datas: Array<GetAreasDataResponse>): Areas =>
@@ -23,5 +25,11 @@ export const mapToCreateAreaModel = (
 	data: CreateAreaDataResponse,
 ): CreateArea => ({
 	uuid: data.uuid,
+	metadata: data.metadata,
+});
+
+export const mapToDeleteAreaModel = (
+	data: DeleteAreaDataResponse,
+): DeleteArea => ({
 	metadata: data.metadata,
 });

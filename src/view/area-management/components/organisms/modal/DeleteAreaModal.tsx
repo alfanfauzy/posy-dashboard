@@ -1,12 +1,37 @@
+import {Area} from '@/domain/area/model';
+import {useDeleteAreaViewModel} from '@/view/area-management/view-models/DeleteAreaViewModel';
+import {useAppSelector} from '@/view/common/store/hooks';
 import {Button, Modal} from 'posy-fnb-core';
 import React from 'react';
 
 type DeleteAreaModalProps = {
 	isOpen: boolean;
 	close: () => void;
+	selectedArea: Area;
+	onSelectArea: (area: Area | null) => void;
 };
 
-const DeleteAreaModal = ({close, isOpen}: DeleteAreaModalProps) => {
+const DeleteAreaModal = ({
+	close,
+	isOpen,
+	selectedArea,
+	onSelectArea,
+}: DeleteAreaModalProps) => {
+	const {outletId} = useAppSelector(state => state.auth);
+	const {DeleteArea, isLoading} = useDeleteAreaViewModel({
+		onSuccess: () => {
+			close();
+			onSelectArea(null);
+		},
+	});
+
+	const onDeleteArea = () => {
+		DeleteArea({
+			area_uuid: selectedArea.uuid,
+			restaurant_outlet_uuid: outletId,
+		});
+	};
+
 	return (
 		<Modal open={isOpen} closeOverlay handleClose={close}>
 			<section className="flex w-[380px] flex-col items-center justify-center p-4">
@@ -26,11 +51,11 @@ const DeleteAreaModal = ({close, isOpen}: DeleteAreaModalProps) => {
 						Cancel
 					</Button>
 					<Button
-						// isLoading={loadLogout}
+						isLoading={isLoading}
 						variant="primary"
 						size="l"
 						fullWidth
-						// onClick={handleLogout}
+						onClick={onDeleteArea}
 					>
 						Delete
 					</Button>
