@@ -2,6 +2,8 @@ import {GetCategoriesQueryKey} from '@/data/category/sources/GetCategoriesQuery'
 import {UpdateCategoryResponse} from '@/domain/category/repositories/UpdateCategoryRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {useDeleteCategoryViewModel} from '@/view/category/view-models/DeleteCategoryViewModel';
+import useCategoryActions from '@/view/common/store/zustand/Category/CategoryAction';
+import useCategoryState from '@/view/common/store/zustand/Category/CategoryZustand';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import {Button} from 'posy-fnb-core';
@@ -11,28 +13,22 @@ const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,
 });
 
-type CancelTableModalProps = {
-	closeConfirmation: () => void;
-	isOpenConfirmation: boolean;
-	value: string;
-};
-
-const OrganismDeleteConfirmationModal = ({
-	isOpenConfirmation,
-	closeConfirmation,
-	value,
-}: CancelTableModalProps) => {
+const OrganismDeleteConfirmationModal = () => {
 	const queryClient = useQueryClient();
+
+	const {isOpenConfirmation, selectedCategoryId} = useCategoryState();
+	const {closeConfirmation} = useCategoryActions();
 
 	const {deleteCategory, isLoading} = useDeleteCategoryViewModel({
 		onSuccess: _data => {
 			const data = _data as Response<UpdateCategoryResponse>;
 			if (data) queryClient.invalidateQueries([GetCategoriesQueryKey]);
+			closeConfirmation();
 		},
 	});
 
 	const handleDeleteCategory = () => {
-		deleteCategory(value);
+		deleteCategory(selectedCategoryId);
 	};
 
 	return (

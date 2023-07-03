@@ -4,21 +4,25 @@ import {UpdateCategoryResponse} from '@/domain/category/repositories/UpdateCateg
 import {Response} from '@/domain/vo/BaseResponse';
 import {useAbility} from '@/view/auth/components/organisms/rbac';
 import {useUpdateCategoryViewModel} from '@/view/category/view-models/UpdateCategoryViewModel';
+import useCategoryActions from '@/view/common/store/zustand/Category/CategoryAction';
 import {useQueryClient} from '@tanstack/react-query';
 import {ColumnsType} from 'antd/es/table';
 import {Toggle} from 'posy-fnb-core';
 import {BiEdit} from 'react-icons/bi';
 import {RiDeleteBinLine} from 'react-icons/ri';
 
-const CategoryColumns = (
-	openConfirmaiton: () => void,
-	setSelectedCategoryId: (value: string) => void,
-	setIsEdit: React.Dispatch<React.SetStateAction<boolean>>,
-	setSelectedCategory: React.Dispatch<React.SetStateAction<Category>>,
-	openForm: () => void,
-): ColumnsType<Category> => {
+const CategoryColumns = (): ColumnsType<Category> => {
 	const queryClient = useQueryClient();
 	const ability = useAbility();
+	const CategoryActions = useCategoryActions();
+
+	const {
+		setIsEdit,
+		openForm,
+		openConfirmation,
+		setSelectedCategoryId,
+		setSelectedCategory,
+	} = CategoryActions;
 
 	const {updateCategory} = useUpdateCategoryViewModel({
 		onSuccess: _data => {
@@ -28,7 +32,7 @@ const CategoryColumns = (
 	});
 
 	const handleOpenConfirmation = (value: string) => {
-		openConfirmaiton();
+		openConfirmation();
 		setSelectedCategoryId(value);
 	};
 

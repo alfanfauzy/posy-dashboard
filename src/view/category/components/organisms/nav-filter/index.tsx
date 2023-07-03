@@ -1,22 +1,23 @@
 import {Pagination} from '@/domain/vo/BasePagination';
 import {useAbility} from '@/view/auth/components/organisms/rbac';
 import InputSearch from '@/view/common/components/atoms/input/search';
+import useCategoryActions from '@/view/common/store/zustand/Category/CategoryAction';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import {useRouter} from 'next/router';
 import {Button} from 'posy-fnb-core';
 import React from 'react';
 
 type OrganismsNavFilterCategoryProps = {
-	openForm: () => void;
 	pagination: Pagination | undefined;
 };
 
 const OrganismsNavFilterCategory = ({
-	openForm,
 	pagination,
 }: OrganismsNavFilterCategoryProps) => {
 	const {query} = useRouter();
 	const ability = useAbility();
+
+	const {openForm} = useCategoryActions();
 
 	return (
 		<aside className="mt-4 flex justify-between">
@@ -38,7 +39,7 @@ const OrganismsNavFilterCategory = ({
 			</div>
 			{ability.can('create', 'product_category') && (
 				<div>
-					<Button size="m" onClick={openForm}>
+					<Button size="m" onClick={() => openForm()}>
 						Add New Category
 					</Button>
 				</div>

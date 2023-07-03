@@ -1,6 +1,5 @@
 import {mapTopUpdateCategory} from '@/data/category/mappers/CategoryMapper';
 import {GetCategoriesQueryKey} from '@/data/category/sources/GetCategoriesQuery';
-import {Category} from '@/domain/category/model';
 import {
 	FormCategoryValidation,
 	validateSchemaFormCategory,
@@ -8,29 +7,18 @@ import {
 import {useCreateCategoryViewModel} from '@/view/category/view-models/CreateCategoryViewModel';
 import {useUpdateCategoryViewModel} from '@/view/category/view-models/UpdateCategoryViewModel';
 import {useForm} from '@/view/common/hooks/useForm';
+import useCategoryActions from '@/view/common/store/zustand/Category/CategoryAction';
+import useCategoryState from '@/view/common/store/zustand/Category/CategoryZustand';
 import {useQueryClient} from '@tanstack/react-query';
 import {Button, Input, Modal, Toggle} from 'posy-fnb-core';
 import React, {useEffect} from 'react';
 import {Controller} from 'react-hook-form';
 
-type OrganismsFormCategoryProps = {
-	closeForm: () => void;
-	isOpenForm: boolean;
-	setIsEdit: (value: boolean) => void;
-	isEdit: boolean;
-	selectedCategory: Category;
-	setSelectedCategory: React.Dispatch<React.SetStateAction<Category>>;
-};
-
-const OrganismsFormCategory = ({
-	closeForm,
-	isOpenForm,
-	setIsEdit,
-	isEdit,
-	selectedCategory,
-	setSelectedCategory,
-}: OrganismsFormCategoryProps) => {
+const OrganismsFormCategory = () => {
 	const queryClient = useQueryClient();
+
+	const {isEdit, isOpenForm, selectedCategory} = useCategoryState();
+	const {closeForm, setIsEdit, setSelectedCategory} = useCategoryActions();
 
 	const onCloseFormCategory = () => {
 		setIsEdit(false);

@@ -1,9 +1,8 @@
 import {useGetCategoriesUsecase} from '@/data/category/usecases/GetCategoriesUsecase';
-import {Category} from '@/domain/category/model';
 import {useAbility} from '@/view/auth/components/organisms/rbac';
-import useDisclosure from '@/view/common/hooks/useDisclosure';
+import useCategoryState from '@/view/common/store/zustand/Category/CategoryZustand';
 import {useRouter} from 'next/router';
-import React, {useState} from 'react';
+import React from 'react';
 
 import OrganismsFormCategory from '../organisms/form';
 import OrganismDeleteConfirmationModal from '../organisms/modal/DeleteConfirmationModal';
@@ -14,25 +13,7 @@ const ViewCategoryProductPage = () => {
 	const {query} = useRouter();
 	const ability = useAbility();
 
-	const [isEdit, setIsEdit] = useState(false);
-	const [selectedCategoryId, setselectedCategoryId] = useState('');
-	const [selectedCategory, setselectedCategory] = useState<Category>({
-		category_name: '',
-		is_active: false,
-		uuid: '',
-		restaurant_uuid: '',
-	});
-
-	const [isOpenForm, {open: openForm, close: closeForm}] = useDisclosure({
-		initialState: false,
-	});
-
-	const [
-		isOpenConfirmation,
-		{open: openConfirmation, close: closeConfirmation},
-	] = useDisclosure({
-		initialState: false,
-	});
+	const {isOpenForm, isOpenConfirmation} = useCategoryState();
 
 	const {
 		data: dataCategory,
@@ -60,40 +41,17 @@ const ViewCategoryProductPage = () => {
 						<aside className="flex items-start">
 							<p className="text-xxl-semibold text-neutral-100 ">Category</p>
 						</aside>
-						<OrganismsNavFilterCategory
-							pagination={pagination}
-							openForm={openForm}
-						/>
+						<OrganismsNavFilterCategory pagination={pagination} />
 					</article>
 					<OrganismsTableCategory
-						openConfirmaiton={openConfirmation}
-						setselectedCategoryId={setselectedCategoryId}
 						dataCategory={newDataCategory}
 						pagination={pagination}
 						loadCategory={loadProduct}
-						setIsEdit={setIsEdit}
-						setSelectedCategory={setselectedCategory}
-						openForm={openForm}
 					/>
 				</>
 			)}
-			{isOpenForm && (
-				<OrganismsFormCategory
-					closeForm={closeForm}
-					isOpenForm={isOpenForm}
-					setIsEdit={setIsEdit}
-					isEdit={isEdit}
-					selectedCategory={selectedCategory}
-					setSelectedCategory={setselectedCategory}
-				/>
-			)}
-			{isOpenConfirmation && (
-				<OrganismDeleteConfirmationModal
-					closeConfirmation={closeConfirmation}
-					isOpenConfirmation={isOpenConfirmation}
-					value={selectedCategoryId}
-				/>
-			)}
+			{isOpenForm && <OrganismsFormCategory />}
+			{isOpenConfirmation && <OrganismDeleteConfirmationModal />}
 		</main>
 	);
 };
