@@ -1,22 +1,28 @@
+import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
-import {useAppDispatch} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import {Divider} from 'antd';
 import dynamic from 'next/dynamic';
-import {Button, Input, Select} from 'posy-fnb-core';
+import {Button, Input, Loading, Select} from 'posy-fnb-core';
 import React from 'react';
 import {AiOutlineEye} from 'react-icons/ai';
 import {BsList} from 'react-icons/bs';
 import {CgTrash} from 'react-icons/cg';
 import {HiOutlinePencilAlt} from 'react-icons/hi';
 
-const AddNewAreaModal = dynamic(() => import('../modal/AddNewAreaModal'));
-const DeleteAreaModal = dynamic(() => import('../modal/DeleteAreaModal'));
+const AddNewAreaModal = dynamic(() => import('../modal/AddNewAreaModal'), {
+	loading: () => <div />,
+});
+const DeleteAreaModal = dynamic(() => import('../modal/DeleteAreaModal'), {
+	loading: () => <div />,
+});
 
 const AreaSettings = () => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
+	const {outletId} = useAppSelector(state => state.auth);
 	const [isOpenAddArea, {open: openAddArea, close: closeAddArea}] =
 		useDisclosure({
 			initialState: false,
@@ -25,6 +31,10 @@ const AreaSettings = () => {
 		useDisclosure({
 			initialState: false,
 		});
+
+	const {data, isLoading} = useGetAreasViewModel({
+		restaurant_outlet_uuid: outletId,
+	});
 
 	return (
 		<>
@@ -50,21 +60,27 @@ const AreaSettings = () => {
 							<p className="text-l-regular">Choose Area</p>
 						</div>
 						<div className="mt-4 px-4 overflow-y-auto flex h-full flex-col gap-3">
-							{new Array(30).fill(0).map((_, index) => (
-								<div key={index}>
-									<Button
-										fullWidth
-										size="m"
-										variant="secondary"
-										className={`${
-											index === 2 &&
-											'border-secondary-main hover:border-secondary-main text-secondary-main'
-										}`}
-									>
-										{index + 1} Floor
-									</Button>
+							{isLoading && (
+								<div className="mt-6">
+									<Loading size={65} />
 								</div>
-							))}
+							)}
+							{data &&
+								data.map(item => (
+									<div key={item.uuid}>
+										<Button
+											fullWidth
+											size="m"
+											variant="secondary"
+											className={`${
+												item.name === '2' &&
+												'border-secondary-main hover:border-secondary-main text-secondary-main'
+											}`}
+										>
+											{item.name}
+										</Button>
+									</div>
+								))}
 						</div>
 						<div className="mt-4 p-4 shadow-box-1 w-full">
 							<Button size="m" fullWidth onClick={openAddArea}>

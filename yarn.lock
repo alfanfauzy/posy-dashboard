@@ -7118,10 +7118,10 @@ postcss@^8.0.9, postcss@^8.4.21, postcss@^8.4.4:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-posy-fnb-core@^1.1.13:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/posy-fnb-core/-/posy-fnb-core-1.1.13.tgz#ce3e56697a1e7b31dbffb655d01dad059966222b"
-  integrity sha512-vNTfW4S+9/F+7D5bb2sF5+iag87UmuQJXVvuuxfQBnP4RAgMhS3PyAiXfg5B2eIg7kMD3wUwKDAfjieWw2kQRg==
+posy-fnb-core@^1.1.14:
+  version "1.1.14"
+  resolved "https://registry.yarnpkg.com/posy-fnb-core/-/posy-fnb-core-1.1.14.tgz#4571893563f145e1115a1230fe863dda6dcff79b"
+  integrity sha512-jTBbx/WdnvEi8rT4QNXpYRECLAjcFTvew78riPZZEcrXILlgOyL6zXR5vo/C2NDmNt1NV+DX3zt2FMOvyHfB8A==
   dependencies:
     "@emotion/react" "^11.10.5"
     "@emotion/styled" "^11.10.5"
