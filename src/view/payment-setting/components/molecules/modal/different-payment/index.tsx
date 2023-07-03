@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import {useContext} from 'react';
 
+const ManageAccount = require('public/images/manage-account.png');
 const OwnedAccount = require('public/images/owned-account.png');
 
 const DifferentPaymentModalOrganism = () => {
@@ -43,7 +44,7 @@ const DifferentPaymentModalOrganism = () => {
 				</section>
 				<section className="flex gap-4 flex-col">
 					<Image
-						src={OwnedAccount}
+						src={ManageAccount}
 						alt="owned-account"
 						width={350}
 						priority
