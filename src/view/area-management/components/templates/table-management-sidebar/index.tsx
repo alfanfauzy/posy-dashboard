@@ -34,7 +34,7 @@ const TableManagementSidebar = () => {
 								// onClick={openCreatePayment}
 								className="whitespace-nowrap text-m-semibold"
 							>
-								Payment
+								Save
 							</Button>
 						</Can>
 					</div>

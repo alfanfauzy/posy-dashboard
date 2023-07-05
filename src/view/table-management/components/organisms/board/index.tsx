@@ -3,8 +3,10 @@ import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import Table from '@/view/table-management/components/molecules/table';
+import {Button} from 'posy-fnb-core';
 import type {DragEvent} from 'react';
 import {useState} from 'react';
+import {AiOutlinePlusCircle} from 'react-icons/ai';
 import {BsList} from 'react-icons/bs';
 
 const squares = {
@@ -105,7 +107,19 @@ type Position = Array<
 	} | null>
 >;
 
-const Board = () => {
+type BoardProps = {
+	isEditLayout: boolean;
+	openEditLayout: () => void;
+	closeEditLayout: () => void;
+	openAddTable: () => void;
+};
+
+const Board = ({
+	isEditLayout,
+	closeEditLayout,
+	openEditLayout,
+	openAddTable,
+}: BoardProps) => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
 	const [table, setTablePos] = useState<Position>(squares.objs);
@@ -114,9 +128,10 @@ const Board = () => {
 		const toY = i % squares.layout.width;
 		const toX = Math.floor(i / squares.layout.width);
 
-		console.log(squares.layout.width, squares.layout.height, i, 'layout');
-
-		// console.log(toX, 'x', toY, 'y');
+		const onOpenAddTable = () => {
+			openAddTable();
+			console.log(toX, toY);
+		};
 
 		const allowDrop = (e: DragEvent<HTMLDivElement>) => {
 			e.preventDefault();
@@ -158,6 +173,16 @@ const Board = () => {
 						<Table data={table[toX][toY]} id={`${toX},${toY}`} />
 					</div>
 				)}
+
+				{!isEditLayout && !table[toX][toY] && (
+					<div className="h-full flex items-center justify-center">
+						<AiOutlinePlusCircle
+							size={22}
+							className="text-neutral-50 hover:opacity-70 cursor-pointer"
+							onClick={onOpenAddTable}
+						/>
+					</div>
+				)}
 			</div>
 		);
 	};
@@ -172,7 +197,21 @@ const Board = () => {
 						className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
 					/>
 				)}
-				<p className="text-xxl-semibold text-neutral-100">Table Settings</p>
+				<div className="flex w-full justify-between items-end">
+					<p className="text-xxl-semibold text-neutral-100">Table Settings</p>
+					{!isEditLayout ? (
+						<p
+							onClick={openEditLayout}
+							className="text-m-medium text-neutral-100 cursor-pointer hover:opacity-70 duration-300 ease-in-out"
+						>
+							Edit Layout
+						</p>
+					) : (
+						<Button size="m" onClick={closeEditLayout}>
+							Save
+						</Button>
+					)}
+				</div>
 			</aside>
 			<aside className="flex">
 				<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4">
