@@ -1,3 +1,5 @@
+import {useGetAreaViewModel} from '@/view/area-management/view-models/GetAreaViewModel';
+import {useAppSelector} from '@/view/common/store/hooks';
 import {Divider} from 'antd';
 import {Button, Input, Select} from 'posy-fnb-core';
 import React from 'react';
@@ -7,9 +9,17 @@ import {HiOutlinePencilAlt} from 'react-icons/hi';
 
 type AreaDetailsProps = {
 	openDeleteArea: () => void;
+	areaId: string;
 };
 
-const AreaDetails = ({openDeleteArea}: AreaDetailsProps) => {
+const AreaDetails = ({openDeleteArea, areaId}: AreaDetailsProps) => {
+	const {outletId} = useAppSelector(state => state.auth);
+
+	const {data, isLoading} = useGetAreaViewModel({
+		restaurant_outlet_uuid: outletId,
+		area_uuid: areaId,
+	});
+
 	return (
 		<section className="h-full flex-1 flex flex-col gap-4 overflow-y-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10">
 			<aside className="relative h-full">

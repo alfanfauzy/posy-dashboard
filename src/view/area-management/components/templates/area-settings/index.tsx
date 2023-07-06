@@ -63,7 +63,10 @@ const AreaSettings = () => {
 					selectedArea={selectedArea}
 					onSelectArea={onSelectArea}
 				/>
-				<AreaDetails openDeleteArea={openDeleteArea} />
+				<AreaDetails
+					openDeleteArea={openDeleteArea}
+					areaId={selectedArea?.uuid || ''}
+				/>
 			</main>
 		</>
 	);

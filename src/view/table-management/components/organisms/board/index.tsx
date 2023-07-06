@@ -170,7 +170,11 @@ const Board = ({
 			>
 				{table[toX][toY] && (
 					<div className="w-full h-full flex items-center justify-center">
-						<Table data={table[toX][toY]} id={`${toX},${toY}`} />
+						<Table
+							data={table[toX][toY]}
+							id={`${toX},${toY}`}
+							isEditLayout={isEditLayout}
+						/>
 					</div>
 				)}
 
