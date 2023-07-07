@@ -5,8 +5,7 @@ import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 
 import {GetMenuProductsDataResponse} from '../types/GetMenuProductsType';
 
-export const GetMenuProductsQueryKey = (input?: GetMenuProductsInput) =>
-	['Products/list', input] as const;
+export const GetMenuProductsQueryKey = 'Products/list';
 
 const GetMenuProducts = async (
 	input: GetMenuProductsInput,
@@ -29,7 +28,7 @@ export const useGetMenuProductsQuery = (
 	options?: UseQueryOptions<Response<DataList<GetMenuProductsDataResponse>>>,
 ) =>
 	useQuery<Response<DataList<GetMenuProductsDataResponse>>>(
-		GetMenuProductsQueryKey(input),
+		[GetMenuProductsQueryKey, JSON.stringify(input)],
 		() => GetMenuProducts(input),
 		{
 			refetchOnWindowFocus: false,

@@ -8,7 +8,6 @@ export type AddonVariant = {
 type AddonBased = {
 	uuid: string;
 	addon_name: string;
-	addon_price?: number;
 	is_optional: boolean;
 	can_choose_multiple: boolean;
 	min_variant: number;
@@ -18,3 +17,11 @@ type AddonBased = {
 
 export type Addon = AddonBased;
 export type Addons = Array<AddonBased>;
+
+export type FormAddon = {
+	restaurant_uuid: string;
+	product_uuid: string;
+	addon_name: string;
+	is_optional: boolean;
+	can_choose_multiple: boolean;
+};

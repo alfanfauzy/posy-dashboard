@@ -19,14 +19,6 @@ const actionOptions = (length: number) => [
 	{label: 'Mark as available', value: 'is_available'},
 ];
 
-// const categoryOptions = [
-// 	{label: 'Select Category', value: '', hide: true},
-// 	{label: 'Category: All', value: 'all'},
-// 	{label: 'Category: Food', value: 'food'},
-// 	{label: 'Category: Beverages', value: 'beverages'},
-// 	{label: 'Category: Desserts', value: 'desserts'},
-// ];
-
 type OrganismsNavFilterProductProps = {
 	selectedRowKeys: Array<Key>;
 	setSelectedRowKeys: (key: Array<Key>) => void;

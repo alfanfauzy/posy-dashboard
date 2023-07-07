@@ -8,8 +8,8 @@ import {Product} from '../model/ProductOutlet';
 
 export type GetMenuProductsInput = InputVariables<
 	keyof Metadata,
-	keyof Pick<Product, 'product_name'>
-> & {restaurant_outlet_uuid: string};
+	keyof Pick<Product, 'product_name'> | 'keyword' | 'category_uuid'
+> & {restaurant_outlet_uuid?: string};
 
 export type GetMenuProductsResult = ResultQuery<MenuProducts | undefined> & {
 	pagination: Pagination | undefined;
