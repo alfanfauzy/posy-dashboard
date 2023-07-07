@@ -26,7 +26,7 @@ export const useCreateCategoryUsecase = ({
 			if (dataSuccess) {
 				onSuccess?.(dataSuccess?.data, ...args);
 				enqueueSnackbar({
-					message: 'Update Successfully',
+					message: 'Successfully added new category',
 					variant: 'success',
 				});
 			}
