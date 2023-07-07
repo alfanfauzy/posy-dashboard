@@ -119,7 +119,7 @@ const OrganismsFormCategory = () => {
 						render={({field: {value, onChange}}) => (
 							<Input
 								fullwidth
-								labelText="Product Name"
+								labelText="Category Name"
 								onChange={onChange}
 								value={value}
 								placeholder="Input category name"
@@ -129,7 +129,7 @@ const OrganismsFormCategory = () => {
 					/>
 				</div>
 				<div>
-					<p className="mb-4 text-m-regular">Recommendation</p>
+					<p className="mb-4 text-m-regular">Show category</p>
 					<Controller
 						control={control}
 						name="is_active"
