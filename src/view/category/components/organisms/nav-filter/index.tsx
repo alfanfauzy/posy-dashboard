@@ -24,7 +24,7 @@ const OrganismsNavFilterCategory = ({
 			<div className="mt-1 flex items-center space-x-4">
 				<div className="flex items-center w-[500px]">
 					<InputSearch
-						placeholder="Search product"
+						placeholder="Search category"
 						isOpen
 						search={(query.search as string) || ''}
 						onSearch={e => onChangeQueryParams('search', e.target.value)}
@@ -33,7 +33,7 @@ const OrganismsNavFilterCategory = ({
 				</div>
 				<div className="w-full">
 					<p className="text-m-medium text-primary-main">
-						Total product: {pagination?.total_objs}
+						Total category: {pagination?.total_objs}
 					</p>
 				</div>
 			</div>
