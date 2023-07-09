@@ -8,4 +8,7 @@ export type GetAreasDataResponse = {
 	width: number;
 	height: number;
 	metadata: NewMetadata;
+	floor_size_name: string;
+	floor_size_uuid: string;
+	total_table: number;
 };

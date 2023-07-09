@@ -4,7 +4,7 @@ import {Button, Input, Select} from 'posy-fnb-core';
 import React from 'react';
 import {CgTrash} from 'react-icons/cg';
 
-const tableTypeOptions = [
+export const tableTypeOptions = [
 	{
 		label: '2 Seats',
 		value: '2',

@@ -1,8 +1,9 @@
+import {Table} from '@/domain/table/model';
 import Image from 'next/image';
 import type {FC, DragEvent} from 'react';
 
 type TableProps = {
-	data: any;
+	data: Table | null;
 	id: string;
 	isEditLayout: boolean;
 };
@@ -16,7 +17,7 @@ const Table: FC<TableProps> = ({data, id, isEditLayout}) => {
 	return (
 		<div
 			id={id}
-			draggable
+			draggable={!!isEditLayout}
 			onDragStart={isEditLayout ? drag : () => undefined}
 			className={isEditLayout ? 'cursor-move' : 'cursor-default'}
 		>
@@ -29,7 +30,7 @@ const Table: FC<TableProps> = ({data, id, isEditLayout}) => {
 					alt="table"
 				/>
 				<p className="absolute text-l-regular text-neutral-70">
-					{data.name.split(' ')[1]}
+					{data?.table_number}
 				</p>
 			</div>
 		</div>

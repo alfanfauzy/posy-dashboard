@@ -1,38 +1,30 @@
 import {
-	ValidationSchemaCreateAreaType,
-	validationSchemaCreateArea,
-} from '@/view/area-management/schemas/create-area';
-import {useCreateAreaViewModel} from '@/view/area-management/view-models/CreateAreaViewModel';
+	ValidationSchemaEditAreaType,
+	validationSchemaEditArea,
+} from '@/view/area-management/schemas/edit-area';
 import {useGetAreaSizesViewModel} from '@/view/area-management/view-models/GetAreaSizesViewModel';
+import {useUpdateAreaViewModel} from '@/view/area-management/view-models/UpdateAreaViewModel';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {Modal} from 'antd';
 import {Button, Input, Select} from 'posy-fnb-core';
-import React, {useMemo} from 'react';
-import {Controller} from 'react-hook-form';
+import React, {useEffect, useMemo} from 'react';
 import {BsEye} from 'react-icons/bs';
+
+import {SelectedArea} from '../../templates/area-settings';
 
 const OptionsTableSmallArea = new Array(30).fill(undefined).map((_, index) => ({
 	label: String(index + 1),
 	value: String(index + 1),
 }));
 
-const OptionsTableLargeArea = new Array(48).fill(undefined).map((_, index) => ({
-	label: String(index + 1),
-	value: String(index + 1),
-}));
-
-type Item = {
-	label: string;
-	value: string;
-};
-
-type AddNewAreaModalProps = {
+type EditAreaModalProps = {
 	close: () => void;
 	isOpen: boolean;
+	selectedArea: SelectedArea | null;
 };
 
-const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
+const EditAreaModal = ({close, isOpen, selectedArea}: EditAreaModalProps) => {
 	const {outletId} = useAppSelector(state => state.auth);
 	const {data: dataAreaSizes, isLoading: loadAreaSizes} =
 		useGetAreaSizesViewModel({
@@ -52,14 +44,11 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 	const {
 		register,
 		handleSubmit,
-		setValue,
-		getValues,
 		reset,
-		control,
 		formState: {errors, isValid},
 	} = useForm({
 		mode: 'onChange',
-		schema: validationSchemaCreateArea,
+		schema: validationSchemaEditArea,
 		defaultValues: {
 			restaurant_outlet_uuid: outletId,
 		},
@@ -70,19 +59,26 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 		close();
 	};
 
-	const {createArea, isLoading: loadCreateArea} = useCreateAreaViewModel({
+	const {UpdateArea, isLoading: loadUpdateArea} = useUpdateAreaViewModel({
 		onSuccess: () => {
 			onClose();
 		},
 	});
 
-	const onSubmit = (form: ValidationSchemaCreateAreaType) => {
-		createArea({
-			...form,
-			total_table: Number(form.total_table),
-			floor_size_uuid: form.floor_size_uuid.value,
-		});
+	const onSubmit = (form: ValidationSchemaEditAreaType) => {
+		if (selectedArea) {
+			UpdateArea({...form, floor_area_uuid: selectedArea?.uuid});
+		}
 	};
+
+	useEffect(() => {
+		if (selectedArea) {
+			reset({
+				name: selectedArea.name,
+				restaurant_outlet_uuid: outletId,
+			});
+		}
+	}, [outletId, reset, selectedArea]);
 
 	return (
 		<Modal
@@ -95,7 +91,7 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="flex flex-col gap-4 h-full px-4 p-6 bg-gradient-to-r from-primary-main to-secondary-main rounded-t-lg items-center justify-center">
 					<div>
-						<p className="text-neutral-10 text-l-semibold">Create New Area</p>
+						<p className="text-neutral-10 text-l-semibold">Edit New Area</p>
 					</div>
 					<div className="w-full flex flex-col gap-4">
 						<div>
@@ -114,55 +110,32 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 								<span className="mb-1 text-neutral-10 text-m-regular">
 									Area size
 								</span>
-								<Controller
-									name="floor_size_uuid"
-									control={control}
-									render={() => (
-										<Select
-											placeholder="Select area"
-											isLoading={loadAreaSizes}
-											// value={{label: value, value}}
-											options={memoDataAreaSizes}
-											className="w-full"
-											onChange={v =>
-												setValue('floor_size_uuid', v, {
-													shouldValidate: true,
-												})
-											}
-											error={!!errors.floor_size_uuid}
-											helperText={errors.floor_size_uuid?.message}
-										/>
-									)}
+
+								<Select
+									disabled
+									placeholder="Select area"
+									isLoading={loadAreaSizes}
+									value={{
+										label: selectedArea?.size || '',
+										value: selectedArea?.size || '',
+									}}
+									options={memoDataAreaSizes}
+									className="w-full"
 								/>
 							</div>
 							<div className="w-1/2">
 								<span className="mb-1 text-neutral-10 text-m-regular">
 									Area table
 								</span>
-								<Controller
-									name="total_table"
-									control={control}
-									render={() => (
-										<Select
-											//value={{label: value, value}}
-											placeholder="Select table"
-											options={
-												getValues('floor_size_uuid')?.label ===
-												'Large (up to 48 table)'
-													? OptionsTableLargeArea
-													: OptionsTableSmallArea
-											}
-											className="w-full"
-											disabled={!getValues('floor_size_uuid')}
-											onChange={v =>
-												setValue('total_table', (v as Item).value, {
-													shouldValidate: true,
-												})
-											}
-											error={!!errors.total_table}
-											helperText={errors.total_table?.message}
-										/>
-									)}
+								<Select
+									value={{
+										label: selectedArea?.table || '',
+										value: selectedArea?.table || '',
+									}}
+									placeholder="Select table"
+									options={OptionsTableSmallArea}
+									className="w-full"
+									disabled
 								/>
 							</div>
 						</aside>
@@ -174,14 +147,20 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 				</div>
 				<section className="p-4 rounded-b-lg bg-neutral-10 w-full flex gap-3">
 					<div className="w-1/2">
-						<Button size="m" variant="secondary" fullWidth onClick={onClose}>
+						<Button
+							type="button"
+							size="m"
+							variant="secondary"
+							fullWidth
+							onClick={onClose}
+						>
 							Cancel
 						</Button>
 					</div>
 					<div className="w-1/2">
 						<Button
 							type="submit"
-							isLoading={loadCreateArea}
+							isLoading={loadUpdateArea}
 							disabled={!isValid}
 							size="m"
 							fullWidth
@@ -195,4 +174,4 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 	);
 };
 
-export default AddNewAreaModal;
+export default EditAreaModal;

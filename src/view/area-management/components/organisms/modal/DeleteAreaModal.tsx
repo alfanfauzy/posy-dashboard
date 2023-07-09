@@ -1,14 +1,15 @@
-import {Area} from '@/domain/area/model';
 import {useDeleteAreaViewModel} from '@/view/area-management/view-models/DeleteAreaViewModel';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {Button, Modal} from 'posy-fnb-core';
 import React from 'react';
 
+import {SelectedArea} from '../../templates/area-settings';
+
 type DeleteAreaModalProps = {
 	isOpen: boolean;
 	close: () => void;
-	selectedArea: Area;
-	onSelectArea: (area: Area | null) => void;
+	selectedArea: SelectedArea;
+	onSelectArea: (area: SelectedArea | null) => void;
 };
 
 const DeleteAreaModal = ({

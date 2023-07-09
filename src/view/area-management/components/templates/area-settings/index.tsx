@@ -1,4 +1,4 @@
-import {Area} from '@/domain/area/model';
+import {mapToAreasModel} from '@/data/area/mappers/AreaMapper';
 import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
@@ -15,6 +15,13 @@ const AddNewAreaModal = dynamic(
 	},
 );
 
+const EditAreaModal = dynamic(
+	() => import('../../organisms/modal/EditAreaModal'),
+	{
+		loading: () => <div />,
+	},
+);
+
 const DeleteAreaModal = dynamic(
 	() => import('../../organisms/modal/DeleteAreaModal'),
 	{
@@ -22,9 +29,20 @@ const DeleteAreaModal = dynamic(
 	},
 );
 
+export type SelectedArea = {
+	uuid: string;
+	name: string;
+	table: string;
+	size: string;
+};
+
 const AreaSettings = () => {
 	const {outletId} = useAppSelector(state => state.auth);
 	const [isOpenAddArea, {open: openAddArea, close: closeAddArea}] =
+		useDisclosure({
+			initialState: false,
+		});
+	const [isOpenEditArea, {open: openEditArea, close: closeEditArea}] =
 		useDisclosure({
 			initialState: false,
 		});
@@ -33,19 +51,43 @@ const AreaSettings = () => {
 			initialState: false,
 		});
 
-	const [selectedArea, setSelectedArea] = useState<Area | null>(null);
+	const [selectedArea, setSelectedArea] = useState<SelectedArea | null>(null);
 
-	const {data: dataArea, isLoading: loadArea} = useGetAreasViewModel({
-		restaurant_outlet_uuid: outletId,
-	});
+	const {data: dataArea, isLoading: loadArea} = useGetAreasViewModel(
+		{
+			restaurant_outlet_uuid: outletId,
+		},
+		{
+			onSuccess: _data => {
+				if (_data && !selectedArea) {
+					const mappedDataArea = mapToAreasModel(_data.data.objs);
+					const defaultArea: SelectedArea = {
+						name: mappedDataArea[0].name,
+						uuid: mappedDataArea[0].uuid,
+						size: mappedDataArea[0].floor_size_name,
+						table: mappedDataArea[0].total_table.toString(),
+					};
+					setSelectedArea(defaultArea);
+				}
+			},
+		},
+	);
 
-	const onSelectArea = (val: Area | null) => {
+	const onSelectArea = (val: SelectedArea | null) => {
 		setSelectedArea(val);
 	};
 
 	return (
 		<>
 			<AddNewAreaModal close={closeAddArea} isOpen={isOpenAddArea} />
+			{selectedArea && (
+				<EditAreaModal
+					close={closeEditArea}
+					isOpen={isOpenEditArea}
+					selectedArea={selectedArea}
+				/>
+			)}
+
 			{selectedArea && (
 				<DeleteAreaModal
 					isOpen={isOpenDeleteArea}
@@ -65,7 +107,9 @@ const AreaSettings = () => {
 				/>
 				<AreaDetails
 					openDeleteArea={openDeleteArea}
-					areaId={selectedArea?.uuid || ''}
+					openEditArea={openEditArea}
+					selectedArea={selectedArea}
+					onSelectArea={onSelectArea}
 				/>
 			</main>
 		</>

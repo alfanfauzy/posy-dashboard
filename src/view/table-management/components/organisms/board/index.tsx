@@ -1,136 +1,68 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import {Area} from '@/domain/area/model';
+import {TableLayout} from '@/domain/table/model/TableLayout';
+import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import Table from '@/view/table-management/components/molecules/table';
+import dynamic from 'next/dynamic';
 import {Button} from 'posy-fnb-core';
 import type {DragEvent} from 'react';
-import {useState} from 'react';
 import {AiOutlinePlusCircle} from 'react-icons/ai';
 import {BsList} from 'react-icons/bs';
 
-const squares = {
-	layout: {
-		type: 'GRID',
-		width: 8,
-		height: 6,
-	},
-	objs: [
-		[
-			{id: 1, name: 'Table 1'},
-			{id: 2, name: 'Table 2'},
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-		],
-		[
-			null,
-			null,
-			{id: 3, name: 'Table 3'},
-			{id: 4, name: 'Table 4'},
-			null,
-			null,
-			null,
-			null,
-		],
-		[null, null, null, null, null, null, null, null],
-		[
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			{id: 5, name: 'Table 5'},
-			{id: 6, name: 'Table 6'},
-		],
-		[
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			{id: 5, name: 'Table 7'},
-			{id: 6, name: 'Table 8'},
-		],
-		[
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			{id: 5, name: 'Table 9'},
-			{id: 6, name: 'Table 10'},
-		],
-		// [
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	{id: 5, name: 'Table 11'},
-		// 	{id: 6, name: 'Table 12'},
-		// ],
-		// [
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	{id: 5, name: 'Table 13'},
-		// 	{id: 6, name: 'Table 14'},
-		// ],
-		// [
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	null,
-		// 	{id: 5, name: 'Table 15'},
-		// 	{id: 6, name: 'Table 16'},
-		// ],
-	],
-};
+import {type TableProps} from '../modal/AddTableModal';
 
-type Position = Array<
-	Array<{
-		id: number;
-		name: string;
-	} | null>
->;
+const AddTableModal = dynamic(() => import('../modal/AddTableModal'), {
+	loading: () => <div />,
+});
 
 type BoardProps = {
 	isEditLayout: boolean;
 	openEditLayout: () => void;
 	closeEditLayout: () => void;
-	openAddTable: () => void;
+	dataArea: Pick<Area, 'height' | 'width'>;
+	table: TableLayout;
+	setTablePos: (val: TableLayout) => void;
 };
 
 const Board = ({
 	isEditLayout,
 	closeEditLayout,
 	openEditLayout,
-	openAddTable,
+	table,
+	dataArea,
+	setTablePos,
 }: BoardProps) => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
-	const [table, setTablePos] = useState<Position>(squares.objs);
+
+	const [
+		isOpenAddTable,
+		{open: openAddTable, close: closeAddTable},
+		{valueState: valueAddTable, setValueState: setValueAddTable},
+	] = useDisclosure<TableProps>({initialState: false});
+
+	const onCloseAddTable = () => {
+		closeAddTable();
+		setValueAddTable({
+			position_x: 0,
+			position_y: 0,
+			floor_area_uuid: '',
+		});
+	};
 
 	const renderSquare = (i: number) => {
-		const toY = i % squares.layout.width;
-		const toX = Math.floor(i / squares.layout.width);
+		const toY = i % dataArea.width;
+		const toX = Math.floor(i / dataArea.width);
 
 		const onOpenAddTable = () => {
 			openAddTable();
-			console.log(toX, toY);
+			setValueAddTable({
+				position_x: toX,
+				position_y: toY,
+				floor_area_uuid: 'ca73e64b-f3be-40e8-a386-90b7094abd81',
+			});
 		};
 
 		const allowDrop = (e: DragEvent<HTMLDivElement>) => {
@@ -164,8 +96,8 @@ const Board = ({
 		return (
 			<div
 				id={`${toX},${toY}`}
-				onDrop={drop}
-				onDragOver={allowDrop}
+				onDrop={isEditLayout ? drop : () => undefined}
+				onDragOver={isEditLayout ? allowDrop : () => undefined}
 				className="lg:w-[90px] w-[72px] lg:h-[90px] h-[72px] aspect-square border-[0.5px] border-neutral-40"
 			>
 				{table[toX][toY] && (
@@ -192,43 +124,53 @@ const Board = ({
 	};
 
 	return (
-		<section className="h-full overflow-y-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10">
-			<aside className="flex items-center gap-4">
-				{width <= 1280 && (
-					<BsList
-						onClick={() => dispatch(setOpenDrawer(true))}
-						size={24}
-						className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
-					/>
-				)}
-				<div className="flex w-full justify-between items-end">
-					<p className="text-xxl-semibold text-neutral-100">Table Settings</p>
-					{!isEditLayout ? (
-						<p
-							onClick={openEditLayout}
-							className="text-m-medium text-neutral-100 cursor-pointer hover:opacity-70 duration-300 ease-in-out"
-						>
-							Edit Layout
-						</p>
-					) : (
-						<Button size="m" onClick={closeEditLayout}>
-							Save
-						</Button>
+		<>
+			{isOpenAddTable && valueAddTable && (
+				<AddTableModal
+					isOpen={isOpenAddTable}
+					onClose={onCloseAddTable}
+					tableProps={valueAddTable}
+				/>
+			)}
+
+			<section className="h-full overflow-y-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10">
+				<aside className="flex items-center gap-4">
+					{width <= 1280 && (
+						<BsList
+							onClick={() => dispatch(setOpenDrawer(true))}
+							size={24}
+							className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
+						/>
 					)}
-				</div>
-			</aside>
-			<aside className="flex">
-				<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4">
-					<div
-						className={`w-fit h-fit border-[0.5px] border-neutral-40 grid grid-cols-${squares.layout.width} `}
-					>
-						{new Array(squares.layout.height * squares.layout.width)
-							.fill(0)
-							.map((_, i) => renderSquare(i))}
+					<div className="flex w-full justify-between items-end">
+						<p className="text-xxl-semibold text-neutral-100">Table Settings</p>
+						{!isEditLayout ? (
+							<p
+								onClick={openEditLayout}
+								className="text-m-medium text-neutral-100 cursor-pointer hover:opacity-70 duration-300 ease-in-out"
+							>
+								Edit Layout
+							</p>
+						) : (
+							<Button size="m" onClick={closeEditLayout}>
+								Save
+							</Button>
+						)}
 					</div>
-				</div>
-			</aside>
-		</section>
+				</aside>
+				<aside className="flex">
+					<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4">
+						<div
+							className={`w-fit h-fit border-[0.5px] border-neutral-40 grid grid-cols-${dataArea.width} `}
+						>
+							{new Array(dataArea.height * dataArea.width)
+								.fill(0)
+								.map((_, i) => renderSquare(i))}
+						</div>
+					</div>
+				</aside>
+			</section>
+		</>
 	);
 };
 

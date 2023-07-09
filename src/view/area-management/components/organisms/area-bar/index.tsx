@@ -1,4 +1,4 @@
-import {Area, Areas} from '@/domain/area/model';
+import {Areas} from '@/domain/area/model';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
@@ -6,12 +6,14 @@ import {Button, Loading} from 'posy-fnb-core';
 import React from 'react';
 import {BsList} from 'react-icons/bs';
 
+import {SelectedArea} from '../../templates/area-settings';
+
 type AreabarProps = {
 	data: Areas | undefined;
 	isLoading: boolean;
 	openAddArea: () => void;
-	selectedArea: Area | null;
-	onSelectArea: (area: Area | null) => void;
+	selectedArea: SelectedArea | null;
+	onSelectArea: (area: SelectedArea | null) => void;
 };
 
 const Areabar = ({
@@ -23,6 +25,7 @@ const Areabar = ({
 }: AreabarProps) => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
+
 	return (
 		<section className="h-full w-1/3 overflow-y-hidden overflow-auto xl:rounded-r-lg rounded-lg bg-neutral-10">
 			<aside className="flex h-full flex-col">
@@ -49,7 +52,14 @@ const Areabar = ({
 						data.map(item => (
 							<div key={item.uuid}>
 								<Button
-									onClick={() => onSelectArea(item)}
+									onClick={() =>
+										onSelectArea({
+											uuid: item.uuid,
+											name: item.name,
+											size: item.height.toString(),
+											table: '2',
+										})
+									}
 									fullWidth
 									size="m"
 									variant="secondary"

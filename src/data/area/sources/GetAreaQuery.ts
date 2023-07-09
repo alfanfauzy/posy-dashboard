@@ -11,7 +11,7 @@ const GetArea = async (
 	input: GetAreaInput,
 ): Promise<Response<GetAreaDataResponse>> => {
 	const response = await Get({
-		endpoint: `/user-service/floor/get-list`,
+		endpoint: `/user-service/floor/get-detail/${input.area_uuid}`,
 		params: input,
 	});
 

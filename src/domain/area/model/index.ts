@@ -8,7 +8,25 @@ export type AreaBased = {
 	width: number;
 	height: number;
 	metadata: NewMetadata;
+	floor_size_name: string;
+	floor_size_uuid: string;
+	total_table: number;
 };
 
-export type Area = AreaBased;
+export type TableList = {
+	uuid: string;
+	restaurant_outlet_uuid: string;
+	floor_area_uuid: string;
+	table_number: string;
+	position_x: number;
+	position_y: number;
+	priority: number;
+	created_at: number;
+	updated_at: number;
+	table_seat: number;
+};
+
+export type Area = AreaBased & {
+	table_list?: Array<TableList>;
+};
 export type Areas = Array<AreaBased>;
