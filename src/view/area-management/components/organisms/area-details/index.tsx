@@ -7,6 +7,7 @@ import {useGetAreaViewModel} from '@/view/area-management/view-models/GetAreaVie
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {tableTypeOptions} from '@/view/table-management/components/templates/table-management-sidebar';
+import {useUpdateBulkTableByFloorViewModel} from '@/view/table-management/view-models/UpdateBulkTableByFloorViewModel';
 import {Divider} from 'antd';
 import {Button, Input, Loading, Select} from 'posy-fnb-core';
 import React from 'react';
@@ -80,8 +81,19 @@ const AreaDetails = ({
 		},
 	);
 
+	const {UpdateBulkTableByFloor, isLoading: loadUpdateBulk} =
+		useUpdateBulkTableByFloorViewModel({});
+
 	const onSubmit = (form: ValidationSchemaEditTableAreaType) => {
-		console.log(form);
+		UpdateBulkTableByFloor({
+			floor_area_uuid: form.floor_area_uuid,
+			restaurant_outlet_uuid: outletId,
+			tables: form.table_list.map(table => ({
+				uuid: table.table_uuid,
+				table_number: table.table_number,
+				table_seat: Number(table.table_seat),
+			})),
+		});
 	};
 
 	return (
@@ -182,7 +194,12 @@ const AreaDetails = ({
 				</aside>
 
 				<div className="absolute bottom-0 w-full">
-					<Button size="m" fullWidth disabled={!isValid}>
+					<Button
+						size="m"
+						fullWidth
+						disabled={!isValid}
+						isLoading={loadUpdateBulk}
+					>
 						Save
 					</Button>
 				</div>

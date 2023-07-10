@@ -1,11 +1,13 @@
 import {Table, Tables} from '@/domain/table/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
+import {UpdateBulkTableByFloor} from '@/domain/table/repositories/UpdateBulkTableByFloorRepository';
 import {NewMetadata} from '@/domain/vo/BaseMetadata';
 
 import {GetTablesDataResponse} from '../types';
 import {CreateUpsertTableDataResponse} from '../types/CreateUpsertTableType';
 import {GetTableLayoutByFloorDataResponse} from '../types/GetTableLayoutByFloorType';
 import {GetTableDataResponse} from '../types/GetTableType';
+import {UpdateBulkTableByFloorDataResponse} from '../types/UpdateBulkTableByFloorType';
 
 // map server data to own model
 export const mapToTablesModel = (datas: Array<GetTablesDataResponse>): Tables =>
@@ -42,6 +44,13 @@ export const mapToCreateUpsertTableModel = (
 ): {uuid: string; metadata: NewMetadata} => ({
 	uuid: data.uuid,
 	metadata: data.metadata,
+});
+
+export const mapToUpdateTableByFloorModel = (
+	data: UpdateBulkTableByFloorDataResponse,
+): UpdateBulkTableByFloor => ({
+	uuid: data.uuid,
+	updated_at: data.metadata.updated_at.seconds,
 });
 
 export const mapToTableLayoutModel = (
