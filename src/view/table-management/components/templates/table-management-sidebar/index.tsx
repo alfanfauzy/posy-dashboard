@@ -1,7 +1,15 @@
+import {Table} from '@/domain/table/model';
 import {Can} from '@/view/auth/components/organisms/rbac';
 import TableIcon from '@/view/common/assets/icons/tableIcon';
+import {useForm} from '@/view/common/hooks/useForm';
+import {useAppSelector} from '@/view/common/store/hooks';
+import {
+	ValidationSchemaAddTableType,
+	validationSchemaAddTable,
+} from '@/view/table-management/schemas/addTableSchema';
+import {useCreateUpsertTableViewModel} from '@/view/table-management/view-models/CreateUpsertTableViewModel';
 import {Button, Input, Select} from 'posy-fnb-core';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {CgTrash} from 'react-icons/cg';
 
 export const tableTypeOptions = [
@@ -23,16 +31,49 @@ export const tableTypeOptions = [
 	},
 ];
 
-const TableManagementSidebar = () => {
+type TableManagementSidebarProps = {
+	selectedTable: Table | null;
+	onChangeSelectedTable: (val: null) => void;
+};
+
+const TableManagementSidebar = ({
+	selectedTable,
+	onChangeSelectedTable,
+}: TableManagementSidebarProps) => {
+	const {outletId} = useAppSelector(state => state.auth);
+
+	const {
+		register,
+		handleSubmit,
+		reset,
+		setValue,
+		watch,
+		formState: {errors, isValid},
+	} = useForm({
+		mode: 'onChange',
+		schema: validationSchemaAddTable,
+	});
+
+	const {CreateUpsertTable, isLoading} = useCreateUpsertTableViewModel({
+		onSuccess: () => {
+			reset();
+			onChangeSelectedTable(null);
+		},
+	});
+
+	const onSubmit = (form: ValidationSchemaAddTableType) => {
+		CreateUpsertTable({...form, restaurant_outlet_uuid: outletId});
+	};
+
+	useEffect(() => {
+		if (selectedTable) {
+			reset(selectedTable);
+		}
+	}, [reset, selectedTable]);
+
 	return (
 		<main className="relative w-full flex-1 h-full rounded-l-lg bg-neutral-10">
-			{/* {loadTransaction && (
-				<div className="flex h-full w-full items-center justify-center">
-					<Loading size={75} />
-				</div>
-			)} */}
-
-			<article className="flex h-full flex-col">
+			<aside className="flex h-full flex-col">
 				<section>
 					<aside className="p-4 bg-gradient-to-r from-primary-main to-secondary-main rounded-l-lg">
 						<div className="flex items-center justify-between">
@@ -42,35 +83,59 @@ const TableManagementSidebar = () => {
 						</div>
 					</aside>
 				</section>
-				{/* <section className="-mt-16 h-full flex flex-col items-center justify-center">
-					<TableIcon />
-					<p className="mt-4 text-l-medium text-neutral-90">
-						Select one of table beside
-					</p>
-				</section> */}
 
-				<section className="p-4">
-					<div className="mt-2 flex flex-col gap-4">
-						<Input labelText="Table name" />
-						<Select options={tableTypeOptions} labelText="Table type" />
+				{!selectedTable ? (
+					<div className="flex flex-col gap-4 justify-center items-center h-full">
+						<TableIcon />
+						<span className="text-m-medium">Select one of table beside</span>
 					</div>
-				</section>
+				) : (
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<section className="p-4">
+							<div className="mt-2 flex flex-col gap-4">
+								<Input
+									{...register('table_number')}
+									labelText="Table name"
+									error={!!errors.table_number}
+									helperText={errors.table_number?.message}
+								/>
+								<Select
+									options={tableTypeOptions}
+									value={{
+										label: `${watch('table_seat')} Seats`,
+										value: watch('table_seat'),
+									}}
+									labelText="Table type"
+									onChange={v =>
+										setValue('table_seat', Number(v.value), {
+											shouldValidate: true,
+										})
+									}
+									error={!!errors.table_seat}
+									helperText={errors.table_seat?.message}
+								/>
+							</div>
+						</section>
 
-				<section className="absolute bottom-0 w-full rounded-bl-lg p-4 shadow-basic bg-neutral-10">
-					<div className="flex gap-2">
-						<Can I="payment" an="transaction">
-							<Button
-								variant="primary"
-								fullWidth
-								// onClick={openCreatePayment}
-								className="whitespace-nowrap text-m-semibold"
-							>
-								Save
-							</Button>
-						</Can>
-					</div>
-				</section>
-			</article>
+						<section className="absolute bottom-0 w-full rounded-bl-lg p-4 shadow-basic bg-neutral-10">
+							<div className="flex gap-2">
+								<Can I="payment" an="transaction">
+									<Button
+										variant="primary"
+										fullWidth
+										type="submit"
+										disabled={!isValid}
+										isLoading={isLoading}
+										className="whitespace-nowrap text-m-semibold"
+									>
+										Save
+									</Button>
+								</Can>
+							</div>
+						</section>
+					</form>
+				)}
+			</aside>
 		</main>
 	);
 };

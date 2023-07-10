@@ -1,5 +1,5 @@
 import {useAppSelector} from '@/view/common/store/hooks';
-import {useGetTablesViewModel} from '@/view/table/view-models/GetTablesViewModel';
+import {useGetTablesViewModel} from '@/view/table-management/view-models/GetTablesViewModel';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
 import {Loading} from 'posy-fnb-core';
 import React from 'react';

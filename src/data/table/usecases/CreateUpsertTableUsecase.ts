@@ -31,7 +31,7 @@ export const useCreateUpsertTableUsecase = ({
 			if (dataSuccess) {
 				onSuccess?.(mapToCreateUpsertTableModel(dataSuccess?.data), ...args);
 				enqueueSnackbar({
-					message: 'Create Table Successfully',
+					message: 'Update Table Successfully',
 					variant: 'success',
 				});
 				queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);

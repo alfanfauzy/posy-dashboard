@@ -3,7 +3,7 @@ import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTrans
 import {UpdateTransaction} from '@/domain/transaction/repositories/UpdateTransactionRepository';
 import {orderType} from '@/view/common/constants/order';
 import {useAppSelector} from '@/view/common/store/hooks';
-import {useGetTablesViewModel} from '@/view/table/view-models/GetTablesViewModel';
+import {useGetTablesViewModel} from '@/view/table-management/view-models/GetTablesViewModel';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
 import {useUpdateTransactionViewModel} from '@/view/transaction/view-models/UpdateTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';

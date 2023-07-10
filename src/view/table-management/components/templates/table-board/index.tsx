@@ -1,4 +1,5 @@
-import {Area} from '@/domain/area/model';
+import {Area, Areas} from '@/domain/area/model';
+import {type Table as TableType} from '@/domain/table/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
@@ -11,29 +12,41 @@ import type {DragEvent} from 'react';
 import {AiOutlinePlusCircle} from 'react-icons/ai';
 import {BsList} from 'react-icons/bs';
 
-import {type TableProps} from '../modal/AddTableModal';
+import {type TableProps} from '../../organisms/modal/AddTableModal';
 
-const AddTableModal = dynamic(() => import('../modal/AddTableModal'), {
-	loading: () => <div />,
-});
+const AddTableModal = dynamic(
+	() => import('../../organisms/modal/AddTableModal'),
+	{
+		loading: () => <div />,
+	},
+);
 
-type BoardProps = {
+type TableBoardProps = {
 	isEditLayout: boolean;
 	openEditLayout: () => void;
 	closeEditLayout: () => void;
 	dataArea: Pick<Area, 'height' | 'width'>;
 	table: TableLayout;
 	setTablePos: (val: TableLayout) => void;
+	onChangeSelectedArea: (val: Area) => void;
+	selectedArea: Area;
+	areaList: Areas;
+	selectedTable: TableType | null;
+	onChangeSelectedTable: (val: TableType) => void;
 };
 
-const Board = ({
+const TableBoard = ({
 	isEditLayout,
 	closeEditLayout,
 	openEditLayout,
 	table,
 	dataArea,
 	setTablePos,
-}: BoardProps) => {
+	areaList,
+	selectedArea,
+	onChangeSelectedArea,
+	onChangeSelectedTable,
+}: TableBoardProps) => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
 
@@ -106,6 +119,7 @@ const Board = ({
 							data={table[toX][toY]}
 							id={`${toX},${toY}`}
 							isEditLayout={isEditLayout}
+							onChangeSelectedTable={onChangeSelectedTable}
 						/>
 					</div>
 				)}
@@ -133,7 +147,7 @@ const Board = ({
 				/>
 			)}
 
-			<section className="h-full overflow-y-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10">
+			<section className="relative h-full overflow-y-hidden overflow-x-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10">
 				<aside className="flex items-center gap-4">
 					{width <= 1280 && (
 						<BsList
@@ -169,9 +183,25 @@ const Board = ({
 						</div>
 					</div>
 				</aside>
+
+				<aside className="absolute flex gap-2 bottom-0 overflow-x-auto w-full pr-10">
+					{areaList.map(area => (
+						<div
+							key={area.uuid}
+							onClick={() => onChangeSelectedArea(area)}
+							className={`p-2 border cursor-pointer hover:opacity-70 rounded-t whitespace-nowrap ${
+								selectedArea.uuid === area.uuid
+									? 'border-secondary-main bg-secondary-border'
+									: 'border-neutral-50 bg-neutral-10'
+							}`}
+						>
+							{area.name}
+						</div>
+					))}
+				</aside>
 			</section>
 		</>
 	);
 };
 
-export default Board;
+export default TableBoard;

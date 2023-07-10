@@ -1,10 +1,11 @@
-import {Tables} from '@/domain/table/model';
+import {Table, Tables} from '@/domain/table/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
 import {NewMetadata} from '@/domain/vo/BaseMetadata';
 
 import {GetTablesDataResponse} from '../types';
 import {CreateUpsertTableDataResponse} from '../types/CreateUpsertTableType';
 import {GetTableLayoutByFloorDataResponse} from '../types/GetTableLayoutByFloorType';
+import {GetTableDataResponse} from '../types/GetTableType';
 
 // map server data to own model
 export const mapToTablesModel = (datas: Array<GetTablesDataResponse>): Tables =>
@@ -15,7 +16,26 @@ export const mapToTablesModel = (datas: Array<GetTablesDataResponse>): Tables =>
 		priority: data.priority,
 		created_at: data.created_at.seconds,
 		updated_at: data.updated_at.seconds,
+		floor_area_uuid: data.floor_area_uuid,
+		table_seat: data.table_seat,
+		table_image: data.table_image,
+		position_x: data.position_x,
+		position_y: data.position_y,
 	}));
+
+export const mapToTableModel = (data: GetTableDataResponse): Table => ({
+	uuid: data.uuid,
+	restaurant_outlet_uuid: data.restaurant_outlet_uuid,
+	table_number: data.table_number,
+	priority: data.priority,
+	created_at: data.created_at.seconds,
+	updated_at: data.updated_at.seconds,
+	floor_area_uuid: data.floor_area_uuid,
+	table_seat: data.table_seat,
+	table_image: data.table_image,
+	position_x: data.position_x,
+	position_y: data.position_y,
+});
 
 export const mapToCreateUpsertTableModel = (
 	data: CreateUpsertTableDataResponse,
