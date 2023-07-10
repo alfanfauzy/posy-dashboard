@@ -10,6 +10,8 @@ type CategoryActions = {
 	closeForm: () => void;
 	openConfirmation: () => void;
 	closeConfirmation: () => void;
+	openDiscard: () => void;
+	closeDiscard: () => void;
 };
 
 const useCategoryActions = (): CategoryActions => {
@@ -43,6 +45,14 @@ const useCategoryActions = (): CategoryActions => {
 		setAppState(() => ({selectedCategory: value}));
 	};
 
+	const openDiscard = () => {
+		setAppState(() => ({isOpenDiscardModal: true}));
+	};
+
+	const closeDiscard = () => {
+		setAppState(() => ({isOpenDiscardModal: false}));
+	};
+
 	return {
 		setIsEdit,
 		openForm,
@@ -51,6 +61,8 @@ const useCategoryActions = (): CategoryActions => {
 		closeConfirmation,
 		setSelectedCategoryId,
 		setSelectedCategory,
+		openDiscard,
+		closeDiscard,
 	};
 };
 

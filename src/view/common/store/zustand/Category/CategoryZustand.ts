@@ -12,6 +12,7 @@ type CategoryState = {
 	};
 	isOpenForm: boolean;
 	isOpenConfirmation: boolean;
+	isOpenDiscardModal: boolean;
 };
 
 const initialSelectedCategory = {
@@ -25,6 +26,7 @@ const useCategoryState = create<CategoryState>(set => ({
 	isEdit: false,
 	isOpenForm: false,
 	isOpenConfirmation: false,
+	isOpenDiscardModal: false,
 	selectedCategoryId: '',
 	selectedCategory: initialSelectedCategory,
 	set: (fn: (arg0: CategoryState) => CategoryState | Partial<CategoryState>) =>
