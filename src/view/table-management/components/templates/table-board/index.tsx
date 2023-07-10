@@ -3,9 +3,10 @@ import {type Table as TableType} from '@/domain/table/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
-import {useAppDispatch} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import Table from '@/view/table-management/components/molecules/table';
+import {useUpdateSaveTableLayoutViewModel} from '@/view/table-management/view-models/UpdateSaveTableLayoutViewModel';
 import dynamic from 'next/dynamic';
 import {Button} from 'posy-fnb-core';
 import type {DragEvent} from 'react';
@@ -49,6 +50,7 @@ const TableBoard = ({
 }: TableBoardProps) => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
+	const {outletId} = useAppSelector(state => state.auth);
 
 	const [
 		isOpenAddTable,
@@ -62,6 +64,21 @@ const TableBoard = ({
 			position_x: 0,
 			position_y: 0,
 			floor_area_uuid: '',
+		});
+	};
+
+	const {UpdateSaveTableLayout, isLoading} = useUpdateSaveTableLayoutViewModel({
+		onSuccess: () => {
+			closeEditLayout();
+		},
+	});
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		UpdateSaveTableLayout({
+			floor_area_uuid: selectedArea.uuid,
+			restaurant_outlet_uuid: outletId,
+			layout: table,
 		});
 	};
 
@@ -147,7 +164,10 @@ const TableBoard = ({
 				/>
 			)}
 
-			<section className="relative h-full overflow-y-hidden overflow-x-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10">
+			<form
+				onSubmit={handleSubmit}
+				className="relative h-full overflow-y-hidden overflow-x-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10"
+			>
 				<aside className="flex items-center gap-4">
 					{width <= 1280 && (
 						<BsList
@@ -166,7 +186,7 @@ const TableBoard = ({
 								Edit Layout
 							</p>
 						) : (
-							<Button size="m" onClick={closeEditLayout}>
+							<Button isLoading={isLoading} type="submit" size="m">
 								Save
 							</Button>
 						)}
@@ -199,7 +219,7 @@ const TableBoard = ({
 						</div>
 					))}
 				</aside>
-			</section>
+			</form>
 		</>
 	);
 };

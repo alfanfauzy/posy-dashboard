@@ -5,6 +5,7 @@ import {NewMetadata} from '@/domain/vo/BaseMetadata';
 
 import {GetTablesDataResponse} from '../types';
 import {CreateUpsertTableDataResponse} from '../types/CreateUpsertTableType';
+import {DeleteTableDataResponse} from '../types/DeleteTableType';
 import {GetTableLayoutByFloorDataResponse} from '../types/GetTableLayoutByFloorType';
 import {GetTableDataResponse} from '../types/GetTableType';
 import {UpdateBulkTableByFloorDataResponse} from '../types/UpdateBulkTableByFloorType';
@@ -75,3 +76,10 @@ export const mapToTableLayoutModel = (
 	});
 	return multiArray;
 };
+
+export const mapToDeleteTableModel = (
+	data: DeleteTableDataResponse,
+): {uuid: string; metadata: NewMetadata} => ({
+	uuid: data.uuid,
+	metadata: data.metadata,
+});

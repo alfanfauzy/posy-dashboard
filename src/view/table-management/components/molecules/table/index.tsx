@@ -31,7 +31,7 @@ const Table: FC<TableProps> = ({
 			id={id}
 			draggable={!!isEditLayout}
 			onDragStart={isEditLayout ? drag : () => undefined}
-			className={isEditLayout ? 'cursor-move' : 'cursor-default'}
+			className={isEditLayout ? 'cursor-move' : 'cursor-pointer'}
 			onClick={onSelectTable}
 		>
 			<div className="relative flex h-full justify-center items-center py-1 px-2.5">
