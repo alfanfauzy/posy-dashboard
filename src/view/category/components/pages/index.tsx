@@ -1,5 +1,7 @@
 import {useGetCategoriesUsecase} from '@/data/category/usecases/GetCategoriesUsecase';
 import {useAbility} from '@/view/auth/components/organisms/rbac';
+import AtomModalDiscard from '@/view/common/components/atoms/modal/modal-discard';
+import useCategoryActions from '@/view/common/store/zustand/Category/CategoryAction';
 import useCategoryState from '@/view/common/store/zustand/Category/CategoryZustand';
 import {useRouter} from 'next/router';
 import React from 'react';
@@ -13,7 +15,23 @@ const ViewCategoryProductPage = () => {
 	const {query} = useRouter();
 	const ability = useAbility();
 
-	const {isOpenForm, isOpenConfirmation} = useCategoryState();
+	const {isOpenForm, isOpenConfirmation, isOpenDiscardModal} =
+		useCategoryState();
+
+	const {closeDiscard, closeForm, setSelectedCategory, setIsEdit} =
+		useCategoryActions();
+
+	const handleCloseDiscard = () => {
+		closeDiscard();
+		setIsEdit(false);
+		closeForm();
+		setSelectedCategory({
+			category_name: '',
+			is_active: false,
+			uuid: '',
+			restaurant_uuid: '',
+		});
+	};
 
 	const {
 		data: dataCategory,
@@ -21,7 +39,7 @@ const ViewCategoryProductPage = () => {
 		isLoading: loadProduct,
 	} = useGetCategoriesUsecase({
 		limit: Number(query.limit) || 10,
-		page: Number(query.page) || 1,
+		page: query.search ? 0 : Number(query.page) || 1,
 		search: [
 			{
 				field: 'keyword',
@@ -51,6 +69,13 @@ const ViewCategoryProductPage = () => {
 				</>
 			)}
 			{isOpenForm && <OrganismsFormCategory />}
+			{isOpenDiscardModal && (
+				<AtomModalDiscard
+					open={isOpenDiscardModal}
+					handleActionOk={handleCloseDiscard}
+					handleActionClose={closeDiscard}
+				/>
+			)}
 			{isOpenConfirmation && <OrganismDeleteConfirmationModal />}
 		</main>
 	);
