@@ -13,6 +13,7 @@ import type {DragEvent} from 'react';
 import {AiOutlinePlusCircle} from 'react-icons/ai';
 import {BsList} from 'react-icons/bs';
 
+import FloorList from '../../molecules/floor-list';
 import {type TableProps} from '../../organisms/modal/AddTableModal';
 
 const AddTableModal = dynamic(
@@ -203,22 +204,11 @@ const TableBoard = ({
 						</div>
 					</div>
 				</aside>
-
-				<aside className="absolute flex gap-2 bottom-0 overflow-x-auto w-full pr-10">
-					{areaList.map(area => (
-						<div
-							key={area.uuid}
-							onClick={() => onChangeSelectedArea(area)}
-							className={`p-2 border cursor-pointer hover:opacity-70 rounded-t whitespace-nowrap ${
-								selectedArea.uuid === area.uuid
-									? 'border-secondary-main bg-secondary-border'
-									: 'border-neutral-50 bg-neutral-10'
-							}`}
-						>
-							{area.name}
-						</div>
-					))}
-				</aside>
+				<FloorList
+					dataArea={areaList}
+					selectedArea={selectedArea}
+					onChangeSelectArea={onChangeSelectedArea}
+				/>
 			</form>
 		</>
 	);

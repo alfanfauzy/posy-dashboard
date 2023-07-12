@@ -11,4 +11,5 @@ export type GetAreasDataResponse = {
 	floor_size_name: string;
 	floor_size_uuid: string;
 	total_table: number;
+	total_waiting_food: number;
 };

@@ -4,6 +4,7 @@ import {Can} from '@/view/auth/components/organisms/rbac';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {requestFullScreen} from '@/view/common/utils/UtilsRequestFullScreen';
 import {useGetOrdersViewModel} from '@/view/order/view-models/GetOrdersViewModel';
 import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/update-transaction';
 import {useGetQrCodeViewModel} from '@/view/transaction/view-models/GetQrCodeViewModel';
@@ -13,7 +14,6 @@ import React, {useRef, useState} from 'react';
 import {AiOutlinePercentage} from 'react-icons/ai';
 import {useReactToPrint} from 'react-to-print';
 
-import {requestFullScreen} from '../../organisms/content/TransactionGridView';
 import ApplyDiscountModal from '../../organisms/modal/ApplyDiscountModal';
 import CreatePaymentModal from '../../organisms/modal/CreatePaymentModal';
 import PaymentConfirmationModal from '../../organisms/modal/PaymentConfirmationModal';

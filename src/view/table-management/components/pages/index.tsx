@@ -27,7 +27,7 @@ const ViewTableManagementPage = () => {
 	};
 	const onChangeSelectedTable = (val: Table | null) => setSelectedTable(val);
 
-	const {data: dataArea, isLoading: loadAreaa} = useGetAreasViewModel(
+	const {data: dataArea, isLoading: loadArea} = useGetAreasViewModel(
 		{
 			restaurant_outlet_uuid: outletId,
 		},
@@ -55,7 +55,7 @@ const ViewTableManagementPage = () => {
 			},
 		);
 
-	if (loadTable || loadAreaa) {
+	if (loadTable || loadArea) {
 		return (
 			<div className="flex h-screen bg-white items-center justify-center">
 				<Loading size={80} />

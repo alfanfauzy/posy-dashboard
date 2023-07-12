@@ -5,11 +5,8 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 import {useProSidebar} from 'react-pro-sidebar';
 
-const TransactionGridView = dynamic(
-	() =>
-		import(
-			'@/view/transaction/components/organisms/content/TransactionGridView'
-		),
+const TransactionSection = dynamic(
+	() => import('@/view/transaction/components/templates/transaction-section'),
 	{
 		loading: () => <div />,
 	},
@@ -69,7 +66,7 @@ const ViewTransactionPage = () => {
 			<section
 				className={`flex-1 ${generateWidth(width, selectedTrxId, collapsed)}`}
 			>
-				<TransactionGridView
+				<TransactionSection
 					openTableCapacity={openTableCapacity}
 					openNotifBar={openNotifBar}
 					isOpenNotifBar={isOpenNotifBar}

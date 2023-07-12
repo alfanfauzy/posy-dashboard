@@ -24,6 +24,7 @@ export const mapToAreasModel = (datas: Array<GetAreasDataResponse>): Areas =>
 		floor_size_name: data.floor_size_name,
 		floor_size_uuid: data.floor_size_uuid,
 		total_table: data.total_table,
+		total_waiting_food: data.total_waiting_food,
 	}));
 
 export const mapToAreaModel = (data: GetAreaDataResponse): Area => ({
@@ -49,6 +50,7 @@ export const mapToAreaModel = (data: GetAreaDataResponse): Area => ({
 	floor_size_name: data.floor_size_name,
 	floor_size_uuid: data.floor_size_uuid,
 	total_table: data.total_table,
+	total_waiting_food: data.total_waiting_food,
 });
 
 export const mapToCreateAreaModel = (

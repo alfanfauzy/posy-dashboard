@@ -38,7 +38,7 @@ const TableGridView = ({closeTableCapacity}: TableGridViewProps) => {
 		);
 
 	return (
-		<section className="h-screen w-screen bg-neutral-100 bg-opacity-60 z-50 inset-0 absolute">
+		<section className="h-screen w-screen overflow-auto bg-neutral-100 bg-opacity-60 z-50 inset-0 absolute">
 			<article className="h-full w-full flex flex-col items-center justify-center">
 				<div ref={ref}>
 					{(isLoading || loadSummary) && (
