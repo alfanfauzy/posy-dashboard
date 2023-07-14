@@ -25,6 +25,7 @@ const ViewTableManagementPage = () => {
 		setSelectedArea(val);
 		setSelectedTable(null);
 	};
+
 	const onChangeSelectedTable = (val: Table | null) => setSelectedTable(val);
 
 	const {data: dataArea, isLoading: loadArea} = useGetAreasViewModel(
@@ -33,7 +34,9 @@ const ViewTableManagementPage = () => {
 		},
 		{
 			onSuccess: dt => {
-				onChangeSelectedArea(dt.data.objs[0]);
+				if (dt?.data?.objs?.length > 0) {
+					onChangeSelectedArea(dt.data.objs[0]);
+				}
 			},
 		},
 	);
@@ -55,40 +58,37 @@ const ViewTableManagementPage = () => {
 			},
 		);
 
-	if (loadTable || loadArea) {
-		return (
-			<div className="flex h-screen bg-white items-center justify-center">
-				<Loading size={80} />
-			</div>
-		);
-	}
-
 	return (
 		<>
-			{dataTable && dataArea && selectedArea && table.length > 0 ? (
-				<main className="h-full w-full flex gap-2">
-					<TableBoard
-						isEditLayout={isEditLayout}
-						closeEditLayout={closeEditLayout}
-						openEditLayout={openEditLayout}
-						table={table}
-						setTablePos={setTablePos}
-						dataArea={{
-							height: selectedArea?.height,
-							width: selectedArea?.width,
-						}}
-						areaList={dataArea}
-						selectedArea={selectedArea}
-						onChangeSelectedArea={onChangeSelectedArea}
-						selectedTable={selectedTable}
-						onChangeSelectedTable={onChangeSelectedTable}
-					/>
-					<TableManagementSidebar
-						selectedTable={selectedTable}
-						onChangeSelectedTable={onChangeSelectedTable}
-					/>
-				</main>
-			) : null}
+			{/* {loadTable || loadArea ? (
+				<div className="flex h-screen bg-white items-center justify-center">
+					<Loading size={80} />
+				</div>
+			) : null} */}
+			{/* {dataTable && dataArea && selectedArea && table.length > 0 ? ( */}
+			<main className="h-full w-full flex gap-2">
+				<TableBoard
+					isEditLayout={isEditLayout}
+					closeEditLayout={closeEditLayout}
+					openEditLayout={openEditLayout}
+					table={table}
+					setTablePos={setTablePos}
+					dataArea={{
+						height: selectedArea?.height || 0,
+						width: selectedArea?.width || 0,
+					}}
+					areaList={dataArea || []}
+					selectedArea={selectedArea || undefined}
+					onChangeSelectedArea={onChangeSelectedArea}
+					selectedTable={selectedTable}
+					onChangeSelectedTable={onChangeSelectedTable}
+				/>
+				<TableManagementSidebar
+					selectedTable={selectedTable}
+					onChangeSelectedTable={onChangeSelectedTable}
+				/>
+			</main>
+			{/* ) : null} */}
 		</>
 	);
 };

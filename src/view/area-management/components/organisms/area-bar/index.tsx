@@ -43,11 +43,11 @@ const Areabar = ({
 					<p className="text-l-regular">Choose Area</p>
 				</div>
 				<div className="mt-4 px-4 overflow-y-auto flex h-full flex-col gap-3">
-					{isLoading && (
+					{isLoading ? (
 						<div className="mt-6">
 							<Loading size={65} />
 						</div>
-					)}
+					) : null}
 					{data &&
 						data.map(item => (
 							<div key={item.uuid}>

@@ -62,10 +62,10 @@ const AreaSettings = () => {
 				if (_data && !selectedArea) {
 					const mappedDataArea = mapToAreasModel(_data.data.objs);
 					const defaultArea: SelectedArea = {
-						name: mappedDataArea[0].name,
-						uuid: mappedDataArea[0].uuid,
-						size: mappedDataArea[0].floor_size_name,
-						table: mappedDataArea[0].total_table.toString(),
+						name: mappedDataArea?.[0].name,
+						uuid: mappedDataArea?.[0].uuid,
+						size: mappedDataArea?.[0].floor_size_name,
+						table: mappedDataArea?.[0].total_table.toString(),
 					};
 					setSelectedArea(defaultArea);
 				}

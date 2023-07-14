@@ -10,7 +10,7 @@ import {tableTypeOptions} from '@/view/table-management/components/templates/tab
 import {useUpdateBulkTableByFloorViewModel} from '@/view/table-management/view-models/UpdateBulkTableByFloorViewModel';
 import {Divider} from 'antd';
 import {Button, Input, Loading, Select} from 'posy-fnb-core';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useFieldArray} from 'react-hook-form';
 import {AiOutlineEye} from 'react-icons/ai';
 import {CgTrash} from 'react-icons/cg';
@@ -49,6 +49,15 @@ const AreaDetails = ({
 		control,
 		name: 'table_list',
 	});
+
+	// useEffect(() => {
+	// 	if (selectedArea?.uuid) {
+	// 		reset({
+	// 			floor_area_uuid: selectedArea.uuid,
+	// 			table_list: [],
+	// 		});
+	// 	}
+	// }, [reset, selectedArea]);
 
 	const {data, isLoading} = useGetAreaViewModel(
 		{
@@ -102,78 +111,82 @@ const AreaDetails = ({
 				<aside className="h-[92%] border border-neutral-40 rounded-lg flex flex-col">
 					<div className="flex justify-between items-center px-6 py-2 bg-neutral-20 border-b border-b-neutral-40 rounded-t-lg">
 						<p className="text-l-semibold text-neutral-90">
-							Area details - {data?.name}
+							Area details {data ? `- ${data?.name}` : null}
 						</p>
 
-						<div className="flex gap-8">
-							<AiOutlineEye
-								size={20}
-								className="cursor-pointer text-neutral-70 hover:opacity-80"
-							/>
-							<HiOutlinePencilAlt
-								onClick={openEditArea}
-								size={20}
-								className="cursor-pointer text-neutral-70 hover:opacity-80"
-							/>
-							<CgTrash
-								onClick={openDeleteArea}
-								className="cursor-pointer text-neutral-70 hover:opacity-80"
-								size={20}
-							/>
-						</div>
+						{data ? (
+							<div className="flex gap-8">
+								<AiOutlineEye
+									size={20}
+									className="cursor-pointer text-neutral-70 hover:opacity-80"
+								/>
+								<HiOutlinePencilAlt
+									onClick={openEditArea}
+									size={20}
+									className="cursor-pointer text-neutral-70 hover:opacity-80"
+								/>
+								<CgTrash
+									onClick={openDeleteArea}
+									className="cursor-pointer text-neutral-70 hover:opacity-80"
+									size={20}
+								/>
+							</div>
+						) : null}
 					</div>
 					<section className="overflow-y-auto flex h-full flex-col">
 						{isLoading && selectedArea?.uuid ? (
 							<div className="flex justify-center items-center my-20">
 								<Loading size={80} />
 							</div>
-						) : (
-							<div className="pt-6 px-6 h-full overflow-y-auto flex flex-col">
-								{getValues('table_list')?.map((table, idx) => (
-									<aside key={table.table_uuid}>
-										<div className="w-full items-center flex gap-4">
-											<div className="w-1/2">
-												<Input
-													{...register(`table_list.${idx}.table_number`)}
-													fullwidth
-													labelText="Table name"
-													error={!!errors.table_list?.[idx]?.table_number}
-													helperText={
-														errors.table_list?.[idx]?.table_number?.message
-													}
-												/>
-											</div>
-											<div className="w-1/2">
-												<Select
-													className="!mb-0"
-													options={tableTypeOptions}
-													labelText="Table seat"
-													value={{
-														label: table.table_seat
-															? `${table.table_seat} seats`
-															: 'Select table seat',
-														value: table.table_seat,
-													}}
-													onChange={val =>
-														update(idx, {
-															table_uuid: table.table_uuid,
-															table_number: table.table_number,
-															table_seat: val.value,
-														})
-													}
-												/>
-											</div>
-											<div className="mt-5">
-												<CgTrash
-													className="cursor-pointer text-neutral-70 hover:opacity-80"
-													size={20}
-													onClick={() => remove(idx)}
-												/>
-											</div>
+						) : null}
+
+						<div className="pt-6 px-6 h-full overflow-y-auto flex flex-col">
+							{getValues('table_list')?.map((table, idx) => (
+								<aside key={table.table_uuid}>
+									<div className="w-full items-center flex gap-4">
+										<div className="w-1/2">
+											<Input
+												{...register(`table_list.${idx}.table_number`)}
+												fullwidth
+												labelText="Table name"
+												error={!!errors.table_list?.[idx]?.table_number}
+												helperText={
+													errors.table_list?.[idx]?.table_number?.message
+												}
+											/>
 										</div>
-										<Divider className="mb-4" />
-									</aside>
-								))}
+										<div className="w-1/2">
+											<Select
+												className="!mb-0"
+												options={tableTypeOptions}
+												labelText="Table seat"
+												value={{
+													label: table.table_seat
+														? `${table.table_seat} seats`
+														: 'Select table seat',
+													value: table.table_seat,
+												}}
+												onChange={val =>
+													update(idx, {
+														table_uuid: table.table_uuid,
+														table_number: table.table_number,
+														table_seat: val.value,
+													})
+												}
+											/>
+										</div>
+										<div className="mt-5">
+											<CgTrash
+												className="cursor-pointer text-neutral-70 hover:opacity-80"
+												size={20}
+												onClick={() => remove(idx)}
+											/>
+										</div>
+									</div>
+									<Divider className="mb-4" />
+								</aside>
+							))}
+							{data ? (
 								<div className="flex items-center justify-center mb-4">
 									<p
 										onClick={() =>
@@ -188,8 +201,8 @@ const AreaDetails = ({
 										+ Add new table
 									</p>
 								</div>
-							</div>
-						)}
+							) : null}
+						</div>
 					</section>
 				</aside>
 

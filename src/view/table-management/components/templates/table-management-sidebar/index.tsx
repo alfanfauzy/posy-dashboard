@@ -95,7 +95,7 @@ const TableManagementSidebar = ({
 					onSelectTable={onChangeSelectedTable}
 				/>
 			)}
-			<main className="relative w-full flex-1 h-full rounded-l-lg bg-neutral-10">
+			<main className="relative w-full max-w-[35%] h-full rounded-l-lg bg-neutral-10">
 				<aside className="flex h-full flex-col">
 					<section>
 						<aside className="p-4 bg-gradient-to-r from-primary-main to-secondary-main rounded-l-lg">

@@ -92,7 +92,7 @@ const CreateTransactionModal = ({
 				restaurant_outlet_table_uuid?.toString() || '',
 			);
 		}
-	}, [dataTransaction, isEdit]);
+	}, [dataTransaction, isEdit, setValue]);
 
 	return (
 		<Modal

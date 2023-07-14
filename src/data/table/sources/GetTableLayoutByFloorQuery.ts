@@ -11,7 +11,10 @@ const GetTableLayoutByFloor = async (
 	input: GetTableLayoutByFloorInput,
 ): Promise<Response<GetTableLayoutByFloorDataResponse>> => {
 	const response = await Get({
-		endpoint: `/user-service/table/get-layout-by-floor/${input.area_uuid}?restaurant_outlet_uuid=${input.restaurant_outlet_uuid}`,
+		endpoint: `/user-service/table/get-layout-by-floor/${input.area_uuid}`,
+		params: {
+			...input,
+		},
 	});
 
 	return {

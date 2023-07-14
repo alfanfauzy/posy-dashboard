@@ -1,3 +1,5 @@
+import {Transactions} from '@/domain/transaction/model';
+
 type TableBased = {
 	uuid: string;
 	restaurant_outlet_uuid: string;
@@ -10,6 +12,7 @@ type TableBased = {
 	table_image: string;
 	position_x: number;
 	position_y: number;
+	transactions?: Transactions;
 };
 
 export type Tables = Array<TableBased>;

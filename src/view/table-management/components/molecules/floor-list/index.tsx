@@ -3,7 +3,7 @@ import React from 'react';
 
 type FloorListProps = {
 	dataArea: Areas;
-	selectedArea: Area;
+	selectedArea: Area | undefined;
 	onChangeSelectArea: (val: Area) => void;
 };
 
@@ -26,10 +26,10 @@ const FloorList = ({
 				>
 					<p>{area.name}</p>
 					<div>
-						{selectedArea.total_waiting_food &&
-						selectedArea.total_waiting_food > 0 ? (
+						{selectedArea?.total_waiting_food &&
+						selectedArea?.total_waiting_food > 0 ? (
 							<div className="w-5 h-5 flex items-center text-xs justify-center bg-secondary-main rounded-full text-white">
-								{selectedArea.total_waiting_food}
+								{selectedArea?.total_waiting_food}
 							</div>
 						) : null}
 					</div>

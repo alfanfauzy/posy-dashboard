@@ -31,7 +31,7 @@ type TableBoardProps = {
 	table: TableLayout;
 	setTablePos: (val: TableLayout) => void;
 	onChangeSelectedArea: (val: Area) => void;
-	selectedArea: Area;
+	selectedArea: Area | undefined;
 	areaList: Areas;
 	selectedTable: TableType | null;
 	onChangeSelectedTable: (val: TableType) => void;
@@ -77,7 +77,7 @@ const TableBoard = ({
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		UpdateSaveTableLayout({
-			floor_area_uuid: selectedArea.uuid,
+			floor_area_uuid: selectedArea?.uuid || '',
 			restaurant_outlet_uuid: outletId,
 			layout: table,
 		});
@@ -86,6 +86,8 @@ const TableBoard = ({
 	const renderSquare = (i: number) => {
 		const toY = i % dataArea.width;
 		const toX = Math.floor(i / dataArea.width);
+
+		const item = table?.[toX]?.[toY];
 
 		const onOpenAddTable = () => {
 			openAddTable();
@@ -131,10 +133,10 @@ const TableBoard = ({
 				onDragOver={isEditLayout ? allowDrop : () => undefined}
 				className="lg:w-[90px] w-[72px] lg:h-[90px] h-[72px] aspect-square border-[0.5px] border-neutral-40"
 			>
-				{table[toX][toY] && (
+				{item?.uuid && (
 					<div className="w-full h-full flex items-center justify-center">
 						<Table
-							data={table[toX][toY]}
+							data={item}
 							id={`${toX},${toY}`}
 							isEditLayout={isEditLayout}
 							onChangeSelectedTable={onChangeSelectedTable}
@@ -142,7 +144,7 @@ const TableBoard = ({
 					</div>
 				)}
 
-				{!isEditLayout && !table[toX][toY] && (
+				{!isEditLayout && !item?.uuid && (
 					<div className="h-full flex items-center justify-center">
 						<AiOutlinePlusCircle
 							size={22}
@@ -167,7 +169,7 @@ const TableBoard = ({
 
 			<form
 				onSubmit={handleSubmit}
-				className="relative h-full overflow-y-hidden overflow-x-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10"
+				className="relative h-full flex-1 overflow-y-hidden overflow-x-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10"
 			>
 				<aside className="flex items-center gap-4">
 					{width <= 1280 && (
@@ -193,17 +195,19 @@ const TableBoard = ({
 						)}
 					</div>
 				</aside>
-				<aside className="flex">
-					<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4">
-						<div
-							className={`w-fit h-fit border-[0.5px] border-neutral-40 grid grid-cols-${dataArea.width} `}
-						>
-							{new Array(dataArea.height * dataArea.width)
-								.fill(0)
-								.map((_, i) => renderSquare(i))}
+				{dataArea ? (
+					<aside className="flex">
+						<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4">
+							<div
+								className={`w-fit h-fit border-[0.5px] border-neutral-40 grid grid-cols-${dataArea.width} `}
+							>
+								{new Array(dataArea.height * dataArea.width)
+									.fill(0)
+									.map((_, i) => renderSquare(i))}
+							</div>
 						</div>
-					</div>
-				</aside>
+					</aside>
+				) : null}
 				<FloorList
 					dataArea={areaList}
 					selectedArea={selectedArea}
