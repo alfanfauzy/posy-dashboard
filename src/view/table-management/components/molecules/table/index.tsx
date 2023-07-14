@@ -39,7 +39,7 @@ const Table: FC<TableProps> = ({
 					id={id}
 					width={60}
 					height={60}
-					src="https://ik.imagekit.io/posyfnb/table_2.png"
+					src={data?.table_image || ''}
 					alt="table"
 				/>
 				<p className="absolute text-l-regular text-neutral-70">

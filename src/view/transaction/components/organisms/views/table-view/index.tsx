@@ -160,14 +160,14 @@ const TableView = ({
 									<Image
 										width={60}
 										height={60}
-										src="https://ik.imagekit.io/posyfnb/table_2.png"
+										src={item.table_image}
 										alt="table"
 									/>
 									<p className="absolute text-l-regular text-neutral-70">
 										{item?.uuid ? item?.table_number : null}
 									</p>
 									{item.transactions && item.transactions?.length > 0 ? (
-										<div className="-top-1 right-2 absolute w-5 h-5 flex items-center text-xs justify-center bg-secondary-main rounded-full text-white">
+										<div className="top-1 right-2 absolute w-5 h-5 flex items-center text-xs justify-center bg-secondary-main rounded-full text-white">
 											{item.transactions?.length}
 										</div>
 									) : null}
