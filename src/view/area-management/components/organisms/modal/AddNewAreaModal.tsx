@@ -60,9 +60,6 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 	} = useForm({
 		mode: 'onChange',
 		schema: validationSchemaCreateArea,
-		defaultValues: {
-			restaurant_outlet_uuid: outletId,
-		},
 	});
 
 	const onClose = () => {
@@ -81,6 +78,7 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 			...form,
 			total_table: Number(form.total_table),
 			floor_size_uuid: form.floor_size_uuid.value,
+			restaurant_outlet_uuid: outletId,
 		});
 	};
 
@@ -104,6 +102,7 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 							</span>
 							<Input
 								fullwidth
+								placeholder="Input area name"
 								{...register('name')}
 								error={!!errors.name}
 								helperText={errors.name?.message}
@@ -117,11 +116,14 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 								<Controller
 									name="floor_size_uuid"
 									control={control}
-									render={() => (
+									render={({field: {value}}) => (
 										<Select
-											placeholder="Select area"
+											placeholder="Select area size"
 											isLoading={loadAreaSizes}
-											// value={{label: value, value}}
+											value={{
+												label: value?.label || 'Select area size',
+												value: value?.value,
+											}}
 											options={memoDataAreaSizes}
 											className="w-full"
 											onChange={v =>
@@ -137,15 +139,15 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 							</div>
 							<div className="w-1/2">
 								<span className="mb-1 text-neutral-10 text-m-regular">
-									Area table
+									Total table
 								</span>
 								<Controller
 									name="total_table"
 									control={control}
-									render={() => (
+									render={({field: {value}}) => (
 										<Select
-											//value={{label: value, value}}
-											placeholder="Select table"
+											value={{label: value || 'Select one', value: value}}
+											placeholder="Select one"
 											options={
 												getValues('floor_size_uuid')?.label ===
 												'Large (up to 48 table)'
@@ -174,7 +176,13 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 				</div>
 				<section className="p-4 rounded-b-lg bg-neutral-10 w-full flex gap-3">
 					<div className="w-1/2">
-						<Button size="m" variant="secondary" fullWidth onClick={onClose}>
+						<Button
+							size="m"
+							type="button"
+							variant="secondary"
+							fullWidth
+							onClick={onClose}
+						>
 							Cancel
 						</Button>
 					</div>

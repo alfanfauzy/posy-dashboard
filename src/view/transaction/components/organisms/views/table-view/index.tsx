@@ -47,7 +47,7 @@ const MenuPopover = (
 					}}
 					className="hover:text-primary-main cursor-pointer"
 				>
-					{el.session_suffix}
+					{el.created_at}
 				</p>
 			))}
 		</div>
@@ -145,7 +145,7 @@ const TableView = ({
 					<div
 						ref={tableRef}
 						id={`${toX},${toY}`}
-						className="lg:w-[90px] w-[72px] lg:h-[90px] h-[72px] aspect-square"
+						className="lg:w-[150px] w-[110px] lg:h-[90px] h-[72px] aspect-square"
 						onClick={() => handleSelectTable(item)}
 					>
 						<div className="w-full h-full flex items-center justify-center">
@@ -191,7 +191,7 @@ const TableView = ({
 					/>
 				)}
 				<section className="flex">
-					<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4 rounded-lg">
+					<div className="bg-[#F7F7F7] h-fit w-fit p-2 rounded-lg">
 						<div
 							className={`w-fit h-fit grid grid-cols-${selectedArea.width} `}
 						>

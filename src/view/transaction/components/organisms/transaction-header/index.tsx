@@ -48,6 +48,7 @@ type TransactionHeaderProps = {
 	loadCreateTransaction: boolean;
 	handleCreateTransaction: (outletId: string) => void;
 	onChangeViewType: (viewType: string) => void;
+	viewType: string;
 };
 
 const TransactionHeader = ({
@@ -59,6 +60,7 @@ const TransactionHeader = ({
 	loadCreateTransaction,
 	handleCreateTransaction,
 	onChangeViewType,
+	viewType,
 }: TransactionHeaderProps) => {
 	const {
 		auth: {outletId, isSubscription, isLoggedIn},
@@ -198,22 +200,24 @@ const TransactionHeader = ({
 						/>
 					</div>
 
-					<div className="w-36">
-						<Can I="create" an="transaction">
-							<Button
-								onClick={() => handleCreateTransaction(outletId)}
-								size="m"
-								fullWidth
-								variant="primary"
-								isLoading={loadCreateTransaction}
-								className="!px-0"
-							>
-								<p className="whitespace-nowrap text-s-semibold">
-									+ New transaction
-								</p>
-							</Button>
-						</Can>
-					</div>
+					{viewType === 'transaction' && (
+						<div className="w-36">
+							<Can I="create" an="transaction">
+								<Button
+									onClick={() => handleCreateTransaction(outletId)}
+									size="m"
+									fullWidth
+									variant="primary"
+									isLoading={loadCreateTransaction}
+									className="!px-0"
+								>
+									<p className="whitespace-nowrap text-s-semibold">
+										+ New transaction
+									</p>
+								</Button>
+							</Can>
+						</div>
+					)}
 				</aside>
 			)}
 		</article>

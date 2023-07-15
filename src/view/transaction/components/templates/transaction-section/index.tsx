@@ -50,7 +50,7 @@ const TransactionSection = ({
 	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 	const [selectedArea, setSelectedArea] = useState<Area>();
 	const [status, setStatus] = useState('');
-	const [viewType, setViewType] = useState('table');
+	const [viewType, setViewType] = useState('transaction');
 
 	const {data, isLoading: loadData} = useGetTransactionsViewModel(
 		{
@@ -233,6 +233,7 @@ const TransactionSection = ({
 				loadCreateTransaction={loadCreateTransaction}
 				handleCreateTransaction={handleCreateTransaction}
 				onChangeViewType={onChangeViewType}
+				viewType={viewType}
 			/>
 
 			<TransactionView
