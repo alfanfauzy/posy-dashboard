@@ -27,9 +27,14 @@ type EditAreaModalProps = {
 const EditAreaModal = ({close, isOpen, selectedArea}: EditAreaModalProps) => {
 	const {outletId} = useAppSelector(state => state.auth);
 	const {data: dataAreaSizes, isLoading: loadAreaSizes} =
-		useGetAreaSizesViewModel({
-			type: 'GRID',
-		});
+		useGetAreaSizesViewModel(
+			{
+				type: 'GRID',
+			},
+			{
+				enabled: isOpen,
+			},
+		);
 
 	const memoDataAreaSizes = useMemo(() => {
 		if (dataAreaSizes) {

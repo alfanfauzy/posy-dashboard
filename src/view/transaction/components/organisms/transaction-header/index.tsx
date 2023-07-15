@@ -160,7 +160,7 @@ const TransactionHeader = ({
 			)}
 			{dataSummary && (
 				<aside className="mt-2 flex gap-2 w-full justify-between">
-					<div className="flex gap-2 xl:mb-0 mb-4 overflow-auto w-full">
+					<div className="flex gap-2 xl:mb-0 mb-2.5 overflow-auto w-full">
 						<FilterChip
 							label={`Waiting Food: ${dataSummary?.waiting_food}`}
 							openSearch={openSearch}

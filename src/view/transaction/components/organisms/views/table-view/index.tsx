@@ -5,6 +5,7 @@ import {Table} from '@/domain/table/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
 import useClickOutside from '@/view/common/hooks/useClickOutside';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
+import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import FloorList from '@/view/table-management/components/molecules/floor-list';
@@ -65,6 +66,7 @@ const TableView = ({
 	selectedArea,
 	onChangeSelectArea,
 }: TableViewProps) => {
+	const {width} = useViewportListener();
 	const {outletId} = useAppSelector(state => state.auth);
 	const [table, setTablePos] = useState<TableLayout>([]);
 	const [isOpenPopover, {open: openPopover, close: closePopOver}] =
@@ -145,7 +147,7 @@ const TableView = ({
 					<div
 						ref={tableRef}
 						id={`${toX},${toY}`}
-						className="lg:w-[150px] w-[110px] lg:h-[90px] h-[72px] aspect-square"
+						className="aspect-square"
 						onClick={() => handleSelectTable(item)}
 					>
 						<div className="w-full h-full flex items-center justify-center">
@@ -158,12 +160,12 @@ const TableView = ({
 							>
 								<div className="relative flex justify-center items-center py-1 px-2.5  cursor-pointer">
 									<Image
-										width={60}
-										height={60}
+										width={width > 1000 ? 65 : 55}
+										height={width > 1000 ? 65 : 55}
 										src={item.table_image}
 										alt="table"
 									/>
-									<p className="absolute text-l-regular text-neutral-70">
+									<p className="absolute text-s-regular lg:text-l-regular text-neutral-70">
 										{item?.uuid ? item?.table_number : null}
 									</p>
 									{item.transactions && item.transactions?.length > 0 ? (
@@ -191,9 +193,13 @@ const TableView = ({
 					/>
 				)}
 				<section className="flex">
-					<div className="bg-[#F7F7F7] h-fit w-fit p-2 rounded-lg">
+					<div
+						className={`bg-[#F7F7F7] h-fit lg:w-full w-fit p-1 rounded-lg ${
+							selectedArea.width === 8 ? 'lg:max-w-[820px]' : 'lg:max-w-3xl'
+						} `}
+					>
 						<div
-							className={`w-fit h-fit grid grid-cols-${selectedArea.width} `}
+							className={`lg:w-full w-fit h-fit grid grid-cols-${selectedArea.width} `}
 						>
 							{new Array(selectedArea.height * selectedArea.width)
 								.fill(0)

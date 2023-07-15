@@ -35,9 +35,14 @@ type AddNewAreaModalProps = {
 const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 	const {outletId} = useAppSelector(state => state.auth);
 	const {data: dataAreaSizes, isLoading: loadAreaSizes} =
-		useGetAreaSizesViewModel({
-			type: 'GRID',
-		});
+		useGetAreaSizesViewModel(
+			{
+				type: 'GRID',
+			},
+			{
+				enabled: isOpen,
+			},
+		);
 
 	const memoDataAreaSizes = useMemo(() => {
 		if (dataAreaSizes) {

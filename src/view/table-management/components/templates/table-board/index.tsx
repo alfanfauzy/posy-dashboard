@@ -131,7 +131,7 @@ const TableBoard = ({
 				id={`${toX},${toY}`}
 				onDrop={isEditLayout ? drop : () => undefined}
 				onDragOver={isEditLayout ? allowDrop : () => undefined}
-				className="lg:w-[90px] w-[72px] lg:h-[90px] h-[72px] aspect-square border-[0.5px] border-neutral-40"
+				className="aspect-square border-[0.5px] border-neutral-40"
 			>
 				{item?.uuid && (
 					<div className="w-full h-full flex items-center justify-center">
@@ -196,10 +196,10 @@ const TableBoard = ({
 					</div>
 				</aside>
 				{dataArea ? (
-					<aside className="flex">
-						<div className="bg-[#F7F7F7] h-fit w-fit p-2 mt-4">
+					<aside className="flex w-full">
+						<div className="bg-[#F7F7F7] h-fit w-full p-2 mt-4">
 							<div
-								className={`w-fit h-fit border-[0.5px] border-neutral-40 grid grid-cols-${dataArea.width} `}
+								className={`w-full h-fit border-[0.5px] border-neutral-40 grid grid-cols-${dataArea.width} `}
 							>
 								{new Array(dataArea.height * dataArea.width)
 									.fill(0)

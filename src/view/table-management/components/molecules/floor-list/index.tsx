@@ -18,7 +18,7 @@ const FloorList = ({
 				<div
 					key={area.uuid}
 					onClick={() => onChangeSelectArea(area)}
-					className={`p-2 border flex items-center  gap-1.5 cursor-pointer hover:opacity-70 rounded-t whitespace-nowrap ${
+					className={`px-2 py-1 border flex items-center cursor-pointer hover:opacity-70 rounded-t whitespace-nowrap ${
 						selectedArea && selectedArea.uuid === area.uuid
 							? 'border-secondary-main bg-secondary-border'
 							: 'border-neutral-50 bg-neutral-10'
@@ -26,10 +26,9 @@ const FloorList = ({
 				>
 					<p>{area.name}</p>
 					<div>
-						{selectedArea?.total_waiting_food &&
-						selectedArea?.total_waiting_food > 0 ? (
-							<div className="w-5 h-5 flex items-center text-xs justify-center bg-secondary-main rounded-full text-white">
-								{selectedArea?.total_waiting_food}
+						{area?.total_waiting_food && area?.total_waiting_food > 0 ? (
+							<div className="w-4 h-4 ml-1.5 flex items-center text-xs justify-center bg-secondary-main rounded-full text-white">
+								{area?.total_waiting_food}
 							</div>
 						) : null}
 					</div>

@@ -146,13 +146,13 @@ const GridView = ({
 				</article>
 			)}
 
-			{dataArea && selectedArea && (
+			{/* {dataArea && selectedArea && (
 				<FloorList
 					dataArea={dataArea}
 					selectedArea={selectedArea}
 					onChangeSelectArea={onChangeSelectArea}
 				/>
-			)}
+			)} */}
 		</article>
 	);
 };

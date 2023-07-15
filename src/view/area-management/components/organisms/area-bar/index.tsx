@@ -1,4 +1,5 @@
 import {Areas} from '@/domain/area/model';
+import AreaIcon from '@/view/common/assets/icons/area';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
@@ -39,39 +40,51 @@ const Areabar = ({
 					)}
 					<p className="text-xxl-semibold text-neutral-100">Area Settings</p>
 				</div>
-				<div className="px-4">
-					<p className="text-l-regular">Choose Area</p>
-				</div>
+
 				<div className="mt-4 px-4 overflow-y-auto flex h-full flex-col gap-3">
 					{isLoading ? (
 						<div className="mt-6">
 							<Loading size={65} />
 						</div>
 					) : null}
-					{data &&
-						data.map(item => (
-							<div key={item.uuid}>
-								<Button
-									onClick={() =>
-										onSelectArea({
-											uuid: item.uuid,
-											name: item.name,
-											size: item.height.toString(),
-											table: '2',
-										})
-									}
-									fullWidth
-									size="m"
-									variant="secondary"
-									className={`${
-										item.uuid === selectedArea?.uuid &&
-										'border-secondary-main hover:border-secondary-main text-secondary-main'
-									}`}
-								>
-									{item.name}
-								</Button>
+
+					{!data && !isLoading ? (
+						<div className="h-full flex flex-col justify-center items-center">
+							<AreaIcon />
+							<p className="text-m-medium mt-2">Please add new area first</p>
+						</div>
+					) : null}
+
+					{data && (
+						<>
+							<div>
+								<p className="text-l-regular">Choose Area</p>
 							</div>
-						))}
+							{data.map(item => (
+								<div key={item.uuid}>
+									<Button
+										onClick={() =>
+											onSelectArea({
+												uuid: item.uuid,
+												name: item.name,
+												size: item.height.toString(),
+												table: '',
+											})
+										}
+										fullWidth
+										size="m"
+										variant="secondary"
+										className={`${
+											item.uuid === selectedArea?.uuid &&
+											'border-secondary-main hover:border-secondary-main text-secondary-main'
+										}`}
+									>
+										{item.name}
+									</Button>
+								</div>
+							))}
+						</>
+					)}
 				</div>
 				<div className="mt-4 p-4 shadow-box-1 w-full">
 					<Button size="m" fullWidth onClick={openAddArea}>

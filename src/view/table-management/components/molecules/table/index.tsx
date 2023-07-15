@@ -42,7 +42,7 @@ const Table: FC<TableProps> = ({
 					src={data?.table_image || ''}
 					alt="table"
 				/>
-				<p className="absolute text-l-regular text-neutral-70">
+				<p className="absolute text-s-regular lg:text-l-regular text-neutral-70">
 					{data?.table_number}
 				</p>
 			</div>

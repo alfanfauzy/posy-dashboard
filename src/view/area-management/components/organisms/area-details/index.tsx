@@ -4,13 +4,14 @@ import {
 	validationSchemaEditTableArea,
 } from '@/view/area-management/schemas/editTableArea';
 import {useGetAreaViewModel} from '@/view/area-management/view-models/GetAreaViewModel';
+import AreaIcon from '@/view/common/assets/icons/area';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {tableTypeOptions} from '@/view/table-management/components/templates/table-management-sidebar';
 import {useUpdateBulkTableByFloorViewModel} from '@/view/table-management/view-models/UpdateBulkTableByFloorViewModel';
 import {Divider} from 'antd';
 import {Button, Input, Loading, Select} from 'posy-fnb-core';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useFieldArray} from 'react-hook-form';
 import {AiOutlineEye} from 'react-icons/ai';
 import {CgTrash} from 'react-icons/cg';
@@ -49,15 +50,6 @@ const AreaDetails = ({
 		control,
 		name: 'table_list',
 	});
-
-	// useEffect(() => {
-	// 	if (selectedArea?.uuid) {
-	// 		reset({
-	// 			floor_area_uuid: selectedArea.uuid,
-	// 			table_list: [],
-	// 		});
-	// 	}
-	// }, [reset, selectedArea]);
 
 	const {data, isLoading} = useGetAreaViewModel(
 		{
@@ -111,10 +103,10 @@ const AreaDetails = ({
 				<aside className="h-[92%] border border-neutral-40 rounded-lg flex flex-col">
 					<div className="flex justify-between items-center px-6 py-2 bg-neutral-20 border-b border-b-neutral-40 rounded-t-lg">
 						<p className="text-l-semibold text-neutral-90">
-							Area details {data ? `- ${data?.name}` : null}
+							Table details {data ? `- ${data?.name}` : null}
 						</p>
 
-						{data ? (
+						{getValues('table_list')?.length > 0 ? (
 							<div className="flex gap-8">
 								<AiOutlineEye
 									size={20}
@@ -140,69 +132,79 @@ const AreaDetails = ({
 							</div>
 						) : null}
 
-						<div className="pt-6 px-6 h-full overflow-y-auto flex flex-col">
-							{getValues('table_list')?.map((table, idx) => (
-								<aside key={table.table_uuid}>
-									<div className="w-full items-center flex gap-4">
-										<div className="w-1/2">
-											<Input
-												{...register(`table_list.${idx}.table_number`)}
-												fullwidth
-												labelText="Table name"
-												error={!!errors.table_list?.[idx]?.table_number}
-												helperText={
-													errors.table_list?.[idx]?.table_number?.message
-												}
-											/>
+						{!getValues('table_list') ||
+						getValues('table_list').length === 0 ? (
+							<div className="h-full flex flex-col justify-center items-center">
+								<AreaIcon />
+								<p className="text-m-medium mt-2">Please add new area first</p>
+							</div>
+						) : null}
+
+						{getValues('table_list')?.length > 0 && !isLoading ? (
+							<div className="pt-6 px-6 h-full overflow-y-auto flex flex-col">
+								{getValues('table_list')?.map((table, idx) => (
+									<aside key={table.table_uuid}>
+										<div className="w-full items-center flex gap-4">
+											<div className="w-1/2">
+												<Input
+													{...register(`table_list.${idx}.table_number`)}
+													fullwidth
+													labelText="Table name"
+													error={!!errors.table_list?.[idx]?.table_number}
+													helperText={
+														errors.table_list?.[idx]?.table_number?.message
+													}
+												/>
+											</div>
+											<div className="w-1/2">
+												<Select
+													className="!mb-0"
+													options={tableTypeOptions}
+													labelText="Table seat"
+													value={{
+														label: table.table_seat
+															? `${table.table_seat} seats`
+															: 'Select table seat',
+														value: table.table_seat,
+													}}
+													onChange={val =>
+														update(idx, {
+															table_uuid: table.table_uuid,
+															table_number: table.table_number,
+															table_seat: val.value,
+														})
+													}
+												/>
+											</div>
+											<div className="mt-5">
+												<CgTrash
+													className="cursor-pointer text-neutral-70 hover:opacity-80"
+													size={20}
+													onClick={() => remove(idx)}
+												/>
+											</div>
 										</div>
-										<div className="w-1/2">
-											<Select
-												className="!mb-0"
-												options={tableTypeOptions}
-												labelText="Table seat"
-												value={{
-													label: table.table_seat
-														? `${table.table_seat} seats`
-														: 'Select table seat',
-													value: table.table_seat,
-												}}
-												onChange={val =>
-													update(idx, {
-														table_uuid: table.table_uuid,
-														table_number: table.table_number,
-														table_seat: val.value,
-													})
-												}
-											/>
-										</div>
-										<div className="mt-5">
-											<CgTrash
-												className="cursor-pointer text-neutral-70 hover:opacity-80"
-												size={20}
-												onClick={() => remove(idx)}
-											/>
-										</div>
+										<Divider className="mb-4" />
+									</aside>
+								))}
+								{getValues('table_list')?.length > 0 ? (
+									<div className="flex items-center justify-center mb-4">
+										<p
+											onClick={() =>
+												append({
+													table_number: '',
+													table_seat: '',
+													table_uuid: '',
+												})
+											}
+											className="text-secondary-main text-l-semibold cursor-pointer hover:text-opacity-70 duration-300"
+										>
+											+ Add new table
+										</p>
 									</div>
-									<Divider className="mb-4" />
-								</aside>
-							))}
-							{data ? (
-								<div className="flex items-center justify-center mb-4">
-									<p
-										onClick={() =>
-											append({
-												table_number: '',
-												table_seat: '',
-												table_uuid: '',
-											})
-										}
-										className="text-secondary-main text-l-semibold cursor-pointer hover:text-opacity-70 duration-300"
-									>
-										+ Add new table
-									</p>
-								</div>
-							) : null}
-						</div>
+								) : null}
+							</div>
+						) : null}
 					</section>
 				</aside>
 

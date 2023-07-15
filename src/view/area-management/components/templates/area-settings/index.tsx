@@ -1,7 +1,9 @@
 import {mapToAreasModel} from '@/data/area/mappers/AreaMapper';
+import {GetAreaQueryKey} from '@/data/area/sources/GetAreaQuery';
 import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import React, {useState} from 'react';
 
@@ -37,7 +39,9 @@ export type SelectedArea = {
 };
 
 const AreaSettings = () => {
+	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
+
 	const [isOpenAddArea, {open: openAddArea, close: closeAddArea}] =
 		useDisclosure({
 			initialState: false,
@@ -68,6 +72,7 @@ const AreaSettings = () => {
 						table: mappedDataArea?.[0].total_table.toString(),
 					};
 					setSelectedArea(defaultArea);
+					queryClient.invalidateQueries([GetAreaQueryKey]);
 				}
 			},
 		},
