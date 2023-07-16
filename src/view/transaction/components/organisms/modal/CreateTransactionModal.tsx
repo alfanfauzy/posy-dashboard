@@ -92,6 +92,7 @@ const CreateTransactionModal = ({
 				restaurant_outlet_table_uuid?.toString() || '',
 			);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dataTransaction, isEdit]);
 
 	return (

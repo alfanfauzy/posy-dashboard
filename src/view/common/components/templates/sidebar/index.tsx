@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
 import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
 import {OutletSelection} from '@/domain/outlet/models';
@@ -72,7 +71,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 				dispatch(setRestaurantOutletId(dataOutletSelection[0].uuid));
 			}
 		}
-	}, [dataOutletSelection, outletId?.length]);
+	}, [dataOutletSelection, dispatch, outletId?.length]);
 
 	const onChangeOutlet = (e: string) => {
 		dispatch(setRestaurantOutletId(e));

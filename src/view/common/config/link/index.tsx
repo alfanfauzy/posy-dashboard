@@ -66,13 +66,18 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 				permission: ['payment_integration'],
 			},
 			{
-				title: 'Tax & Service',
+				title: 'Tax & Services',
 				path: 'settings/tax-and-service',
 				permission: ['setting_tax_service'],
 			},
 			{
 				title: 'Subscription',
 				path: 'settings/subscription',
+				permission: ['setting_subscription'],
+			},
+			{
+				title: 'Food Ratings',
+				path: 'settings/food-ratings',
 				permission: ['setting_subscription'],
 			},
 		],
