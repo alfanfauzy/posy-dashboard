@@ -87,7 +87,9 @@ const TransactionSection = ({
 		},
 		{
 			onSuccess: dt => {
-				setSelectedArea(dt.data.objs[0]);
+				if (dt.data.objs?.length > 0) {
+					setSelectedArea(dt.data.objs[0]);
+				}
 			},
 		},
 	);

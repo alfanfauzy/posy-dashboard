@@ -3,6 +3,7 @@ import {mapToTableLayoutModel} from '@/data/table/mappers/TableMapper';
 import {Area, Areas} from '@/domain/area/model';
 import {Table} from '@/domain/table/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
+import AreaIcon from '@/view/common/assets/icons/area';
 import useClickOutside from '@/view/common/hooks/useClickOutside';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
@@ -12,6 +13,7 @@ import FloorList from '@/view/table-management/components/molecules/floor-list';
 import {useGetTableLayoutByFloorViewModel} from '@/view/table-management/view-models/GetTableLayoutByFloorViewModel';
 import {Popover} from 'antd';
 import Image from 'next/image';
+import {useRouter} from 'next/router';
 import {Loading} from 'posy-fnb-core';
 import React, {useRef, useState} from 'react';
 
@@ -66,6 +68,7 @@ const TableView = ({
 	selectedArea,
 	onChangeSelectArea,
 }: TableViewProps) => {
+	const {push} = useRouter();
 	const {width} = useViewportListener();
 	const {outletId} = useAppSelector(state => state.auth);
 	const [table, setTablePos] = useState<TableLayout>([]);
@@ -116,7 +119,21 @@ const TableView = ({
 		}
 	};
 
-	if (loadTable) {
+	if (!selectedArea) {
+		return (
+			<div className="h-full flex flex-col justify-center items-center">
+				<AreaIcon />
+				<p
+					onClick={() => push('/settings/area-management')}
+					className="text-l-medium mt-4 cursor-pointer hover:text-secondary-main hover:opacity-70"
+				>
+					Please add new area first
+				</p>
+			</div>
+		);
+	}
+
+	if (loadTable && selectedArea?.uuid) {
 		return (
 			<div className="h-full flex justify-center items-center">
 				<Loading size={80} />
