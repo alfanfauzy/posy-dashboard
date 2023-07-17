@@ -80,7 +80,7 @@ const MasterProductColumns = (): ColumnsType<Product> => {
 						<div className="flex items-center justify-center">
 							<RiDeleteBinLine
 								onClick={() => handleOpenConfirmation(record.uuid as string)}
-								size={23}
+								size={18}
 								className="cursor-pointer text-neutral-70 hover:opacity-70"
 							/>
 						</div>
