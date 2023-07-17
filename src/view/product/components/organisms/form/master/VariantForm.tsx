@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import InputNumeric from '@/view/common/components/atoms/input/numeric/InputNumeric';
-import {ValidationSchemaProductOutletType} from '@/view/product/schemas/update-product';
+import {ValidationSchemaMasterProductType} from '@/view/product/schemas/product-master';
 import {Button, Input} from 'posy-fnb-core';
 import React from 'react';
 import {useFieldArray, useFormContext} from 'react-hook-form';
@@ -16,11 +16,11 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 		register,
 		watch,
 		formState: {errors},
-	} = useFormContext<ValidationSchemaProductOutletType>();
+	} = useFormContext<ValidationSchemaMasterProductType>();
 
 	const {fields, append, remove} = useFieldArray({
 		control,
-		name: `addon.${addonIdx}.addon_variants`,
+		name: `addon.${addonIdx}.variants`,
 	});
 
 	return (
@@ -33,15 +33,14 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 							fullwidth
 							labelText="Variant name"
 							{...register(
-								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_name`,
+								`addon.${addonIdx}.variants.${variantIdx}.variant_name`,
 							)}
 							error={
-								!!errors.addon?.[addonIdx]?.addon_variants?.[variantIdx]
-									?.variant_name
+								!!errors.addon?.[addonIdx]?.variants?.[variantIdx]?.variant_name
 							}
 							helperText={
-								errors.addon?.[addonIdx]?.addon_variants?.[variantIdx]
-									?.variant_name?.message
+								errors.addon?.[addonIdx]?.variants?.[variantIdx]?.variant_name
+									?.message
 							}
 						/>
 					</div>
@@ -49,19 +48,19 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 						<InputNumeric
 							placeholder="0"
 							value={watch(
-								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_price`,
+								`addon.${addonIdx}.variants.${variantIdx}.variant_price`,
 							)}
 							labelText="Set price"
 							{...register(
-								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_price`,
+								`addon.${addonIdx}.variants.${variantIdx}.variant_price`,
 							)}
 							error={
-								!!errors.addon?.[addonIdx]?.addon_variants?.[variantIdx]
+								!!errors.addon?.[addonIdx]?.variants?.[variantIdx]
 									?.variant_price
 							}
 							helperText={
-								errors.addon?.[addonIdx]?.addon_variants?.[variantIdx]
-									?.variant_price?.message
+								errors.addon?.[addonIdx]?.variants?.[variantIdx]?.variant_price
+									?.message
 							}
 						/>
 					</div>
@@ -81,6 +80,7 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 							{
 								variant_name: '',
 								variant_price: '',
+								variant_priority: 0,
 							},
 							{
 								shouldFocus: false,
