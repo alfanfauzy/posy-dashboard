@@ -11,7 +11,7 @@ export const UploadImagePublicService = async (
 ): Promise<Response<UploadFilePublicResponse>> => {
 	try {
 		const response = await Post({
-			endpoint: `/api/fnb-document-service/v1/document/internal/public/upload`,
+			endpoint: `/document-service/v1/document/public/upload`,
 			data: payload,
 			headers: {'Content-Type': 'multipart/form-data'},
 		});
