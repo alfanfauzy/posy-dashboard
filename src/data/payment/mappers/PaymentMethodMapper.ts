@@ -3,6 +3,7 @@ import {
 	GetPaymentBalanceResponse,
 	GetPaymentMethodCategoryListResponse,
 	GetPaymentMethodListResponse,
+	GetPaymentReportListResponse,
 } from '@/data/payment/types';
 import {
 	PaymentAccountInfo,
@@ -11,6 +12,7 @@ import {
 	PaymentMethods,
 } from '@/domain/payment/models';
 import {PaymentMethodCategoryPayload} from '@/domain/payment/models/index';
+import {PaymentsReport} from '@/domain/payment/models/payment-report';
 
 export const mapToPaymentMethodCategoryModel = (
 	datas: Array<GetPaymentMethodCategoryListResponse>,
@@ -87,4 +89,35 @@ export const mapToPaymentBalance = (
 	cash: data.cash,
 	pending: data.pending,
 	total: data.total,
+});
+
+export const mapToPaymentReportList = (
+	datas: GetPaymentReportListResponse,
+): PaymentsReport => ({
+	hasMore: datas?.has_more ?? undefined,
+	link: datas?.links[0]?.href ?? [],
+	data: datas?.objs.map(obj => ({
+		id: obj.id,
+		transaction_id: obj.reference_detail.code,
+		date: obj.metadata.created_at,
+		outlet: obj.reference_detail.organization_name,
+		category: obj.reference_detail.type,
+		payment_method: obj.payment_method.name,
+		ammount_received: obj.net_amount,
+		setlement_status: obj.settlement_status,
+		amount: obj.amount,
+		cashflow: obj.cashflow,
+		currency: obj.currency,
+		estimated_settlement_time: obj.estimated_settlement_time,
+		fee: obj.fee,
+		fee_detail: {
+			charge_amount: obj.fee_detail?.charge_amount,
+			charge_fee: obj.fee_detail?.charge_fee,
+			charge_fee_unit: obj.fee_detail?.charge_fee_unit,
+			vat_amount: obj.fee_detail?.vat_amount,
+		},
+		net_amount: obj.net_amount,
+		settlement_status: obj.settlement_status,
+		status: obj.status,
+	})),
 });

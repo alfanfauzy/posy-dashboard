@@ -1,4 +1,8 @@
-import {UseMutationResult, UseQueryResult} from '@tanstack/react-query';
+import {
+	UseInfiniteQueryResult,
+	UseMutationResult,
+	UseQueryResult,
+} from '@tanstack/react-query';
 
 export type Response<TData = unknown> = {
 	code: number;
@@ -31,4 +35,11 @@ export type DataList<TData> = {
 	total_objs: number;
 	per_page: number;
 	objs: Array<TData>;
+};
+
+export type ResultInfinite<TData = unknown, TError = unknown> = Omit<
+	UseInfiniteQueryResult<unknown, TError>,
+	'data'
+> & {
+	data: TData;
 };
