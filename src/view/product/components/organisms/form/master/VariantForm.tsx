@@ -47,7 +47,7 @@ const VariantTemp = ({addonIdx}: VariantTempProps) => {
 					</div>
 					<div className="w-1/2">
 						<InputNumeric
-							placeholder="+5.000"
+							placeholder="0"
 							value={watch(
 								`addon.${addonIdx}.addon_variants.${variantIdx}.variant_price`,
 							)}

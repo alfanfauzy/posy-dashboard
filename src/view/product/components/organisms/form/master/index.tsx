@@ -334,7 +334,7 @@ const OrganismsFormMasterProduct = ({
 											onChange={onChange}
 											fullwidth
 											labelText="Product Name"
-											placeholder="Special Fried Rice"
+											placeholder="e.g. Fried Rice"
 											error={!!errors?.product_name}
 											helperText={errors?.product_name?.message}
 										/>
@@ -351,7 +351,7 @@ const OrganismsFormMasterProduct = ({
 											name={name}
 											isLoading={isLoadingCategory}
 											options={OptionsCategories}
-											placeholder={'Food, Promo'}
+											placeholder={'Choose category'}
 											value={value}
 											filterOption={FilterOption}
 											isMulti
@@ -387,7 +387,7 @@ const OrganismsFormMasterProduct = ({
 									onChange={onChange}
 									labelText="Description"
 									value={value}
-									placeholder="This section is for product Fried rice is a dish of cooked rice that has been stir-fried in a wok or a frying pan and is usually mixed with other ingredients such as eggs, vegetables, seafood, or meat."
+									placeholder="e.g. fried rice is a combination of long grained rice and eggs."
 								/>
 							)}
 						/>
@@ -431,7 +431,7 @@ const OrganismsFormMasterProduct = ({
 					<aside className="mt-6">
 						<div>
 							<InputNumeric
-								placeholder="50.000"
+								placeholder="0"
 								value={watch('price')}
 								labelText="Price"
 								{...register('price', {
@@ -474,7 +474,7 @@ const OrganismsFormMasterProduct = ({
 						</div>
 						<div>
 							<Input
-								placeholder="10"
+								placeholder="0"
 								{...register('price_discount_percentage', {
 									onChange: e => {
 										setValue(
@@ -504,7 +504,7 @@ const OrganismsFormMasterProduct = ({
 						</div>
 						<div>
 							<InputNumeric
-								placeholder="45.000"
+								placeholder="0"
 								value={watch('price_after_discount')}
 								labelText="Price after discount"
 								{...register('price_after_discount')}
@@ -536,7 +536,7 @@ const OrganismsFormMasterProduct = ({
 								disabled={!watch('is_active_cooking_duration')}
 								error={!!errors.cooking_duration}
 								helperText={errors.cooking_duration?.message}
-								placeholder="60"
+								placeholder="0"
 								{...register('cooking_duration')}
 							/>
 						</div>
@@ -600,7 +600,7 @@ const OrganismsFormMasterProduct = ({
 							</div>
 							<div className="mt-6">
 								<Input
-									placeholder="Spicy level"
+									placeholder="e.g. spicy level"
 									labelText="Addon name"
 									{...register(`addon.${addonIdx}.addon_name`)}
 									error={errors?.addon && !!errors?.addon[addonIdx]?.addon_name}
