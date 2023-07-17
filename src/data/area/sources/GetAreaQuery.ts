@@ -5,7 +5,7 @@ import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 
 import {GetAreaDataResponse} from '../types/GetAreaType';
 
-export const GetAreaQueryKey = 'Area/list' as const;
+export const GetAreaQueryKey = 'Area/detail' as const;
 
 const GetArea = async (
 	input: GetAreaInput,

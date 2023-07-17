@@ -103,7 +103,7 @@ const AreaDetails = ({
 				<aside className="h-[92%] border border-neutral-40 rounded-lg flex flex-col">
 					<div className="flex justify-between items-center px-6 py-2 bg-neutral-20 border-b border-b-neutral-40 rounded-t-lg">
 						<p className="text-l-semibold text-neutral-90">
-							Table details {data ? `- ${data?.name}` : null}
+							Area details {data ? `- ${data?.name}` : null}
 						</p>
 
 						{getValues('table_list')?.length > 0 ? (

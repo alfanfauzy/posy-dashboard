@@ -96,7 +96,7 @@ const EditAreaModal = ({close, isOpen, selectedArea}: EditAreaModalProps) => {
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="flex flex-col gap-4 h-full px-4 p-6 bg-gradient-to-r from-primary-main to-secondary-main rounded-t-lg items-center justify-center">
 					<div>
-						<p className="text-neutral-10 text-l-semibold">Edit New Area</p>
+						<p className="text-neutral-10 text-l-semibold">Edit Area</p>
 					</div>
 					<div className="w-full flex flex-col gap-4">
 						<div>
@@ -130,7 +130,7 @@ const EditAreaModal = ({close, isOpen, selectedArea}: EditAreaModalProps) => {
 							</div>
 							<div className="w-1/2">
 								<span className="mb-1 text-neutral-10 text-m-regular">
-									Area table
+									Total table
 								</span>
 								<Select
 									value={{

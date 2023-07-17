@@ -7,7 +7,8 @@ export const validationSchemaEditTableArea = z.object({
 			table_uuid: z.string(),
 			table_number: z
 				.string()
-				.min(1, {message: 'Table name must be atleast 1 characters'}),
+				.min(1, {message: 'Table name must be atleast 1 characters'})
+				.max(30, {message: 'Table name is too long'}),
 			table_seat: z
 				.string()
 				.min(1, {message: 'Table seat must be atleast 1 characters'}),

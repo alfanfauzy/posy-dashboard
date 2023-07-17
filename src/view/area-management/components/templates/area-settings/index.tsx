@@ -5,7 +5,7 @@ import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Areabar from '../../organisms/area-bar';
 import AreaDetails from '../../organisms/area-details';
@@ -81,6 +81,17 @@ const AreaSettings = () => {
 	const onSelectArea = (val: SelectedArea | null) => {
 		setSelectedArea(val);
 	};
+
+	useEffect(() => {
+		if (dataArea) {
+			setSelectedArea({
+				name: dataArea?.[0].name,
+				uuid: dataArea?.[0].uuid,
+				size: dataArea?.[0].floor_size_name,
+				table: dataArea?.[0].total_table.toString(),
+			});
+		}
+	}, [dataArea, outletId]);
 
 	return (
 		<>
