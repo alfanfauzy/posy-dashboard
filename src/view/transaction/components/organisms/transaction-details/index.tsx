@@ -6,6 +6,7 @@ import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
+import {useRouter} from 'next/router';
 import React, {useState} from 'react';
 import {CgTrash} from 'react-icons/cg';
 import {FiEdit} from 'react-icons/fi';
@@ -13,6 +14,7 @@ import {IoIosArrowDown, IoIosArrowUp} from 'react-icons/io';
 
 import CancelOrderBottomsheet from '../cancel-order/CancelOrderBottomsheet';
 import CancelTransactionModal from '../modal/CancelTransactionModal';
+import CreateTransactionFromTableModal from '../modal/CreateTransactionFromTableModal';
 import CreateTransactionModal from '../modal/CreateTransactionModal';
 
 type TransactionDetailsProps = {
@@ -24,12 +26,20 @@ const TransactionDetails = ({
 	dataTransaction,
 	dataOrder,
 }: TransactionDetailsProps) => {
+	const {query} = useRouter();
 	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 	const {outletId} = useAppSelector(state => state.auth);
 	const [
 		isOpenCancelTransaction,
 		{open: openCancelTransaction, close: closeCancelTransaction},
 		{valueState, setValueState},
+	] = useDisclosure<CreateCancelTransactionInput>({initialState: false});
+	const [
+		isOpenEditTransactionFromTableView,
+		{
+			open: openEditTransactionFromTableView,
+			close: closeEditTransactionFromTableView,
+		},
 	] = useDisclosure<CreateCancelTransactionInput>({initialState: false});
 
 	const [isOpenCancelOrder, {open: openCancelOrder, close: closeCancelOrder}] =
@@ -52,6 +62,8 @@ const TransactionDetails = ({
 		setOpenModalTransaction(value);
 	};
 
+	const isTableView = query.view_type === 'table';
+
 	return (
 		<section>
 			<aside className="p-4 bg-gradient-to-r from-primary-main to-secondary-main rounded-l-lg">
@@ -65,7 +77,11 @@ const TransactionDetails = ({
 							<FiEdit
 								size={20}
 								className="cursor-pointer text-neutral-10"
-								onClick={() => setOpenModalTransaction(true)}
+								onClick={
+									isTableView
+										? openEditTransactionFromTableView
+										: () => setOpenModalTransaction(true)
+								}
 							/>
 							<CgTrash
 								className="cursor-pointer text-neutral-10"
@@ -162,6 +178,12 @@ const TransactionDetails = ({
 					dataTransaction={dataTransaction}
 				/>
 			)}
+
+			<CreateTransactionFromTableModal
+				open={isOpenEditTransactionFromTableView}
+				handleClose={closeEditTransactionFromTableView}
+				isEdit
+			/>
 
 			<CancelOrderBottomsheet
 				dataOrder={dataOrder}

@@ -8,7 +8,10 @@ import useClickOutside from '@/view/common/hooks/useClickOutside';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {
+	onChangeSelectedTable,
+	onChangeSelectedTrxId,
+} from '@/view/common/store/slices/transaction';
 import FloorList from '@/view/table-management/components/molecules/floor-list';
 import {useGetTableLayoutByFloorViewModel} from '@/view/table-management/view-models/GetTableLayoutByFloorViewModel';
 import {Popover} from 'antd';
@@ -70,8 +73,12 @@ const TableView = ({
 	onChangeSelectArea,
 }: TableViewProps) => {
 	const {push} = useRouter();
+	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
 	const {outletId} = useAppSelector(state => state.auth);
+	const selectedTable = useAppSelector(
+		state => state.transaction.selectedTable,
+	);
 	const [table, setTablePos] = useState<TableLayout>([]);
 	const [isOpenPopover, {open: openPopover, close: closePopOver}] =
 		useDisclosure({
@@ -87,8 +94,8 @@ const TableView = ({
 	const [
 		isOpenCreateTransaction,
 		{open: openCreateTransaction, close: closeCreateTransaction},
-		{valueState: selectedTable, setValueState: setSelectedTable},
-	] = useDisclosure<Table>({
+		// {valueState: selectedTable, setValueState: setSelectedTable},
+	] = useDisclosure({
 		initialState: false,
 	});
 
@@ -113,10 +120,20 @@ const TableView = ({
 	const handleSelectTable = (itemTable: Table) => {
 		if (itemTable?.transactions && itemTable?.transactions?.length >= 1) {
 			openPopover();
-			setSelectedTable(itemTable);
+			dispatch(
+				onChangeSelectedTable({
+					prevTable: selectedTable,
+					table: itemTable,
+				}),
+			);
 		} else {
 			openCreateTransaction();
-			setSelectedTable(itemTable);
+			dispatch(
+				onChangeSelectedTable({
+					prevTable: selectedTable,
+					table: itemTable,
+				}),
+			);
 		}
 	};
 
@@ -203,13 +220,11 @@ const TableView = ({
 
 		return (
 			<main>
-				{selectedTable && (
-					<CreateTransactionFromTableModal
-						open={isOpenCreateTransaction}
-						handleClose={closeCreateTransaction}
-						dataTable={selectedTable}
-					/>
-				)}
+				<CreateTransactionFromTableModal
+					open={isOpenCreateTransaction}
+					handleClose={closeCreateTransaction}
+				/>
+
 				<section className="flex">
 					<div
 						className={`bg-[#F7F7F7] h-fit lg:w-full w-fit p-1 rounded-lg ${

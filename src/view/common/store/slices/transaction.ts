@@ -3,6 +3,7 @@
  * Transaction reducer
  *
  */
+import {Table} from '@/domain/table/model';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 type Payment = {
@@ -15,6 +16,8 @@ export type TransactionState = {
 	search: string;
 	selectedTrxId: string;
 	payment: Payment;
+	selectedTable: Table | null;
+	prevTable: Table | null;
 };
 
 const initialState: TransactionState = {
@@ -25,6 +28,8 @@ const initialState: TransactionState = {
 		total: 0,
 		discount_percentage: 0,
 	},
+	selectedTable: null,
+	prevTable: null,
 };
 
 export const TransactionSlice = createSlice({
@@ -44,6 +49,15 @@ export const TransactionSlice = createSlice({
 		onChangePayment: (state, action: PayloadAction<{payment: Payment}>) => {
 			state.payment = action.payload.payment;
 		},
+		onChangeSelectedTable: (
+			state,
+			action: PayloadAction<{table: Table | null; prevTable?: Table | null}>,
+		) => {
+			state.selectedTable = action.payload.table;
+			if (action.payload.prevTable) {
+				state.prevTable = action.payload.prevTable;
+			}
+		},
 	},
 });
 
@@ -53,6 +67,7 @@ export const {
 	onClearSearch,
 	onChangeSelectedTrxId,
 	onChangePayment,
+	onChangeSelectedTable,
 } = TransactionSlice.actions;
 
 export default TransactionSlice.reducer;
