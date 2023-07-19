@@ -2,6 +2,7 @@ import {combineReducers} from '@reduxjs/toolkit';
 import {persistReducer} from 'redux-persist';
 import PersistStorage from 'redux-persist/lib/storage';
 
+import area from './slices/area';
 import auth from './slices/auth';
 import modal from './slices/modal';
 import order from './slices/order';
@@ -23,6 +24,7 @@ const persistedReducer = persistReducer(
 		order,
 		modal,
 		product,
+		area,
 	}),
 );
 

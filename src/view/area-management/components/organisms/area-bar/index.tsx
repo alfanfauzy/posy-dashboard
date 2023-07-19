@@ -1,31 +1,25 @@
 import {Areas} from '@/domain/area/model';
 import AreaIcon from '@/view/common/assets/icons/area';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
-import {useAppDispatch} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeArea} from '@/view/common/store/slices/area';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import {Button, Loading} from 'posy-fnb-core';
 import React from 'react';
 import {BsList} from 'react-icons/bs';
 
-import {SelectedArea} from '../../templates/area-settings';
-
 type AreabarProps = {
 	data: Areas | undefined;
 	isLoading: boolean;
 	openAddArea: () => void;
-	selectedArea: SelectedArea | null;
-	onSelectArea: (area: SelectedArea | null) => void;
 };
 
-const Areabar = ({
-	data,
-	isLoading,
-	openAddArea,
-	onSelectArea,
-	selectedArea,
-}: AreabarProps) => {
+const Areabar = ({data, isLoading, openAddArea}: AreabarProps) => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
+	const {
+		area: {selectedArea},
+	} = useAppSelector(state => state);
 
 	return (
 		<section className="h-full w-1/3 overflow-y-hidden overflow-auto xl:rounded-r-lg rounded-lg bg-neutral-10">
@@ -48,7 +42,7 @@ const Areabar = ({
 						</div>
 					) : null}
 
-					{!data && !isLoading ? (
+					{data?.length === 0 ? (
 						<div className="h-full flex flex-col justify-center items-center">
 							<AreaIcon />
 							<p className="text-m-medium mt-2">Please add new area first</p>
@@ -64,12 +58,14 @@ const Areabar = ({
 								<div key={item.uuid}>
 									<Button
 										onClick={() =>
-											onSelectArea({
-												uuid: item.uuid,
-												name: item.name,
-												size: item.height.toString(),
-												table: '',
-											})
+											dispatch(
+												onChangeArea({
+													uuid: item.uuid,
+													name: item.name,
+													size: item.height.toString(),
+													table: '',
+												}),
+											)
 										}
 										fullWidth
 										size="m"

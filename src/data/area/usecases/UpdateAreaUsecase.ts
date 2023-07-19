@@ -9,6 +9,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useSnackbar} from 'notistack';
 
 import {mapToUpdateAreaModel} from '../mappers/AreaMapper';
+import {GetAreaQueryKey} from '../sources/GetAreaQuery';
 import {GetAreasQueryKey} from '../sources/GetAreasQuery';
 import {useUpdateAreaMutation} from '../sources/UpdateAreaMutation';
 
@@ -35,6 +36,7 @@ export const useUpdateAreaUsecase = ({
 					variant: 'success',
 				});
 				queryClient.invalidateQueries([GetAreasQueryKey]);
+				queryClient.invalidateQueries([GetAreaQueryKey]);
 			}
 		},
 		onError: (dataError, ...args) => {

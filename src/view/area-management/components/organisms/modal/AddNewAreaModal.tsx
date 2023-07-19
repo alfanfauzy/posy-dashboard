@@ -4,13 +4,17 @@ import {
 } from '@/view/area-management/schemas/create-area';
 import {useCreateAreaViewModel} from '@/view/area-management/view-models/CreateAreaViewModel';
 import {useGetAreaSizesViewModel} from '@/view/area-management/view-models/GetAreaSizesViewModel';
+import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
-import {Modal} from 'antd';
+import {Image, Modal} from 'antd';
 import {Button, Input, Select} from 'posy-fnb-core';
 import React, {useMemo} from 'react';
 import {Controller} from 'react-hook-form';
 import {BsEye} from 'react-icons/bs';
+
+const tablePreview = '/images/table-settings.png';
+const tablePreviewLarge = '/images/table-settings-lg.png';
 
 const OptionsTableSmallArea = new Array(30).fill(undefined).map((_, index) => ({
 	label: String(index + 1),
@@ -43,6 +47,11 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 				enabled: isOpen,
 			},
 		);
+
+	const [isShowPreview, {open: openPreview, close: ClosePreview}] =
+		useDisclosure({
+			initialState: false,
+		});
 
 	const memoDataAreaSizes = useMemo(() => {
 		if (dataAreaSizes) {
@@ -174,10 +183,32 @@ const AddNewAreaModal = ({close, isOpen}: AddNewAreaModalProps) => {
 							</div>
 						</aside>
 					</div>
-					<div className="flex items-center gap-2">
-						<BsEye size={16} className="text-neutral-10" />
-						<p className="text-m-medium text-neutral-10">View example</p>
-					</div>
+					{getValues('floor_size_uuid')?.label && (
+						<div
+							onClick={openPreview}
+							className="flex items-center gap-2 cursor-pointer hover:opacity-70"
+						>
+							<BsEye size={16} className="text-neutral-10" />
+							<p className="text-m-medium text-neutral-10">View example</p>
+							<Image.PreviewGroup
+								preview={{
+									visible: isShowPreview,
+									onVisibleChange: ClosePreview,
+								}}
+							>
+								<Image
+									alt="preview"
+									className="hidden"
+									src={
+										getValues('floor_size_uuid')?.label ===
+										'Large (up to 48 table)'
+											? tablePreviewLarge
+											: tablePreview
+									}
+								/>
+							</Image.PreviewGroup>
+						</div>
+					)}
 				</div>
 				<section className="p-4 rounded-b-lg bg-neutral-10 w-full flex gap-3">
 					<div className="w-1/2">

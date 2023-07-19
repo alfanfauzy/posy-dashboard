@@ -3,9 +3,10 @@ import {GetAreaQueryKey} from '@/data/area/sources/GetAreaQuery';
 import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {onChangeArea} from '@/view/common/store/slices/area';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import Areabar from '../../organisms/area-bar';
 import AreaDetails from '../../organisms/area-details';
@@ -31,16 +32,12 @@ const DeleteAreaModal = dynamic(
 	},
 );
 
-export type SelectedArea = {
-	uuid: string;
-	name: string;
-	table: string;
-	size: string;
-};
-
 const AreaSettings = () => {
 	const queryClient = useQueryClient();
-	const {outletId} = useAppSelector(state => state.auth);
+	const {
+		auth: {outletId},
+		area: {selectedArea},
+	} = useAppSelector(state => state);
 
 	const [isOpenAddArea, {open: openAddArea, close: closeAddArea}] =
 		useDisclosure({
@@ -55,8 +52,6 @@ const AreaSettings = () => {
 			initialState: false,
 		});
 
-	const [selectedArea, setSelectedArea] = useState<SelectedArea | null>(null);
-
 	const {data: dataArea, isLoading: loadArea} = useGetAreasViewModel(
 		{
 			restaurant_outlet_uuid: outletId,
@@ -65,52 +60,28 @@ const AreaSettings = () => {
 			onSuccess: _data => {
 				if (_data && !selectedArea) {
 					const mappedDataArea = mapToAreasModel(_data.data.objs);
-					const defaultArea: SelectedArea = {
+					const defaultArea = {
 						name: mappedDataArea?.[0].name,
 						uuid: mappedDataArea?.[0].uuid,
 						size: mappedDataArea?.[0].floor_size_name,
 						table: mappedDataArea?.[0].total_table.toString(),
 					};
-					setSelectedArea(defaultArea);
+					onChangeArea(defaultArea);
 					queryClient.invalidateQueries([GetAreaQueryKey]);
 				}
 			},
 		},
 	);
 
-	const onSelectArea = (val: SelectedArea | null) => {
-		setSelectedArea(val);
-	};
-
-	useEffect(() => {
-		if (dataArea) {
-			setSelectedArea({
-				name: dataArea?.[0].name,
-				uuid: dataArea?.[0].uuid,
-				size: dataArea?.[0].floor_size_name,
-				table: dataArea?.[0].total_table.toString(),
-			});
-		}
-	}, [dataArea, outletId]);
-
 	return (
 		<>
 			<AddNewAreaModal close={closeAddArea} isOpen={isOpenAddArea} />
 			{selectedArea && (
-				<EditAreaModal
-					close={closeEditArea}
-					isOpen={isOpenEditArea}
-					selectedArea={selectedArea}
-				/>
+				<EditAreaModal close={closeEditArea} isOpen={isOpenEditArea} />
 			)}
 
 			{selectedArea && (
-				<DeleteAreaModal
-					isOpen={isOpenDeleteArea}
-					close={closeDeleteArea}
-					selectedArea={selectedArea}
-					onSelectArea={onSelectArea}
-				/>
+				<DeleteAreaModal isOpen={isOpenDeleteArea} close={closeDeleteArea} />
 			)}
 
 			<main className="flex w-full gap-2">
@@ -118,14 +89,10 @@ const AreaSettings = () => {
 					data={dataArea}
 					isLoading={loadArea}
 					openAddArea={openAddArea}
-					selectedArea={selectedArea}
-					onSelectArea={onSelectArea}
 				/>
 				<AreaDetails
 					openDeleteArea={openDeleteArea}
 					openEditArea={openEditArea}
-					selectedArea={selectedArea}
-					onSelectArea={onSelectArea}
 				/>
 			</main>
 		</>

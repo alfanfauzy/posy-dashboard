@@ -141,7 +141,7 @@ const TableView = ({
 		);
 	}
 
-	if (dataArea && dataTable && table && selectedArea) {
+	if (dataArea && dataTable && table && selectedArea && !loadTable) {
 		const RenderSquare = (
 			i: number,
 			openCreateTransaction: () => void,

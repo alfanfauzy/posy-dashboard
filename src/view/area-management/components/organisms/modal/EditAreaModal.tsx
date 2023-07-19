@@ -11,8 +11,6 @@ import {Button, Input, Select} from 'posy-fnb-core';
 import React, {useEffect, useMemo} from 'react';
 import {BsEye} from 'react-icons/bs';
 
-import {SelectedArea} from '../../templates/area-settings';
-
 const OptionsTableSmallArea = new Array(30).fill(undefined).map((_, index) => ({
 	label: String(index + 1),
 	value: String(index + 1),
@@ -21,11 +19,13 @@ const OptionsTableSmallArea = new Array(30).fill(undefined).map((_, index) => ({
 type EditAreaModalProps = {
 	close: () => void;
 	isOpen: boolean;
-	selectedArea: SelectedArea | null;
 };
 
-const EditAreaModal = ({close, isOpen, selectedArea}: EditAreaModalProps) => {
-	const {outletId} = useAppSelector(state => state.auth);
+const EditAreaModal = ({close, isOpen}: EditAreaModalProps) => {
+	const {
+		auth: {outletId},
+		area: {selectedArea},
+	} = useAppSelector(state => state);
 	const {data: dataAreaSizes, isLoading: loadAreaSizes} =
 		useGetAreaSizesViewModel(
 			{

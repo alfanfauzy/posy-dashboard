@@ -33,11 +33,6 @@ export const TransactionSlice = createSlice({
 	reducers: {
 		onChangeSearch: (state, action: PayloadAction<{search: string}>) => {
 			const {search} = action.payload;
-			//   const regex = new RegExp(search, 'i')
-			//   const filteredMenu = menus
-			//     .flatMap((el) => el.product)
-			//     .filter(({ product_name }) => product_name.match(regex))
-			//   state.filteredMenu = filteredMenu
 			state.search = search;
 		},
 		onClearSearch: state => {

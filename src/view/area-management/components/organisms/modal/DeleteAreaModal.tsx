@@ -1,36 +1,42 @@
 import {useDeleteAreaViewModel} from '@/view/area-management/view-models/DeleteAreaViewModel';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeArea} from '@/view/common/store/slices/area';
 import {Button, Modal} from 'posy-fnb-core';
 import React from 'react';
-
-import {SelectedArea} from '../../templates/area-settings';
 
 type DeleteAreaModalProps = {
 	isOpen: boolean;
 	close: () => void;
-	selectedArea: SelectedArea;
-	onSelectArea: (area: SelectedArea | null) => void;
 };
 
-const DeleteAreaModal = ({
-	close,
-	isOpen,
-	selectedArea,
-	onSelectArea,
-}: DeleteAreaModalProps) => {
-	const {outletId} = useAppSelector(state => state.auth);
+const DeleteAreaModal = ({close, isOpen}: DeleteAreaModalProps) => {
+	const dispatch = useAppDispatch();
+	const {
+		auth: {outletId},
+		area: {selectedArea},
+	} = useAppSelector(state => state);
+
 	const {DeleteArea, isLoading} = useDeleteAreaViewModel({
 		onSuccess: () => {
 			close();
-			onSelectArea(null);
+			dispatch(
+				onChangeArea({
+					name: '',
+					uuid: '',
+					size: '',
+					table: '',
+				}),
+			);
 		},
 	});
 
 	const onDeleteArea = () => {
-		DeleteArea({
-			area_uuid: selectedArea.uuid,
-			restaurant_outlet_uuid: outletId,
-		});
+		if (selectedArea) {
+			DeleteArea({
+				area_uuid: selectedArea.uuid,
+				restaurant_outlet_uuid: outletId,
+			});
+		}
 	};
 
 	return (

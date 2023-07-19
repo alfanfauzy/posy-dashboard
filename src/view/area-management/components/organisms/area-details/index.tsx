@@ -6,33 +6,28 @@ import {
 import {useGetAreaViewModel} from '@/view/area-management/view-models/GetAreaViewModel';
 import AreaIcon from '@/view/common/assets/icons/area';
 import {useForm} from '@/view/common/hooks/useForm';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeArea} from '@/view/common/store/slices/area';
 import {tableTypeOptions} from '@/view/table-management/components/templates/table-management-sidebar';
 import {useUpdateBulkTableByFloorViewModel} from '@/view/table-management/view-models/UpdateBulkTableByFloorViewModel';
 import {Divider} from 'antd';
 import {Button, Input, Loading, Select} from 'posy-fnb-core';
 import React from 'react';
 import {useFieldArray} from 'react-hook-form';
-import {AiOutlineEye} from 'react-icons/ai';
 import {CgTrash} from 'react-icons/cg';
 import {HiOutlinePencilAlt} from 'react-icons/hi';
-
-import {SelectedArea} from '../../templates/area-settings';
 
 type AreaDetailsProps = {
 	openDeleteArea: () => void;
 	openEditArea: () => void;
-	selectedArea: SelectedArea | null;
-	onSelectArea: (val: SelectedArea | null) => void;
 };
 
-const AreaDetails = ({
-	openDeleteArea,
-	openEditArea,
-	selectedArea,
-	onSelectArea,
-}: AreaDetailsProps) => {
-	const {outletId} = useAppSelector(state => state.auth);
+const AreaDetails = ({openDeleteArea, openEditArea}: AreaDetailsProps) => {
+	const {
+		auth: {outletId},
+		area: {selectedArea},
+	} = useAppSelector(state => state);
+	const dispatch = useAppDispatch();
 
 	const {
 		register,
@@ -62,13 +57,13 @@ const AreaDetails = ({
 			onSuccess: _data => {
 				if (_data) {
 					const mappedDataArea = mapToAreaModel(_data.data);
-					const defaultArea: SelectedArea = {
+					const defaultArea = {
 						name: mappedDataArea?.name,
 						uuid: mappedDataArea?.uuid,
 						size: mappedDataArea?.floor_size_name,
 						table: mappedDataArea?.total_table?.toString(),
 					};
-					onSelectArea(defaultArea);
+					dispatch(onChangeArea(defaultArea));
 					reset({
 						floor_area_uuid: defaultArea.uuid,
 						table_list: mappedDataArea?.table_list?.map(table => ({
@@ -103,15 +98,11 @@ const AreaDetails = ({
 				<aside className="h-[92%] border border-neutral-40 rounded-lg flex flex-col">
 					<div className="flex justify-between items-center px-6 py-2 bg-neutral-20 border-b border-b-neutral-40 rounded-t-lg">
 						<p className="text-l-semibold text-neutral-90">
-							Area details {data ? `- ${data?.name}` : null}
+							Area details {data ? `- ${data?.floor_size_name}` : null}
 						</p>
 
-						{getValues('table_list')?.length > 0 ? (
+						{selectedArea.uuid ? (
 							<div className="flex gap-8">
-								<AiOutlineEye
-									size={20}
-									className="cursor-pointer text-neutral-70 hover:opacity-80"
-								/>
 								<HiOutlinePencilAlt
 									onClick={openEditArea}
 									size={20}
@@ -132,8 +123,7 @@ const AreaDetails = ({
 							</div>
 						) : null}
 
-						{!getValues('table_list') ||
-						getValues('table_list').length === 0 ? (
+						{!selectedArea.uuid || getValues('table_list')?.length === 0 ? (
 							<div className="h-full flex flex-col justify-center items-center">
 								<AreaIcon />
 								<p className="text-m-medium mt-2">Please add new area first</p>
