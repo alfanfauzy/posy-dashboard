@@ -1,3 +1,4 @@
+import {GetAreasQueryKey} from '@/data/area/sources/GetAreasQuery';
 import {GetTableLayoutByFloorQueryKey} from '@/data/table/sources/GetTableLayoutByFloorQuery';
 import {Table} from '@/domain/table/model';
 import {useForm} from '@/view/common/hooks/useForm';
@@ -29,17 +30,30 @@ const CreateTransactionFromTableModal = ({
 	const {outletId} = useAppSelector(state => state.auth);
 	const queryClient = useQueryClient();
 
-	const methods = useForm({
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: {errors, isValid},
+	} = useForm({
 		mode: 'onChange',
 		schema: validationSchemaCreateTransactionFromTableView,
 	});
+
+	const onClose = () => {
+		handleClose(false);
+		reset({
+			customer_name: '',
+			total_pax: '',
+		});
+	};
 
 	const {createTransaction, isLoading: loadCreateTransaction} =
 		useCreateTransactionViewModel({
 			onSuccess: () => {
 				queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
-				handleClose(false);
-				methods.reset();
+				queryClient.invalidateQueries([GetAreasQueryKey]);
+				onClose();
 			},
 		});
 
@@ -54,43 +68,14 @@ const CreateTransactionFromTableModal = ({
 		});
 	};
 
-	const {
-		register,
-		handleSubmit,
-		watch,
-		formState: {errors, isValid},
-	} = methods;
-
-	// useEffect(() => {
-	// 	if (isEdit) {
-	// 		const {
-	// 			total_pax,
-	// 			customer_name,
-	// 			transaction_category,
-	// 			restaurant_outlet_table_uuid,
-	// 		} = dataTransaction as Transaction;
-
-	// 		const selectTransactionCategory =
-	// 			orderTransactionType[transaction_category];
-
-	// 		setValue('customer_name', customer_name);
-	// 		setValue('total_pax', total_pax > 0 ? total_pax.toString() : undefined);
-	// 		setValue('transaction_category', selectTransactionCategory);
-	// 		setValue(
-	// 			'restaurant_outlet_table_uuid',
-	// 			restaurant_outlet_table_uuid?.toString() || '',
-	// 		);
-	// 	}
-	// }, [dataTransaction, isEdit, setValue]);
-
 	return (
 		<Modal
 			open={open}
-			onCancel={() => handleClose(false)}
+			onCancel={onClose}
 			closable={false}
 			footer={
 				<div className="grid grid-cols-2 gap-2 px-4 pb-4 pt-2">
-					<Button variant="secondary" onClick={() => handleClose(false)}>
+					<Button type="button" variant="secondary" onClick={onClose}>
 						Cancel
 					</Button>
 					<Button
@@ -132,7 +117,6 @@ const CreateTransactionFromTableModal = ({
 							{...register('total_pax', {
 								setValueAs: v => v.replace(/\D/, ''),
 							})}
-							value={watch('total_pax')}
 							error={!!errors.total_pax}
 						/>
 					</div>

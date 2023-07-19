@@ -46,9 +46,6 @@ const TransactionView = ({
 					closeNotifBar={closeNotifBar}
 					handleCreateTransaction={handleCreateTransaction}
 					loadCreateTransaction={loadCreateTransaction}
-					dataArea={dataArea}
-					onChangeSelectArea={onChangeSelectArea}
-					selectedArea={selectedArea}
 				/>
 			);
 		default:
@@ -59,9 +56,6 @@ const TransactionView = ({
 					closeNotifBar={closeNotifBar}
 					handleCreateTransaction={handleCreateTransaction}
 					loadCreateTransaction={loadCreateTransaction}
-					dataArea={dataArea}
-					onChangeSelectArea={onChangeSelectArea}
-					selectedArea={selectedArea}
 				/>
 			);
 	}

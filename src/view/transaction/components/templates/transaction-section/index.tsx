@@ -8,9 +8,11 @@ import CancelIcon from '@/view/common/assets/icons/cancel';
 import {handlePlayAudio} from '@/view/common/components/templates/layout';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import {useCreateTransactionViewModel} from '@/view/transaction/view-models/CreateTransactionViewModel';
 import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTransactionsViewModel';
 import {useQueryClient} from '@tanstack/react-query';
+import {useRouter} from 'next/router';
 import {closeSnackbar, useSnackbar} from 'notistack';
 import React, {useEffect, useRef, useState} from 'react';
 import {useReactToPrint} from 'react-to-print';
@@ -33,6 +35,7 @@ const TransactionSection = ({
 	closeNotifBar,
 	isOpenNotifBar,
 }: TransactionSectionProps) => {
+	const {query} = useRouter();
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {enqueueSnackbar} = useSnackbar();
@@ -50,7 +53,9 @@ const TransactionSection = ({
 	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 	const [selectedArea, setSelectedArea] = useState<Area>();
 	const [status, setStatus] = useState('');
-	const [viewType, setViewType] = useState('transaction');
+	const [viewType, setViewType] = useState(
+		(query.view_type as string) || 'transaction',
+	);
 
 	const {data, isLoading: loadData} = useGetTransactionsViewModel(
 		{
@@ -87,7 +92,10 @@ const TransactionSection = ({
 		},
 		{
 			onSuccess: dt => {
-				if (dt.data.objs?.length > 0) {
+				if (dt.data.objs?.length > 0 && query.area_uuid) {
+					const area = dt.data.objs.find(item => item.uuid === query.area_uuid);
+					setSelectedArea(area);
+				} else if (dt.data.objs?.length > 0) {
 					setSelectedArea(dt.data.objs[0]);
 				}
 			},
@@ -121,12 +129,15 @@ const TransactionSection = ({
 		createTransaction({restaurant_outlet_uuid: restaurantOutletId});
 	};
 
-	const onChangeSelectArea = (val: Area) => {
+	const onChangeSelectArea = async (val: Area) => {
 		setSelectedArea(val);
-		// setSelectedTable(null);
+		await onChangeQueryParams('area_uuid', val?.uuid);
 	};
 
-	const onChangeViewType = (val: string) => setViewType(val);
+	const onChangeViewType = async (val: string) => {
+		setViewType(val);
+		await onChangeQueryParams('view_type', val);
+	};
 
 	const play = () => {
 		if (audioRef.current) {

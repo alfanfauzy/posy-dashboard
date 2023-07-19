@@ -1,4 +1,3 @@
-import {Area, Areas} from '@/domain/area/model';
 import {TransactionStatus, Transactions} from '@/domain/transaction/model';
 import PlusCircleIcon from '@/view/common/assets/icons/plusCircle';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
@@ -6,7 +5,6 @@ import {
 	onChangePayment,
 	onChangeSelectedTrxId,
 } from '@/view/common/store/slices/transaction';
-import FloorList from '@/view/table-management/components/molecules/floor-list';
 import {Loading} from 'posy-fnb-core';
 import React from 'react';
 
@@ -42,9 +40,6 @@ type GridViewProps = {
 	closeNotifBar: () => void;
 	loadCreateTransaction: boolean;
 	handleCreateTransaction: (outletId: string) => void;
-	dataArea: Areas | undefined;
-	selectedArea: Area | undefined;
-	onChangeSelectArea: (val: Area) => void;
 };
 
 const GridView = ({
@@ -53,9 +48,6 @@ const GridView = ({
 	closeNotifBar,
 	handleCreateTransaction,
 	loadCreateTransaction,
-	dataArea,
-	onChangeSelectArea,
-	selectedArea,
 }: GridViewProps) => {
 	const dispatch = useAppDispatch();
 	const {

@@ -50,7 +50,8 @@ const MenuPopover = (
 					}}
 					className="hover:text-primary-main cursor-pointer"
 				>
-					{el.created_at}
+					{item.table_number}
+					{el.session_suffix}
 				</p>
 			))}
 		</div>
