@@ -14,6 +14,7 @@ import {requestFullScreen} from '@/view/common/utils/UtilsRequestFullScreen';
 import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
 import {useGetTransactionSummaryViewModel} from '@/view/transaction/view-models/GetTransactionSummaryViewModel';
 import {Popover, Skeleton} from 'antd';
+import {useRouter} from 'next/router';
 import {Button} from 'posy-fnb-core';
 import React from 'react';
 import {AiOutlineFullscreen} from 'react-icons/ai';
@@ -68,6 +69,7 @@ const TransactionHeader = ({
 	} = useAppSelector(state => state);
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
+	const {query} = useRouter();
 
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
 
@@ -185,19 +187,23 @@ const TransactionHeader = ({
 									: 'border-neutral-50 '
 							}`}
 						/>
-						<FilterChip
-							label={`Table Capacity: ${dataSummary.available_capacity}/${dataSummary.table_capacity}`}
-							openSearch={openSearch}
-							onClick={openTableCapacity}
-						/>
-						<InputSearch
-							isTransaction
-							isOpen={openSearch}
-							open={open}
-							onSearch={onSearch}
-							onClearSearch={onClear}
-							search={search}
-						/>
+						{query.view_type === 'transaction' && (
+							<FilterChip
+								label={`Table Capacity: ${dataSummary.available_capacity}/${dataSummary.table_capacity}`}
+								openSearch={openSearch}
+								onClick={openTableCapacity}
+							/>
+						)}
+						{query.view_type === 'transaction' && (
+							<InputSearch
+								isTransaction
+								isOpen={openSearch}
+								open={open}
+								onSearch={onSearch}
+								onClearSearch={onClear}
+								search={search}
+							/>
+						)}
 					</div>
 
 					{viewType === 'transaction' && (

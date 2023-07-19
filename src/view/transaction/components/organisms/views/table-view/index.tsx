@@ -219,7 +219,7 @@ const TableView = ({
 		};
 
 		return (
-			<main>
+			<main className="overflow-auto">
 				<CreateTransactionFromTableModal
 					open={isOpenCreateTransaction}
 					handleClose={closeCreateTransaction}
