@@ -2,22 +2,22 @@ import {Rating, Ratings} from '@/domain/rating/model';
 import {Pagination} from '@/domain/vo/BasePagination';
 import Table from '@/view/common/components/atoms/table';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
-import React, {Key, useState} from 'react';
+import React, {useState} from 'react';
 
 import RatingDetailsModal from '../modal/rating-details';
 import RatingColumns from './Columns';
 
 type OrganismsTableRatingProps = {
-	selectedRowKeys: Array<Key>;
-	setSelectedRowKeys: (key: Array<Key>) => void;
+	// selectedRowKeys: Array<Key>;
+	// setSelectedRowKeys: (key: Array<Key>) => void;
 	dataRating: Ratings | undefined;
 	loadRating: boolean;
 	pagination: Pagination | undefined;
 };
 
 const OrganismsTableRating = ({
-	selectedRowKeys,
-	setSelectedRowKeys,
+	// selectedRowKeys,
+	// setSelectedRowKeys,
 	dataRating,
 	loadRating,
 	pagination,
@@ -27,14 +27,14 @@ const OrganismsTableRating = ({
 		initialState: false,
 	});
 
-	const onSelectChange = (newSelectedRowKeys: Array<Key>) => {
-		setSelectedRowKeys(newSelectedRowKeys);
-	};
+	// const onSelectChange = (newSelectedRowKeys: Array<Key>) => {
+	// 	setSelectedRowKeys(newSelectedRowKeys);
+	// };
 
-	const rowSelection = {
-		selectedRowKeys,
-		onChange: onSelectChange,
-	};
+	// const rowSelection = {
+	// 	selectedRowKeys,
+	// 	onChange: onSelectChange,
+	// };
 
 	return (
 		<article className="mt-6">
@@ -43,7 +43,7 @@ const OrganismsTableRating = ({
 				dataSource={dataRating}
 				paginationData={pagination}
 				rowKey={record => record.uuid}
-				rowSelection={rowSelection}
+				// rowSelection={rowSelection}
 				scroll={{y: '54vh', x: 1100}}
 				loading={loadRating}
 			/>

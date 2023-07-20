@@ -3,7 +3,7 @@ import {Dates} from '@/view/common/types/date';
 import {defineds} from '@/view/common/utils/date';
 import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
 import {useRouter} from 'next/router';
-import React, {Key, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {useGetTransactionRatingsViewModel} from '../../view-models/GetTransactionRatingsViewModel';
 import NavFilterRating from '../organisms/nav-filter';
@@ -11,7 +11,7 @@ import TableRating from '../organisms/table';
 
 const ViewRatingPage = () => {
 	const {query} = useRouter();
-	const [selectedRowKeys, setSelectedRowKeys] = useState<Array<Key>>([]);
+	// const [selectedRowKeys, setSelectedRowKeys] = useState<Array<Key>>([]);
 
 	const [date, setDate] = useState<Array<Dates>>([
 		{
@@ -54,15 +54,15 @@ const ViewRatingPage = () => {
 					<p className="text-xxl-semibold text-neutral-100 ">Food Ratings</p>
 				</aside>
 				<NavFilterRating
-					selectedRowKeys={selectedRowKeys}
-					setSelectedRowKeys={setSelectedRowKeys}
+					// selectedRowKeys={selectedRowKeys}
+					// setSelectedRowKeys={setSelectedRowKeys}
 					pagination={pagination}
 					dates={date}
 				/>
 			</article>
 			<TableRating
-				selectedRowKeys={selectedRowKeys}
-				setSelectedRowKeys={setSelectedRowKeys}
+				// selectedRowKeys={selectedRowKeys}
+				// setSelectedRowKeys={setSelectedRowKeys}
 				dataRating={dataRating}
 				pagination={pagination}
 				loadRating={loadRating}

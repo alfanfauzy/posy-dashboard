@@ -101,7 +101,7 @@ const RatingDetailsModal = ({
 						</p>
 					</div>
 
-					<aside className="mt-4">
+					<aside className="my-4 flex flex-col gap-4">
 						{data?.map(item => (
 							<aside key={item.uuid} className="p-4 border rounded-lg shadow">
 								<div>
