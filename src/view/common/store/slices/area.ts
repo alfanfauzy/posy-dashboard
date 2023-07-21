@@ -9,6 +9,9 @@ export type SelectedArea = {
 
 type AreaState = {
 	selectedArea: SelectedArea;
+	isOpenAddArea: boolean;
+	isOpenEditArea: boolean;
+	isOpenDeleteArea: boolean;
 };
 
 const initialState: AreaState = {
@@ -18,6 +21,9 @@ const initialState: AreaState = {
 		table: '',
 		size: '',
 	},
+	isOpenAddArea: false,
+	isOpenEditArea: false,
+	isOpenDeleteArea: false,
 };
 
 const AreaSlice = createSlice({
@@ -35,10 +41,24 @@ const AreaSlice = createSlice({
 				size: '',
 			};
 		},
+		onChangeToggleAddArea: (state, action: PayloadAction<boolean>) => {
+			state.isOpenAddArea = action.payload;
+		},
+		onChangeToggleEditArea: (state, action: PayloadAction<boolean>) => {
+			state.isOpenEditArea = action.payload;
+		},
+		onChangeToggleDeleteArea: (state, action: PayloadAction<boolean>) => {
+			state.isOpenDeleteArea = action.payload;
+		},
 	},
 });
 
-// export the action from the slice
-export const {onChangeArea, onResetArea} = AreaSlice.actions;
+export const {
+	onChangeArea,
+	onResetArea,
+	onChangeToggleAddArea,
+	onChangeToggleEditArea,
+	onChangeToggleDeleteArea,
+} = AreaSlice.actions;
 
 export default AreaSlice.reducer;

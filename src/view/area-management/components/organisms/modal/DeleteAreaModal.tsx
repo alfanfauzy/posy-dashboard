@@ -1,19 +1,17 @@
 import {useDeleteAreaViewModel} from '@/view/area-management/view-models/DeleteAreaViewModel';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onChangeArea} from '@/view/common/store/slices/area';
+import {
+	onChangeArea,
+	onChangeToggleDeleteArea,
+} from '@/view/common/store/slices/area';
 import {Button, Modal} from 'posy-fnb-core';
 import React from 'react';
 
-type DeleteAreaModalProps = {
-	isOpen: boolean;
-	close: () => void;
-};
-
-const DeleteAreaModal = ({close, isOpen}: DeleteAreaModalProps) => {
+const DeleteAreaModal = () => {
 	const dispatch = useAppDispatch();
 	const {
 		auth: {outletId},
-		area: {selectedArea},
+		area: {selectedArea, isOpenDeleteArea},
 	} = useAppSelector(state => state);
 
 	const {DeleteArea, isLoading} = useDeleteAreaViewModel({
@@ -40,7 +38,7 @@ const DeleteAreaModal = ({close, isOpen}: DeleteAreaModalProps) => {
 	};
 
 	return (
-		<Modal open={isOpen} closeOverlay handleClose={close}>
+		<Modal open={isOpenDeleteArea} closeOverlay handleClose={close}>
 			<section className="flex w-[380px] flex-col items-center justify-center p-4">
 				<div className="px-16">
 					<p className="text-center text-l-semibold line-clamp-2">
@@ -52,7 +50,7 @@ const DeleteAreaModal = ({close, isOpen}: DeleteAreaModalProps) => {
 						variant="secondary"
 						size="l"
 						fullWidth
-						onClick={close}
+						onClick={() => dispatch(onChangeToggleDeleteArea(false))}
 						className="whitespace-nowrap"
 					>
 						Cancel

@@ -6,7 +6,11 @@ import {
 import {useGetAreaViewModel} from '@/view/area-management/view-models/GetAreaViewModel';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onChangeArea} from '@/view/common/store/slices/area';
+import {
+	onChangeArea,
+	onChangeToggleDeleteArea,
+	onChangeToggleEditArea,
+} from '@/view/common/store/slices/area';
 import {useUpdateBulkTableByFloorViewModel} from '@/view/table-management/view-models/UpdateBulkTableByFloorViewModel';
 import {Button} from 'posy-fnb-core';
 import React, {useEffect, useState} from 'react';
@@ -17,12 +21,7 @@ import {HiOutlinePencilAlt} from 'react-icons/hi';
 import AreaTableList from '../../organisms/area-table-list';
 import DeleteTableModal from '../../organisms/modal/DeleteTableModal';
 
-type AreaDetailsProps = {
-	openDeleteArea: () => void;
-	openEditArea: () => void;
-};
-
-const AreaDetails = ({openDeleteArea, openEditArea}: AreaDetailsProps) => {
+const AreaDetails = () => {
 	const {
 		auth: {outletId},
 		area: {selectedArea},
@@ -139,12 +138,12 @@ const AreaDetails = ({openDeleteArea, openEditArea}: AreaDetailsProps) => {
 								{selectedArea.uuid ? (
 									<div className="flex gap-8">
 										<HiOutlinePencilAlt
-											onClick={openEditArea}
+											onClick={() => dispatch(onChangeToggleEditArea(true))}
 											size={20}
 											className="cursor-pointer text-neutral-70 hover:opacity-80"
 										/>
 										<CgTrash
-											onClick={openDeleteArea}
+											onClick={() => dispatch(onChangeToggleDeleteArea(true))}
 											className="cursor-pointer text-neutral-70 hover:opacity-80"
 											size={20}
 										/>

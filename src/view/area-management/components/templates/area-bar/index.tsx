@@ -1,7 +1,10 @@
 import {Area, Areas} from '@/domain/area/model';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onChangeArea} from '@/view/common/store/slices/area';
+import {
+	onChangeArea,
+	onChangeToggleAddArea,
+} from '@/view/common/store/slices/area';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import EmptyArea from '@/view/transaction/components/molecules/empty-area';
 import {Button, Loading} from 'posy-fnb-core';
@@ -11,10 +14,9 @@ import {BsList} from 'react-icons/bs';
 type AreabarProps = {
 	data: Areas | undefined;
 	isLoading: boolean;
-	openAddArea: () => void;
 };
 
-const Areabar = ({data, isLoading, openAddArea}: AreabarProps) => {
+const Areabar = ({data, isLoading}: AreabarProps) => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
 	const {
@@ -81,7 +83,11 @@ const Areabar = ({data, isLoading, openAddArea}: AreabarProps) => {
 					)}
 				</div>
 				<div className="mt-4 p-4 shadow-box-1 w-full">
-					<Button size="m" fullWidth onClick={openAddArea}>
+					<Button
+						size="m"
+						fullWidth
+						onClick={() => dispatch(onChangeToggleAddArea(true))}
+					>
 						Add New Area
 					</Button>
 				</div>

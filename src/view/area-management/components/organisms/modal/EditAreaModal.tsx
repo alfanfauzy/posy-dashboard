@@ -6,7 +6,8 @@ import {useGetAreaSizesViewModel} from '@/view/area-management/view-models/GetAr
 import {useUpdateAreaViewModel} from '@/view/area-management/view-models/UpdateAreaViewModel';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeToggleEditArea} from '@/view/common/store/slices/area';
 import {Modal} from 'antd';
 import {Button, Input, Select} from 'posy-fnb-core';
 import React, {useEffect, useMemo} from 'react';
@@ -18,15 +19,11 @@ const OptionsTableSmallArea = new Array(30).fill(undefined).map((_, index) => ({
 	value: String(index + 1),
 }));
 
-type EditAreaModalProps = {
-	close: () => void;
-	isOpen: boolean;
-};
-
-const EditAreaModal = ({close, isOpen}: EditAreaModalProps) => {
+const EditAreaModal = () => {
+	const dispatch = useAppDispatch();
 	const {
 		auth: {outletId},
-		area: {selectedArea},
+		area: {selectedArea, isOpenEditArea},
 	} = useAppSelector(state => state);
 
 	const [isShowPreview, {open: openPreview, close: closePreview}] =
@@ -40,7 +37,7 @@ const EditAreaModal = ({close, isOpen}: EditAreaModalProps) => {
 				type: 'GRID',
 			},
 			{
-				enabled: isOpen,
+				enabled: isOpenEditArea,
 			},
 		);
 
@@ -69,7 +66,7 @@ const EditAreaModal = ({close, isOpen}: EditAreaModalProps) => {
 
 	const onClose = () => {
 		reset();
-		close();
+		dispatch(onChangeToggleEditArea(false));
 	};
 
 	const {UpdateArea, isLoading: loadUpdateArea} = useUpdateAreaViewModel({
@@ -99,7 +96,7 @@ const EditAreaModal = ({close, isOpen}: EditAreaModalProps) => {
 			closable={false}
 			footer={null}
 			width={450}
-			open={isOpen}
+			open={isOpenEditArea}
 		>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="flex flex-col gap-4 h-full px-4 p-6 bg-gradient-to-r from-primary-main to-secondary-main rounded-t-lg items-center justify-center">

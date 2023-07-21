@@ -1,7 +1,6 @@
 import {mapToAreasModel} from '@/data/area/mappers/AreaMapper';
 import {GetAreaQueryKey} from '@/data/area/sources/GetAreaQuery';
 import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
-import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {onChangeArea} from '@/view/common/store/slices/area';
 import {useQueryClient} from '@tanstack/react-query';
@@ -39,19 +38,6 @@ const ViewAreaManagementPage = () => {
 		area: {selectedArea},
 	} = useAppSelector(state => state);
 
-	const [isOpenAddArea, {open: openAddArea, close: closeAddArea}] =
-		useDisclosure({
-			initialState: false,
-		});
-	const [isOpenEditArea, {open: openEditArea, close: closeEditArea}] =
-		useDisclosure({
-			initialState: false,
-		});
-	const [isOpenDeleteArea, {open: openDeleteArea, close: closeDeleteArea}] =
-		useDisclosure({
-			initialState: false,
-		});
-
 	const {data: dataArea, isLoading: loadArea} = useGetAreasViewModel(
 		{
 			restaurant_outlet_uuid: outletId,
@@ -75,23 +61,12 @@ const ViewAreaManagementPage = () => {
 
 	return (
 		<>
-			<AddNewAreaModal close={closeAddArea} isOpen={isOpenAddArea} />
-			{selectedArea && (
-				<EditAreaModal close={closeEditArea} isOpen={isOpenEditArea} />
-			)}
-			{selectedArea && (
-				<DeleteAreaModal isOpen={isOpenDeleteArea} close={closeDeleteArea} />
-			)}
+			<AddNewAreaModal />
+			{selectedArea && <EditAreaModal />}
+			{selectedArea && <DeleteAreaModal />}
 			<main className="h-full w-full flex gap-2">
-				<Areabar
-					data={dataArea}
-					isLoading={loadArea}
-					openAddArea={openAddArea}
-				/>
-				<AreaDetails
-					openDeleteArea={openDeleteArea}
-					openEditArea={openEditArea}
-				/>
+				<Areabar data={dataArea} isLoading={loadArea} />
+				<AreaDetails />
 			</main>
 		</>
 	);
