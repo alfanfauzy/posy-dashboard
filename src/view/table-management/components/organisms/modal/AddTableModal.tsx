@@ -1,5 +1,7 @@
 import {useForm} from '@/view/common/hooks/useForm';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onCloseAddTable} from '@/view/common/store/slices/table';
+import {tableTypeOptions} from '@/view/table-management/constants';
 import {
 	ValidationSchemaAddTableType,
 	validationSchemaAddTable,
@@ -9,22 +11,12 @@ import {Modal} from 'antd';
 import {Button, Input, Select} from 'posy-fnb-core';
 import React from 'react';
 
-import {tableTypeOptions} from '../../templates/table-management-sidebar';
-
-export type TableProps = {
-	position_x: number;
-	position_y: number;
-	floor_area_uuid: string;
-};
-
-type AddTableModalProps = {
-	isOpen: boolean;
-	onClose: () => void;
-	tableProps: TableProps;
-};
-
-const AddTableModal = ({isOpen, onClose, tableProps}: AddTableModalProps) => {
+const AddTableModal = () => {
+	const dispatch = useAppDispatch();
 	const {outletId} = useAppSelector(state => state.auth);
+	const {addTable} = useAppSelector(state => state.table);
+	const {isOpen, payload} = addTable;
+
 	const {
 		register,
 		formState: {errors, isValid},
@@ -35,11 +27,13 @@ const AddTableModal = ({isOpen, onClose, tableProps}: AddTableModalProps) => {
 		mode: 'onChange',
 		schema: validationSchemaAddTable,
 		defaultValues: {
-			position_x: tableProps.position_y,
-			position_y: tableProps.position_x,
-			floor_area_uuid: tableProps.floor_area_uuid,
+			position_x: payload?.position_y,
+			position_y: payload?.position_x,
+			floor_area_uuid: payload?.floor_area_uuid,
 		},
 	});
+
+	const onClose = () => dispatch(onCloseAddTable());
 
 	const {CreateUpsertTable, isLoading} = useCreateUpsertTableViewModel({
 		onSuccess: () => {

@@ -7,6 +7,7 @@ import auth from './slices/auth';
 import modal from './slices/modal';
 import order from './slices/order';
 import product from './slices/product';
+import table from './slices/table';
 import transaction from './slices/transaction';
 
 const persistConfig = {
@@ -25,6 +26,7 @@ const persistedReducer = persistReducer(
 		modal,
 		product,
 		area,
+		table,
 	}),
 );
 

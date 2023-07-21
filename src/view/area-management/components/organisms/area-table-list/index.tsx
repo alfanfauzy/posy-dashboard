@@ -2,7 +2,7 @@ import {Area} from '@/domain/area/model';
 import {ValidationSchemaEditTableAreaType} from '@/view/area-management/schemas/editTableArea';
 import {getMaxTable} from '@/view/area-management/utils/getMaxTable';
 import {SelectedArea} from '@/view/common/store/slices/area';
-import {tableTypeOptions} from '@/view/table-management/components/templates/table-management-sidebar';
+import {tableTypeOptions} from '@/view/table-management/constants';
 import EmptyArea from '@/view/transaction/components/molecules/empty-area';
 import {Divider} from 'antd';
 import {Input, Loading, Select} from 'posy-fnb-core';

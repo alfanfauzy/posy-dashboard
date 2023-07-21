@@ -3,7 +3,7 @@ import React from 'react';
 
 type FloorListProps = {
 	dataArea: Areas;
-	selectedArea: Area | undefined;
+	selectedArea: Area | null;
 	onChangeSelectArea: (val: Area) => void;
 };
 
