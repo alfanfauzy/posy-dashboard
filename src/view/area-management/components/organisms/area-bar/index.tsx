@@ -42,7 +42,7 @@ const Areabar = ({data, isLoading, openAddArea}: AreabarProps) => {
 						</div>
 					) : null}
 
-					{data?.length === 0 ? (
+					{(!data || data?.length === 0) && !isLoading ? (
 						<div className="h-full flex flex-col justify-center items-center">
 							<AreaIcon />
 							<p className="text-m-medium mt-2">Please add new area first</p>

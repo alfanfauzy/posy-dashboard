@@ -12,7 +12,7 @@ import {tableTypeOptions} from '@/view/table-management/components/templates/tab
 import {useUpdateBulkTableByFloorViewModel} from '@/view/table-management/view-models/UpdateBulkTableByFloorViewModel';
 import {Divider} from 'antd';
 import {Button, Input, Loading, Select} from 'posy-fnb-core';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useFieldArray} from 'react-hook-form';
 import {CgTrash} from 'react-icons/cg';
 import {HiOutlinePencilAlt} from 'react-icons/hi';
@@ -65,7 +65,7 @@ const AreaDetails = ({openDeleteArea, openEditArea}: AreaDetailsProps) => {
 		name: 'table_list',
 	});
 
-	const {data, isLoading} = useGetAreaViewModel(
+	const {data, isLoading, isFetching} = useGetAreaViewModel(
 		{
 			restaurant_outlet_uuid: outletId,
 			area_uuid: selectedArea?.uuid || '',
@@ -120,6 +120,15 @@ const AreaDetails = ({openDeleteArea, openEditArea}: AreaDetailsProps) => {
 		setOpenDeleteTable({isOpen: false, payload: 0});
 	};
 
+	useEffect(() => {
+		if (!selectedArea.uuid) {
+			reset({
+				floor_area_uuid: '',
+				table_list: [],
+			});
+		}
+	}, [reset, selectedArea]);
+
 	return (
 		<>
 			{openDeleteTable.isOpen ? (
@@ -159,7 +168,8 @@ const AreaDetails = ({openDeleteArea, openEditArea}: AreaDetailsProps) => {
 								</div>
 							) : null}
 
-							{!selectedArea.uuid || getValues('table_list')?.length === 0 ? (
+							{(!selectedArea.name || getValues('table_list')?.length === 0) &&
+							!isFetching ? (
 								<div className="h-full flex flex-col justify-center items-center">
 									<AreaIcon />
 									<p className="text-m-medium mt-2">

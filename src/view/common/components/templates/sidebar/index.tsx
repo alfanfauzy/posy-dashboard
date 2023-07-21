@@ -10,6 +10,7 @@ import {PROTECT_ROUTES} from '@/view/common/config/link';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onResetArea} from '@/view/common/store/slices/area';
 import {setRestaurantOutletId} from '@/view/common/store/slices/auth';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
@@ -78,6 +79,7 @@ const TemplatesSidebar = ({
 	const onChangeOutlet = (e: string) => {
 		dispatch(setRestaurantOutletId(e));
 		dispatch(onChangeSelectedTrxId({id: ''}));
+		dispatch(onResetArea());
 		queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 		queryClient.invalidateQueries([GetNotificationsQueryKey]);
 	};

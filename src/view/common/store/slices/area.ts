@@ -27,10 +27,18 @@ const AreaSlice = createSlice({
 		onChangeArea: (state, action: PayloadAction<SelectedArea>) => {
 			state.selectedArea = action.payload;
 		},
+		onResetArea: state => {
+			state.selectedArea = {
+				name: '',
+				uuid: '',
+				table: '',
+				size: '',
+			};
+		},
 	},
 });
 
 // export the action from the slice
-export const {onChangeArea} = AreaSlice.actions;
+export const {onChangeArea, onResetArea} = AreaSlice.actions;
 
 export default AreaSlice.reducer;

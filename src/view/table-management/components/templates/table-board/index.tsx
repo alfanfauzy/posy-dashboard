@@ -97,7 +97,7 @@ const TableBoard = ({
 			setValueAddTable({
 				position_x: toX,
 				position_y: toY,
-				floor_area_uuid: 'ca73e64b-f3be-40e8-a386-90b7094abd81',
+				floor_area_uuid: selectedArea?.uuid || '',
 			});
 		};
 
