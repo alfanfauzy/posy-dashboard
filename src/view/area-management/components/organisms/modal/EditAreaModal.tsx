@@ -4,12 +4,16 @@ import {
 } from '@/view/area-management/schemas/edit-area';
 import {useGetAreaSizesViewModel} from '@/view/area-management/view-models/GetAreaSizesViewModel';
 import {useUpdateAreaViewModel} from '@/view/area-management/view-models/UpdateAreaViewModel';
+import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
-import {Modal} from 'antd';
+import {Image, Modal} from 'antd';
 import {Button, Input, Select} from 'posy-fnb-core';
 import React, {useEffect, useMemo} from 'react';
 import {BsEye} from 'react-icons/bs';
+
+const tablePreview = '/images/table-settings.png';
+const tablePreviewLarge = '/images/table-settings-lg.png';
 
 const OptionsTableSmallArea = new Array(30).fill(undefined).map((_, index) => ({
 	label: String(index + 1),
@@ -26,6 +30,12 @@ const EditAreaModal = ({close, isOpen}: EditAreaModalProps) => {
 		auth: {outletId},
 		area: {selectedArea},
 	} = useAppSelector(state => state);
+
+	const [isShowPreview, {open: openPreview, close: ClosePreview}] =
+		useDisclosure({
+			initialState: false,
+		});
+
 	const {data: dataAreaSizes, isLoading: loadAreaSizes} =
 		useGetAreaSizesViewModel(
 			{
@@ -145,10 +155,31 @@ const EditAreaModal = ({close, isOpen}: EditAreaModalProps) => {
 							</div>
 						</aside>
 					</div>
-					<div className="flex items-center gap-2">
-						<BsEye size={16} className="text-neutral-10" />
-						<p className="text-m-medium text-neutral-10">View example</p>
-					</div>
+					{selectedArea.size && (
+						<div
+							onClick={openPreview}
+							className="flex items-center gap-2 cursor-pointer hover:opacity-70"
+						>
+							<BsEye size={16} className="text-neutral-10" />
+							<p className="text-m-medium text-neutral-10">View example</p>
+							<Image.PreviewGroup
+								preview={{
+									visible: isShowPreview,
+									onVisibleChange: ClosePreview,
+								}}
+							>
+								<Image
+									alt="preview"
+									className="hidden"
+									src={
+										selectedArea.size === 'Large (up to 48 table)'
+											? tablePreviewLarge
+											: tablePreview
+									}
+								/>
+							</Image.PreviewGroup>
+						</div>
+					)}
 				</div>
 				<section className="p-4 rounded-b-lg bg-neutral-10 w-full flex gap-3">
 					<div className="w-1/2">

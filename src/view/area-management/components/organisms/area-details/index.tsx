@@ -92,6 +92,22 @@ const AreaDetails = ({openDeleteArea, openEditArea}: AreaDetailsProps) => {
 		});
 	};
 
+	const getMaxTable = (area_table: string) => {
+		const maxTableLg = 'Large (up to 48 table)';
+		const maxTableSm = 'Small (up to 30 table)';
+
+		const maxTable: Record<string, number> = {
+			[maxTableLg]: 48,
+			[maxTableSm]: 30,
+		};
+
+		return maxTable[area_table];
+	};
+
+	const canAddTable =
+		getValues('table_list')?.length > 0 &&
+		getValues('table_list')?.length < getMaxTable(data?.floor_size_name || '');
+
 	return (
 		<section className="h-full flex-1 flex flex-col gap-4 overflow-y-hidden overflow-auto p-4 xl:rounded-r-lg rounded-lg bg-neutral-10">
 			<form onSubmit={handleSubmit(onSubmit)} className="relative h-full">
@@ -177,7 +193,7 @@ const AreaDetails = ({openDeleteArea, openEditArea}: AreaDetailsProps) => {
 										<Divider className="mb-4" />
 									</aside>
 								))}
-								{getValues('table_list')?.length > 0 ? (
+								{canAddTable ? (
 									<div className="flex items-center justify-center mb-4">
 										<p
 											onClick={() =>
