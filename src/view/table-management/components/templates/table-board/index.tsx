@@ -1,15 +1,14 @@
 import {Area, Areas} from '@/domain/area/model';
 import {type Table as TableType} from '@/domain/table/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
-import AreaIcon from '@/view/common/assets/icons/area';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import Table from '@/view/table-management/components/molecules/table';
 import {useUpdateSaveTableLayoutViewModel} from '@/view/table-management/view-models/UpdateSaveTableLayoutViewModel';
+import EmptyArea from '@/view/transaction/components/molecules/empty-area';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
 import {Button} from 'posy-fnb-core';
 import type {DragEvent} from 'react';
 import {AiOutlinePlusCircle} from 'react-icons/ai';
@@ -51,7 +50,6 @@ const TableBoard = ({
 	onChangeSelectedArea,
 	onChangeSelectedTable,
 }: TableBoardProps) => {
-	const {push} = useRouter();
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
 	const {outletId} = useAppSelector(state => state.auth);
@@ -199,17 +197,7 @@ const TableBoard = ({
 						)}
 					</div>
 				</aside>
-				{areaList.length === 0 && (
-					<div className="h-full flex flex-col justify-center items-center">
-						<AreaIcon />
-						<p
-							onClick={() => push('/settings/area-management')}
-							className="text-l-medium mt-4 cursor-pointer hover:text-secondary-main hover:opacity-70"
-						>
-							Please add new area first
-						</p>
-					</div>
-				)}
+				{areaList.length === 0 && <EmptyArea redirect />}
 
 				{areaList.length > 0 ? (
 					<aside className="flex w-full h-full pb-20 overflow-y-auto">

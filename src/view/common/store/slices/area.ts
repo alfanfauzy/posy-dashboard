@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-type SelectedArea = {
+export type SelectedArea = {
 	uuid: string;
 	name: string;
 	table: string;

@@ -130,7 +130,7 @@ const TransactionSidebar = () => {
 	});
 
 	return (
-		<main className="relative lg:min-w-[350px] min-w-[290px] lg:max-w-[350px] max-w-[290px]  h-full rounded-l-lg bg-neutral-10">
+		<main className="relative lg:min-w-[350px] lg:max-w-[350px] min-w-[310px] max-w-[310px] h-full rounded-l-lg bg-neutral-10">
 			{loadTransaction && (
 				<div className="flex h-full w-full items-center justify-center">
 					<Loading size={75} />
