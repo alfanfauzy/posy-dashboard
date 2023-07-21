@@ -12,6 +12,7 @@ import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onResetArea} from '@/view/common/store/slices/area';
 import {setRestaurantOutletId} from '@/view/common/store/slices/auth';
+import {onChangeSelectedTable} from '@/view/common/store/slices/table';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
@@ -80,6 +81,7 @@ const TemplatesSidebar = ({
 		dispatch(setRestaurantOutletId(e));
 		dispatch(onChangeSelectedTrxId({id: ''}));
 		dispatch(onResetArea());
+		dispatch(onChangeSelectedTable(null));
 		queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 		queryClient.invalidateQueries([GetNotificationsQueryKey]);
 	};

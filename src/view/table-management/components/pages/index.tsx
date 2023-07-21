@@ -15,7 +15,7 @@ const ViewTableManagementPage = () => {
 	const {outletId} = useAppSelector(state => state.auth);
 	const {selectedArea} = useAppSelector(state => state.table);
 
-	const {data: dataArea} = useGetAreasViewModel(
+	const {data: dataArea, isLoading: loadArea} = useGetAreasViewModel(
 		{
 			restaurant_outlet_uuid: outletId,
 		},
@@ -28,7 +28,7 @@ const ViewTableManagementPage = () => {
 		},
 	);
 
-	useGetTableLayoutByFloorViewModel(
+	const {isLoading: loadTableLayout} = useGetTableLayoutByFloorViewModel(
 		{
 			restaurant_outlet_uuid: outletId,
 			area_uuid: selectedArea?.uuid || '',
@@ -44,10 +44,11 @@ const ViewTableManagementPage = () => {
 		},
 	);
 
+	const isLoading = (loadTableLayout && !!selectedArea) || loadArea;
 	return (
 		<>
 			<main className="h-full w-full flex gap-2">
-				<TableSettings dataArea={dataArea || []} />
+				<TableSettings dataArea={dataArea || []} isLoading={isLoading} />
 				<TableDetailSidebar />
 			</main>
 		</>

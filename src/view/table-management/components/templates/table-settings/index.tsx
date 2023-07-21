@@ -7,6 +7,7 @@ import {
 import {useUpdateSaveTableLayoutViewModel} from '@/view/table-management/view-models/UpdateSaveTableLayoutViewModel';
 import EmptyArea from '@/view/transaction/components/molecules/empty-area';
 import dynamic from 'next/dynamic';
+import {Loading} from 'posy-fnb-core';
 
 import FloorList from '../../molecules/floor-list';
 import TableSettingBoard from '../../organisms/table-setting-board';
@@ -21,9 +22,10 @@ const AddTableModal = dynamic(
 
 type TableSettingsProps = {
 	dataArea: Areas;
+	isLoading: boolean;
 };
 
-const TableSettings = ({dataArea}: TableSettingsProps) => {
+const TableSettings = ({dataArea, isLoading}: TableSettingsProps) => {
 	const dispatch = useAppDispatch();
 	const {outletId} = useAppSelector(state => state.auth);
 	const {selectedArea, tableLayout, addTable} = useAppSelector(
@@ -58,8 +60,13 @@ const TableSettings = ({dataArea}: TableSettingsProps) => {
 					dataArea={dataArea || []}
 					isLoadingSaveTable={isLoadingSaveTable}
 				/>
+				{isLoading ? (
+					<div className="flex h-full justify-center items-center">
+						<Loading size={80} />
+					</div>
+				) : null}
 
-				{dataArea.length === 0 && <EmptyArea redirect />}
+				{dataArea.length === 0 && !isLoading && <EmptyArea redirect />}
 
 				{dataArea.length > 0 && selectedArea ? <TableSettingBoard /> : null}
 
