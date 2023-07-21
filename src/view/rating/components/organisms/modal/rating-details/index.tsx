@@ -31,6 +31,7 @@ const RatingDetailsModal = ({
 	const {data, isLoading} = useGetDetailRatingsViewModel(
 		{
 			food_rating_uuid: query.id as string,
+			limit: 100,
 		},
 		{
 			enabled: !!query.id,
@@ -94,16 +95,19 @@ const RatingDetailsModal = ({
 					</aside>
 				</section>
 
-				<section className="mt-4">
+				<section className="mt-4 w-full">
 					<div className="flex justify-center">
 						<p className="text-l-bold text-primary-main">
 							How&apos;s the Order
 						</p>
 					</div>
 
-					<aside className="my-4 flex flex-col gap-4">
+					<aside className="my-4 w-full flex flex-col gap-4">
 						{data?.map(item => (
-							<aside key={item.uuid} className="p-4 border rounded-lg shadow">
+							<aside
+								key={item.uuid}
+								className="p-4 border w-full rounded-lg shadow"
+							>
 								<div>
 									<p className="text-l-bold text-primary-main">
 										{item.product_name || '-'}
@@ -114,15 +118,9 @@ const RatingDetailsModal = ({
 								<div>
 									<p className="text-l-bold text-primary-main">Notes</p>
 									<div className="flex flex-wrap gap-2">
-										{item.review.map((review, idx) => (
-											<p
-												key={review}
-												className="text-m-medium text-primary-main lowercase"
-											>
-												{review.split('_').join(' ')}
-												{idx !== item.review.length - 1 && ','}
-											</p>
-										))}
+										<p className="text-m-medium text-primary-main lowercase">
+											{item.review_note}
+										</p>
 									</div>
 								</div>
 							</aside>

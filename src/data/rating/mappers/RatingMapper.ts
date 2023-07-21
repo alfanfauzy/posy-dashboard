@@ -33,4 +33,5 @@ export const mapToDetailRatingsModel = (
 		rating: data.rating,
 		review: data.review,
 		addon_information: data.addon_information,
+		review_note: data.review_note,
 	}));

@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {useAppSelector} from '@/view/common/store/hooks';
 import {Dates} from '@/view/common/types/date';
 import {defineds} from '@/view/common/utils/date';
 import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
@@ -11,6 +12,7 @@ import TableRating from '../organisms/table';
 
 const ViewRatingPage = () => {
 	const {query} = useRouter();
+	const {outletId} = useAppSelector(state => state.auth);
 	// const [selectedRowKeys, setSelectedRowKeys] = useState<Array<Key>>([]);
 
 	const [date, setDate] = useState<Array<Dates>>([
@@ -39,6 +41,10 @@ const ViewRatingPage = () => {
 		limit: Number(query.limit) || 10,
 		page: Number(query.page) || 1,
 		search: [
+			{
+				field: 'restaurant_outlet_uuid',
+				value: outletId,
+			},
 			{
 				field: 'created_at',
 				value: `${toUnix(date[0].startDate)}&&${toUnix(date[0].endDate)}`,

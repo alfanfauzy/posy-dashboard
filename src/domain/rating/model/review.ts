@@ -5,7 +5,8 @@ export type ReviewBased = {
 	product_name: string;
 	addon_information: Array<AddonInformation>;
 	rating: number;
-	review: Array<string>;
+	review: string;
+	review_note: string;
 };
 
 type AddonInformation = {
