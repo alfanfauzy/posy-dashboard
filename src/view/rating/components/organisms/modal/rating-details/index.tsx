@@ -1,4 +1,5 @@
 import {Rating} from '@/domain/rating/model';
+import {useAppSelector} from '@/view/common/store/hooks';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {useGetDetailRatingsViewModel} from '@/view/rating/view-models/GetDetailRatingsViewModel';
@@ -20,6 +21,7 @@ const RatingDetailsModal = ({
 	selectedRow,
 	setSelectedRow,
 }: RatingDetailsModalProps) => {
+	const {outletId} = useAppSelector(state => state.auth);
 	const {query} = useRouter();
 
 	const onCloseDetail = async () => {
@@ -32,6 +34,12 @@ const RatingDetailsModal = ({
 		{
 			food_rating_uuid: query.id as string,
 			limit: 100,
+			search: [
+				{
+					field: 'restaurant_outlet_uuid',
+					value: outletId,
+				},
+			],
 		},
 		{
 			enabled: !!query.id,
@@ -119,7 +127,7 @@ const RatingDetailsModal = ({
 									<p className="text-l-bold text-primary-main">Notes</p>
 									<div className="flex flex-wrap gap-2">
 										<p className="text-m-medium text-primary-main lowercase">
-											{item.review_note}
+											{item.review_note || '-'}
 										</p>
 									</div>
 								</div>
