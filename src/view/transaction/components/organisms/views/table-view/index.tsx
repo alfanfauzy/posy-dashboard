@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import {mapToTableLayoutModel} from '@/data/table/mappers/TableMapper';
-import {Area, Areas} from '@/domain/area/model';
+import {Area} from '@/domain/area/model';
 import {Table} from '@/domain/table/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
 import useClickOutside from '@/view/common/hooks/useClickOutside';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {
-	onChangeSelectedTable,
-	onChangeSelectedTrxId,
-} from '@/view/common/store/slices/transaction';
-import FloorList from '@/view/table-management/components/molecules/floor-list';
+import {onChangeSelectedTable} from '@/view/common/store/slices/transaction';
 import {useGetTableLayoutByFloorViewModel} from '@/view/table-management/view-models/GetTableLayoutByFloorViewModel';
 import {Popover} from 'antd';
 import Image from 'next/image';
@@ -19,63 +15,15 @@ import {Loading} from 'posy-fnb-core';
 import React, {useRef, useState} from 'react';
 
 import EmptyArea from '../../../molecules/empty-area';
+import TableViewPopover from '../../../molecules/table-view-popover';
 import CreateTransactionFromTableModal from '../../modal/CreateTransactionFromTableModal';
 
-const MenuPopover = (
-	item: Table,
-	openCreateTransaction: () => void,
-	closePopOver: () => void,
-) => {
-	const dispatch = useAppDispatch();
-
-	return (
-		<div className="flex flex-col gap-4">
-			<p
-				onClick={() => {
-					openCreateTransaction();
-					closePopOver();
-				}}
-				className="hover:text-primary-main cursor-pointer"
-			>
-				+ Create new trx
-			</p>
-			{item?.transactions?.map(el => (
-				<p
-					key={el.uuid}
-					onClick={() => {
-						dispatch(
-							onChangeSelectedTrxId({
-								id: el.uuid,
-							}),
-						);
-						closePopOver();
-					}}
-					className="hover:text-primary-main cursor-pointer"
-				>
-					{item.table_number}
-					{el.session_suffix}
-				</p>
-			))}
-		</div>
-	);
-};
-
-type TableViewProps = {
-	dataArea: Areas | undefined;
-	selectedArea: Area | undefined;
-	onChangeSelectArea: (val: Area) => void;
-};
-
-const TableView = ({
-	dataArea,
-	selectedArea,
-	onChangeSelectArea,
-}: TableViewProps) => {
+const TableView = () => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
 	const {outletId} = useAppSelector(state => state.auth);
-	const selectedTable = useAppSelector(
-		state => state.transaction.selectedTable,
+	const {selectedArea, selectedTable} = useAppSelector(
+		state => state.transaction,
 	);
 	const [table, setTablePos] = useState<TableLayout>([]);
 
@@ -134,7 +82,6 @@ const TableView = ({
 			);
 		}
 	};
-	console.log(selectedArea);
 
 	const RenderSquare = (
 		i: number,
@@ -164,7 +111,7 @@ const TableView = ({
 					<div className="w-full h-full flex items-center justify-center">
 						<Popover
 							content={() =>
-								MenuPopover(item, openCreateTransaction, closePopOver)
+								TableViewPopover(item, openCreateTransaction, closePopOver)
 							}
 							open={showPopOverDrowdown}
 							placement="bottom"
@@ -229,11 +176,6 @@ const TableView = ({
 					</div>
 				</div>
 			</section>
-			<FloorList
-				dataArea={dataArea || []}
-				selectedArea={selectedArea}
-				onChangeSelectArea={onChangeSelectArea}
-			/>
 		</main>
 	);
 };

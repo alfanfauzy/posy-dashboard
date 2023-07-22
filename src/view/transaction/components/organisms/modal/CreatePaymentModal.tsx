@@ -1,3 +1,4 @@
+import {GetTableLayoutByFloorQueryKey} from '@/data/table/sources/GetTableLayoutByFloorQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
@@ -35,8 +36,8 @@ const CreatePaymentModal = ({
 	setValueState,
 }: CreatePaymentModalProps) => {
 	const queryClient = useQueryClient();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const printReceiptRef = useRef<any>();
+	const printReceiptRef =
+		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 	const {outletId} = useAppSelector(state => state.auth);
 	const {payment, selectedTrxId} = useAppSelector(state => state.transaction);
 	const [selectedPaymentCategory, setSelectedPaymentCategory] = useState({
@@ -85,6 +86,7 @@ const CreatePaymentModal = ({
 				setValueState(data);
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+				queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
 				closeCreatePayment();
 				setOpenConfirmation(false);
 				openPaymentConfirmation();

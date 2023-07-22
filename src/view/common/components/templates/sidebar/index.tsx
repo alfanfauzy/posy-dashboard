@@ -11,9 +11,16 @@ import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onResetArea} from '@/view/common/store/slices/area';
-import {setRestaurantOutletId} from '@/view/common/store/slices/auth';
+import {
+	setOpenDrawer,
+	setRestaurantOutletId,
+} from '@/view/common/store/slices/auth';
 import {onChangeSelectedTable} from '@/view/common/store/slices/table';
-import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {
+	onChangeSelectedArea,
+	onChangeSelectedTrxId,
+	onChangeSelectedTable as onChangeSelectedTableTransaction,
+} from '@/view/common/store/slices/transaction';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {useQueryClient} from '@tanstack/react-query';
@@ -82,13 +89,26 @@ const TemplatesSidebar = ({
 		dispatch(onChangeSelectedTrxId({id: ''}));
 		dispatch(onResetArea());
 		dispatch(onChangeSelectedTable(null));
+		dispatch(onChangeSelectedArea(null));
+		dispatch(
+			onChangeSelectedTableTransaction({
+				table: null,
+				prevTable: null,
+			}),
+		);
 		queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 		queryClient.invalidateQueries([GetNotificationsQueryKey]);
+		dispatch(setOpenDrawer(false));
 	};
 
 	const onCollapseSidebar = () => {
 		collapseSidebar();
 		dispatch(onChangeSelectedTrxId({id: ''}));
+	};
+
+	const onOpenLogout = () => {
+		dispatch(setOpenDrawer(false));
+		openLogout();
 	};
 
 	return (
@@ -165,8 +185,7 @@ const TemplatesSidebar = ({
 
 						<div
 							role="button"
-							onClick={openLogout}
-							onKeyDown={openLogout}
+							onClick={onOpenLogout}
 							className="mt-2.5 flex cursor-pointer gap-4 hover:opacity-70"
 						>
 							<FiLogOut className="text-neutral-90" size={18} />

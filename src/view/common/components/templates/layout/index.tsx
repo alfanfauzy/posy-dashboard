@@ -46,8 +46,8 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		state => state.auth,
 	);
 	const [loading, setLoading] = useState(true);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const audioRef = useRef<any>();
+	const audioRef =
+		useRef<HTMLAudioElement>() as React.MutableRefObject<HTMLAudioElement>;
 	const {enqueueSnackbar} = useSnackbar();
 
 	const play = () => {

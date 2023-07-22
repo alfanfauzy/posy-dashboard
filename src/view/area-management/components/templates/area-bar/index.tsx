@@ -1,15 +1,13 @@
 import {Area, Areas} from '@/domain/area/model';
-import useViewportListener from '@/view/common/hooks/useViewportListener';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
 	onChangeArea,
 	onChangeToggleAddArea,
 } from '@/view/common/store/slices/area';
-import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import EmptyArea from '@/view/transaction/components/molecules/empty-area';
 import {Button, Loading} from 'posy-fnb-core';
 import React from 'react';
-import {BsList} from 'react-icons/bs';
 
 type AreabarProps = {
 	data: Areas | undefined;
@@ -18,7 +16,6 @@ type AreabarProps = {
 
 const Areabar = ({data, isLoading}: AreabarProps) => {
 	const dispatch = useAppDispatch();
-	const {width} = useViewportListener();
 	const {
 		area: {selectedArea},
 	} = useAppSelector(state => state);
@@ -38,16 +35,7 @@ const Areabar = ({data, isLoading}: AreabarProps) => {
 	return (
 		<section className="h-full w-1/3 overflow-y-hidden overflow-auto xl:rounded-r-lg rounded-lg bg-neutral-10">
 			<aside className="flex h-full flex-col">
-				<div className="flex items-center gap-4 px-4 pt-4 pb-2">
-					{width <= 1280 && (
-						<BsList
-							onClick={() => dispatch(setOpenDrawer(true))}
-							size={24}
-							className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
-						/>
-					)}
-					<p className="text-xxl-semibold text-neutral-100">Area Settings</p>
-				</div>
+				<NavDrawer title="Area Settings" className="px-4 pt-4 pb-2" />
 
 				<div className="mt-4 px-4 overflow-y-auto flex h-full flex-col gap-3">
 					{isLoading ? (

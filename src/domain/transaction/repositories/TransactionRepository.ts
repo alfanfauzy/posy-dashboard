@@ -18,6 +18,7 @@ export type GetTransactionsInput = InputVariables<
 			'customer_name' | 'status' | 'transaction_code' | 'created_at' | 'paid_at'
 	  >
 	| keyof FilterBased
+	| 'floor_area_uuid'
 >;
 
 export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {

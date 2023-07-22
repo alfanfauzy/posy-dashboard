@@ -2,74 +2,42 @@ import {TransactionStatus} from '@/domain/transaction/model';
 import {Can} from '@/view/auth/components/organisms/rbac';
 import FilterChip from '@/view/common/components/atoms/chips/filter-chip';
 import InputSearch from '@/view/common/components/atoms/input/search';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
-import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import {
 	onChangeSearch,
+	onChangeStatus,
+	onChangeToggleNotifBar,
+	onChangeToggleTableCapacity,
 	onClearSearch,
 } from '@/view/common/store/slices/transaction';
 import {requestFullScreen} from '@/view/common/utils/UtilsRequestFullScreen';
 import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
 import {useGetTransactionSummaryViewModel} from '@/view/transaction/view-models/GetTransactionSummaryViewModel';
 import {Popover, Skeleton} from 'antd';
-import {useRouter} from 'next/router';
 import {Button} from 'posy-fnb-core';
 import React from 'react';
 import {AiOutlineFullscreen} from 'react-icons/ai';
-import {BsList, BsThreeDotsVertical} from 'react-icons/bs';
+import {BsThreeDotsVertical} from 'react-icons/bs';
 import {IoMdNotificationsOutline} from 'react-icons/io';
 
-const Menu = (onChangeViewType: (val: string) => void) => {
-	return (
-		<div className="flex flex-col gap-4">
-			<p
-				onClick={() => onChangeViewType('table')}
-				className="hover:text-primary-main cursor-pointer"
-			>
-				Table View
-			</p>
-			<p
-				onClick={() => onChangeViewType('transaction')}
-				className="hover:text-primary-main cursor-pointer"
-			>
-				Transaction View
-			</p>
-		</div>
-	);
-};
+import ViewTypeMenu from '../../molecules/view-type-menu';
 
 type TransactionHeaderProps = {
-	status: string;
-	onChangeStatus: (status: string) => void;
-	openTableCapacity: () => void;
-	openNotifBar: () => void;
-	isOpenNotifBar: boolean;
 	loadCreateTransaction: boolean;
 	handleCreateTransaction: (outletId: string) => void;
-	onChangeViewType: (viewType: string) => void;
-	viewType: string;
 };
 
 const TransactionHeader = ({
-	status,
-	onChangeStatus,
-	isOpenNotifBar,
-	openNotifBar,
-	openTableCapacity,
 	loadCreateTransaction,
 	handleCreateTransaction,
-	onChangeViewType,
-	viewType,
 }: TransactionHeaderProps) => {
 	const {
 		auth: {outletId, isSubscription, isLoggedIn},
-		transaction: {search},
+		transaction: {search, viewType, isOpenNotifBar, status, selectedArea},
 	} = useAppSelector(state => state);
 	const dispatch = useAppDispatch();
-	const {width} = useViewportListener();
-	const {query} = useRouter();
 
 	const [openSearch, {open, close}] = useDisclosure({initialState: false});
 
@@ -93,9 +61,9 @@ const TransactionHeader = ({
 		statusParams: string,
 	) => {
 		if (status === statusParams) {
-			onChangeStatus('');
+			dispatch(onChangeStatus(''));
 		} else {
-			onChangeStatus(statusParams);
+			dispatch(onChangeStatus(statusParams));
 		}
 	};
 
@@ -111,16 +79,7 @@ const TransactionHeader = ({
 	return (
 		<article className="h-fit">
 			<aside className="flex items-start justify-between">
-				<div className="flex items-center gap-2">
-					{width <= 1280 && (
-						<BsList
-							onClick={() => dispatch(setOpenDrawer(true))}
-							size={24}
-							className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
-						/>
-					)}
-					<p className="text-xxl-semibold text-neutral-100">Transaction</p>
-				</div>
+				<NavDrawer title="Transaction" />
 
 				<div className="flex items-center gap-6">
 					<div
@@ -129,7 +88,7 @@ const TransactionHeader = ({
 						} relative hover:bg-secondary-border duration-300 ease-in-out cursor-pointer rounded-full p-1`}
 					>
 						<IoMdNotificationsOutline
-							onClick={openNotifBar}
+							onClick={() => dispatch(onChangeToggleNotifBar(true))}
 							className="cursor-pointer hover:opacity-70"
 							size={28}
 						/>
@@ -146,7 +105,7 @@ const TransactionHeader = ({
 						size={24}
 					/>
 
-					<Popover content={() => Menu(onChangeViewType)} placement="bottom">
+					<Popover content={ViewTypeMenu} placement="bottom">
 						<BsThreeDotsVertical
 							size={20}
 							className="cursor-pointer hover:opacity-70"
@@ -187,14 +146,14 @@ const TransactionHeader = ({
 									: 'border-neutral-50 '
 							}`}
 						/>
-						{query.view_type === 'transaction' && (
+						{viewType === 'transaction' && (
 							<FilterChip
 								label={`Table Capacity: ${dataSummary.available_capacity}/${dataSummary.table_capacity}`}
 								openSearch={openSearch}
-								onClick={openTableCapacity}
+								onClick={() => dispatch(onChangeToggleTableCapacity(true))}
 							/>
 						)}
-						{query.view_type === 'transaction' && (
+						{viewType === 'transaction' && selectedArea && (
 							<InputSearch
 								isTransaction
 								isOpen={openSearch}
@@ -206,7 +165,7 @@ const TransactionHeader = ({
 						)}
 					</div>
 
-					{viewType === 'transaction' && (
+					{viewType === 'transaction' && selectedArea && (
 						<div className="w-36">
 							<Can I="create" an="transaction">
 								<Button

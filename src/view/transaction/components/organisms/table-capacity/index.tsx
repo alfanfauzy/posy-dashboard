@@ -1,22 +1,23 @@
 import FilterChip from '@/view/common/components/atoms/chips/filter-chip';
 import useClickOutside from '@/view/common/hooks/useClickOutside';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeToggleTableCapacity} from '@/view/common/store/slices/transaction';
 import {useGetTableStatusViewModel} from '@/view/transaction/view-models/GetTableStatusViewModel';
 import {useGetTransactionSummaryViewModel} from '@/view/transaction/view-models/GetTransactionSummaryViewModel';
 import {Loading} from 'posy-fnb-core';
 import React, {useRef} from 'react';
 
-type TableGridViewProps = {
-	closeTableCapacity: () => void;
-};
-
-const TableGridView = ({closeTableCapacity}: TableGridViewProps) => {
+const TableCapacity = () => {
+	const dispatch = useAppDispatch();
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
 	);
 
-	const ref = useRef<HTMLDivElement>(null);
-	useClickOutside({ref, handleClick: closeTableCapacity});
+	const tableCapacityRef = useRef<HTMLDivElement>(null);
+	useClickOutside({
+		ref: tableCapacityRef,
+		handleClick: () => dispatch(onChangeToggleTableCapacity(false)),
+	});
 
 	const {data, isLoading} = useGetTableStatusViewModel(
 		{
@@ -38,9 +39,9 @@ const TableGridView = ({closeTableCapacity}: TableGridViewProps) => {
 		);
 
 	return (
-		<section className="h-screen w-screen overflow-auto bg-neutral-100 bg-opacity-60 z-50 inset-0 absolute">
-			<article className="h-full w-full flex flex-col items-center justify-center">
-				<div ref={ref}>
+		<section className="min-h-screen w-screen overflow-auto bg-neutral-100 bg-opacity-60 z-50 inset-0 absolute">
+			<article className="py-10 w-full flex flex-col items-center justify-center">
+				<div ref={tableCapacityRef}>
 					{(isLoading || loadSummary) && (
 						<div className="flex h-full items-center justify-center">
 							<Loading size={90} />
@@ -81,4 +82,4 @@ const TableGridView = ({closeTableCapacity}: TableGridViewProps) => {
 	);
 };
 
-export default TableGridView;
+export default TableCapacity;

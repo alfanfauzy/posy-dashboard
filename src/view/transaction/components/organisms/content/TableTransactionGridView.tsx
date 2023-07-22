@@ -1,3 +1,5 @@
+import {Area} from '@/domain/area/model';
+import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {useGetTablesViewModel} from '@/view/table-management/view-models/GetTablesViewModel';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
@@ -18,7 +20,16 @@ const TableTransactionGridView = ({
 		state => state.auth,
 	);
 
+	const [selectedArea, setSelectedArea] = React.useState<Area | undefined>(
+		undefined,
+	);
+
 	const {setValue, watch, trigger} = methods;
+
+	const {data: dataArea} = useGetAreasViewModel({
+		show_waiting_food: false,
+		restaurant_outlet_uuid: outletId,
+	});
 
 	const {data: dataTable, isLoading: loadTable} = useGetTablesViewModel(
 		{
@@ -32,20 +43,52 @@ const TableTransactionGridView = ({
 					field: 'restaurant_outlet_uuid',
 					value: outletId,
 				},
+				{
+					field: 'floor_area_uuid',
+					value: selectedArea?.uuid || '',
+				},
 			],
 		},
-		{enabled: orderType === 0 && isSubscription && isLoggedIn},
+		{
+			enabled:
+				orderType === 0 && isSubscription && isLoggedIn && !!selectedArea,
+		},
 	);
+
+	const onChangeSelectArea = (area: Area) => {
+		setSelectedArea(area);
+		setValue('restaurant_outlet_table_uuid', '');
+		trigger();
+	};
 
 	return (
 		<section>
-			{loadTable && (
+			{dataArea && (
+				<div className={`px-4 grid gap-4 grid-cols-${dataArea?.length}`}>
+					{dataArea.map(area => (
+						<div
+							key={area.uuid}
+							onClick={() => onChangeSelectArea(area)}
+							className={`px-2 py-1 border flex items-center justify-center cursor-pointer hover:opacity-70 rounded-full whitespace-nowrap ${
+								selectedArea && selectedArea.uuid === area.uuid
+									? 'border-secondary-main bg-secondary-border'
+									: 'border-neutral-50 bg-neutral-10'
+							}`}
+						>
+							<p>{area.name}</p>
+						</div>
+					))}
+				</div>
+			)}
+
+			{loadTable && selectedArea && (
 				<article className="flex h-full items-center justify-center my-6">
 					<Loading size={90} />
 				</article>
 			)}
-			{dataTable && (
-				<aside className="grid grid-cols-5 gap-3 px-4 py-2">
+
+			{dataTable && selectedArea && (
+				<aside className="mt-4 grid grid-cols-5 gap-3 px-4 py-2">
 					{dataTable.map(table => (
 						<div
 							key={table.uuid}

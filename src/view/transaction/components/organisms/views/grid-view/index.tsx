@@ -4,40 +4,17 @@ import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
 	onChangePayment,
 	onChangeSelectedTrxId,
+	onChangeToggleNotifBar,
 } from '@/view/common/store/slices/transaction';
+import {generateBorderColor} from '@/view/transaction/utils/common';
 import {Loading} from 'posy-fnb-core';
 import React from 'react';
 
-const generateBorderColor = (
-	status: string,
-	trxId: string,
-	selectedTrxId: string,
-	firstOrderAt: number,
-	isWaitingFood: boolean,
-) => {
-	const now = Date.now();
-	const diffTime = Math.abs(now - firstOrderAt * 1000);
-	const diffMinutes = Math.floor(diffTime / 60000);
-
-	if (isWaitingFood && diffMinutes > 10) {
-		return 'border-2 border-error';
-	}
-
-	if (trxId === selectedTrxId) {
-		return 'border-2 border-primary-main';
-	}
-
-	const borderColor: Record<string, string> = {
-		WAITING_FOOD: 'border-2 border-blue-success',
-		WAITING_PAYMENT: 'border-2 border-green-success',
-	};
-	return borderColor[status];
-};
+import EmptyArea from '../../../molecules/empty-area';
 
 type GridViewProps = {
 	data: Transactions | undefined;
 	isLoading: boolean;
-	closeNotifBar: () => void;
 	loadCreateTransaction: boolean;
 	handleCreateTransaction: (outletId: string) => void;
 };
@@ -45,20 +22,16 @@ type GridViewProps = {
 const GridView = ({
 	data,
 	isLoading,
-	closeNotifBar,
 	handleCreateTransaction,
 	loadCreateTransaction,
 }: GridViewProps) => {
 	const dispatch = useAppDispatch();
 	const {
-		transaction: {selectedTrxId},
+		transaction: {selectedTrxId, status, selectedArea},
 		auth: {outletId},
 	} = useAppSelector(state => state);
 
 	const handleSelectTrx = (trxId: string) => {
-		// if (width <= 1280) {
-		// 	collapseSidebar(true);
-		// }
 		dispatch(onChangeSelectedTrxId({id: trxId}));
 		dispatch(
 			onChangePayment({
@@ -69,8 +42,12 @@ const GridView = ({
 				},
 			}),
 		);
-		closeNotifBar();
+		dispatch(onChangeToggleNotifBar(false));
 	};
+
+	if (!selectedArea) {
+		return <EmptyArea redirect />;
+	}
 
 	return (
 		<article className="h-[80%] w-full overflow-y-auto mb-8">
@@ -79,6 +56,9 @@ const GridView = ({
 					<Loading size={90} />
 				</article>
 			)}
+
+			{!selectedArea && <EmptyArea redirect />}
+
 			{data && data.length === 0 && (
 				<article className="flex h-full items-center justify-center rounded-md bg-neutral-20">
 					<div
@@ -96,6 +76,7 @@ const GridView = ({
 					</div>
 				</article>
 			)}
+
 			{data && (
 				<article
 					className={`${
@@ -137,14 +118,6 @@ const GridView = ({
 						))}
 				</article>
 			)}
-
-			{/* {dataArea && selectedArea && (
-				<FloorList
-					dataArea={dataArea}
-					selectedArea={selectedArea}
-					onChangeSelectArea={onChangeSelectArea}
-				/>
-			)} */}
 		</article>
 	);
 };

@@ -24,8 +24,8 @@ import TransactionDetails from '../../organisms/transaction-details';
 import ManualSubmitOrder from '../manual-order';
 
 const TransactionSidebar = () => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const qrRef = useRef<any>();
+	const qrRef =
+		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 	const {
 		selectedTrxId,
 		payment: {discount_percentage},
@@ -90,10 +90,11 @@ const TransactionSidebar = () => {
 						reset({
 							customer_name: '',
 							total_pax: '',
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any
-							restaurant_outlet_table_uuid: '' as any,
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any
-							transaction_category: '' as any,
+							restaurant_outlet_table_uuid: '',
+							transaction_category: {
+								label: '',
+								value: 0,
+							},
 						});
 					}
 				},

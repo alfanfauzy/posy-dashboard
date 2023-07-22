@@ -3,6 +3,7 @@
  * Transaction reducer
  *
  */
+import {Area} from '@/domain/area/model';
 import {Table} from '@/domain/table/model';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
@@ -12,12 +13,19 @@ type Payment = {
 	discount_percentage: number;
 };
 
+export type ViewType = 'table' | 'transaction';
+
 export type TransactionState = {
 	search: string;
 	selectedTrxId: string;
 	payment: Payment;
 	selectedTable: Table | null;
 	prevTable: Table | null;
+	viewType: ViewType;
+	isOpenNotifBar: boolean;
+	isOpenTableCapacity: boolean;
+	selectedArea: Area | null;
+	status: string;
 };
 
 const initialState: TransactionState = {
@@ -30,6 +38,11 @@ const initialState: TransactionState = {
 	},
 	selectedTable: null,
 	prevTable: null,
+	viewType: 'transaction',
+	isOpenNotifBar: false,
+	isOpenTableCapacity: false,
+	selectedArea: null,
+	status: '',
 };
 
 export const TransactionSlice = createSlice({
@@ -54,9 +67,23 @@ export const TransactionSlice = createSlice({
 			action: PayloadAction<{table: Table | null; prevTable?: Table | null}>,
 		) => {
 			state.selectedTable = action.payload.table;
-			if (action.payload.prevTable) {
-				state.prevTable = action.payload.prevTable;
-			}
+			state.prevTable = action.payload.prevTable || null;
+		},
+		onChangeViewType: (state, action: PayloadAction<ViewType>) => {
+			state.viewType = action.payload;
+			state.selectedTrxId = '';
+		},
+		onChangeToggleTableCapacity: (state, action: PayloadAction<boolean>) => {
+			state.isOpenTableCapacity = action.payload;
+		},
+		onChangeToggleNotifBar: (state, action: PayloadAction<boolean>) => {
+			state.isOpenNotifBar = action.payload;
+		},
+		onChangeSelectedArea: (state, action: PayloadAction<Area | null>) => {
+			state.selectedArea = action.payload;
+		},
+		onChangeStatus: (state, action: PayloadAction<string>) => {
+			state.status = action.payload;
 		},
 	},
 });
@@ -68,6 +95,11 @@ export const {
 	onChangeSelectedTrxId,
 	onChangePayment,
 	onChangeSelectedTable,
+	onChangeViewType,
+	onChangeToggleTableCapacity,
+	onChangeToggleNotifBar,
+	onChangeSelectedArea,
+	onChangeStatus,
 } = TransactionSlice.actions;
 
 export default TransactionSlice.reducer;

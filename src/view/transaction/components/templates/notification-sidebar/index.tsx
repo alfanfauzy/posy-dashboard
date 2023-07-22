@@ -1,7 +1,8 @@
 import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import Badge from '@/view/common/components/atoms/badge';
 import {listNotificationTabs} from '@/view/common/constants/notification';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeToggleNotifBar} from '@/view/common/store/slices/transaction';
 import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
 import {useGetNotificationsViewModel} from '@/view/notification/view-models/GetNotificationsViewModel';
 import {Button, Loading} from 'posy-fnb-core';
@@ -10,13 +11,8 @@ import {IoMdClose} from 'react-icons/io';
 
 import Notificationitem from '../../molecules/notification-item';
 
-type NotificationSidebarProps = {
-	closeNotificationSidebar: () => void;
-};
-
-const NotificationSidebar = ({
-	closeNotificationSidebar,
-}: NotificationSidebarProps) => {
+const NotificationSidebar = () => {
+	const dispatch = useAppDispatch();
 	const {outletId} = useAppSelector(state => state.auth);
 
 	const [tabValueOrder, setTabValueOrder] = useState(0);
@@ -46,7 +42,7 @@ const NotificationSidebar = ({
 						<IoMdClose
 							size={28}
 							className="cursor-pointer hover:opacity-70"
-							onClick={closeNotificationSidebar}
+							onClick={() => dispatch(onChangeToggleNotifBar(false))}
 						/>
 					</div>
 				</section>
@@ -110,7 +106,6 @@ const NotificationSidebar = ({
 								item={item}
 								idx={idx}
 								lengthData={dataNotification.length}
-								closeNotificationSidebar={closeNotificationSidebar}
 							/>
 						))}
 					</div>

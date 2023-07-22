@@ -1,11 +1,9 @@
 import {Areas} from '@/domain/area/model';
-import useViewportListener from '@/view/common/hooks/useViewportListener';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import {onOpenEditLayout} from '@/view/common/store/slices/table';
 import {Button} from 'posy-fnb-core';
 import React from 'react';
-import {BsList} from 'react-icons/bs';
 
 type TableSettingsProps = {
 	isLoadingSaveTable: boolean;
@@ -17,20 +15,12 @@ const TableSettingHeader = ({
 	isLoadingSaveTable,
 }: TableSettingsProps) => {
 	const dispatch = useAppDispatch();
-	const {width} = useViewportListener();
 	const {isEditLayout} = useAppSelector(state => state.table);
 
 	return (
 		<aside className="flex items-center gap-4">
-			{width <= 1280 && (
-				<BsList
-					onClick={() => dispatch(setOpenDrawer(true))}
-					size={24}
-					className="cursor-pointer text-neutral-100 hover:opacity-70 duration-300 ease-in-out"
-				/>
-			)}
 			<div className="flex w-full justify-between items-end">
-				<p className="text-xxl-semibold text-neutral-100">Table Settings</p>
+				<NavDrawer title="Table Settings" />
 				{!isEditLayout && dataArea.length > 0 && (
 					<p
 						onClick={() => dispatch(onOpenEditLayout())}

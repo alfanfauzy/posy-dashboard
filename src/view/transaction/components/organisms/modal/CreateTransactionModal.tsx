@@ -128,25 +128,30 @@ const CreateTransactionModal = ({
 					{isEdit ? 'Edit' : 'Create New'} Transaction
 				</p>
 				<div className="grid grid-cols-3 gap-4">
-					<reactHookForm.Controller
-						control={control}
-						name="transaction_category"
-						render={({field: {onChange}}) => (
-							<Select
-								isSearchable={false}
-								className="rounded-md !mt-0 text-l-regular h-10"
-								onChange={e => {
-									onChange(e);
-									setValue('restaurant_outlet_table_uuid', '');
-								}}
-								value={watch('transaction_category')}
-								options={orderType}
-								placeholder="Select Type"
-							/>
-						)}
-					/>
-
 					<div>
+						<p className="text-neutral-10 mb-1">Transaction Type</p>
+						<reactHookForm.Controller
+							control={control}
+							name="transaction_category"
+							render={({field: {onChange}}) => (
+								<Select
+									isSearchable={false}
+									className="rounded-md !mt-0 text-l-regular h-10"
+									onChange={e => {
+										onChange(e);
+										setValue('restaurant_outlet_table_uuid', '', {
+											shouldValidate: true,
+										});
+									}}
+									value={watch('transaction_category')}
+									options={orderType}
+									placeholder="Select Type"
+								/>
+							)}
+						/>
+					</div>
+					<div>
+						<p className="text-neutral-10 mb-1">Pax (Optional)</p>
 						<Input
 							size="l"
 							placeholder="Pax (Optional)"
@@ -159,12 +164,15 @@ const CreateTransactionModal = ({
 							error={!!errors.total_pax}
 						/>
 					</div>
-					<Input
-						size="l"
-						placeholder="Customer name (Optional)"
-						{...register('customer_name')}
-						error={!!errors.customer_name}
-					/>
+					<div>
+						<p className="text-neutral-10 mb-1">Customer name (Optional)</p>
+						<Input
+							size="l"
+							placeholder="Customer name (Optional)"
+							{...register('customer_name')}
+							error={!!errors.customer_name}
+						/>
+					</div>
 				</div>
 			</div>
 			{watch('transaction_category.value') === 0 && (

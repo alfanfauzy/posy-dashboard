@@ -1,18 +1,14 @@
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
-import {Area} from '@/domain/area/model';
 import {QrCode} from '@/domain/qr-code/model';
 import {TransactionStatus} from '@/domain/transaction/model';
-import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
 import CancelIcon from '@/view/common/assets/icons/cancel';
 import {handlePlayAudio} from '@/view/common/components/templates/layout';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
-import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import {useCreateTransactionViewModel} from '@/view/transaction/view-models/CreateTransactionViewModel';
 import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTransactionsViewModel';
 import {useQueryClient} from '@tanstack/react-query';
-import {useRouter} from 'next/router';
 import {closeSnackbar, useSnackbar} from 'notistack';
 import React, {useEffect, useRef, useState} from 'react';
 import {useReactToPrint} from 'react-to-print';
@@ -22,40 +18,24 @@ import PrintQrCodeReceipt from '../../organisms/receipt/PrintQrCodeReceipt';
 import TransactionHeader from '../../organisms/transaction-header';
 import TransactionView from '../transaction-view';
 
-type TransactionSectionProps = {
-	openTableCapacity: () => void;
-	openNotifBar: () => void;
-	closeNotifBar: () => void;
-	isOpenNotifBar: boolean;
-};
-
-const TransactionSection = ({
-	openTableCapacity,
-	openNotifBar,
-	closeNotifBar,
-	isOpenNotifBar,
-}: TransactionSectionProps) => {
-	const {query} = useRouter();
+const TransactionSection = () => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {enqueueSnackbar} = useSnackbar();
-	const {search} = useAppSelector(state => state.transaction);
+	const {search, status, selectedArea} = useAppSelector(
+		state => state.transaction,
+	);
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
 	);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const qrRef = useRef<any>();
+	const qrRef =
+		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const audioRef = useRef<any>();
+	const audioRef =
+		useRef<HTMLAudioElement>() as React.MutableRefObject<HTMLAudioElement>;
 
 	const [openModalTransaction, setOpenModalTransaction] = useState(false);
-	const [selectedArea, setSelectedArea] = useState<Area>();
-	const [status, setStatus] = useState('');
-	const [viewType, setViewType] = useState(
-		(query.view_type as string) || 'transaction',
-	);
 
 	const {data, isLoading: loadData} = useGetTransactionsViewModel(
 		{
@@ -78,27 +58,14 @@ const TransactionSection = ({
 					field: 'restaurant_outlet_uuid',
 					value: outletId,
 				},
+				{
+					field: 'floor_area_uuid',
+					value: selectedArea?.uuid || '',
+				},
 			],
 		},
 		{
 			enabled: outletId?.length > 0 && isSubscription && isLoggedIn,
-		},
-	);
-
-	const {data: dataArea} = useGetAreasViewModel(
-		{
-			restaurant_outlet_uuid: outletId,
-			show_waiting_food: true,
-		},
-		{
-			onSuccess: dt => {
-				if (dt.data.objs?.length > 0 && query.area_uuid) {
-					const area = dt.data.objs.find(item => item.uuid === query.area_uuid);
-					setSelectedArea(area);
-				} else if (dt.data.objs?.length > 0) {
-					setSelectedArea(dt.data.objs[0]);
-				}
-			},
 		},
 	);
 
@@ -129,16 +96,6 @@ const TransactionSection = ({
 		createTransaction({restaurant_outlet_uuid: restaurantOutletId});
 	};
 
-	const onChangeSelectArea = async (val: Area) => {
-		setSelectedArea(val);
-		await onChangeQueryParams('area_uuid', val?.uuid);
-	};
-
-	const onChangeViewType = async (val: string) => {
-		setViewType(val);
-		await onChangeQueryParams('view_type', val);
-	};
-
 	const play = () => {
 		if (audioRef.current) {
 			audioRef.current.play();
@@ -148,8 +105,6 @@ const TransactionSection = ({
 	const handleCloseModalCreateTransaction = (value: boolean) => {
 		setOpenModalTransaction(value);
 	};
-
-	const onChangeStatus = (val: string) => setStatus(val);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -238,30 +193,16 @@ const TransactionSection = ({
 	return (
 		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-lg bg-neutral-10 p-4">
 			<TransactionHeader
-				status={status}
-				openNotifBar={openNotifBar}
-				onChangeStatus={onChangeStatus}
-				isOpenNotifBar={isOpenNotifBar}
-				openTableCapacity={openTableCapacity}
 				loadCreateTransaction={loadCreateTransaction}
 				handleCreateTransaction={handleCreateTransaction}
-				onChangeViewType={onChangeViewType}
-				viewType={viewType}
 			/>
 
 			<TransactionView
 				dataTransaction={data}
 				loadTransaction={loadData}
-				closeNotifBar={closeNotifBar}
 				loadCreateTransaction={loadCreateTransaction}
 				handleCreateTransaction={handleCreateTransaction}
-				dataArea={dataArea}
-				selectedArea={selectedArea}
-				onChangeSelectArea={onChangeSelectArea}
-				viewType={viewType}
 			/>
-
-			<audio ref={audioRef} src="/sounds/notif.mp3" />
 
 			{dataQr && <PrintQrCodeReceipt data={dataQr} printReceiptRef={qrRef} />}
 
@@ -271,6 +212,8 @@ const TransactionSection = ({
 					handleClose={handleCloseModalCreateTransaction}
 				/>
 			)}
+
+			<audio ref={audioRef} src="/sounds/notif.mp3" />
 		</section>
 	);
 };

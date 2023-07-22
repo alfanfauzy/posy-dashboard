@@ -1,6 +1,9 @@
 import {Notification, NotificationAction} from '@/domain/notification/model';
 import {useAppDispatch} from '@/view/common/store/hooks';
-import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {
+	onChangeSelectedTrxId,
+	onChangeToggleNotifBar,
+} from '@/view/common/store/slices/transaction';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {useCreateSetReadNotificationViewModel} from '@/view/notification/view-models/CreateSetReadNotificationViewModel';
 import {Divider} from 'antd';
@@ -13,15 +16,9 @@ type NotificationitemProps = {
 	item: Notification;
 	lengthData: number;
 	idx: number;
-	closeNotificationSidebar: () => void;
 };
 
-const Notificationitem = ({
-	item,
-	lengthData,
-	idx,
-	closeNotificationSidebar,
-}: NotificationitemProps) => {
+const Notificationitem = ({item, lengthData, idx}: NotificationitemProps) => {
 	const dispatch = useAppDispatch();
 	const {createSetReadNotification} = useCreateSetReadNotificationViewModel({});
 
@@ -45,7 +42,7 @@ const Notificationitem = ({
 				}),
 			);
 			setTimeout(() => {
-				closeNotificationSidebar();
+				dispatch(onChangeToggleNotifBar(false));
 			}, 300);
 		}
 	};
