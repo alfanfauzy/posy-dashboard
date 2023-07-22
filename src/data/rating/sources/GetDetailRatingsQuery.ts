@@ -5,7 +5,7 @@ import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 
 import {GetDetailRatingsDataResponse} from '../types/GetDetailRatingsType';
 
-export const GetDetailRatingsQueryKey = 'rating/list' as const;
+export const GetDetailRatingsQueryKey = 'rating/detail' as const;
 
 const GetDetailRatings = async (
 	input: GetDetailRatingsInput,
