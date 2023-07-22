@@ -1,4 +1,3 @@
-import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import Badge from '@/view/common/components/atoms/badge';
 import {listNotificationTabs} from '@/view/common/constants/notification';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
@@ -9,6 +8,7 @@ import {Button, Loading} from 'posy-fnb-core';
 import React, {useState} from 'react';
 import {IoMdClose} from 'react-icons/io';
 
+import EmptyData from '../../molecules/empty-state/empty-data';
 import Notificationitem from '../../molecules/notification-item';
 
 const NotificationSidebar = () => {
@@ -90,12 +90,7 @@ const NotificationSidebar = () => {
 				)}
 
 				{!dataNotification && !loadNotification && (
-					<div className="flex h-full w-full flex-col items-center justify-center gap-4">
-						<div className="-mt-24">
-							<NoOrderIcon />
-							<p className="mt-4 text-l-medium">There’s no notification yet</p>
-						</div>
-					</div>
+					<EmptyData message="There's no notification yet" />
 				)}
 
 				{dataNotification && (

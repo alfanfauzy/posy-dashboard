@@ -5,7 +5,7 @@ import {
 	onCloseEditLayout,
 } from '@/view/common/store/slices/table';
 import {useUpdateSaveTableLayoutViewModel} from '@/view/table-management/view-models/UpdateSaveTableLayoutViewModel';
-import EmptyArea from '@/view/transaction/components/molecules/empty-area';
+import EmptyArea from '@/view/transaction/components/molecules/empty-state/empty-area';
 import dynamic from 'next/dynamic';
 import {Loading} from 'posy-fnb-core';
 

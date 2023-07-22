@@ -7,14 +7,17 @@ import useClickOutside from '@/view/common/hooks/useClickOutside';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onChangeSelectedTable} from '@/view/common/store/slices/transaction';
+import {
+	onChangeIsOpenEditTransactionFromTableView,
+	onChangeSelectedTable,
+} from '@/view/common/store/slices/transaction';
 import {useGetTableLayoutByFloorViewModel} from '@/view/table-management/view-models/GetTableLayoutByFloorViewModel';
 import {Popover} from 'antd';
 import Image from 'next/image';
 import {Loading} from 'posy-fnb-core';
 import React, {useRef, useState} from 'react';
 
-import EmptyArea from '../../../molecules/empty-area';
+import EmptyArea from '../../../molecules/empty-state/empty-area';
 import TableViewPopover from '../../../molecules/table-view-popover';
 import CreateTransactionFromTableModal from '../../modal/CreateTransactionFromTableModal';
 
@@ -37,13 +40,6 @@ const TableView = () => {
 	useClickOutside({
 		ref: tableRef,
 		handleClick: closePopOver,
-	});
-
-	const [
-		isOpenCreateTransaction,
-		{open: openCreateTransaction, close: closeCreateTransaction},
-	] = useDisclosure({
-		initialState: false,
 	});
 
 	const {isLoading: loadTable} = useGetTableLayoutByFloorViewModel(
@@ -73,7 +69,7 @@ const TableView = () => {
 				}),
 			);
 		} else {
-			openCreateTransaction();
+			dispatch(onChangeIsOpenEditTransactionFromTableView(true));
 			dispatch(
 				onChangeSelectedTable({
 					prevTable: selectedTable,
@@ -85,7 +81,6 @@ const TableView = () => {
 
 	const RenderSquare = (
 		i: number,
-		openCreateTransaction: () => void,
 		closePopOver: () => void,
 		selectedArea: Area,
 	) => {
@@ -110,9 +105,7 @@ const TableView = () => {
 				>
 					<div className="w-full h-full flex items-center justify-center">
 						<Popover
-							content={() =>
-								TableViewPopover(item, openCreateTransaction, closePopOver)
-							}
+							content={() => TableViewPopover(item, closePopOver)}
 							open={showPopOverDrowdown}
 							placement="bottom"
 						>
@@ -155,24 +148,14 @@ const TableView = () => {
 
 	return (
 		<main className="overflow-auto">
-			<CreateTransactionFromTableModal
-				open={isOpenCreateTransaction}
-				handleClose={closeCreateTransaction}
-			/>
+			<CreateTransactionFromTableModal />
 
 			<section>
 				<div ref={tableRef} className="bg-[#F7F7F7] p-1 rounded-lg">
 					<div className={`w-full h-fit grid grid-cols-${selectedArea.width} `}>
 						{new Array(selectedArea.height * selectedArea.width)
 							.fill(0)
-							.map((_, i) =>
-								RenderSquare(
-									i,
-									openCreateTransaction,
-									closePopOver,
-									selectedArea,
-								),
-							)}
+							.map((_, i) => RenderSquare(i, closePopOver, selectedArea))}
 					</div>
 				</div>
 			</section>

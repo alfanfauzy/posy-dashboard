@@ -1,12 +1,11 @@
 import {Order, OrderDetail} from '@/domain/order/model';
 import {generateStatusOrderDetail} from '@/view/common/utils/UtilsGenerateOrderStatus';
+import {CancelOptions} from '@/view/transaction/constants';
 import {ValidationSchemaCancelOrderType} from '@/view/transaction/schemas/cancel-order';
 import {Checkbox, Divider, Select} from 'antd';
 import {Textarea} from 'posy-fnb-core';
 import React from 'react';
 import {Controller, useFieldArray, useFormContext} from 'react-hook-form';
-
-import {CancelOptions} from './CancelOrderBottomsheet';
 
 type CancelDetailOrderProps = {
 	detail: OrderDetail;

@@ -7,10 +7,6 @@ import {FilterBased, InputVariables} from '@/domain/vo/BaseInput';
 import {Pagination} from '@/domain/vo/BasePagination';
 import {ResultQuery} from '@/domain/vo/BaseResponse';
 
-/**
- * GET
- */
-
 export type GetTransactionsInput = InputVariables<
 	keyof Transaction,
 	| keyof Pick<
@@ -18,7 +14,6 @@ export type GetTransactionsInput = InputVariables<
 			'customer_name' | 'status' | 'transaction_code' | 'created_at' | 'paid_at'
 	  >
 	| keyof FilterBased
-	| 'floor_area_uuid'
 >;
 
 export type GetTransactionsResult = ResultQuery<Transactions | undefined> & {

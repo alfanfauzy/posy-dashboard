@@ -1,17 +1,16 @@
 import {Table} from '@/domain/table/model';
 import {useAppDispatch} from '@/view/common/store/hooks';
-import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {
+	onChangeIsOpenEditTransactionFromTableView,
+	onChangeSelectedTrxId,
+} from '@/view/common/store/slices/transaction';
 import React from 'react';
 
-const TableViewPopover = (
-	item: Table,
-	openCreateTransaction: () => void,
-	closePopOver: () => void,
-) => {
+const TableViewPopover = (item: Table, closePopOver: () => void) => {
 	const dispatch = useAppDispatch();
 
 	const onCreateTransaction = () => {
-		openCreateTransaction();
+		dispatch(onChangeIsOpenEditTransactionFromTableView(true));
 		closePopOver();
 	};
 

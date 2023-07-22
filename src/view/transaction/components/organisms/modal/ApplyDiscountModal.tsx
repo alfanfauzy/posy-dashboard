@@ -1,9 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {GetPaymentSummaryQueryKey} from '@/data/transaction/sources/GetPaymentSummaryQuery';
 import {ApplyDiscount} from '@/domain/transaction/repositories/CreateApplyDiscountRepository';
 import InputNumeric from '@/view/common/components/atoms/input/numeric/InputNumeric';
 import {useForm} from '@/view/common/hooks/useForm';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeIsApplyDiscount} from '@/view/common/store/slices/transaction';
 import {toRupiah} from '@/view/common/utils/common';
 import {
 	ValidationSchemaApplyDiscountType,
@@ -15,22 +15,17 @@ import dynamic from 'next/dynamic';
 import {Button, Input} from 'posy-fnb-core';
 import React, {useEffect, useState} from 'react';
 
-const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
+const Modal = dynamic(() => import('posy-fnb-core').then(mod => mod.Modal), {
 	loading: () => <div />,
 });
 
-type ApplyDiscountModalProps = {
-	isOpenApplyDiscount: boolean;
-	closeApplyDiscount: () => void;
-};
-
-const ApplyDiscountModal = ({
-	closeApplyDiscount,
-	isOpenApplyDiscount,
-}: ApplyDiscountModalProps) => {
+const ApplyDiscountModal = () => {
+	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
-	const {selectedTrxId, payment} = useAppSelector(state => state.transaction);
+	const {selectedTrxId, payment, isApplyDiscount} = useAppSelector(
+		state => state.transaction,
+	);
 
 	const [price] = useState(Number(payment.subtotal) || 0);
 
@@ -49,12 +44,14 @@ const ApplyDiscountModal = ({
 		},
 	});
 
+	const handleClose = () => dispatch(onChangeIsApplyDiscount(false));
+
 	const {createApplyDiscount, isLoading} = useCreateApplyDiscountViewModel({
 		onSuccess: _data => {
 			const data = _data as ApplyDiscount;
 			if (data) {
 				queryClient.invalidateQueries([GetPaymentSummaryQueryKey]);
-				closeApplyDiscount();
+				handleClose();
 			}
 		},
 	});
@@ -71,13 +68,13 @@ const ApplyDiscountModal = ({
 		setValue('discount_percentage', payment.discount_percentage.toString());
 		const discountPrice = (Number(payment.discount_percentage) * price) / 100;
 		setValue('discount_price', discountPrice.toString());
-	}, [payment.discount_percentage]);
+	}, [payment.discount_percentage, price, setValue]);
 
 	return (
 		<Modal
 			closeOverlay
-			open={isOpenApplyDiscount}
-			handleClose={closeApplyDiscount}
+			open={isApplyDiscount}
+			handleClose={handleClose}
 			className="min-w-[340px] p-8"
 		>
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -120,11 +117,7 @@ const ApplyDiscountModal = ({
 				</aside>
 
 				<div className="mt-10 flex items-center justify-center gap-4">
-					<Button
-						variant="secondary"
-						className="w-1/2"
-						onClick={closeApplyDiscount}
-					>
+					<Button variant="secondary" className="w-1/2" onClick={handleClose}>
 						Close
 					</Button>
 					<Button

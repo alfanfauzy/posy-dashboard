@@ -1,3 +1,5 @@
+import {TransactionTabsType} from '@/view/common/store/slices/transaction';
+
 export const listCancelReason = [
 	{
 		label: 'Out of stock',
@@ -43,7 +45,10 @@ export const orderTransactionType = {
 	},
 };
 
-export const listOrderTabs = [
-	{label: 'Order', value: 0},
-	{label: 'Payment', value: 1},
+export const listTransactionTabs: Array<{
+	label: string;
+	value: TransactionTabsType;
+}> = [
+	{label: 'Order', value: 'order'},
+	{label: 'Payment', value: 'payment'},
 ];

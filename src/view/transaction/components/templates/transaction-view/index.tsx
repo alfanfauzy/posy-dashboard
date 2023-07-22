@@ -50,7 +50,7 @@ const TransactionView = ({
 		},
 	);
 
-	const contents: Record<string, JSX.Element> = {
+	const ViewTypes: Record<string, JSX.Element> = {
 		table: <TableView />,
 		transaction: (
 			<GridView
@@ -64,12 +64,14 @@ const TransactionView = ({
 
 	return (
 		<>
-			{contents[viewType]}
-			<FloorList
-				dataArea={dataArea || []}
-				selectedArea={selectedArea}
-				onChangeSelectArea={val => dispatch(onChangeSelectedArea(val))}
-			/>
+			{ViewTypes[viewType]}
+			{viewType === 'table' ? (
+				<FloorList
+					dataArea={dataArea || []}
+					selectedArea={selectedArea}
+					onChangeSelectArea={val => dispatch(onChangeSelectedArea(val))}
+				/>
+			) : null}
 		</>
 	);
 };

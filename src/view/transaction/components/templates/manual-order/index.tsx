@@ -7,7 +7,6 @@ import {AddonVariant} from '@/domain/addon/model';
 import {MenuProductBased} from '@/domain/product/model/ProductMenu';
 import {Product} from '@/domain/product/model/ProductOutlet';
 import {Transaction} from '@/domain/transaction/model';
-import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
@@ -15,6 +14,8 @@ import {closeModal, openModal} from '@/view/common/store/slices/modal';
 import {
 	onAddOrder,
 	onChangeAddOn,
+	onChangeIsOpenCreateOrder,
+	onChangeIsOpenPrintToKitchen,
 	onChangeNotes,
 	onChangeProduct,
 	onChangeQuantity,
@@ -38,35 +39,31 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {CgTrash} from 'react-icons/cg';
 import {IoMdArrowBack} from 'react-icons/io';
 
+import EmptyData from '../../molecules/empty-state/empty-data';
+
 const BottomSheet = dynamic(
-	() => import('posy-fnb-core').then(el => el.BottomSheet),
+	() => import('posy-fnb-core').then(mod => mod.BottomSheet),
 	{
 		loading: () => <div />,
 	},
 );
 
 type ManualSubmitOrderProps = {
-	isOpenCreateOrder: boolean;
-	closeCreateOrder: () => void;
-	dataTransaction: Transaction;
-	openPrintToKitchen: () => void;
+	dataTransaction: Transaction | undefined;
 };
 
-const ManualSubmitOrder = ({
-	closeCreateOrder,
-	isOpenCreateOrder,
-	dataTransaction,
-	openPrintToKitchen,
-}: ManualSubmitOrderProps) => {
-	const queryClient = useQueryClient();
+const ManualSubmitOrder = ({dataTransaction}: ManualSubmitOrderProps) => {
 	const dispatch = useAppDispatch();
+	const queryClient = useQueryClient();
 	const [tabValueMenu, setTabValueMenu] = useState(0);
 
+	const {outletId} = useAppSelector(state => state.auth);
+	const {order, orderForm, isOpenCreateOrder} = useAppSelector(
+		state => state.order,
+	);
 	const {quantity, notes, product, addOnVariant} = useAppSelector(
 		state => state.order.orderForm,
 	);
-	const {outletId} = useAppSelector(state => state.auth);
-	const {order, orderForm} = useAppSelector(state => state.order);
 
 	const [
 		isOpenAddVariantOrder,
@@ -89,9 +86,12 @@ const ManualSubmitOrder = ({
 		);
 
 	const onCloseAddManualOrder = () => {
-		closeCreateOrder();
+		dispatch(onChangeIsOpenCreateOrder(false));
 		dispatch(onClearOrder());
 	};
+
+	const handlePrintToKitchen = () =>
+		dispatch(onChangeIsOpenPrintToKitchen(true));
 
 	const {createOrderManual, isLoading: loadCreateOrderManual} =
 		useCreateOrderManualViewModel({
@@ -104,7 +104,7 @@ const ManualSubmitOrder = ({
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				queryClient.invalidateQueries([GetTransactionQueryKey]);
 				setTimeout(() => {
-					openPrintToKitchen();
+					handlePrintToKitchen();
 				}, 500);
 			},
 		});
@@ -363,9 +363,7 @@ const ManualSubmitOrder = ({
 								<div className="mt-6 flex items-center justify-center text-l-semibold">
 									there&apos;s no product yet
 								</div>
-							) : (
-								<div />
-							)}
+							) : null}
 
 							{!loadProduct && dataProduct && memoizeProducts && (
 								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -440,7 +438,9 @@ const ManualSubmitOrder = ({
 					<div className="w-full px-6 pt-6">
 						<p className="text-xxl-bold">Your Order</p>
 						<p className="mt-1 text-l-semibold">
-							ID: {generateTransactionCode(dataTransaction?.transaction_code)}
+							ID:{' '}
+							{dataTransaction &&
+								generateTransactionCode(dataTransaction?.transaction_code)}
 						</p>
 						<div className="my-2 border-b border-neutral-30" />
 					</div>
@@ -470,27 +470,20 @@ const ManualSubmitOrder = ({
 									<div>
 										<p className="text-s-regular">Total pax</p>
 										<p className="text-l-semibold">
-											{dataTransaction.total_pax || '-'}
+											{dataTransaction?.total_pax || '-'}
 										</p>
 									</div>
 									<div className="mt-4">
 										<p className="text-s-regular">Table number</p>
 										<p className="text-l-semibold">
-											{dataTransaction.table_number || '-'}
+											{dataTransaction?.table_number || '-'}
 										</p>
 									</div>
 								</div>
 							</div>
 							<div className="my-2 border-b border-neutral-30" />
 						</aside>
-						{order.length === 0 && (
-							<div className="flex h-full w-full flex-col items-center justify-center gap-4">
-								<div className="-mt-24">
-									<NoOrderIcon />
-									<p className="text-l-medium">There’s no order yet</p>
-								</div>
-							</div>
-						)}
+						{order.length === 0 && <EmptyData message="There's no order yet" />}
 
 						{order.length > 0 && (
 							<div className="px-6">

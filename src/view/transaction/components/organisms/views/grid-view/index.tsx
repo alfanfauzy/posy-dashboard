@@ -10,7 +10,7 @@ import {generateBorderColor} from '@/view/transaction/utils/common';
 import {Loading} from 'posy-fnb-core';
 import React from 'react';
 
-import EmptyArea from '../../../molecules/empty-area';
+import EmptyArea from '../../../molecules/empty-state/empty-area';
 
 type GridViewProps = {
 	data: Transactions | undefined;

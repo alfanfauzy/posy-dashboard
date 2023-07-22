@@ -1,10 +1,7 @@
-/**
- *
- * Transaction reducer
- *
- */
 import {Area} from '@/domain/area/model';
 import {Table} from '@/domain/table/model';
+import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
+import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 type Payment = {
@@ -14,6 +11,8 @@ type Payment = {
 };
 
 export type ViewType = 'table' | 'transaction';
+
+export type TransactionTabsType = 'order' | 'payment';
 
 export type TransactionState = {
 	search: string;
@@ -26,6 +25,19 @@ export type TransactionState = {
 	isOpenTableCapacity: boolean;
 	selectedArea: Area | null;
 	status: string;
+	isOpenCreateTransaction: boolean;
+	isOpenEditTransactionFromTableView: boolean;
+	cancelTransaction: {
+		isOpen: boolean;
+		payload: CreateCancelTransactionInput | null;
+	};
+	isOpenCreatePayment: boolean;
+	paymentSuccess: {
+		isOpen: boolean;
+		payload: MakePayment | null;
+	};
+	isApplyDiscount: boolean;
+	transactionTab: TransactionTabsType;
 };
 
 const initialState: TransactionState = {
@@ -43,6 +55,19 @@ const initialState: TransactionState = {
 	isOpenTableCapacity: false,
 	selectedArea: null,
 	status: '',
+	isOpenCreateTransaction: false,
+	isOpenEditTransactionFromTableView: false,
+	cancelTransaction: {
+		isOpen: false,
+		payload: null,
+	},
+	isOpenCreatePayment: false,
+	paymentSuccess: {
+		isOpen: false,
+		payload: null,
+	},
+	isApplyDiscount: false,
+	transactionTab: 'order',
 };
 
 export const TransactionSlice = createSlice({
@@ -58,6 +83,9 @@ export const TransactionSlice = createSlice({
 		},
 		onChangeSelectedTrxId: (state, action: PayloadAction<{id: string}>) => {
 			state.selectedTrxId = action.payload.id;
+			if (action.payload.id !== '') {
+				state.isOpenNotifBar = false;
+			}
 		},
 		onChangePayment: (state, action: PayloadAction<{payment: Payment}>) => {
 			state.payment = action.payload.payment;
@@ -78,12 +106,57 @@ export const TransactionSlice = createSlice({
 		},
 		onChangeToggleNotifBar: (state, action: PayloadAction<boolean>) => {
 			state.isOpenNotifBar = action.payload;
+			if (action.payload) {
+				state.selectedTrxId = '';
+			}
 		},
 		onChangeSelectedArea: (state, action: PayloadAction<Area | null>) => {
 			state.selectedArea = action.payload;
 		},
 		onChangeStatus: (state, action: PayloadAction<string>) => {
 			state.status = action.payload;
+		},
+		onChangeIsOpenCreateTransaction: (
+			state,
+			action: PayloadAction<boolean>,
+		) => {
+			state.isOpenCreateTransaction = action.payload;
+		},
+		onChangeIsOpenEditTransactionFromTableView: (
+			state,
+			action: PayloadAction<boolean>,
+		) => {
+			state.isOpenEditTransactionFromTableView = action.payload;
+		},
+		onChangeCancelTransaction: (
+			state,
+			action: PayloadAction<{
+				isOpen: boolean;
+				payload: CreateCancelTransactionInput | null;
+			}>,
+		) => {
+			state.cancelTransaction = action.payload;
+		},
+		onChangeIsOpenCreatePayment: (state, action: PayloadAction<boolean>) => {
+			state.isOpenCreatePayment = action.payload;
+		},
+		onChangePaymentSuccess: (
+			state,
+			action: PayloadAction<{
+				isOpen: boolean;
+				payload: MakePayment | null;
+			}>,
+		) => {
+			state.paymentSuccess = action.payload;
+		},
+		onChangeIsApplyDiscount: (state, action: PayloadAction<boolean>) => {
+			state.isApplyDiscount = action.payload;
+		},
+		onChangeTransactionTab: (
+			state,
+			action: PayloadAction<TransactionTabsType>,
+		) => {
+			state.transactionTab = action.payload;
 		},
 	},
 });
@@ -100,6 +173,13 @@ export const {
 	onChangeToggleNotifBar,
 	onChangeSelectedArea,
 	onChangeStatus,
+	onChangeIsOpenCreateTransaction,
+	onChangeIsOpenEditTransactionFromTableView,
+	onChangeCancelTransaction,
+	onChangeIsOpenCreatePayment,
+	onChangePaymentSuccess,
+	onChangeIsApplyDiscount,
+	onChangeTransactionTab,
 } = TransactionSlice.actions;
 
 export default TransactionSlice.reducer;

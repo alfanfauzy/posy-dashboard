@@ -5,7 +5,7 @@ import {
 	onChangeArea,
 	onChangeToggleAddArea,
 } from '@/view/common/store/slices/area';
-import EmptyArea from '@/view/transaction/components/molecules/empty-area';
+import EmptyArea from '@/view/transaction/components/molecules/empty-state/empty-area';
 import {Button, Loading} from 'posy-fnb-core';
 import React from 'react';
 

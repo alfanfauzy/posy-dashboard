@@ -4,25 +4,46 @@ import {QrCode} from '@/domain/qr-code/model';
 import {TransactionStatus} from '@/domain/transaction/model';
 import CancelIcon from '@/view/common/assets/icons/cancel';
 import {handlePlayAudio} from '@/view/common/components/templates/layout';
+import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {
+	onChangeIsOpenCreateTransaction,
+	onChangeSelectedTrxId,
+} from '@/view/common/store/slices/transaction';
+import {generateWidth} from '@/view/transaction/utils/common';
 import {useCreateTransactionViewModel} from '@/view/transaction/view-models/CreateTransactionViewModel';
 import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTransactionsViewModel';
 import {useQueryClient} from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
 import {closeSnackbar, useSnackbar} from 'notistack';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
+import {useProSidebar} from 'react-pro-sidebar';
 import {useReactToPrint} from 'react-to-print';
 
-import CreateTransactionModal from '../../organisms/modal/CreateTransactionModal';
-import PrintQrCodeReceipt from '../../organisms/receipt/PrintQrCodeReceipt';
+const CreateTransactionModal = dynamic(
+	() => import('../../organisms/modal/CreateTransactionModal'),
+	{
+		loading: () => <div />,
+	},
+);
+
+const PrintQrCodeReceipt = dynamic(
+	() => import('../../organisms/receipt/PrintQrCodeReceipt'),
+	{
+		loading: () => <div />,
+	},
+);
+
 import TransactionHeader from '../../organisms/transaction-header';
 import TransactionView from '../transaction-view';
 
 const TransactionSection = () => {
 	const dispatch = useAppDispatch();
+	const {collapsed} = useProSidebar();
 	const queryClient = useQueryClient();
+	const {width} = useViewportListener();
 	const {enqueueSnackbar} = useSnackbar();
-	const {search, status, selectedArea} = useAppSelector(
+	const {search, status, selectedTrxId} = useAppSelector(
 		state => state.transaction,
 	);
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
@@ -34,8 +55,6 @@ const TransactionSection = () => {
 
 	const audioRef =
 		useRef<HTMLAudioElement>() as React.MutableRefObject<HTMLAudioElement>;
-
-	const [openModalTransaction, setOpenModalTransaction] = useState(false);
 
 	const {data, isLoading: loadData} = useGetTransactionsViewModel(
 		{
@@ -57,10 +76,6 @@ const TransactionSection = () => {
 				{
 					field: 'restaurant_outlet_uuid',
 					value: outletId,
-				},
-				{
-					field: 'floor_area_uuid',
-					value: selectedArea?.uuid || '',
 				},
 			],
 		},
@@ -85,7 +100,7 @@ const TransactionSection = () => {
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				setTimeout(() => {
 					handlePrint();
-					setOpenModalTransaction(true);
+					dispatch(onChangeIsOpenCreateTransaction(true));
 				}, 100);
 				dispatch(onChangeSelectedTrxId({id: dt.uuid}));
 			}
@@ -100,10 +115,6 @@ const TransactionSection = () => {
 		if (audioRef.current) {
 			audioRef.current.play();
 		}
-	};
-
-	const handleCloseModalCreateTransaction = (value: boolean) => {
-		setOpenModalTransaction(value);
 	};
 
 	useEffect(() => {
@@ -191,29 +202,27 @@ const TransactionSection = () => {
 	}, [data, enqueueSnackbar]);
 
 	return (
-		<section className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-lg bg-neutral-10 p-4">
-			<TransactionHeader
-				loadCreateTransaction={loadCreateTransaction}
-				handleCreateTransaction={handleCreateTransaction}
-			/>
-
-			<TransactionView
-				dataTransaction={data}
-				loadTransaction={loadData}
-				loadCreateTransaction={loadCreateTransaction}
-				handleCreateTransaction={handleCreateTransaction}
-			/>
-
-			{dataQr && <PrintQrCodeReceipt data={dataQr} printReceiptRef={qrRef} />}
-
-			{openModalTransaction && (
-				<CreateTransactionModal
-					open={openModalTransaction}
-					handleClose={handleCloseModalCreateTransaction}
+		<section
+			className={`flex-1 ${generateWidth(width, selectedTrxId, collapsed)}`}
+		>
+			<div className="relative h-full w-full flex flex-col xl:gap-4 overflow-hidden rounded-lg bg-neutral-10 p-4">
+				<TransactionHeader
+					loadCreateTransaction={loadCreateTransaction}
+					handleCreateTransaction={handleCreateTransaction}
 				/>
-			)}
 
-			<audio ref={audioRef} src="/sounds/notif.mp3" />
+				<TransactionView
+					dataTransaction={data}
+					loadTransaction={loadData}
+					loadCreateTransaction={loadCreateTransaction}
+					handleCreateTransaction={handleCreateTransaction}
+				/>
+
+				<CreateTransactionModal />
+
+				{dataQr && <PrintQrCodeReceipt data={dataQr} printReceiptRef={qrRef} />}
+				<audio ref={audioRef} src="/sounds/notif.mp3" />
+			</div>
 		</section>
 	);
 };

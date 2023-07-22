@@ -1,11 +1,16 @@
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
-import {OrderStatus, Orders} from '@/domain/order/model';
+import {Order, OrderStatus, Orders} from '@/domain/order/model';
 import {CreatePrintOrderToKitchenModel} from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeIsOpenPrintToKitchen} from '@/view/common/store/slices/order';
 import {generateStatusOrder} from '@/view/common/utils/UtilsGenerateOrderStatus';
 import {useCreatePrintOrderToKitchenViewModel} from '@/view/order/view-models/CreatePrintOrderToKitchenViewModel';
+import {
+	generateBgColorOrderStatus,
+	generateBorderColorOrderStatus,
+} from '@/view/transaction/utils/common';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import {Button, Checkbox} from 'posy-fnb-core';
@@ -18,63 +23,21 @@ const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,
 });
 
-const generateBgColor = (status: OrderStatus) => {
-	switch (status) {
-		case '0':
-			return 'bg-neutral-10';
-		case '1':
-			return 'bg-neutral-10';
-		case '2':
-			return 'bg-[#FFFCF0]';
-		case '3':
-			return 'bg-[#EEFFEF]';
-		case '4':
-			return 'bg-red-caution/10';
-		default:
-			return 'bg-blue-success';
-	}
-};
-
-const generateBorderColor = (status: OrderStatus, isChecked: boolean) => {
-	if (isChecked) {
-		switch (status) {
-			case '0':
-				return 'bg-neutral-10 border-2 border-secondary-main';
-			case '1':
-				return 'bg-neutral-10 border-2 border-secondary-main';
-			case '2':
-				return 'border-2 border-[#C69A00]';
-			case '3':
-				return 'border-2 border-green-success';
-			case '4':
-				return 'bg-red-caution/10 border-2 border-red-caution';
-			default:
-				return 'bg-blue-success border-2 border-secondary-main';
-		}
-	}
-
-	return 'border border-neutral-40';
-};
-
 type PrintToKitchenModalProps = {
-	isOpenPrintToKitchen: boolean;
-	onClosePrintToKitchen: () => void;
 	dataOrder: Orders;
 };
 
-const PrintToKitchenModal = ({
-	isOpenPrintToKitchen,
-	onClosePrintToKitchen,
-	dataOrder,
-}: PrintToKitchenModalProps) => {
+const PrintToKitchenModal = ({dataOrder}: PrintToKitchenModalProps) => {
+	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
 	const {selectedTrxId} = useAppSelector(state => state.transaction);
+	const {isOpenPrintToKitchen} = useAppSelector(state => state.order);
 
 	const [loading, setLoading] = useState<boolean>(false);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const printToKitchenRef = useRef<any>();
+	const printToKitchenRef =
+		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
 	const [selectedOrder, setSelectedOrder] = React.useState<Array<string>>([]);
 
@@ -83,7 +46,7 @@ const PrintToKitchenModal = ({
 	});
 
 	const handleClosePrintToKitchen = () => {
-		onClosePrintToKitchen();
+		dispatch(onChangeIsOpenPrintToKitchen(false));
 		setSelectedOrder([]);
 	};
 
@@ -126,6 +89,36 @@ const PrintToKitchenModal = ({
 			);
 		}
 	}, [dataOrder]);
+
+	const handleCheckAllOrder = () => {
+		setLoading(true);
+		if (selectedOrder.length === dataOrder.length) {
+			setSelectedOrder(() => []);
+			setTimeout(() => {
+				setLoading(false), 100;
+			});
+		} else {
+			setSelectedOrder(() => dataOrder.map(item => item.uuid));
+			setTimeout(() => {
+				setLoading(false), 100;
+			});
+		}
+	};
+
+	const handleCheckOrder = (order: Order) => {
+		setLoading(true);
+		if (!selectedOrder.includes(order.uuid)) {
+			setSelectedOrder(prev => [...prev, order.uuid]);
+			setTimeout(() => {
+				setLoading(false);
+			}, 100);
+		} else {
+			setSelectedOrder(prev => prev.filter(item => item !== order.uuid));
+			setTimeout(() => {
+				setLoading(false);
+			}, 100);
+		}
+	};
 
 	return (
 		<>
@@ -170,47 +163,18 @@ const PrintToKitchenModal = ({
 									className="w-full"
 									title="Select all"
 									size="m"
-									onChange={() => {
-										setLoading(true);
-										if (selectedOrder.length === dataOrder.length) {
-											setSelectedOrder(() => []);
-											setTimeout(() => {
-												setLoading(false), 100;
-											});
-										} else {
-											setSelectedOrder(() => dataOrder.map(item => item.uuid));
-											setTimeout(() => {
-												setLoading(false), 100;
-											});
-										}
-									}}
+									onChange={handleCheckAllOrder}
 									checked={selectedOrder.length === dataOrder.length}
 								/>
 							</div>
 							{dataOrder.map((order, idx) => (
 								<div
-									onClick={() => {
-										setLoading(true);
-
-										if (!selectedOrder.includes(order.uuid)) {
-											setSelectedOrder(prev => [...prev, order.uuid]);
-											setTimeout(() => {
-												setLoading(false);
-											}, 100);
-										} else {
-											setSelectedOrder(prev =>
-												prev.filter(item => item !== order.uuid),
-											);
-											setTimeout(() => {
-												setLoading(false);
-											}, 100);
-										}
-									}}
+									onClick={() => handleCheckOrder(order)}
 									key={order.uuid}
-									className={`my-4 px-4 pb-4 pt-2  w-full rounded-lg ${generateBorderColor(
+									className={`my-4 px-4 pb-4 pt-2  w-full rounded-lg ${generateBorderColorOrderStatus(
 										order.status,
 										selectedOrder.includes(order.uuid),
-									)} ${generateBgColor(order.status)}`}
+									)} ${generateBgColorOrderStatus(order.status)}`}
 								>
 									<div className="flex items-center justify-between text-m-semibold">
 										<div className="cursor-pointer w-full">

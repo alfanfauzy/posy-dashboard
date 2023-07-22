@@ -3,14 +3,13 @@ import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTrans
 import {CancelTransaction} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {CancelOptions} from '@/view/transaction/constants';
 import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import {Button, Select, Textarea} from 'posy-fnb-core';
 import React, {useState} from 'react';
 import {AiOutlineInfoCircle} from 'react-icons/ai';
-
-import {CancelOptions} from '../cancel-order/CancelOrderBottomsheet';
 
 const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,

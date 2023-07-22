@@ -1,3 +1,5 @@
+import {OrderStatus} from '@/domain/order/model';
+
 export const generateWidth = (
 	width: number,
 	selectedTrxId: string,
@@ -36,4 +38,45 @@ export const generateBorderColor = (
 		WAITING_PAYMENT: 'border-2 border-green-success',
 	};
 	return borderColor[status];
+};
+
+export const generateBgColorOrderStatus = (status: OrderStatus) => {
+	switch (status) {
+		case '0':
+			return 'bg-neutral-10';
+		case '1':
+			return 'bg-neutral-10';
+		case '2':
+			return 'bg-[#FFFCF0]';
+		case '3':
+			return 'bg-[#EEFFEF]';
+		case '4':
+			return 'bg-red-caution/10';
+		default:
+			return 'bg-blue-success';
+	}
+};
+
+export const generateBorderColorOrderStatus = (
+	status: OrderStatus,
+	isChecked: boolean,
+) => {
+	if (isChecked) {
+		switch (status) {
+			case '0':
+				return 'bg-neutral-10 border-2 border-secondary-main';
+			case '1':
+				return 'bg-neutral-10 border-2 border-secondary-main';
+			case '2':
+				return 'border-2 border-[#C69A00]';
+			case '3':
+				return 'border-2 border-green-success';
+			case '4':
+				return 'bg-red-caution/10 border-2 border-red-caution';
+			default:
+				return 'bg-blue-success border-2 border-secondary-main';
+		}
+	}
+
+	return 'border border-neutral-40';
 };

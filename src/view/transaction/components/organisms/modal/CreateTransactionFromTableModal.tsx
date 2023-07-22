@@ -5,6 +5,7 @@ import {QrCode} from '@/domain/qr-code/model';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
+	onChangeIsOpenEditTransactionFromTableView,
 	onChangeSelectedTable,
 	onChangeSelectedTrxId,
 } from '@/view/common/store/slices/transaction';
@@ -25,24 +26,21 @@ import {useReactToPrint} from 'react-to-print';
 import PrintQrCodeReceipt from '../receipt/PrintQrCodeReceipt';
 
 type CreateTransactionFromTableModalProps = {
-	open: boolean;
-	handleClose: (value: boolean) => void;
 	isEdit?: boolean;
 };
 
 const CreateTransactionFromTableModal = ({
-	open,
-	handleClose,
 	isEdit,
 }: CreateTransactionFromTableModalProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
-	const dataTable = useAppSelector(state => state.transaction.selectedTable);
-	const prevTable = useAppSelector(state => state.transaction.prevTable);
-	const selectedTrxId = useAppSelector(
-		state => state.transaction.selectedTrxId,
-	);
+	const {
+		prevTable,
+		selectedTrxId,
+		selectedTable,
+		isOpenEditTransactionFromTableView,
+	} = useAppSelector(state => state.transaction);
 
 	const {
 		register,
@@ -54,8 +52,11 @@ const CreateTransactionFromTableModal = ({
 		schema: validationSchemaCreateTransactionFromTableView,
 	});
 
+	const handleClose = () =>
+		dispatch(onChangeIsOpenEditTransactionFromTableView(false));
+
 	const onClose = () => {
-		handleClose(false);
+		handleClose();
 		reset({
 			customer_name: '',
 			total_pax: '',
@@ -69,7 +70,7 @@ const CreateTransactionFromTableModal = ({
 	};
 
 	const onCloseEdit = () => {
-		handleClose(false);
+		handleClose();
 	};
 
 	useGetTransactionViewModel(
@@ -87,8 +88,8 @@ const CreateTransactionFromTableModal = ({
 		},
 	);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const qrRef = useRef<any>();
+	const qrRef =
+		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
 	const handlePrint = useReactToPrint({
 		content: () => qrRef.current,
@@ -126,7 +127,7 @@ const CreateTransactionFromTableModal = ({
 			updateTransaction({
 				...form,
 				restaurant_outlet_uuid: outletId,
-				restaurant_outlet_table_uuid: dataTable?.uuid,
+				restaurant_outlet_table_uuid: selectedTable?.uuid,
 				transaction_uuid: selectedTrxId,
 				transaction_category: {label: 'DINE_IN', value: 0},
 			});
@@ -135,7 +136,7 @@ const CreateTransactionFromTableModal = ({
 				...form,
 				total_pax: Number(form.total_pax),
 				restaurant_outlet_uuid: outletId,
-				restaurant_outlet_table_uuid: dataTable?.uuid,
+				restaurant_outlet_table_uuid: selectedTable?.uuid,
 			});
 		}
 	};
@@ -147,12 +148,12 @@ const CreateTransactionFromTableModal = ({
 				total_pax: '',
 			});
 		}
-	}, [isEdit, reset, open]);
+	}, [isEdit, reset, isOpenEditTransactionFromTableView]);
 
 	return (
 		<>
 			<Modal
-				open={open}
+				open={isOpenEditTransactionFromTableView}
 				onCancel={onClose}
 				closable={false}
 				footer={

@@ -3,7 +3,7 @@ import {ValidationSchemaEditTableAreaType} from '@/view/area-management/schemas/
 import {getMaxTable} from '@/view/area-management/utils/getMaxTable';
 import {SelectedArea} from '@/view/common/store/slices/area';
 import {tableTypeOptions} from '@/view/table-management/constants';
-import EmptyArea from '@/view/transaction/components/molecules/empty-area';
+import EmptyArea from '@/view/transaction/components/molecules/empty-state/empty-area';
 import {Divider} from 'antd';
 import {Input, Loading, Select} from 'posy-fnb-core';
 import React from 'react';
