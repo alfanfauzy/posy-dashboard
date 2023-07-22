@@ -1,6 +1,6 @@
 import {GetBankListResponse} from '@/data/bank/types';
 import {useGetBankListUsecase} from '@/data/bank/usecases/GetBankListUsecase';
-import {GetBankListsResult} from '@/domain/bank/repositories/BankRepository';
+import {GetBankListsResult} from '@/domain/bank/repositories/GetBankListRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

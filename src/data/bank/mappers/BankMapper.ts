@@ -3,7 +3,7 @@ import {
 	GetLinkedBankAccountResponse,
 } from '@/data/bank/types';
 import {BankLists, LinkedBankAccount} from '@/domain/bank/models';
-import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {PayloadSaveBankAccount} from '@/domain/bank/repositories/CreateSaveBankRepository';
 import {PaymentBankAccountForm} from '@/view/payment-setting/schemas/payment/setting';
 
 export const mapToBankListMapper = (

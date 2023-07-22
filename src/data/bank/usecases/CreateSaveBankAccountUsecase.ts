@@ -1,7 +1,7 @@
-import {useCreateSaveBankAccountMutation} from '@/data/bank/sources/PostSaveBankAccountMutation';
+import {useCreateSaveBankAccountMutation} from '@/data/bank/sources/CreateSaveBankAccountMutation';
 import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
-import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {PayloadSaveBankAccount} from '@/domain/bank/repositories/CreateSaveBankRepository';
 import {BaseError} from '@/domain/vo/BaseError';
 import {useSnackbar} from 'notistack';
 

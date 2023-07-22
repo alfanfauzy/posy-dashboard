@@ -2,6 +2,8 @@ import {store} from '@/view/common/store';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import axios, {AxiosError} from 'axios';
 
+export const GetImagePrivateQueryKey = 'image/private';
+
 export const GetImagePrivateQuery = async (
 	imageURL: string,
 ): Promise<string> => {
@@ -36,7 +38,7 @@ export const useGetImagePrivateQuery = (
 	options?: UseQueryOptions<string>,
 ) =>
 	useQuery<string>(
-		['image/private', JSON.stringify(imageURL)],
+		[GetImagePrivateQueryKey, JSON.stringify(imageURL)],
 		() => GetImagePrivateQuery(imageURL),
 		{
 			...options,

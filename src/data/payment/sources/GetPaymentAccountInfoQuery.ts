@@ -4,6 +4,8 @@ import {Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
+export const GetPaymentAccountInfoQueryKey = 'payment-account-info';
+
 export const GetPaymentAccountInfo = async (): Promise<
 	Response<GetPaymentAccountInfoResponse>
 > => {
@@ -24,7 +26,7 @@ export const useGetPaymentAccountInfoQuery = (
 	options?: UseQueryOptions<Response<GetPaymentAccountInfoResponse>>,
 ) =>
 	useQuery<Response<GetPaymentAccountInfoResponse>>(
-		['payment-account-info'],
+		[GetPaymentAccountInfoQueryKey],
 		() => GetPaymentAccountInfo(),
 		{
 			...options,

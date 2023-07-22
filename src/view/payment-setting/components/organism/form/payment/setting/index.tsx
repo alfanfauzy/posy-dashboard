@@ -2,10 +2,13 @@ import {
 	mapToBankOptions,
 	mapToPayloadSaveBankAccount,
 } from '@/data/bank/mappers/BankMapper';
-import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {GetCheckBankResponse} from '@/data/bank/types';
+import {UploadFilePublicResponse} from '@/data/file-upload/types';
+import {PayloadSaveBankAccount} from '@/domain/bank/repositories/CreateSaveBankRepository';
+import {Response} from '@/domain/vo/BaseResponse';
+import {useCheckBankViewModal} from '@/view/bank/view-models/CreateCheckBankViewModel';
 import {useGetBankListViewModal} from '@/view/bank/view-models/GetBankListViewModel';
 import {useGetLinkedBankAccountViewModel} from '@/view/bank/view-models/GetLinkedBankAccountViewModel';
-import {useCheckBankViewModal} from '@/view/bank/view-models/PostCheckBankViewModel';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
 import {useGetImagePrivateViewModel} from '@/view/file-upload/view-modals/GetImagePrivateViewModels';
 import {useUploadImagePrivateViewModal} from '@/view/file-upload/view-modals/UploadImagePrivateViewModels';
@@ -51,8 +54,8 @@ const FormPaymentSetting = () => {
 		reset,
 		setValue,
 		watch,
-		clearErrors,
-		formState: {errors},
+		// clearErrors,
+		formState: {errors, isValid},
 		control,
 	} = methods;
 
@@ -76,9 +79,9 @@ const FormPaymentSetting = () => {
 	 * Service Upload Image
 	 */
 	const {uploadImagePrivate} = useUploadImagePrivateViewModal({
-		onSuccess(data) {
-			setValue('bank_proof_url', data.data.url);
-			clearErrors('bank_proof_url');
+		onSuccess(data: Response<UploadFilePublicResponse>) {
+			setValue('bank_proof_url', data.data.url, {shouldValidate: true});
+			// clearErrors('bank_proof_url');
 		},
 	});
 
@@ -87,16 +90,18 @@ const FormPaymentSetting = () => {
 	 */
 	const {checkBank, isLoading: isLoadingCheckBank} = useCheckBankViewModal({
 		onSuccess(data) {
+			const response = data as Response<GetCheckBankResponse>;
+
 			const {
 				data: {account_name},
-			} = data;
+			} = response;
 
-			setValue('account_name', account_name);
-			clearErrors('account_name');
+			setValue('account_name', account_name, {shouldValidate: true});
+			setValue('password', '', {shouldValidate: true});
 			setIsErrorCheckBank(false);
 		},
 		onError() {
-			setValue('account_name', '');
+			setValue('account_name', '', {shouldValidate: true});
 			setIsErrorCheckBank(true);
 		},
 	});
@@ -115,12 +120,17 @@ const FormPaymentSetting = () => {
 
 			const responseImageURL = bank_proof_url.split('/')[8];
 
-			setValue('bank_uuid', {label: bank_name, value: bank_uuid});
-			setValue('account_number', account_number);
-			setValue('email', email_notify_withdrawal);
-			setValue('account_name', account_name);
-			setValue('bank_proof_url', bank_proof_url);
+			setValue(
+				'bank_uuid',
+				{label: bank_name, value: bank_uuid},
+				{shouldValidate: true},
+			);
+			setValue('account_number', account_number, {shouldValidate: true});
+			setValue('email', email_notify_withdrawal, {shouldValidate: true});
+			setValue('account_name', account_name, {shouldValidate: true});
+			setValue('bank_proof_url', bank_proof_url, {shouldValidate: true});
 			setImageURL(responseImageURL);
+			setValue('password', '', {shouldValidate: true});
 		},
 	});
 
@@ -132,7 +142,11 @@ const FormPaymentSetting = () => {
 			const accountTypeLabel =
 				type === 'OWNED' ? 'Owned Account' : 'Manage Account';
 
-			setValue('account_type', {label: accountTypeLabel, value: type});
+			setValue(
+				'account_type',
+				{label: accountTypeLabel, value: type},
+				{shouldValidate: true},
+			);
 		},
 	});
 
@@ -147,7 +161,7 @@ const FormPaymentSetting = () => {
 		if (fileInputRef.current && fileInputRef.current.value !== null) {
 			fileInputRef.current.value = '';
 		}
-		setValue('bank_proof_url', '');
+		setValue('bank_proof_url', '', {shouldValidate: true});
 		setBankProofURL('');
 		setImageURL('');
 	};
@@ -257,8 +271,8 @@ const FormPaymentSetting = () => {
 								name={name}
 								value={value}
 								onChange={e => {
-									setValue('account_type', e);
-									clearErrors('account_type');
+									setValue('account_type', e, {shouldValidate: true});
+									// clearErrors('account_type');
 								}}
 								options={PAYMENT_ACCOUNT_TYPE}
 								labelText="Payment account type"
@@ -284,12 +298,12 @@ const FormPaymentSetting = () => {
 								name={name}
 								value={value}
 								onChange={e => {
-									setValue('bank_uuid', e);
-									clearErrors('bank_uuid');
+									setValue('bank_uuid', e, {shouldValidate: true});
+									// clearErrors('bank_uuid');
 
 									// Clear field account name & account number when change bank
-									setValue('account_name', '');
-									setValue('account_number', '');
+									setValue('account_name', '', {shouldValidate: true});
+									setValue('account_number', '', {shouldValidate: true});
 								}}
 								isLoading={isLoadingBankList}
 								options={optionsBankList}
@@ -433,6 +447,7 @@ const FormPaymentSetting = () => {
 					fullWidth
 					isLoading={isLoadingSaveBankAccount}
 					onClick={handleButton}
+					disabled={!isValid}
 				>
 					Save
 				</Button>

@@ -1,5 +1,5 @@
 import {mapToPayloadSaveBankAccount} from '@/data/bank/mappers/BankMapper';
-import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {PayloadSaveBankAccount} from '@/domain/bank/repositories/CreateSaveBankRepository';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
 import {PaymentBankAccountForm} from '@/view/payment-setting/schemas/payment/setting';
@@ -12,7 +12,7 @@ import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 const PasswordConfirmationBankOrganism = () => {
 	const {
 		isOpenPasswordConfirmationBank,
-		handleIsOpenPasswordConfirmation,
+		handleIsOpenPasswordConfirmationBank,
 		isLoadingSaveBankAccount,
 		saveBankAccount,
 		isLoadingPaymentWithdraw,
@@ -25,7 +25,6 @@ const PasswordConfirmationBankOrganism = () => {
 		register,
 		setValue,
 		formState: {errors},
-		trigger,
 		getValues,
 		resetField,
 	} = methodsWithdraw;
@@ -33,7 +32,7 @@ const PasswordConfirmationBankOrganism = () => {
 	const [showPassword, {toggle}] = useDisclosure({initialState: false});
 
 	const handleCloseModal = () => {
-		handleIsOpenPasswordConfirmation();
+		handleIsOpenPasswordConfirmationBank();
 		resetField('password');
 	};
 
@@ -56,7 +55,7 @@ const PasswordConfirmationBankOrganism = () => {
 			onCancel={handleCloseModal}
 			title={
 				<h1 className="text-xl-semibold border-b border-neutral-40 p-4">
-					Input password
+					Input password bank
 				</h1>
 			}
 			footer={
@@ -79,8 +78,7 @@ const PasswordConfirmationBankOrganism = () => {
 					labelText="Password"
 					placeholder="Input password"
 					onChange={e => {
-						setValue('password', e.target.value);
-						trigger();
+						setValue('password', e.target.value, {shouldValidate: true});
 					}}
 					endAdornment={
 						showPassword ? (

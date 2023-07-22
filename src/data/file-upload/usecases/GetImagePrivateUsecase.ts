@@ -1,5 +1,5 @@
 import {useGetImagePrivateQuery} from '@/data/file-upload/sources/GetImagePrivateQuery';
-import {GetPrivateImageResult} from '@/domain/file-upload/repositories/FileUploadRepository';
+import {GetPrivateImageResult} from '@/domain/file-upload/repositories/GetPrivateImageRepository';
 import {UseQueryOptions} from '@tanstack/react-query';
 
 export const useGetImagePrivateUsecase = (
