@@ -1,5 +1,5 @@
 import {useGetImagePrivateUsecase} from '@/data/file-upload/usecases/GetImagePrivateUsecase';
-import {GetPrivateImageResult} from '@/domain/file-upload/repositories/FileUploadRepository';
+import {GetPrivateImageResult} from '@/domain/file-upload/repositories/GetPrivateImageRepository';
 import {UseQueryOptions} from '@tanstack/react-query';
 
 export const useGetImagePrivateViewModel = (

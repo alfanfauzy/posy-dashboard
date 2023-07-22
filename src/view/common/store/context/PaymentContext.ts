@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import {LinkedBankAccount} from '@/domain/bank/models';
-import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {PayloadSaveBankAccount} from '@/domain/bank/repositories/CreateSaveBankRepository';
 import {
 	PaymentAccountInfo,
 	PaymentBalance,

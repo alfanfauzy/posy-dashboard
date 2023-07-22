@@ -1,14 +1,14 @@
 import {mapToPaymentMethodCategoryModel} from '@/data/payment/mappers/PaymentMethodMapper';
-import {useGetPaymentMethodCategoryQuery} from '@/data/payment/sources/GetPaymentMethodCategory';
+import {useGetPaymentMethodCategoryQuery} from '@/data/payment/sources/GetPaymentMethodCategoryQuery';
 import {GetPaymentMethodCategoryListResponse} from '@/data/payment/types';
 import {
 	GetFilterPaymentMethodCategory,
 	GetPaymentMethodCategorysResult,
-} from '@/domain/payment/repositories/PaymentRepositories';
+} from '@/domain/payment/repositories/GetPaymentMethodCategoriesRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
-export const useGetPaymentMethodCategoryUsecase = (
+export const useGetPaymentMethodCategoryUsecases = (
 	input?: GetFilterPaymentMethodCategory,
 	options?: UseQueryOptions<
 		Response<DataList<GetPaymentMethodCategoryListResponse>>

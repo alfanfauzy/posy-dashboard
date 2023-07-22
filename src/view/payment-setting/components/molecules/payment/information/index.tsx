@@ -94,11 +94,19 @@ const PaymentInformationWitDataMolecules = () => {
 					If you want to make your own payment account, please contact our
 					customer support.
 				</p>
-				<Button variant="secondary" onClick={() => window.open(whatsapp_link)}>
+				<Button
+					size="m"
+					variant="secondary"
+					onClick={() => window.open(whatsapp_link)}
+				>
 					Contact Support
 				</Button>
 				<Can I="update_bank" an="payment_integration">
-					<Button onClick={handleModal} disabled={isLoadingPaymentBalance}>
+					<Button
+						size="m"
+						onClick={handleModal}
+						disabled={isLoadingPaymentBalance}
+					>
 						Edit Information
 					</Button>
 				</Can>

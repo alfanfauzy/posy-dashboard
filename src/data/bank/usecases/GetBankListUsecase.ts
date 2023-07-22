@@ -1,7 +1,7 @@
 import {mapToBankListMapper} from '@/data/bank/mappers/BankMapper';
 import {useGetBankListQuery} from '@/data/bank/sources/GetBankListQuery';
 import {GetBankListResponse} from '@/data/bank/types';
-import {GetBankListsResult} from '@/domain/bank/repositories/BankRepository';
+import {GetBankListsResult} from '@/domain/bank/repositories/GetBankListRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 

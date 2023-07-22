@@ -1,6 +1,6 @@
 import Post from '@/data/common/api/post';
 import {SaveBankAccountResponse} from '@/domain/bank/models';
-import {PayloadSaveBankAccount} from '@/domain/bank/repositories/BankRepository';
+import {PayloadSaveBankAccount} from '@/domain/bank/repositories/CreateSaveBankRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {useMutation, UseMutationOptions} from '@tanstack/react-query';
 import {AxiosError} from 'axios';

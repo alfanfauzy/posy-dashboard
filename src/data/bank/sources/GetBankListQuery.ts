@@ -4,6 +4,8 @@ import {Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
+export const GetBankListQueryKey = 'bank/list';
+
 export const GetBankList = async (): Promise<
 	Response<Array<GetBankListResponse>>
 > => {
@@ -23,7 +25,7 @@ export const useGetBankListQuery = (
 	options?: UseQueryOptions<Response<Array<GetBankListResponse>>>,
 ) =>
 	useQuery<Response<Array<GetBankListResponse>>>(
-		['bank/list'],
+		[GetBankListQueryKey],
 		() => GetBankList(),
 		{
 			...options,

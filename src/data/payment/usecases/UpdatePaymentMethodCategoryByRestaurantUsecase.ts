@@ -1,17 +1,11 @@
+import {MutationOptions} from '@/data/common/types';
 import {useUpdatePaymentMethodCategoryByRestaurantMutationMutation} from '@/data/payment/sources/UpdateMethodCategoryByRestaurantMutation';
-import {UpdatePaymentMethodCategoryResponse} from '@/data/payment/types';
 import {PaymentMethodCategoryByRestaurantPayload} from '@/domain/payment/models';
-import {Response} from '@/domain/vo/BaseResponse';
-import {UseMutationOptions} from '@tanstack/react-query';
-import {AxiosError} from 'axios';
+import {UpdatePaymentMethodCategoryRepository} from '@/domain/payment/repositories/UpdatePaymentMethodCategoriesRepository';
 
-export const useUpdatePaymentMethodCategoryByRestaurantUsecase = (
-	options?: UseMutationOptions<
-		Response<UpdatePaymentMethodCategoryResponse>,
-		AxiosError<Response>,
-		PaymentMethodCategoryByRestaurantPayload
-	>,
-): any => {
+export const useUpdatePaymentMethodCategoryByRestaurantUsecases = ({
+	...options
+}: MutationOptions): UpdatePaymentMethodCategoryRepository => {
 	const {mutate, data, ...rest} =
 		useUpdatePaymentMethodCategoryByRestaurantMutationMutation(options);
 
@@ -23,7 +17,7 @@ export const useUpdatePaymentMethodCategoryByRestaurantUsecase = (
 
 	return {
 		updatePaymentMethodCategory,
-		data: data?.data.success,
+		data: data?.data,
 		...rest,
 	};
 };

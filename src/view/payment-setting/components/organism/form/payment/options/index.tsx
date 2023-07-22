@@ -1,5 +1,5 @@
 import {PaymentMethod} from '@/domain/payment/models';
-import {GetFilterPaymentMethod} from '@/domain/payment/repositories/PaymentRepositories';
+import {GetFilterPaymentMethod} from '@/domain/payment/repositories/GetPaymentMethodRepository';
 import MoleculesSwitchStatusPaymentMethod from '@/view/payment-setting/components/molecules/switch/payment';
 import {useGetPaymentMethodViewModal} from '@/view/payment-setting/view-models/GetPaymentMethodViewModel';
 import {Table} from 'antd';

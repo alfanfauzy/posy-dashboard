@@ -1,9 +1,11 @@
 import Post from '@/data/common/api/post';
 import {GetPaymentMethodListResponse} from '@/data/payment/types/index';
-import {GetFilterPaymentMethod} from '@/domain/payment/repositories/PaymentRepositories';
+import {GetFilterPaymentMethod} from '@/domain/payment/repositories/GetPaymentMethodRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
+
+export const GetPaymentMethodQueryKey = 'payment-method/list';
 
 export const GetPaymentMethod = async (
 	input?: GetFilterPaymentMethod,
@@ -26,7 +28,7 @@ export const useGetPaymentMethodQuery = (
 	options?: UseQueryOptions<Response<DataList<GetPaymentMethodListResponse>>>,
 ) =>
 	useQuery<Response<DataList<GetPaymentMethodListResponse>>>(
-		['payment-method/list', JSON.stringify(input)],
+		[GetPaymentMethodQueryKey, JSON.stringify(input)],
 		() => GetPaymentMethod(input),
 		{
 			enabled: !!JSON.stringify(input),

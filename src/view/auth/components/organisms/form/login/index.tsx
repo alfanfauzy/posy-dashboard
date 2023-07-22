@@ -45,25 +45,16 @@ const OrganismsFormLogin = () => {
 		},
 		onError: _error => {
 			const error = _error as BaseError;
-			if (error?.isUnknown()) {
-				setValue('email', '');
-				setError(
-					'email',
-					{message: error.message},
-					{
-						shouldFocus: true,
-					},
-				);
-			} else {
-				setValue('password', '');
-				setError(
-					'password',
-					{message: error.message},
-					{
-						shouldFocus: true,
-					},
-				);
-			}
+			setValue('email', '');
+			setValue('password', '');
+			setValue('password', '');
+			setError(
+				'password',
+				{message: error.message},
+				{
+					shouldFocus: true,
+				},
+			);
 		},
 	});
 
