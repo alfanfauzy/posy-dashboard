@@ -11,7 +11,7 @@ const GetDetailRatings = async (
 	input: GetDetailRatingsInput,
 ): Promise<Response<DataList<GetDetailRatingsDataResponse>>> => {
 	const response = await Post({
-		endpoint: `/product-service//rating/product-rating/get-by-review/${input.food_rating_uuid}`,
+		endpoint: `/product-service/rating/product-rating/get-by-review/${input.food_rating_uuid}`,
 		data: input,
 	});
 

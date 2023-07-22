@@ -13,7 +13,6 @@ import TableRating from '../organisms/table';
 const ViewRatingPage = () => {
 	const {query} = useRouter();
 	const {outletId} = useAppSelector(state => state.auth);
-	// const [selectedRowKeys, setSelectedRowKeys] = useState<Array<Key>>([]);
 
 	const [date, setDate] = useState<Array<Dates>>([
 		{
@@ -59,16 +58,9 @@ const ViewRatingPage = () => {
 				<aside className="flex items-start">
 					<p className="text-xxl-semibold text-neutral-100 ">Food Ratings</p>
 				</aside>
-				<NavFilterRating
-					// selectedRowKeys={selectedRowKeys}
-					// setSelectedRowKeys={setSelectedRowKeys}
-					pagination={pagination}
-					dates={date}
-				/>
+				<NavFilterRating pagination={pagination} dates={date} />
 			</article>
 			<TableRating
-				// selectedRowKeys={selectedRowKeys}
-				// setSelectedRowKeys={setSelectedRowKeys}
 				dataRating={dataRating}
 				pagination={pagination}
 				loadRating={loadRating}
