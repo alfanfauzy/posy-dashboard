@@ -1,4 +1,5 @@
 /* eslint-disable no-nested-ternary */
+import {GetAreasQueryKey} from '@/data/area/sources/GetAreasQuery';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {mapProductMenuToProductOutletModel} from '@/data/product/mappers/ProductMapper';
 import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
@@ -103,6 +104,7 @@ const ManualSubmitOrder = ({dataTransaction}: ManualSubmitOrderProps) => {
 				]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				queryClient.invalidateQueries([GetTransactionQueryKey]);
+				queryClient.invalidateQueries([GetAreasQueryKey]);
 				setTimeout(() => {
 					handlePrintToKitchen();
 				}, 500);

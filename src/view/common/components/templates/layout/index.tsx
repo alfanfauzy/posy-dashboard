@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {GetAreasQueryKey} from '@/data/area/sources/GetAreasQuery';
 import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
 import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
@@ -114,6 +115,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 				queryClient.invalidateQueries([GetNotificationsQueryKey]);
+				queryClient.invalidateQueries([GetAreasQueryKey]);
 				enqueueSnackbar({
 					className: 'border-t-8 border-blue-success',
 					style: {

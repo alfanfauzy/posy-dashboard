@@ -1,3 +1,4 @@
+import {GetAreasQueryKey} from '@/data/area/sources/GetAreasQuery';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
@@ -65,6 +66,7 @@ const PrintToKitchenModal = ({dataOrder}: PrintToKitchenModalProps) => {
 				queryClient.invalidateQueries([GetOrdersQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
+				queryClient.invalidateQueries([GetAreasQueryKey]);
 			}
 		},
 	});
