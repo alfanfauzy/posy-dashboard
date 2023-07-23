@@ -14,9 +14,11 @@ const DeleteAreaModal = () => {
 		area: {selectedArea, isOpenDeleteArea},
 	} = useAppSelector(state => state);
 
+	const onCloseDeleteArea = () => dispatch(onChangeToggleDeleteArea(false));
+
 	const {DeleteArea, isLoading} = useDeleteAreaViewModel({
 		onSuccess: () => {
-			close();
+			onCloseDeleteArea();
 			dispatch(
 				onChangeArea({
 					name: '',
@@ -50,7 +52,7 @@ const DeleteAreaModal = () => {
 						variant="secondary"
 						size="l"
 						fullWidth
-						onClick={() => dispatch(onChangeToggleDeleteArea(false))}
+						onClick={onCloseDeleteArea}
 						className="whitespace-nowrap"
 					>
 						Cancel
