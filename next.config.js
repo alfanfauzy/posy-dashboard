@@ -8,7 +8,7 @@ const nextConfig = {
 			'fnbapi.stage.pvg.im',
 			'fnbapi.posy.tech',
 			'ik.imagekit.io',
-			'fnbapi.stage.pvg.im'
+			'fnbapi.stage.pvg.im',
 		],
 	},
 	rewrites() {
