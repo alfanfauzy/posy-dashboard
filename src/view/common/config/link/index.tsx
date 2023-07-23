@@ -78,7 +78,7 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 			{
 				title: 'Food Ratings',
 				path: 'settings/food-ratings',
-				permission: ['setting_subscription'],
+				permission: ['food_rating'],
 			},
 		],
 	},
