@@ -1,6 +1,6 @@
 import {Area} from '@/domain/area/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
-import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch} from '@/view/common/store/hooks';
 import {onOpenAddTable} from '@/view/common/store/slices/table';
 import React, {DragEvent} from 'react';
 import {AiOutlinePlusCircle} from 'react-icons/ai';
@@ -12,6 +12,7 @@ type TableSquareProps = {
 	tablePos: TableLayout;
 	setTablePos: (tablePos: TableLayout) => void;
 	selectedArea: Area;
+	isEditLayout: boolean;
 };
 
 const TableSquare = ({
@@ -19,9 +20,9 @@ const TableSquare = ({
 	selectedArea,
 	tablePos,
 	setTablePos,
+	isEditLayout,
 }: TableSquareProps) => {
 	const dispatch = useAppDispatch();
-	const {isEditLayout} = useAppSelector(state => state.table);
 
 	const toY = index % selectedArea.width;
 	const toX = Math.floor(index / selectedArea?.width);

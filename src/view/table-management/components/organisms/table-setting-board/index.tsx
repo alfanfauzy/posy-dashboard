@@ -10,7 +10,7 @@ type TableSettingBoardProps = {
 };
 
 const TableSettingBoard = ({tablePos, setTablePos}: TableSettingBoardProps) => {
-	const {selectedArea} = useAppSelector(state => state.table);
+	const {selectedArea, isEditLayout} = useAppSelector(state => state.table);
 
 	return (
 		<aside className="flex w-full h-full pb-20 overflow-y-auto">
@@ -27,6 +27,7 @@ const TableSettingBoard = ({tablePos, setTablePos}: TableSettingBoardProps) => {
 									tablePos,
 									setTablePos,
 									selectedArea,
+									isEditLayout,
 								}),
 							)}
 					</div>

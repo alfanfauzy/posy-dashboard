@@ -113,7 +113,7 @@ const TemplatesSidebar = ({
 
 	return (
 		<>
-			<LogoutModal close={closeLogout} isOpen={isOpenLogout} />
+			<LogoutModal closeLogout={closeLogout} isOpen={isOpenLogout} />
 			<Sidebar
 				defaultCollapsed={width <= 1280}
 				className="relative z-0 h-full overflow-hidden rounded-r-lg bg-neutral-10"

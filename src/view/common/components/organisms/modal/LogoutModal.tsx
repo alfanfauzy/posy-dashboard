@@ -1,16 +1,23 @@
 import {useLogoutViewModel} from '@/view/auth/view-models/LogoutViewModel';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onLogout} from '@/view/common/store/slices/auth';
+import {onResetArea} from '@/view/common/store/slices/area';
+import {onLogout, setRestaurantOutletId} from '@/view/common/store/slices/auth';
+import {onChangeSelectedTable} from '@/view/common/store/slices/table';
+import {
+	onChangeSelectedArea,
+	onChangeSelectedTrxId,
+	onChangeSelectedTable as onChangeSelectedTableTransaction,
+} from '@/view/common/store/slices/transaction';
 import {useRouter} from 'next/router';
 import {Button, Modal} from 'posy-fnb-core';
 import React from 'react';
 
 type LogoutModalProps = {
 	isOpen: boolean;
-	close: () => void;
+	closeLogout: () => void;
 };
 
-const LogoutModal = ({close, isOpen}: LogoutModalProps) => {
+const LogoutModal = ({closeLogout, isOpen}: LogoutModalProps) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const {
@@ -21,10 +28,21 @@ const LogoutModal = ({close, isOpen}: LogoutModalProps) => {
 	} = useAppSelector(state => state.auth);
 
 	const {logout, isLoading: loadLogout} = useLogoutViewModel({
-		onSuccess: () => {
+		onSuccess: async () => {
 			dispatch(onLogout());
-			close();
-			router.push('/auth/login');
+			dispatch(setRestaurantOutletId(''));
+			dispatch(onChangeSelectedTrxId({id: ''}));
+			dispatch(onResetArea());
+			dispatch(onChangeSelectedTable(null));
+			dispatch(onChangeSelectedArea(null));
+			dispatch(
+				onChangeSelectedTableTransaction({
+					table: null,
+					prevTable: null,
+				}),
+			);
+			closeLogout();
+			await router.push('/auth/login');
 		},
 	});
 
