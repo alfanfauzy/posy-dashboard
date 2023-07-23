@@ -27,7 +27,7 @@ const ApplyDiscountModal = () => {
 		state => state.transaction,
 	);
 
-	const [price] = useState(Number(payment.subtotal) || 0);
+	const [price, setPrice] = useState(0);
 
 	const {
 		register,
@@ -63,6 +63,10 @@ const ApplyDiscountModal = () => {
 			...data,
 		});
 	};
+
+	useEffect(() => {
+		setPrice(payment.subtotal);
+	}, [payment]);
 
 	useEffect(() => {
 		setValue('discount_percentage', payment.discount_percentage.toString());

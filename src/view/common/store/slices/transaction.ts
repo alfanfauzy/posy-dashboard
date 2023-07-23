@@ -90,6 +90,11 @@ export const TransactionSlice = createSlice({
 			if (action.payload.id !== '') {
 				state.isOpenNotifBar = false;
 			}
+			state.payment = {
+				subtotal: 0,
+				total: 0,
+				discount_percentage: 0,
+			};
 		},
 		onChangePayment: (state, action: PayloadAction<{payment: Payment}>) => {
 			state.payment = action.payload.payment;

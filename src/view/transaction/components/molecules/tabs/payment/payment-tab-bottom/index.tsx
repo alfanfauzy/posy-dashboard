@@ -10,7 +10,7 @@ import {AiOutlinePercentage} from 'react-icons/ai';
 const PaymentTabBottom = () => {
 	const dispatch = useAppDispatch();
 	const {
-		payment: {discount_percentage},
+		payment: {discount_percentage, total},
 	} = useAppSelector(state => state.transaction);
 
 	const handleCreatePayment = () => dispatch(onChangeIsOpenCreatePayment(true));
@@ -21,6 +21,7 @@ const PaymentTabBottom = () => {
 		<div className="flex gap-2">
 			<Button
 				variant="secondary"
+				disabled={!total}
 				onClick={handleOpenApplyDiscount}
 				className={`${discount_percentage > 0 ? 'bg-secondary-border' : ''}`}
 			>
@@ -32,6 +33,7 @@ const PaymentTabBottom = () => {
 				<Button
 					variant="primary"
 					fullWidth
+					disabled={!total}
 					onClick={handleCreatePayment}
 					className="whitespace-nowrap text-m-semibold"
 				>

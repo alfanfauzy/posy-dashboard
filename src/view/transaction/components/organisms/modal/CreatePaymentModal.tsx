@@ -5,6 +5,7 @@ import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRe
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
 	onChangeIsOpenCreatePayment,
+	onChangePayment,
 	onChangePaymentSuccess,
 } from '@/view/common/store/slices/transaction';
 import {toRupiah} from '@/view/common/utils/common';
@@ -53,28 +54,53 @@ const CreatePaymentModal = () => {
 	});
 	const [selectedPayment, setSelectedPayment] = useState('');
 	const [additionalInfo, setAdditionalInfo] = useState('');
-	const [suggestionPrice] = useState(payment.total || 0);
-	const [price, setPrice] = useState(payment.total || 0);
+	const [price, setPrice] = useState(0);
 
 	const [openConfirmation, setOpenConfirmation] = useState(false);
 
 	const suggestionAmount = useMemo(
-		() => generateSuggestionAmount(suggestionPrice),
-		[suggestionPrice],
+		() => generateSuggestionAmount(payment.total || 0),
+		[payment],
 	);
 
-	const handleCloseCreatePayment = () =>
+	useEffect(() => {
+		setPrice(payment.total);
+	}, [payment]);
+
+	const handleCloseCreatePayment = () => {
 		dispatch(onChangeIsOpenCreatePayment(false));
+		dispatch(
+			onChangePayment({
+				payment: {
+					discount_percentage: 0,
+					subtotal: 0,
+					total: 0,
+				},
+			}),
+		);
+	};
 
 	const {
 		data: dataPaymentMethodCategories,
 		isLoading: loadPaymentMethodCategories,
-	} = useGetPaymentMethodCategoriesViewModel({
-		sort: {field: 'created_at', value: 'asc'},
-		search: [{field: 'is_integration', value: 'false'}],
-		page: 1,
-		limit: 50,
-	});
+	} = useGetPaymentMethodCategoriesViewModel(
+		{
+			sort: {field: 'created_at', value: 'asc'},
+			search: [{field: 'is_integration', value: 'false'}],
+			page: 1,
+			limit: 50,
+		},
+		{
+			onSuccess: dtPaymentCategories => {
+				if (dtPaymentCategories.data.objs) {
+					setSelectedPaymentCategory({
+						type: 'cash',
+						uuid: dtPaymentCategories.data.objs[0].uuid,
+					});
+				}
+			},
+		},
+	);
 
 	const {data: dataPaymentMethods, isLoading: loadPaymentMethods} =
 		useGetPaymentMethodsViewModel(
@@ -86,6 +112,11 @@ const CreatePaymentModal = () => {
 			},
 			{
 				enabled: selectedPaymentCategory.uuid !== '',
+				onSuccess: dtPaymentMethods => {
+					if (dtPaymentMethods.data.objs) {
+						setSelectedPayment(dtPaymentMethods.data.objs[0].uuid);
+					}
+				},
 			},
 		);
 
@@ -162,12 +193,6 @@ const CreatePaymentModal = () => {
 			}
 		},
 	});
-
-	useEffect(() => {
-		if (dataPaymentMethods && selectedPaymentCategory.type === 'cash') {
-			setSelectedPayment(dataPaymentMethods[0].uuid);
-		}
-	}, [selectedPaymentCategory, dataPaymentMethods]);
 
 	return (
 		<>
