@@ -1,3 +1,4 @@
+import {GetAreaQueryKey} from '@/data/area/sources/GetAreaQuery';
 import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
 import {
@@ -5,6 +6,7 @@ import {
 	UpdateBulkTableByFloorRepository,
 } from '@/domain/table/repositories/UpdateBulkTableByFloorRepository';
 import {BaseError} from '@/domain/vo/BaseError';
+import {useQueryClient} from '@tanstack/react-query';
 import {useSnackbar} from 'notistack';
 
 import {mapToUpdateTableByFloorModel} from '../mappers/TableMapper';
@@ -15,6 +17,7 @@ export const useUpdateBulkTableByFloorUsecase = ({
 	onSuccess,
 	...options
 }: MutationOptions): UpdateBulkTableByFloorRepository => {
+	const queryClient = useQueryClient();
 	let error: BaseError | null = null;
 	const {enqueueSnackbar} = useSnackbar();
 
@@ -27,6 +30,7 @@ export const useUpdateBulkTableByFloorUsecase = ({
 		onSuccess: (dataSuccess, ...args) => {
 			if (dataSuccess) {
 				onSuccess?.(mapToUpdateTableByFloorModel(dataSuccess?.data), ...args);
+				queryClient.invalidateQueries([GetAreaQueryKey]);
 				enqueueSnackbar({
 					message: 'Update Table Successfully',
 					variant: 'success',
