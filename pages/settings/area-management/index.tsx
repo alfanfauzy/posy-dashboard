@@ -5,7 +5,7 @@ import {SEO} from '@/view/common/constants/seo';
 import type {NextPageWithLayout} from '@/view/common/types/index';
 
 const Page: NextPageWithLayout = () => (
-	<Guard action="view_floor" on="area_management">
+	<Guard action="view" on="area_management">
 		<MetaHeader
 			title="Posy Resto - Area Management"
 			description={SEO.description}

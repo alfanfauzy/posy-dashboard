@@ -63,12 +63,12 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 			{
 				title: 'Area Management',
 				path: 'settings/area-management',
-				permission: ['setting_subscription'],
+				permission: ['area_management'],
 			},
 			{
 				title: 'Table Management',
 				path: 'settings/table-management',
-				permission: ['setting_subscription'],
+				permission: ['table_management'],
 			},
 			{
 				title: 'Payment Integration',

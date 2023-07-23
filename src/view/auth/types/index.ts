@@ -21,8 +21,7 @@ export type Actions =
 	| 'update_bank'
 	| 'create_bank'
 	| 'manage_payment_method'
-	| 'view'
-	| 'view_floor';
+	| 'view';
 
 export type Subjects =
 	| 'setting_tax_service'
