@@ -10,7 +10,7 @@ import {ResultQuery} from '@/domain/vo/BaseResponse';
 
 export type GetCategoriesInput = InputVariables<
 	keyof Category | keyof Metadata,
-	keyof Pick<Category, 'uuid'> | 'keyword'
+	keyof Pick<Category, 'uuid'> | 'keyword' | 'is_active'
 >;
 
 export type GetCategoriesResult = ResultQuery<Categories | undefined> & {

@@ -187,7 +187,12 @@ const OrganismsFormMasterProduct = ({
 
 	const {data: dataCategory, isLoading: isLoadingCategory} =
 		useGetCategoriesUsecase(
-			{},
+			{
+				search: [{field: 'is_active', value: 'true'}],
+				sort: {field: 'created_at', value: 'desc'},
+				page: 1,
+				limit: 0,
+			},
 			{
 				enabled: isOpenEditProduct,
 			},
