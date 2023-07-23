@@ -310,7 +310,7 @@ export const mapToPayloadMasterProduct = (
 			variants:
 				data.variants.map(variant => ({
 					variant_name: variant.variant_name,
-					variant_price: Number(variant.variant_price),
+					variant_price: Number(variant.variant_price.split('.').join('')),
 					variant_priority: variant.variant_priority,
 				})) ?? [],
 		})) ?? [],
