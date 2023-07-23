@@ -5,8 +5,10 @@ import 'react-date-range/dist/theme/default.css';
 import '@/view/common/styles/globals.css';
 
 import {AbilityProvider} from '@/view/auth/components/organisms/rbac';
+import Loadingbar from '@/view/common/components/atoms/loading/loading-bar';
 import ModalWrapper from '@/view/common/components/atoms/modal';
 import Layout from '@/view/common/components/templates/layout';
+import {useLoading} from '@/view/common/hooks/useLoading';
 import {persistor, wrapper} from '@/view/common/store/index';
 import type {NextPageWithLayout} from '@/view/common/types/index';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
@@ -39,6 +41,7 @@ const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
 		}),
 	);
 	const {store} = wrapper.useWrappedStore(rest);
+	const {loadingState} = useLoading();
 
 	const getLayout =
 		Component.getLayout ??
@@ -59,6 +62,10 @@ const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
 				<Provider store={store}>
 					<AbilityProvider>
 						<PersistGate persistor={persistor}>
+							<Loadingbar
+								isRouteChanging={loadingState.isRouteChanging}
+								key={loadingState.loadingKey}
+							/>
 							<ModalWrapper />
 							{getLayout(<Component {...pageProps} />)}
 						</PersistGate>

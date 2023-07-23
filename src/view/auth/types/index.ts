@@ -34,7 +34,9 @@ export type Subjects =
 	| 'transaction_report'
 	| 'transaction_history'
 	| 'role'
-	| 'payment_integration';
+	| 'payment_integration'
+	| 'table_management'
+	| 'area_management';
 
 export type Ability = PureAbility<[Actions, Subjects], MongoQuery>;
 export type AbilityValue = RawRuleOf<Ability>;

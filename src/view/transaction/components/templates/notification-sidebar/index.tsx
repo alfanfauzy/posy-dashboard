@@ -1,22 +1,18 @@
-import NoOrderIcon from '@/view/common/assets/icons/noOrder';
 import Badge from '@/view/common/components/atoms/badge';
 import {listNotificationTabs} from '@/view/common/constants/notification';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeToggleNotifBar} from '@/view/common/store/slices/transaction';
 import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
 import {useGetNotificationsViewModel} from '@/view/notification/view-models/GetNotificationsViewModel';
 import {Button, Loading} from 'posy-fnb-core';
 import React, {useState} from 'react';
 import {IoMdClose} from 'react-icons/io';
 
+import EmptyData from '../../molecules/empty-state/empty-data';
 import Notificationitem from '../../molecules/notification-item';
 
-type NotificationSidebarProps = {
-	closeNotificationSidebar: () => void;
-};
-
-const NotificationSidebar = ({
-	closeNotificationSidebar,
-}: NotificationSidebarProps) => {
+const NotificationSidebar = () => {
+	const dispatch = useAppDispatch();
 	const {outletId} = useAppSelector(state => state.auth);
 
 	const [tabValueOrder, setTabValueOrder] = useState(0);
@@ -38,7 +34,7 @@ const NotificationSidebar = ({
 		);
 
 	return (
-		<main className="relative min-w-[350px] max-w-[350px] h-full rounded-l-2xl bg-neutral-10">
+		<main className="relative min-w-[350px] max-w-[350px] h-full rounded-l-lg bg-neutral-10">
 			<article className="flex h-full flex-col p-4">
 				<section>
 					<div className="flex items-center justify-between">
@@ -46,7 +42,7 @@ const NotificationSidebar = ({
 						<IoMdClose
 							size={28}
 							className="cursor-pointer hover:opacity-70"
-							onClick={closeNotificationSidebar}
+							onClick={() => dispatch(onChangeToggleNotifBar(false))}
 						/>
 					</div>
 				</section>
@@ -94,12 +90,7 @@ const NotificationSidebar = ({
 				)}
 
 				{!dataNotification && !loadNotification && (
-					<div className="flex h-full w-full flex-col items-center justify-center gap-4">
-						<div className="-mt-24">
-							<NoOrderIcon />
-							<p className="mt-4 text-l-medium">There’s no notification yet</p>
-						</div>
-					</div>
+					<EmptyData message="There's no notification yet" />
 				)}
 
 				{dataNotification && (
@@ -110,7 +101,6 @@ const NotificationSidebar = ({
 								item={item}
 								idx={idx}
 								lengthData={dataNotification.length}
-								closeNotificationSidebar={closeNotificationSidebar}
 							/>
 						))}
 					</div>

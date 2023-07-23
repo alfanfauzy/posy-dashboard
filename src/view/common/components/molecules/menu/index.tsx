@@ -1,4 +1,6 @@
 import {Subjects} from '@/view/auth/types';
+import {useAppDispatch} from '@/view/common/store/hooks';
+import {setOpenDrawer} from '@/view/common/store/slices/auth';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useRouter} from 'next/router';
 import React from 'react';
@@ -15,21 +17,26 @@ type MoleculesMenuProps = {
 };
 
 const MoleculesMenu = ({item, collapse}: MoleculesMenuProps) => {
+	const dispatch = useAppDispatch();
 	const {pathname, push, asPath} = useRouter();
 
 	const linkTo = (path: string) => {
 		push(`/${path}`);
+		dispatch(setOpenDrawer(false));
 	};
 
 	const [, firstPath] = asPath.split('/');
 
 	return (
-		<Menu key={item.path} className={`w-full py-1 ${!collapse ? 'px-4' : ''}`}>
+		<Menu
+			key={item.path}
+			className={`w-full py-0.5 ${!collapse ? 'px-3' : ''}`}
+		>
 			{Array.isArray(item.subMenu) && item.subMenu.length > 0 && (
 				<SubMenu
 					label={item.title}
 					icon={item.icon}
-					className="pl-1 text-l-semibold"
+					className="pl-1 text-m-semibold"
 					defaultOpen={firstPath === item.title.toLocaleLowerCase()}
 				>
 					{item.subMenu.map(
@@ -38,7 +45,7 @@ const MoleculesMenu = ({item, collapse}: MoleculesMenuProps) => {
 								<MenuItem
 									key={el.title}
 									onClick={() => linkTo(el.path)}
-									className={`my-1 text-m-regular transition-all duration-300 ease-in-out first:mt-2 ${
+									className={`my-0.5 text-m-regular transition-all duration-300 ease-in-out first:mt-2 ${
 										pathname.indexOf(el.path) !== -1
 											? 'rounded-lg bg-[#F2F1F9]'
 											: 'hover:rounded-lg hover:bg-[#F2F1F9]'
@@ -52,7 +59,7 @@ const MoleculesMenu = ({item, collapse}: MoleculesMenuProps) => {
 			)}
 			{!Array.isArray(item.subMenu) && (
 				<MenuItem
-					className={`py-0.5 pl-1 text-l-semibold transition-all duration-300 ease-in-out ${
+					className={`py-0.5 pl-1 text-m-semibold transition-all duration-300 ease-in-out ${
 						pathname.indexOf(item.path) !== -1
 							? 'rounded-lg bg-[#F2F1F9]'
 							: 'hover:rounded-lg hover:bg-[#F2F1F9]'

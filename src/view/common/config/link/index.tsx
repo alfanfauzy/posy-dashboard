@@ -61,6 +61,16 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 		],
 		subMenu: [
 			{
+				title: 'Area Management',
+				path: 'settings/area-management',
+				permission: ['area_management'],
+			},
+			{
+				title: 'Table Management',
+				path: 'settings/table-management',
+				permission: ['table_management'],
+			},
+			{
 				title: 'Payment Integration',
 				path: 'settings/payment',
 				permission: ['payment_integration'],

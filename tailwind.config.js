@@ -13,6 +13,7 @@ module.exports = {
 			},
 			boxShadow: {
 				modal: '0px -6px 24px rgba(0, 0, 0, 0.15);',
+				'box-1': '0px -6px 24px 0px rgba(0, 0, 0, 0.06);',
 			},
 		},
 	},

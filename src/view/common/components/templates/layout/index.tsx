@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {GetAreasQueryKey} from '@/data/area/sources/GetAreasQuery';
 import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
 import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
@@ -10,16 +11,22 @@ import Transition from '@/view/common/components/atoms/animations/transition';
 import Sidebar from '@/view/common/components/templates/sidebar';
 import firebaseApp from '@/view/common/config/firebase';
 import {UNPROTECT_ROUTES} from '@/view/common/config/link';
+import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {setIsSubscription} from '@/view/common/store/slices/auth';
+import {
+	setIsSubscription,
+	setOpenDrawer,
+	setRestaurantOutletId,
+} from '@/view/common/store/slices/auth';
 import {useGetOutletSelectionViewModel} from '@/view/outlet/view-models/GetOutletSelectionViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
+import {Drawer} from 'antd';
 import {getMessaging, onMessage} from 'firebase/messaging';
 import {useRouter} from 'next/router';
 import {closeSnackbar, useSnackbar} from 'notistack';
 import {Loading} from 'posy-fnb-core';
-import React, {ReactNode, useEffect, useRef, useState} from 'react';
+import React, {ReactNode, useEffect, useMemo, useRef, useState} from 'react';
 import {ProSidebarProvider} from 'react-pro-sidebar';
 
 type OrganismsLayoutProps = {
@@ -35,11 +42,14 @@ export const handlePlayAudio = (play: () => void) => {
 const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
+	const {width} = useViewportListener();
 	const {replace, asPath, pathname} = useRouter();
-	const {isLoggedIn, isSubscription} = useAppSelector(state => state.auth);
+	const {isLoggedIn, isSubscription, openDrawer, outletId} = useAppSelector(
+		state => state.auth,
+	);
 	const [loading, setLoading] = useState(true);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const audioRef = useRef<any>();
+	const audioRef =
+		useRef<HTMLAudioElement>() as React.MutableRefObject<HTMLAudioElement>;
 	const {enqueueSnackbar} = useSnackbar();
 
 	const play = () => {
@@ -106,6 +116,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 				queryClient.invalidateQueries([GetNotificationsQueryKey]);
+				queryClient.invalidateQueries([GetAreasQueryKey]);
 				enqueueSnackbar({
 					className: 'border-t-8 border-blue-success',
 					style: {
@@ -134,6 +145,21 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		});
 	}, []);
 
+	const outletOptions = useMemo(
+		() =>
+			dataOutletSelection?.map(entry => ({
+				label: entry.outlet_name,
+				value: entry.uuid,
+			})) ?? [],
+		[dataOutletSelection],
+	);
+
+	useEffect(() => {
+		if (!outletId && outletOptions?.length > 0) {
+			dispatch(setRestaurantOutletId(outletOptions[0]?.value));
+		}
+	}, [dispatch, outletId, outletOptions]);
+
 	if (loading) {
 		return (
 			<main className="flex h-screen w-full items-center justify-center">
@@ -146,9 +172,23 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		<ProSidebarProvider>
 			<main className="h-screen max-h-screen overflow-x-auto overflow-y-hidden bg-neutral-30">
 				<section className="flex h-full w-full gap-2">
-					<div>
-						<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
-					</div>
+					{width > 1280 ? (
+						<div>
+							<Sidebar outletOptions={outletOptions} />
+						</div>
+					) : (
+						<Drawer
+							placement="left"
+							width={200}
+							onClose={() => dispatch(setOpenDrawer(false))}
+							open={openDrawer}
+							closeIcon={null}
+							headerStyle={{display: 'none'}}
+						>
+							<Sidebar isDrawer outletOptions={outletOptions} />
+						</Drawer>
+					)}
+
 					<div className="h-full flex-1 overflow-y-scroll">
 						<Transition asPath={pathname}>{children}</Transition>
 					</div>

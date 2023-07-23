@@ -24,7 +24,7 @@ const ViewSubscriptionPage = () => {
 
 	return (
 		<main className="flex h-full w-full">
-			<article className="flex h-full w-full flex-col rounded-2xl bg-neutral-10 p-6">
+			<article className="flex h-full w-full flex-col rounded-lg bg-neutral-10 p-4">
 				<section className="flex items-start justify-between">
 					<p className="text-xxl-semibold text-primary-main ">Subscription</p>
 				</section>

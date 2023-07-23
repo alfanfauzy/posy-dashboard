@@ -28,3 +28,9 @@ export type Metadata = {
 	updated_at: UpdatedAt;
 	cancel_at: CancelAt;
 };
+
+export type NewMetadata = {
+	created_at: string;
+	updated_at: string;
+	cancel_at: string;
+};

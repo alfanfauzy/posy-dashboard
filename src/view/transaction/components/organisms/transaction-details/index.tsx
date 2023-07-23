@@ -1,174 +1,67 @@
 import {Orders} from '@/domain/order/model';
-import {Transaction} from '@/domain/transaction/model';
-import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
-import CountUpTimer from '@/view/common/components/atoms/countup';
-import useDisclosure from '@/view/common/hooks/useDisclosure';
-import {useAppSelector} from '@/view/common/store/hooks';
-import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
-import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
-import React, {useState} from 'react';
-import {CgTrash} from 'react-icons/cg';
-import {FiEdit} from 'react-icons/fi';
-import {IoIosArrowDown, IoIosArrowUp} from 'react-icons/io';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {
+	TransactionTabsType,
+	onChangeTransactionTab,
+} from '@/view/common/store/slices/transaction';
+import {listTransactionTabs} from '@/view/transaction/constants/order';
+import {Button} from 'posy-fnb-core';
+import React from 'react';
 
-import CancelOrderBottomsheet from '../cancel-order/CancelOrderBottomsheet';
-import CancelTransactionModal from '../modal/CancelTransactionModal';
-import CreateTransactionModal from '../modal/CreateTransactionModal';
+import TabOrderDetails from '../../molecules/tabs/order/details';
+import TabPaymentDetails from '../../molecules/tabs/payment/payment-tab-bottom/details';
 
-type TransactionDetailsProps = {
-	dataTransaction: Transaction | undefined;
+type OrderDetailsProps = {
 	dataOrder: Orders | undefined;
 };
 
-const TransactionDetails = ({
-	dataTransaction,
-	dataOrder,
-}: TransactionDetailsProps) => {
-	const [openModalTransaction, setOpenModalTransaction] = useState(false);
-	const {outletId} = useAppSelector(state => state.auth);
-	const [
-		isOpenCancelTransaction,
-		{open: openCancelTransaction, close: closeCancelTransaction},
-		{valueState, setValueState},
-	] = useDisclosure<CreateCancelTransactionInput>({initialState: false});
+const TransactionDetails = ({dataOrder}: OrderDetailsProps) => {
+	const dispatch = useAppDispatch();
 
-	const [isOpenCancelOrder, {open: openCancelOrder, close: closeCancelOrder}] =
-		useDisclosure({initialState: false});
+	const {transactionTab} = useAppSelector(state => state.transaction);
 
-	const [isOpenTransactionDetail, {toggle: toggleTransactionDetail}] =
-		useDisclosure({
-			initialState: false,
-		});
+	const handleChangeTab = (tab: TransactionTabsType) =>
+		dispatch(onChangeTransactionTab(tab));
 
-	const onOpenCancelTransaction = (payload: CreateCancelTransactionInput) => {
-		setValueState({
-			transaction_uuid: payload.transaction_uuid,
-			restaurant_outlet_uuid: payload.restaurant_outlet_uuid,
-		});
-		openCancelTransaction();
-	};
+	const generateDetailTabs = (tab: TransactionTabsType) => {
+		const tabs = {
+			order: <TabOrderDetails dataOrder={dataOrder} />,
+			payment: <TabPaymentDetails dataOrder={dataOrder} />,
+		};
 
-	const handleCloseModalCreateTransaction = (value: boolean) => {
-		setOpenModalTransaction(value);
+		return tabs[tab];
 	};
 
 	return (
-		<section>
-			<aside className="p-4 bg-gradient-to-r from-primary-main to-secondary-main rounded-l-2xl">
-				<div className="flex items-center justify-between">
-					<p className="text-l-bold text-neutral-10">
-						Table {dataTransaction?.table_number}
-						{dataTransaction?.session_suffix}
-					</p>
-					{dataTransaction && (
-						<div className="flex gap-6">
-							<FiEdit
-								size={20}
-								className="cursor-pointer text-neutral-10"
-								onClick={() => setOpenModalTransaction(true)}
-							/>
-							<CgTrash
-								className="cursor-pointer text-neutral-10"
-								size={20}
-								onClick={
-									dataTransaction.total_order > 0
-										? () => openCancelOrder()
-										: () =>
-												onOpenCancelTransaction({
-													restaurant_outlet_uuid: outletId,
-													transaction_uuid: dataTransaction.uuid,
-												})
-								}
-							/>
-						</div>
+		<section className="h-full">
+			<aside className="h-full">
+				<div className="w-full h-fit flex bg-slate-100 rounded-full border border-neutral-50">
+					{listTransactionTabs.map(tab =>
+						transactionTab === tab.value ? (
+							<Button
+								size="m"
+								key={tab.value}
+								className="w-1/2 text-m-bold"
+								onClick={() => handleChangeTab(tab.value)}
+							>
+								{tab.label}
+							</Button>
+						) : (
+							<p
+								key={tab.value}
+								onClick={() => {
+									handleChangeTab(tab.value);
+								}}
+								className="w-1/2 flex items-center justify-center text-m-bold cursor-pointer hover:opacity-70 duration-300 ease-in-out"
+							>
+								{tab.label}
+							</p>
+						),
 					)}
 				</div>
-				<div className="my-4 border-b border-secondary-main" />
 
-				{dataTransaction && (
-					<div>
-						<div className="mt-2 flex gap-4 items-center justify-between">
-							<div className="w-[45%]">
-								<p className="text-m-semibold text-neutral-10">
-									ID:{' '}
-									{`${generateTransactionCode(
-										dataTransaction?.transaction_code,
-									)}`}
-								</p>
-							</div>
-
-							<div className="flex justify-between w-1/2 border-l pl-3">
-								<p className="text-m-semibold text-neutral-10">
-									{dataTransaction && dataTransaction?.first_order_at > 0 ? (
-										<CountUpTimer startTime={dataTransaction?.first_order_at} />
-									) : (
-										<div className="mx-0.5">-</div>
-									)}
-								</p>
-								{isOpenTransactionDetail ? (
-									<IoIosArrowUp
-										size={22}
-										className="cursor-pointer text-neutral-10"
-										onClick={toggleTransactionDetail}
-									/>
-								) : (
-									<IoIosArrowDown
-										size={22}
-										className="cursor-pointer text-neutral-10"
-										onClick={toggleTransactionDetail}
-									/>
-								)}
-							</div>
-						</div>
-						{isOpenTransactionDetail && (
-							<div className="mt-3 flex gap-4 items-center justify-between">
-								<div className="w-1/2">
-									<p className="text-s-regular line-clamp-1 text-neutral-10">
-										Name: {dataTransaction.customer_name || '-'}
-									</p>
-									<p className="mt-1 text-s-regular line-clamp-1 lowercase text-neutral-10">
-										Type:{' '}
-										{dataTransaction.transaction_category
-											.split('_')
-											.join(' ') || '-'}
-									</p>
-								</div>
-								<div className="w-1/2 pl-1">
-									<p className="text-s-regular line-clamp-1 text-neutral-10">
-										Pax: {dataTransaction.total_pax || '-'}
-									</p>
-									<p className="mt-1 text-s-regular line-clamp-1 text-neutral-10">
-										Time Order:{' '}
-										{dateFormatter(dataTransaction?.created_at, 'HH:mm')}
-									</p>
-								</div>
-							</div>
-						)}
-					</div>
-				)}
+				{generateDetailTabs(transactionTab)}
 			</aside>
-			{isOpenCancelTransaction && (
-				<CancelTransactionModal
-					isOpen={isOpenCancelTransaction}
-					close={closeCancelTransaction}
-					value={valueState}
-				/>
-			)}
-			{openModalTransaction && (
-				<CreateTransactionModal
-					open={openModalTransaction}
-					handleClose={handleCloseModalCreateTransaction}
-					isEdit
-					dataTransaction={dataTransaction}
-				/>
-			)}
-
-			<CancelOrderBottomsheet
-				dataOrder={dataOrder}
-				closeCancelOrder={closeCancelOrder}
-				isOpenCancelOrder={isOpenCancelOrder}
-				dataTransaction={dataTransaction}
-			/>
 		</section>
 	);
 };
