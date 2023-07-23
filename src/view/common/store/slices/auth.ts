@@ -11,6 +11,7 @@ export type AuthState = {
 	isSubscription: boolean;
 	authData: Login;
 	outletId: string;
+	openDrawer: boolean;
 };
 
 const initialState: AuthState = {
@@ -33,6 +34,7 @@ const initialState: AuthState = {
 		},
 		accesses: [],
 	},
+	openDrawer: false,
 };
 
 export const AuthSlice = createSlice({
@@ -78,6 +80,9 @@ export const AuthSlice = createSlice({
 		setIsSubscription: (state: AuthState, action: PayloadAction<boolean>) => {
 			state.isSubscription = action.payload;
 		},
+		setOpenDrawer: (state: AuthState, action: PayloadAction<boolean>) => {
+			state.openDrawer = action.payload;
+		},
 	},
 });
 
@@ -87,6 +92,7 @@ export const {
 	setRestaurantOutletId,
 	setIsSubscription,
 	onSetCredentials,
+	setOpenDrawer,
 } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

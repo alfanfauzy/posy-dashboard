@@ -29,6 +29,9 @@ export type OrderState = {
 		notes?: string;
 	};
 	order: Array<OrderItem>;
+	isOpenCreateOrder: boolean;
+	isOpenCancelOrder: boolean;
+	isOpenPrintToKitchen: boolean;
 };
 
 const initialState: OrderState = {
@@ -38,6 +41,9 @@ const initialState: OrderState = {
 		addOnVariant: [],
 	},
 	order: [],
+	isOpenCreateOrder: false,
+	isOpenCancelOrder: false,
+	isOpenPrintToKitchen: false,
 };
 
 export const OrderSlice = createSlice({
@@ -125,6 +131,15 @@ export const OrderSlice = createSlice({
 		onClearOrder: state => {
 			state.order = [];
 		},
+		onChangeIsOpenCreateOrder: (state, action: PayloadAction<boolean>) => {
+			state.isOpenCreateOrder = action.payload;
+		},
+		onChangeIsOpenCancelOrder: (state, action: PayloadAction<boolean>) => {
+			state.isOpenCancelOrder = action.payload;
+		},
+		onChangeIsOpenPrintToKitchen: (state, action: PayloadAction<boolean>) => {
+			state.isOpenPrintToKitchen = action.payload;
+		},
 	},
 });
 
@@ -138,6 +153,9 @@ export const {
 	onAddOrder,
 	onDropOrder,
 	onClearOrder,
+	onChangeIsOpenCreateOrder,
+	onChangeIsOpenCancelOrder,
+	onChangeIsOpenPrintToKitchen,
 } = OrderSlice.actions;
 
 export default OrderSlice.reducer;

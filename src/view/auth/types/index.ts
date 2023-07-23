@@ -36,7 +36,10 @@ export type Subjects =
 	| 'role'
 	| 'payment_integration'
 	| 'product'
-	| 'product_category';
+	| 'product_category'
+	| 'food_rating'
+	| 'table_management'
+	| 'area_management';
 
 export type Ability = PureAbility<[Actions, Subjects], MongoQuery>;
 export type AbilityValue = RawRuleOf<Ability>;

@@ -78,12 +78,22 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 		],
 		subMenu: [
 			{
+				title: 'Area Management',
+				path: 'settings/area-management',
+				permission: ['area_management'],
+			},
+			{
+				title: 'Table Management',
+				path: 'settings/table-management',
+				permission: ['table_management'],
+			},
+			{
 				title: 'Payment Integration',
 				path: 'settings/payment',
 				permission: ['payment_integration'],
 			},
 			{
-				title: 'Tax & Service',
+				title: 'Tax & Services',
 				path: 'settings/tax-and-service',
 				permission: ['setting_tax_service'],
 			},
@@ -91,6 +101,11 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 				title: 'Subscription',
 				path: 'settings/subscription',
 				permission: ['setting_subscription'],
+			},
+			{
+				title: 'Food Ratings',
+				path: 'settings/food-ratings',
+				permission: ['food_rating'],
 			},
 		],
 	},

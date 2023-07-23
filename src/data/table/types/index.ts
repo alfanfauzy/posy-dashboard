@@ -7,4 +7,9 @@ export type GetTablesDataResponse = {
 	priority: number;
 	created_at: CreatedAt;
 	updated_at: UpdatedAt;
+	floor_area_uuid: string;
+	table_seat: number;
+	table_image: string;
+	position_x: number;
+	position_y: number;
 };

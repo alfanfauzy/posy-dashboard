@@ -23,7 +23,7 @@ const AtomsInputSearch = ({
 }: AtomsInputSearchProps) => (
 	<div
 		className={`transition-all duration-100 ease-in-out ${
-			isOpen && isTransaction ? 'ml-10 mb-4 xl:mb-0 w-full' : 'w-full'
+			isOpen && isTransaction ? 'ml-14 w-full' : 'w-full'
 		}`}
 	>
 		<span className="relative flex h-full items-center justify-start">

@@ -9,20 +9,20 @@ import React from 'react';
 
 type PaymentSummaryProps = {
 	dataOrder: Orders;
-	transaction_uuid: string;
 };
 
-const PaymentSummary = ({dataOrder, transaction_uuid}: PaymentSummaryProps) => {
+const PaymentSummary = ({dataOrder}: PaymentSummaryProps) => {
 	const dispatch = useAppDispatch();
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
 	);
+	const {selectedTrxId} = useAppSelector(state => state.transaction);
 
 	const {data: dataPayment, isLoading: loadPayment} =
 		useGetPaymentSummaryViewModel(
 			{
 				restaurant_outlet_uuid: outletId,
-				transaction_uuid,
+				transaction_uuid: selectedTrxId,
 			},
 			{
 				enabled: outletId.length > 0 && isSubscription && isLoggedIn,

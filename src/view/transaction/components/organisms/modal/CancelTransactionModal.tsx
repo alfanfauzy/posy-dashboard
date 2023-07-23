@@ -1,3 +1,4 @@
+import {GetTableLayoutByFloorQueryKey} from '@/data/table/sources/GetTableLayoutByFloorQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {
@@ -5,7 +6,11 @@ import {
 	CreateCancelTransactionInput,
 } from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {useAppDispatch} from '@/view/common/store/hooks';
-import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {onChangeIsOpenCancelOrder} from '@/view/common/store/slices/order';
+import {
+	onChangeCancelTransaction,
+	onChangeSelectedTrxId,
+} from '@/view/common/store/slices/transaction';
 import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
@@ -17,18 +22,26 @@ const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 });
 
 type CancelTransactionModalProps = {
-	close: () => void;
 	isOpen: boolean;
-	value: CreateCancelTransactionInput | undefined;
+	payload: CreateCancelTransactionInput | null;
 };
 
 const CancelTransactionModal = ({
 	isOpen,
-	close,
-	value,
+	payload,
 }: CancelTransactionModalProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
+
+	const handleClose = () => {
+		dispatch(onChangeIsOpenCancelOrder(false));
+		dispatch(
+			onChangeCancelTransaction({
+				isOpen: false,
+				payload: null,
+			}),
+		);
+	};
 
 	const {createCancelTransaction, isLoading} =
 		useCreateCancelTransactionViewModel({
@@ -37,23 +50,21 @@ const CancelTransactionModal = ({
 				if (data) {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+					queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
 					dispatch(onChangeSelectedTrxId({id: ''}));
-					close();
+					handleClose();
 				}
 			},
 		});
 
 	const onCancelTransaction = () => {
-		if (value) {
-			createCancelTransaction({
-				transaction_uuid: value.transaction_uuid,
-				restaurant_outlet_uuid: value.restaurant_outlet_uuid,
-			});
+		if (payload) {
+			createCancelTransaction(payload);
 		}
 	};
 
 	return (
-		<Modal open={isOpen} handleClose={close}>
+		<Modal open={isOpen} handleClose={handleClose}>
 			<section className="flex w-[380px] flex-col items-center justify-center p-4">
 				<div className="px-16">
 					<p className="text-center text-l-semibold line-clamp-2">
@@ -65,7 +76,7 @@ const CancelTransactionModal = ({
 						variant="secondary"
 						size="l"
 						fullWidth
-						onClick={close}
+						onClick={handleClose}
 						className="whitespace-nowrap"
 					>
 						No

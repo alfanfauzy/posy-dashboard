@@ -41,7 +41,7 @@ const ViewProductPage = () => {
 	});
 
 	return (
-		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
+		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">
 			<article>
 				<aside className="flex items-start">
 					<p className="text-xxl-semibold text-neutral-100 ">Product</p>
