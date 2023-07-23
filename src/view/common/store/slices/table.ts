@@ -1,6 +1,5 @@
 import {Area} from '@/domain/area/model';
 import {Table} from '@/domain/table/model';
-import {TableLayout} from '@/domain/table/model/TableLayout';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 type AddTablePayload = {
@@ -12,7 +11,6 @@ type AddTablePayload = {
 type TableState = {
 	selectedTable: Table | null;
 	selectedArea: Area | null;
-	tableLayout: TableLayout;
 	isEditLayout: boolean;
 	addTable: {
 		isOpen: boolean;
@@ -23,7 +21,6 @@ type TableState = {
 const initialState: TableState = {
 	selectedTable: null,
 	selectedArea: null,
-	tableLayout: [],
 	isEditLayout: false,
 	addTable: {
 		isOpen: false,
@@ -41,9 +38,6 @@ const TableSlice = createSlice({
 		},
 		onChangeSelectedTable: (state, action: PayloadAction<Table | null>) => {
 			state.selectedTable = action.payload;
-		},
-		onChangeTableLayout: (state, action: PayloadAction<TableLayout>) => {
-			state.tableLayout = action.payload;
 		},
 		onOpenEditLayout: state => {
 			state.isEditLayout = true;
@@ -65,7 +59,6 @@ const TableSlice = createSlice({
 export const {
 	onChangeSelectedArea,
 	onChangeSelectedTable,
-	onChangeTableLayout,
 	onOpenEditLayout,
 	onCloseEditLayout,
 	onOpenAddTable,

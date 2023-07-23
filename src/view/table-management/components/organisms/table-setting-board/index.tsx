@@ -1,12 +1,16 @@
+import {TableLayout} from '@/domain/table/model/TableLayout';
 import {useAppSelector} from '@/view/common/store/hooks';
 import React from 'react';
 
 import TableSquare from '../../molecules/table-square';
 
-const TableSettingBoard = () => {
-	const {selectedArea, tableLayout, isEditLayout} = useAppSelector(
-		state => state.table,
-	);
+type TableSettingBoardProps = {
+	tablePos: TableLayout;
+	setTablePos: (tablePos: TableLayout) => void;
+};
+
+const TableSettingBoard = ({tablePos, setTablePos}: TableSettingBoardProps) => {
+	const {selectedArea} = useAppSelector(state => state.table);
 
 	return (
 		<aside className="flex w-full h-full pb-20 overflow-y-auto">
@@ -20,9 +24,9 @@ const TableSettingBoard = () => {
 							.map((_, index) =>
 								TableSquare({
 									index,
+									tablePos,
+									setTablePos,
 									selectedArea,
-									isEditLayout,
-									tableLayout,
 								}),
 							)}
 					</div>

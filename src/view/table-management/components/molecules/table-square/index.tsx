@@ -1,10 +1,7 @@
 import {Area} from '@/domain/area/model';
 import {TableLayout} from '@/domain/table/model/TableLayout';
-import {useAppDispatch} from '@/view/common/store/hooks';
-import {
-	onChangeTableLayout,
-	onOpenAddTable,
-} from '@/view/common/store/slices/table';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onOpenAddTable} from '@/view/common/store/slices/table';
 import React, {DragEvent} from 'react';
 import {AiOutlinePlusCircle} from 'react-icons/ai';
 
@@ -12,23 +9,24 @@ import Table from '../../atoms/table';
 
 type TableSquareProps = {
 	index: number;
+	tablePos: TableLayout;
+	setTablePos: (tablePos: TableLayout) => void;
 	selectedArea: Area;
-	tableLayout: TableLayout;
-	isEditLayout: boolean;
 };
 
 const TableSquare = ({
 	index,
 	selectedArea,
-	isEditLayout,
-	tableLayout,
+	tablePos,
+	setTablePos,
 }: TableSquareProps) => {
 	const dispatch = useAppDispatch();
+	const {isEditLayout} = useAppSelector(state => state.table);
 
 	const toY = index % selectedArea.width;
 	const toX = Math.floor(index / selectedArea?.width);
 
-	const item = tableLayout?.[toX]?.[toY];
+	const item = tablePos?.[toX]?.[toY];
 
 	const handleOpenAddTable = () => {
 		dispatch(
@@ -56,15 +54,16 @@ const TableSquare = ({
 		if ((!x && !y) || (x === fromX && y === fromY)) {
 			return;
 		} else {
-			const newTableLayout = [...tableLayout];
+			const newTableLayout = [...tablePos];
 			const filteredTable = newTableLayout[fromX][fromY];
 			const swapTable = newTableLayout[x][y];
 
 			newTableLayout[x][y] = filteredTable;
+
 			if (swapTable) newTableLayout[fromX][fromY] = swapTable;
 			else newTableLayout[fromX][fromY] = null;
 
-			dispatch(onChangeTableLayout(newTableLayout));
+			setTablePos(newTableLayout);
 		}
 	};
 

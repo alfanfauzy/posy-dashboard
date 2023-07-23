@@ -1,4 +1,5 @@
 import {Areas} from '@/domain/area/model';
+import {TableLayout} from '@/domain/table/model/TableLayout';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
 	onChangeSelectedArea,
@@ -23,14 +24,19 @@ const AddTableModal = dynamic(
 type TableSettingsProps = {
 	dataArea: Areas;
 	isLoading: boolean;
+	tablePos: TableLayout;
+	setTablePos: (tablePos: TableLayout) => void;
 };
 
-const TableSettings = ({dataArea, isLoading}: TableSettingsProps) => {
+const TableSettings = ({
+	dataArea,
+	isLoading,
+	tablePos,
+	setTablePos,
+}: TableSettingsProps) => {
 	const dispatch = useAppDispatch();
 	const {outletId} = useAppSelector(state => state.auth);
-	const {selectedArea, tableLayout, addTable} = useAppSelector(
-		state => state.table,
-	);
+	const {selectedArea, addTable} = useAppSelector(state => state.table);
 
 	const {UpdateSaveTableLayout, isLoading: isLoadingSaveTable} =
 		useUpdateSaveTableLayoutViewModel({
@@ -44,7 +50,7 @@ const TableSettings = ({dataArea, isLoading}: TableSettingsProps) => {
 		UpdateSaveTableLayout({
 			floor_area_uuid: selectedArea?.uuid || '',
 			restaurant_outlet_uuid: outletId,
-			layout: tableLayout,
+			layout: tablePos,
 		});
 	};
 
@@ -68,7 +74,9 @@ const TableSettings = ({dataArea, isLoading}: TableSettingsProps) => {
 
 				{dataArea.length === 0 && !isLoading && <EmptyArea redirect />}
 
-				{dataArea.length > 0 && selectedArea ? <TableSettingBoard /> : null}
+				{dataArea.length > 0 && selectedArea ? (
+					<TableSettingBoard tablePos={tablePos} setTablePos={setTablePos} />
+				) : null}
 
 				<FloorList
 					dataArea={dataArea}
