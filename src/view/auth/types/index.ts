@@ -21,7 +21,7 @@ export type Actions =
 	| 'update_bank'
 	| 'create_bank'
 	| 'manage_payment_method'
-	| 'view';
+	| 'delete';
 
 export type Subjects =
 	| 'setting_tax_service'
@@ -35,6 +35,8 @@ export type Subjects =
 	| 'transaction_history'
 	| 'role'
 	| 'payment_integration'
+	| 'product'
+	| 'product_category'
 	| 'food_rating'
 	| 'table_management'
 	| 'area_management';

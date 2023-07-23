@@ -68,3 +68,8 @@ export type UpdateOutletProductDataResponse = {
 		updated_at: UpdatedAt;
 	};
 };
+
+export type GetProductDetailResponse = {
+	product: OutletProductBased;
+	addons: Array<Addon>;
+};

@@ -1,4 +1,6 @@
-import {Categories} from '@/domain/category/model';
+import {Categories, Category} from '@/domain/category/model';
+import {UpdateCategoryInput} from '@/domain/category/repositories/UpdateCategoryRepository';
+import {FormCategoryValidation} from '@/view/category/schema/category-schema';
 
 import {GetCategoriesDataResponse} from '../types';
 
@@ -12,3 +14,13 @@ export const mapToCategoriesModel = (
 		is_active: data.is_active,
 		restaurant_uuid: data.restaurant_uuid,
 	}));
+
+export const mapTopUpdateCategory = (
+	data: FormCategoryValidation,
+	selectedCategory: Category,
+): UpdateCategoryInput => {
+	return {
+		categoryId: selectedCategory.uuid,
+		payload: data,
+	};
+};

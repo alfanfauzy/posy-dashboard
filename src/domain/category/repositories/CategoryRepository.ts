@@ -1,5 +1,7 @@
 import {Categories, Category} from '@/domain/category/model';
 import {InputVariables} from '@/domain/vo/BaseInput';
+import {Metadata} from '@/domain/vo/BaseMetadata';
+import {Pagination} from '@/domain/vo/BasePagination';
 import {ResultQuery} from '@/domain/vo/BaseResponse';
 
 /**
@@ -7,8 +9,10 @@ import {ResultQuery} from '@/domain/vo/BaseResponse';
  */
 
 export type GetCategoriesInput = InputVariables<
-	keyof Category,
-	keyof Pick<Category, 'uuid'>
+	keyof Category | keyof Metadata,
+	keyof Pick<Category, 'uuid'> | 'keyword' | 'is_active'
 >;
 
-export type GetCategoriesResult = ResultQuery<Categories | undefined>;
+export type GetCategoriesResult = ResultQuery<Categories | undefined> & {
+	pagination: Pagination | undefined;
+};

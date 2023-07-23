@@ -8,7 +8,7 @@ export type AddonVariant = {
 type AddonBased = {
 	uuid: string;
 	addon_name: string;
-	addon_price: number;
+	addon_price?: number;
 	is_optional: boolean;
 	can_choose_multiple: boolean;
 	min_variant: number;
