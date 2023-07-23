@@ -3,9 +3,13 @@ import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransaction
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {Transaction} from '@/domain/transaction/model';
 import {UpdateTransaction} from '@/domain/transaction/repositories/UpdateTransactionRepository';
-import {orderTransactionType, orderType} from '@/view/common/constants/order';
 import {useForm} from '@/view/common/hooks/useForm';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeIsOpenCreateTransaction} from '@/view/common/store/slices/transaction';
+import {
+	orderTransactionType,
+	orderType,
+} from '@/view/transaction/constants/order';
 import {validationSchemaUpdateTransaction} from '@/view/transaction/schemas/update-transaction';
 import {ValidationSchemaUpdateTransactionType} from '@/view/transaction/schemas/update-transaction';
 import {useUpdateTransactionViewModel} from '@/view/transaction/view-models/UpdateTransactionViewModel';
@@ -19,26 +23,27 @@ import Select from 'react-select';
 import TableTransactionGridView from '../content/TableTransactionGridView';
 
 type CreateTransactionModalProps = {
-	open: boolean;
-	handleClose: (value: boolean) => void;
 	isEdit?: boolean;
 	dataTransaction?: Transaction | undefined;
 };
 
 const CreateTransactionModal = ({
-	open,
-	handleClose,
 	isEdit,
 	dataTransaction,
 }: CreateTransactionModalProps) => {
+	const dispatch = useAppDispatch();
 	const {outletId} = useAppSelector(state => state.auth);
-	const {selectedTrxId} = useAppSelector(state => state.transaction);
+	const {selectedTrxId, isOpenCreateTransaction} = useAppSelector(
+		state => state.transaction,
+	);
 	const queryClient = useQueryClient();
 
 	const methods = useForm({
 		mode: 'onChange',
 		schema: validationSchemaUpdateTransaction,
 	});
+
+	const handleClose = () => dispatch(onChangeIsOpenCreateTransaction(false));
 
 	const {updateTransaction, isLoading: loadUpdateTransaction} =
 		useUpdateTransactionViewModel({
@@ -49,7 +54,7 @@ const CreateTransactionModal = ({
 					queryClient.invalidateQueries([GetTransactionQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
 				}
-				handleClose(false);
+				handleClose();
 			},
 		});
 
@@ -92,21 +97,20 @@ const CreateTransactionModal = ({
 				restaurant_outlet_table_uuid?.toString() || '',
 			);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dataTransaction, isEdit]);
+	}, [dataTransaction, isEdit, setValue]);
 
 	return (
 		<Modal
 			style={{
 				top: 15,
 			}}
-			open={open}
-			onCancel={() => handleClose(false)}
+			open={isOpenCreateTransaction}
+			onCancel={handleClose}
 			width={794}
 			closable={false}
 			footer={
 				<div className="grid grid-cols-2 gap-2 px-4 pb-4 pt-2">
-					<Button variant="secondary" onClick={() => handleClose(false)}>
+					<Button variant="secondary" onClick={handleClose}>
 						Cancel
 					</Button>
 					<Button
@@ -129,25 +133,30 @@ const CreateTransactionModal = ({
 					{isEdit ? 'Edit' : 'Create New'} Transaction
 				</p>
 				<div className="grid grid-cols-3 gap-4">
-					<reactHookForm.Controller
-						control={control}
-						name="transaction_category"
-						render={({field: {onChange}}) => (
-							<Select
-								isSearchable={false}
-								className="rounded-md !mt-0 text-l-regular h-10"
-								onChange={e => {
-									onChange(e);
-									setValue('restaurant_outlet_table_uuid', '');
-								}}
-								value={watch('transaction_category')}
-								options={orderType}
-								placeholder="Select Type"
-							/>
-						)}
-					/>
-
 					<div>
+						<p className="text-neutral-10 mb-1">Transaction Type</p>
+						<reactHookForm.Controller
+							control={control}
+							name="transaction_category"
+							render={({field: {onChange}}) => (
+								<Select
+									isSearchable={false}
+									className="rounded-md !mt-0 text-l-regular h-10"
+									onChange={e => {
+										onChange(e);
+										setValue('restaurant_outlet_table_uuid', '', {
+											shouldValidate: true,
+										});
+									}}
+									value={watch('transaction_category')}
+									options={orderType}
+									placeholder="Select Type"
+								/>
+							)}
+						/>
+					</div>
+					<div>
+						<p className="text-neutral-10 mb-1">Pax (Optional)</p>
 						<Input
 							size="l"
 							placeholder="Pax (Optional)"
@@ -160,12 +169,15 @@ const CreateTransactionModal = ({
 							error={!!errors.total_pax}
 						/>
 					</div>
-					<Input
-						size="l"
-						placeholder="Customer name (Optional)"
-						{...register('customer_name')}
-						error={!!errors.customer_name}
-					/>
+					<div>
+						<p className="text-neutral-10 mb-1">Customer name (Optional)</p>
+						<Input
+							size="l"
+							placeholder="Customer name (Optional)"
+							{...register('customer_name')}
+							error={!!errors.customer_name}
+						/>
+					</div>
 				</div>
 			</div>
 			{watch('transaction_category.value') === 0 && (

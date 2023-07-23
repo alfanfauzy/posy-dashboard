@@ -9,7 +9,7 @@ import {ResultQuery} from '@/domain/vo/BaseResponse';
 
 export type GetTablesInput = InputVariables<
 	keyof Pick<Table, 'priority'>,
-	keyof Pick<Table, 'table_number'> | keyof FilterBased
+	keyof Pick<Table, 'table_number'> | keyof FilterBased | 'floor_area_uuid'
 >;
 
 export type GetTablesResult = ResultQuery<Tables | undefined> & {

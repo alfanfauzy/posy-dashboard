@@ -1,16 +1,17 @@
+import {GetTableLayoutByFloorQueryKey} from '@/data/table/sources/GetTableLayoutByFloorQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {CancelTransaction} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeIsOpenCancelOrder} from '@/view/common/store/slices/order';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {CancelOptions} from '@/view/transaction/constants';
 import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import {Button, Select, Textarea} from 'posy-fnb-core';
 import React, {useState} from 'react';
 import {AiOutlineInfoCircle} from 'react-icons/ai';
-
-import {CancelOptions} from '../cancel-order/CancelOrderBottomsheet';
 
 const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
 	loading: () => <div />,
@@ -30,6 +31,11 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 	const [reason, setReason] = useState({label: '', value: ''});
 	const [reasonOther, setReasonOther] = useState('');
 
+	const handleClose = () => {
+		close();
+		dispatch(onChangeIsOpenCancelOrder(false));
+	};
+
 	const {createCancelTransaction, isLoading} =
 		useCreateCancelTransactionViewModel({
 			onSuccess: _data => {
@@ -37,8 +43,9 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 				if (data) {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+					queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
 					dispatch(onChangeSelectedTrxId({id: ''}));
-					close();
+					handleClose();
 				}
 			},
 		});
@@ -55,7 +62,12 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 	};
 
 	return (
-		<Modal overflow={false} closeOverlay open={isOpen} handleClose={close}>
+		<Modal
+			overflow={false}
+			closeOverlay
+			open={isOpen}
+			handleClose={handleClose}
+		>
 			<section className="flex w-[380px] flex-col items-center justify-center">
 				<div className="px-16 flex flex-col items-center">
 					<AiOutlineInfoCircle
@@ -90,7 +102,7 @@ const CancelTableModal = ({isOpen, close, value}: CancelTableModalProps) => {
 						variant="secondary"
 						size="l"
 						fullWidth
-						onClick={close}
+						onClick={handleClose}
 						className="whitespace-nowrap"
 					>
 						No

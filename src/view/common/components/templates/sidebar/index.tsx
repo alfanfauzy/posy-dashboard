@@ -1,7 +1,5 @@
 import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
 import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
-import {OutletSelection} from '@/domain/outlet/models';
-import {useLogoutViewModel} from '@/view/auth/view-models/LogoutViewModel';
 import PersonIcon from '@/view/common/assets/icons/person';
 import Logo from '@/view/common/components/atoms/logo';
 import Menu from '@/view/common/components/molecules/menu';
@@ -10,30 +8,37 @@ import {PROTECT_ROUTES} from '@/view/common/config/link';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {onLogout, setRestaurantOutletId} from '@/view/common/store/slices/auth';
-import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {onResetArea} from '@/view/common/store/slices/area';
+import {
+	setOpenDrawer,
+	setRestaurantOutletId,
+} from '@/view/common/store/slices/auth';
+import {onChangeSelectedTable} from '@/view/common/store/slices/table';
+import {
+	onChangeSelectedArea,
+	onChangeSelectedTrxId,
+} from '@/view/common/store/slices/transaction';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import {Select} from 'antd';
 import dynamic from 'next/dynamic';
-import {useRouter} from 'next/router';
-import {Button} from 'posy-fnb-core';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {BsList} from 'react-icons/bs';
 import {FiLogOut} from 'react-icons/fi';
 import {Sidebar, useProSidebar} from 'react-pro-sidebar';
 
-const Modal = dynamic(() => import('posy-fnb-core').then(el => el.Modal), {
-	loading: () => <div />,
-});
+const LogoutModal = dynamic(() => import('../../organisms/modal/LogoutModal'));
+
+type OutletOptionsType = Array<{label: string; value: string}>;
 
 type TemplatesSidebarProps = {
-	dataOutletSelection: OutletSelection | undefined;
+	outletOptions: OutletOptionsType;
+	isDrawer?: boolean;
 };
 
-const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
-	const router = useRouter();
+const TemplatesSidebar = ({outletOptions, isDrawer}: TemplatesSidebarProps) => {
+	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {width} = useViewportListener();
 	const {collapseSidebar, collapsed} = useProSidebar();
@@ -41,60 +46,32 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 		initialState: false,
 	});
 
-	const dispatch = useAppDispatch();
 	const {
 		outletId,
 		isSubscription,
 		isLoggedIn,
 		authData: {
-			user_info: {full_name, uuid},
-			token,
+			user_info: {full_name},
 		},
 	} = useAppSelector(state => state.auth);
-
-	const [outletOpt, setOutletOpt] = useState<
-		Array<{label: string; value: string}>
-	>([]);
 
 	const {data: dataSubscriptionReminder} = useGetSubscriptionReminderViewModel({
 		enabled: isLoggedIn,
 	});
 
 	useEffect(() => {
-		if (dataOutletSelection) {
-			const opts = dataOutletSelection.map(item => ({
-				value: item.uuid,
-				label: item.outlet_name,
-			}));
-			setOutletOpt(opts);
-			if (outletId?.length === 0) {
-				dispatch(setRestaurantOutletId(dataOutletSelection[0].uuid));
-			}
-		}
-	}, [dataOutletSelection, dispatch, outletId?.length]);
+		if (isDrawer) collapseSidebar(false);
+	}, [collapseSidebar, isDrawer]);
 
 	const onChangeOutlet = (e: string) => {
 		dispatch(setRestaurantOutletId(e));
 		dispatch(onChangeSelectedTrxId({id: ''}));
+		dispatch(onResetArea());
+		dispatch(onChangeSelectedTable(null));
+		dispatch(onChangeSelectedArea(null));
 		queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 		queryClient.invalidateQueries([GetNotificationsQueryKey]);
-	};
-
-	const {logout, isLoading: loadLogout} = useLogoutViewModel({
-		onSuccess: () => {
-			closeLogout();
-			router.push('auth/login');
-			setTimeout(() => {
-				dispatch(onLogout());
-			}, 500);
-		},
-	});
-
-	const handleLogout = () => {
-		logout({
-			token,
-			user_uuid: uuid,
-		});
+		dispatch(setOpenDrawer(false));
 	};
 
 	const onCollapseSidebar = () => {
@@ -102,20 +79,29 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 		dispatch(onChangeSelectedTrxId({id: ''}));
 	};
 
+	const onOpenLogout = () => {
+		dispatch(setOpenDrawer(false));
+		openLogout();
+	};
+
 	return (
 		<>
+			<LogoutModal closeLogout={closeLogout} isOpen={isOpenLogout} />
 			<Sidebar
 				defaultCollapsed={width <= 1280}
-				className="relative z-0 h-full overflow-hidden rounded-r-2xl bg-neutral-10"
+				className="relative z-0 h-full overflow-hidden rounded-r-lg bg-neutral-10"
 				width="200px"
 			>
 				<aside
-					className={`flex h-[12%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
+					className={`flex h-[10%] w-full items-center transition-all duration-300 ease-in-out sm:justify-start ${
 						collapsed ? 'pl-3.5' : 'pl-4'
 					}`}
 				>
 					{!collapsed ? (
-						<Logo onClick={onCollapseSidebar} titleProps="text-xl" />
+						<Logo
+							onClick={isDrawer ? () => undefined : onCollapseSidebar}
+							titleProps="text-xl"
+						/>
 					) : (
 						<BsList
 							size={24}
@@ -128,7 +114,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 				<aside
 					className={`${
 						dataSubscriptionReminder?.is_show ? 'h-[60%]' : 'h-[70%]'
-					} overflow-y-auto pb-24`}
+					} overflow-y-auto pb-4`}
 				>
 					{PROTECT_ROUTES.map(
 						route =>
@@ -147,7 +133,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 					<aside
 						className={`w-full ${
 							collapsed ? 'items-center' : 'items-start'
-						} flex h-[140px] flex-col justify-start rounded-t-md rounded-b-none bg-[#F2F1F9] p-6`}
+						} flex h-[130px] flex-col justify-start rounded-t-md rounded-b-none bg-[#F2F1F9] p-4`}
 					>
 						<div
 							className={`flex items-center gap-2 ${
@@ -164,7 +150,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 
 						<Select
 							className={`mt-2.5 ${collapsed ? 'w-10' : '!w-[164px]'}`}
-							options={outletOpt}
+							options={outletOptions}
 							value={outletId}
 							onChange={onChangeOutlet}
 							disabled={!isSubscription}
@@ -172,8 +158,7 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 
 						<div
 							role="button"
-							onClick={openLogout}
-							onKeyDown={openLogout}
+							onClick={onOpenLogout}
 							className="mt-2.5 flex cursor-pointer gap-4 hover:opacity-70"
 						>
 							<FiLogOut className="text-neutral-90" size={18} />
@@ -182,35 +167,6 @@ const TemplatesSidebar = ({dataOutletSelection}: TemplatesSidebarProps) => {
 					</aside>
 				</aside>
 			</Sidebar>
-			<Modal open={isOpenLogout} closeOverlay handleClose={closeLogout}>
-				<section className="flex w-[380px] flex-col items-center justify-center p-4">
-					<div className="px-16">
-						<p className="text-center text-l-semibold line-clamp-2">
-							Are you sure you want to logout?
-						</p>
-					</div>
-					<div className="mt-8 flex w-full gap-3">
-						<Button
-							variant="secondary"
-							size="l"
-							fullWidth
-							onClick={closeLogout}
-							className="whitespace-nowrap"
-						>
-							Cancel
-						</Button>
-						<Button
-							isLoading={loadLogout}
-							variant="primary"
-							size="l"
-							fullWidth
-							onClick={handleLogout}
-						>
-							Logout
-						</Button>
-					</div>
-				</section>
-			</Modal>
 		</>
 	);
 };

@@ -7,10 +7,6 @@ import {FilterBased, InputVariables} from '@/domain/vo/BaseInput';
 import {Pagination} from '@/domain/vo/BasePagination';
 import {ResultQuery} from '@/domain/vo/BaseResponse';
 
-/**
- * GET
- */
-
 export type GetTransactionsInput = InputVariables<
 	keyof Transaction,
 	| keyof Pick<

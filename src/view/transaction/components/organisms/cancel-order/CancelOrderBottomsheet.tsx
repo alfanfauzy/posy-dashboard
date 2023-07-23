@@ -3,6 +3,9 @@ import {Transaction} from '@/domain/transaction/model';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeIsOpenCancelOrder} from '@/view/common/store/slices/order';
+import {CancelOptions} from '@/view/transaction/constants';
 import {
 	ValidationSchemaCancelOrderType,
 	validationSchemaCancelOrder,
@@ -20,51 +23,26 @@ import CancelTableModal from '../modal/CancelTableModal';
 import ConfirmationCancelOrderModal from '../modal/ConfirmationCancelOrderModal';
 import CancelDetailOrder from './CancelDetailOrder';
 
-export const CancelOptions = [
-	{
-		label: 'Out of stock',
-		value: 'OUT_OF_STOCK',
-	},
-	{
-		label: 'Customer cancellation',
-		value: 'CUSTOMER_CANCELLATION',
-	},
-	{
-		label: 'Long waiting time',
-		value: 'LONG_WAITING',
-	},
-	{
-		label: 'Wrong order',
-		value: 'WRONG_ORDER',
-	},
-	{
-		label: 'Others',
-		value: 'OTHERS',
-	},
-];
-
 const BottomSheet = dynamic(
-	() => import('posy-fnb-core').then(el => el.BottomSheet),
+	() => import('posy-fnb-core').then(mod => mod.BottomSheet),
 	{
 		loading: () => <div />,
 	},
 );
 
 type CancelOrderBottomsheetProps = {
-	isOpenCancelOrder: boolean;
-	closeCancelOrder: () => void;
 	dataOrder: Orders | undefined;
 	dataTransaction: Transaction | undefined;
 };
 
 const CancelOrderBottomsheet = ({
-	closeCancelOrder,
 	dataOrder,
-	isOpenCancelOrder,
 	dataTransaction,
 }: CancelOrderBottomsheetProps) => {
 	const router = useRouter();
+	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
+	const {isOpenCancelOrder} = useAppSelector(state => state.order);
 
 	const [selectedOrder, setSelectedOrder] = useState('');
 	const [isOpenCancelTable, {close: closeCancelTable, open: openCancelTable}] =
@@ -101,7 +79,7 @@ const CancelOrderBottomsheet = ({
 	});
 
 	const handleCloseCancelOrder = async () => {
-		closeCancelOrder();
+		dispatch(onChangeIsOpenCancelOrder(false));
 		setSelectedOrder('');
 		reset({});
 		await router.push({
@@ -121,8 +99,7 @@ const CancelOrderBottomsheet = ({
 
 	useEffect(() => {
 		watch();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [watch]);
 
 	return (
 		<>
@@ -206,7 +183,7 @@ const CancelOrderBottomsheet = ({
 									</aside>
 								)}
 							</section>
-							<aside className="absolute bottom-0 pr-5 pt-5 mb-5">
+							<aside className="absolute w-full bottom-0 pr-10 pt-5 mb-5">
 								<div
 									onClick={openCancelTable}
 									className={`h-14 w-full cursor-pointer rounded-2xl p-4 shadow-sm duration-300 ease-in-out hover:border-secondary-hover hover:border active:shadow-md flex items-center justify-center justify-self-center bg-white border-neutral-30 border`}
@@ -326,7 +303,7 @@ const CancelOrderBottomsheet = ({
 														labelText="Reason"
 														onChange={e => {
 															getValues(`order.${idx}.order_detail`)?.map(
-																(el, detailIdx) =>
+																(_, detailIdx) =>
 																	setValue(
 																		`order.${idx}.order_detail.${detailIdx}.cancel_reason_other`,
 																		e.target.value,
@@ -353,7 +330,7 @@ const CancelOrderBottomsheet = ({
 									))}
 							</aside>
 
-							<aside className="absolute bottom-0 w-full flex gap-2 rounded-bl-2xl bg-neutral-10 p-4 shadow-basic">
+							<aside className="absolute bottom-0 w-full flex gap-2 rounded-bl-lg bg-neutral-10 p-4 shadow-basic">
 								<Button
 									variant="secondary"
 									fullWidth
