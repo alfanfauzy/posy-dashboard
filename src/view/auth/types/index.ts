@@ -35,6 +35,7 @@ export type Subjects =
 	| 'transaction_history'
 	| 'role'
 	| 'payment_integration'
+	| 'food_rating'
 	| 'table_management'
 	| 'area_management';
 

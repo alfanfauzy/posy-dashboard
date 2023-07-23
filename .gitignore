@@ -37,4 +37,5 @@ yarn-error.log*
 next-env.d.ts
 
 public/firebase-messaging-sw.js
+list-tasks-FE.txt
 
