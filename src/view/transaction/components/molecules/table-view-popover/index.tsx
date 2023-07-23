@@ -1,7 +1,7 @@
 import {Table} from '@/domain/table/model';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {
-	onChangeIsOpenEditTransactionFromTableView,
+	onChangeIsOpenCreateTransactionFromTableView,
 	onChangeSelectedTrxId,
 } from '@/view/common/store/slices/transaction';
 import React from 'react';
@@ -10,7 +10,13 @@ const TableViewPopover = (item: Table, closePopOver: () => void) => {
 	const dispatch = useAppDispatch();
 
 	const onCreateTransaction = () => {
-		dispatch(onChangeIsOpenEditTransactionFromTableView(true));
+		dispatch(
+			onChangeIsOpenCreateTransactionFromTableView({
+				isEdit: false,
+				isOpen: true,
+				table_uuid: item.uuid,
+			}),
+		);
 		closePopOver();
 	};
 

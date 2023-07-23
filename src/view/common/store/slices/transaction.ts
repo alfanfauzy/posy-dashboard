@@ -1,5 +1,4 @@
 import {Area} from '@/domain/area/model';
-import {Table} from '@/domain/table/model';
 import {CreateCancelTransactionInput} from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {MakePayment} from '@/domain/transaction/repositories/CreateMakePaymentRepository';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
@@ -18,15 +17,17 @@ export type TransactionState = {
 	search: string;
 	selectedTrxId: string;
 	payment: Payment;
-	selectedTable: Table | null;
-	prevTable: Table | null;
 	viewType: ViewType;
 	isOpenNotifBar: boolean;
 	isOpenTableCapacity: boolean;
 	selectedArea: Area | null;
 	status: string;
 	isOpenCreateTransaction: boolean;
-	isOpenEditTransactionFromTableView: boolean;
+	createTransactionFromTableView: {
+		isOpen: boolean;
+		isEdit: boolean;
+		table_uuid: string;
+	};
 	cancelTransaction: {
 		isOpen: boolean;
 		payload: CreateCancelTransactionInput | null;
@@ -48,15 +49,18 @@ const initialState: TransactionState = {
 		total: 0,
 		discount_percentage: 0,
 	},
-	selectedTable: null,
-	prevTable: null,
+	// selectedTable: null,
 	viewType: 'transaction',
 	isOpenNotifBar: false,
 	isOpenTableCapacity: false,
 	selectedArea: null,
 	status: '',
 	isOpenCreateTransaction: false,
-	isOpenEditTransactionFromTableView: false,
+	createTransactionFromTableView: {
+		isOpen: false,
+		isEdit: false,
+		table_uuid: '',
+	},
 	cancelTransaction: {
 		isOpen: false,
 		payload: null,
@@ -90,13 +94,6 @@ export const TransactionSlice = createSlice({
 		onChangePayment: (state, action: PayloadAction<{payment: Payment}>) => {
 			state.payment = action.payload.payment;
 		},
-		onChangeSelectedTable: (
-			state,
-			action: PayloadAction<{table: Table | null; prevTable?: Table | null}>,
-		) => {
-			state.selectedTable = action.payload.table;
-			state.prevTable = action.payload.prevTable || null;
-		},
 		onChangeViewType: (state, action: PayloadAction<ViewType>) => {
 			state.viewType = action.payload;
 			state.selectedTrxId = '';
@@ -122,11 +119,15 @@ export const TransactionSlice = createSlice({
 		) => {
 			state.isOpenCreateTransaction = action.payload;
 		},
-		onChangeIsOpenEditTransactionFromTableView: (
+		onChangeIsOpenCreateTransactionFromTableView: (
 			state,
-			action: PayloadAction<boolean>,
+			action: PayloadAction<{
+				isOpen: boolean;
+				isEdit: boolean;
+				table_uuid: string;
+			}>,
 		) => {
-			state.isOpenEditTransactionFromTableView = action.payload;
+			state.createTransactionFromTableView = action.payload;
 		},
 		onChangeCancelTransaction: (
 			state,
@@ -167,14 +168,13 @@ export const {
 	onClearSearch,
 	onChangeSelectedTrxId,
 	onChangePayment,
-	onChangeSelectedTable,
 	onChangeViewType,
 	onChangeToggleTableCapacity,
 	onChangeToggleNotifBar,
 	onChangeSelectedArea,
 	onChangeStatus,
 	onChangeIsOpenCreateTransaction,
-	onChangeIsOpenEditTransactionFromTableView,
+	onChangeIsOpenCreateTransactionFromTableView,
 	onChangeCancelTransaction,
 	onChangeIsOpenCreatePayment,
 	onChangePaymentSuccess,

@@ -50,7 +50,7 @@ const GridView = ({
 	}
 
 	return (
-		<article className="h-[80%] w-full overflow-y-auto mb-8">
+		<article className="h-full w-full overflow-y-auto mb-8">
 			{isLoading && (
 				<article className="flex h-full items-center justify-center">
 					<Loading size={90} />

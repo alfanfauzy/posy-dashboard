@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
 import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
-import {OutletSelection} from '@/domain/outlet/models';
 import PersonIcon from '@/view/common/assets/icons/person';
 import Logo from '@/view/common/components/atoms/logo';
 import Menu from '@/view/common/components/molecules/menu';
@@ -19,29 +17,27 @@ import {onChangeSelectedTable} from '@/view/common/store/slices/table';
 import {
 	onChangeSelectedArea,
 	onChangeSelectedTrxId,
-	onChangeSelectedTable as onChangeSelectedTableTransaction,
 } from '@/view/common/store/slices/transaction';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useGetSubscriptionReminderViewModel} from '@/view/subscription/view-models/GetSubscriptionReminderViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import {Select} from 'antd';
 import dynamic from 'next/dynamic';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {BsList} from 'react-icons/bs';
 import {FiLogOut} from 'react-icons/fi';
 import {Sidebar, useProSidebar} from 'react-pro-sidebar';
 
 const LogoutModal = dynamic(() => import('../../organisms/modal/LogoutModal'));
 
+type OutletOptionsType = Array<{label: string; value: string}>;
+
 type TemplatesSidebarProps = {
-	dataOutletSelection: OutletSelection | undefined;
+	outletOptions: OutletOptionsType;
 	isDrawer?: boolean;
 };
 
-const TemplatesSidebar = ({
-	dataOutletSelection,
-	isDrawer,
-}: TemplatesSidebarProps) => {
+const TemplatesSidebar = ({outletOptions, isDrawer}: TemplatesSidebarProps) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {width} = useViewportListener();
@@ -59,30 +55,13 @@ const TemplatesSidebar = ({
 		},
 	} = useAppSelector(state => state.auth);
 
-	const [outletOpt, setOutletOpt] = useState<
-		Array<{label: string; value: string}>
-	>([]);
-
 	const {data: dataSubscriptionReminder} = useGetSubscriptionReminderViewModel({
 		enabled: isLoggedIn,
 	});
 
 	useEffect(() => {
 		if (isDrawer) collapseSidebar(false);
-	}, [isDrawer]);
-
-	useEffect(() => {
-		if (dataOutletSelection) {
-			const opts = dataOutletSelection.map(item => ({
-				value: item.uuid,
-				label: item.outlet_name,
-			}));
-			setOutletOpt(opts);
-			if (outletId?.length === 0) {
-				dispatch(setRestaurantOutletId(dataOutletSelection[0].uuid));
-			}
-		}
-	}, [dataOutletSelection, outletId?.length]);
+	}, [collapseSidebar, isDrawer]);
 
 	const onChangeOutlet = (e: string) => {
 		dispatch(setRestaurantOutletId(e));
@@ -90,12 +69,6 @@ const TemplatesSidebar = ({
 		dispatch(onResetArea());
 		dispatch(onChangeSelectedTable(null));
 		dispatch(onChangeSelectedArea(null));
-		dispatch(
-			onChangeSelectedTableTransaction({
-				table: null,
-				prevTable: null,
-			}),
-		);
 		queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 		queryClient.invalidateQueries([GetNotificationsQueryKey]);
 		dispatch(setOpenDrawer(false));
@@ -177,7 +150,7 @@ const TemplatesSidebar = ({
 
 						<Select
 							className={`mt-2.5 ${collapsed ? 'w-10' : '!w-[164px]'}`}
-							options={outletOpt}
+							options={outletOptions}
 							value={outletId}
 							onChange={onChangeOutlet}
 							disabled={!isSubscription}

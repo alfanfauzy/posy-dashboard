@@ -7,7 +7,7 @@ import {onChangeIsOpenCancelOrder} from '@/view/common/store/slices/order';
 import {
 	onChangeCancelTransaction,
 	onChangeIsOpenCreateTransaction,
-	onChangeIsOpenEditTransactionFromTableView,
+	onChangeIsOpenCreateTransactionFromTableView,
 } from '@/view/common/store/slices/transaction';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
@@ -19,13 +19,6 @@ import {IoIosArrowUp} from 'react-icons/io';
 
 const CreateTransactionModal = dynamic(
 	() => import('../../modal/CreateTransactionModal'),
-	{
-		loading: () => <div />,
-	},
-);
-
-const CreateTransactionFromTableModal = dynamic(
-	() => import('../../modal/CreateTransactionFromTableModal'),
 	{
 		loading: () => <div />,
 	},
@@ -67,7 +60,13 @@ const TransactionDetailsHeader = ({
 	const handleEditTransaction = () => {
 		const isTableView = viewType === 'table';
 		isTableView
-			? dispatch(onChangeIsOpenEditTransactionFromTableView(true))
+			? dispatch(
+					onChangeIsOpenCreateTransactionFromTableView({
+						isOpen: true,
+						isEdit: true,
+						table_uuid: '',
+					}),
+			  )
 			: dispatch(onChangeIsOpenCreateTransaction(true));
 	};
 
@@ -170,8 +169,6 @@ const TransactionDetailsHeader = ({
 			<CancelTransactionModal {...cancelTransaction} />
 
 			<CreateTransactionModal isEdit dataTransaction={dataTransaction} />
-
-			<CreateTransactionFromTableModal isEdit />
 
 			<CancelOrderBottomsheet
 				dataOrder={dataOrder}

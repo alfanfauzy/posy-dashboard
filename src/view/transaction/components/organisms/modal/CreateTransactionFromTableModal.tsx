@@ -5,9 +5,8 @@ import {QrCode} from '@/domain/qr-code/model';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
-	onChangeIsOpenEditTransactionFromTableView,
-	onChangeSelectedTable,
 	onChangeSelectedTrxId,
+	onChangeIsOpenCreateTransactionFromTableView,
 } from '@/view/common/store/slices/transaction';
 import {
 	validationSchemaCreateTransactionFromTableView,
@@ -25,22 +24,18 @@ import {useReactToPrint} from 'react-to-print';
 
 import PrintQrCodeReceipt from '../receipt/PrintQrCodeReceipt';
 
-type CreateTransactionFromTableModalProps = {
-	isEdit?: boolean;
-};
-
-const CreateTransactionFromTableModal = ({
-	isEdit,
-}: CreateTransactionFromTableModalProps) => {
+const CreateTransactionFromTableModal = () => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
-	const {
-		prevTable,
-		selectedTrxId,
-		selectedTable,
-		isOpenEditTransactionFromTableView,
-	} = useAppSelector(state => state.transaction);
+	const {selectedTrxId, createTransactionFromTableView} = useAppSelector(
+		state => state.transaction,
+	);
+
+	const qrRef =
+		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+
+	const isEdit = createTransactionFromTableView?.isEdit;
 
 	const {
 		register,
@@ -52,44 +47,33 @@ const CreateTransactionFromTableModal = ({
 		schema: validationSchemaCreateTransactionFromTableView,
 	});
 
-	const handleClose = () =>
-		dispatch(onChangeIsOpenEditTransactionFromTableView(false));
-
-	const onClose = () => {
-		handleClose();
-		reset({
-			customer_name: '',
-			total_pax: '',
-		});
-
-		if (prevTable) {
-			dispatch(onChangeSelectedTable({table: prevTable, prevTable: null}));
-		} else {
-			dispatch(onChangeSelectedTable({table: null, prevTable: null}));
-		}
-	};
-
-	const onCloseEdit = () => {
-		handleClose();
-	};
-
-	useGetTransactionViewModel(
+	const {data} = useGetTransactionViewModel(
 		{
 			transaction_uuid: selectedTrxId,
 		},
 		{
 			enabled: !!(isEdit && selectedTrxId),
 			onSuccess: dt => {
-				reset({
-					customer_name: dt.data.customer_name,
-					total_pax: dt.data.total_pax.toString(),
-				});
+				if (dt.data && isEdit) {
+					reset({
+						customer_name: dt.data.customer_name,
+						total_pax: dt.data.total_pax.toString(),
+					});
+				}
 			},
 		},
 	);
 
-	const qrRef =
-		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
+	const handleClose = () => {
+		dispatch(
+			onChangeIsOpenCreateTransactionFromTableView({
+				isOpen: false,
+				isEdit: false,
+				table_uuid: '',
+			}),
+		);
+		reset();
+	};
 
 	const handlePrint = useReactToPrint({
 		content: () => qrRef.current,
@@ -104,7 +88,7 @@ const CreateTransactionFromTableModal = ({
 			const dt = _dataQr as QrCode;
 			queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
 			queryClient.invalidateQueries([GetAreasQueryKey]);
-			onClose();
+			handleClose();
 			setTimeout(() => {
 				handlePrint();
 			}, 100);
@@ -116,18 +100,18 @@ const CreateTransactionFromTableModal = ({
 		useUpdateTransactionViewModel({
 			onSuccess: () => {
 				queryClient.invalidateQueries([GetTransactionQueryKey]);
-				onCloseEdit();
+				handleClose();
 			},
 		});
 
 	const onSubmit: reactHookForm.SubmitHandler<
 		ValidationSchemaCreateTransactionFromTableViewType
 	> = form => {
-		if (isEdit) {
+		if (isEdit && data?.restaurant_outlet_table_uuid) {
 			updateTransaction({
 				...form,
 				restaurant_outlet_uuid: outletId,
-				restaurant_outlet_table_uuid: selectedTable?.uuid,
+				restaurant_outlet_table_uuid: data.restaurant_outlet_table_uuid,
 				transaction_uuid: selectedTrxId,
 				transaction_category: {label: 'DINE_IN', value: 0},
 			});
@@ -136,7 +120,8 @@ const CreateTransactionFromTableModal = ({
 				...form,
 				total_pax: Number(form.total_pax),
 				restaurant_outlet_uuid: outletId,
-				restaurant_outlet_table_uuid: selectedTable?.uuid,
+				restaurant_outlet_table_uuid:
+					createTransactionFromTableView?.table_uuid,
 			});
 		}
 	};
@@ -148,21 +133,17 @@ const CreateTransactionFromTableModal = ({
 				total_pax: '',
 			});
 		}
-	}, [isEdit, reset, isOpenEditTransactionFromTableView]);
+	}, [isEdit, reset]);
 
 	return (
 		<>
 			<Modal
-				open={isOpenEditTransactionFromTableView}
-				onCancel={onClose}
+				open={createTransactionFromTableView?.isOpen}
+				onCancel={handleClose}
 				closable={false}
 				footer={
 					<div className="grid grid-cols-2 gap-2 px-4 pb-4 pt-2">
-						<Button
-							type="button"
-							variant="secondary"
-							onClick={isEdit ? onCloseEdit : onClose}
-						>
+						<Button type="button" variant="secondary" onClick={handleClose}>
 							Cancel
 						</Button>
 						<Button

@@ -7,10 +7,7 @@ import useClickOutside from '@/view/common/hooks/useClickOutside';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import useViewportListener from '@/view/common/hooks/useViewportListener';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
-import {
-	onChangeIsOpenEditTransactionFromTableView,
-	onChangeSelectedTable,
-} from '@/view/common/store/slices/transaction';
+import {onChangeIsOpenCreateTransactionFromTableView} from '@/view/common/store/slices/transaction';
 import {useGetTableLayoutByFloorViewModel} from '@/view/table-management/view-models/GetTableLayoutByFloorViewModel';
 import {Popover} from 'antd';
 import Image from 'next/image';
@@ -19,28 +16,20 @@ import React, {useRef, useState} from 'react';
 
 import EmptyArea from '../../../molecules/empty-state/empty-area';
 import TableViewPopover from '../../../molecules/table-view-popover';
-import CreateTransactionFromTableModal from '../../modal/CreateTransactionFromTableModal';
 
 const TableView = () => {
 	const dispatch = useAppDispatch();
 	const {width} = useViewportListener();
 	const {outletId} = useAppSelector(state => state.auth);
-	const {selectedArea, selectedTable} = useAppSelector(
-		state => state.transaction,
-	);
+	const {selectedArea} = useAppSelector(state => state.transaction);
 	const [table, setTablePos] = useState<TableLayout>([]);
+
+	const [selectedTable, setSelectedTable] = useState<Table | null>(null);
 
 	const [isOpenPopover, {open: openPopover, close: closePopOver}] =
 		useDisclosure({
 			initialState: false,
 		});
-
-	const tableRef =
-		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
-	useClickOutside({
-		ref: tableRef,
-		handleClick: closePopOver,
-	});
 
 	const {isLoading: loadTable} = useGetTableLayoutByFloorViewModel(
 		{
@@ -62,26 +51,33 @@ const TableView = () => {
 	const handleSelectTable = (itemTable: Table) => {
 		if (itemTable?.transactions && itemTable?.transactions?.length >= 1) {
 			openPopover();
-			dispatch(
-				onChangeSelectedTable({
-					prevTable: selectedTable,
-					table: itemTable,
-				}),
-			);
 		} else {
-			dispatch(onChangeIsOpenEditTransactionFromTableView(true));
 			dispatch(
-				onChangeSelectedTable({
-					prevTable: selectedTable,
-					table: itemTable,
+				onChangeIsOpenCreateTransactionFromTableView({
+					isEdit: false,
+					isOpen: true,
+					table_uuid: itemTable.uuid,
 				}),
 			);
 		}
+		setSelectedTable(itemTable);
 	};
+
+	const handleClosePopover = () => {
+		closePopOver();
+		setSelectedTable(null);
+	};
+
+	const tableRef =
+		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
+	useClickOutside({
+		ref: tableRef,
+		handleClick: closePopOver,
+	});
 
 	const RenderSquare = (
 		i: number,
-		closePopOver: () => void,
+		handleClosePopover: () => void,
 		selectedArea: Area,
 	) => {
 		const toY = i % selectedArea.width;
@@ -100,27 +96,27 @@ const TableView = () => {
 			return (
 				<div
 					id={`${toX},${toY}`}
-					className="lg:py-4 py-1"
+					className="lg:py-2 py-1"
 					onClick={() => handleSelectTable(item)}
 				>
 					<div className="w-full h-full flex items-center justify-center">
 						<Popover
-							content={() => TableViewPopover(item, closePopOver)}
+							content={() => TableViewPopover(item, handleClosePopover)}
 							open={showPopOverDrowdown}
 							placement="bottom"
 						>
 							<div className="relative flex justify-center items-center py-1 px-2.5 cursor-pointer">
 								<Image
-									width={width > 1000 ? 65 : 55}
-									height={width > 1000 ? 65 : 55}
+									width={width > 1000 ? 70 : 60}
+									height={width > 1000 ? 70 : 60}
 									src={item.table_image}
 									alt="table"
 								/>
-								<p className="absolute text-s-regular lg:text-l-regular text-neutral-70">
-									{item?.uuid ? item?.table_number : null}
+								<p className="absolute text-s-regular lg:text-m-regular text-neutral-70">
+									{item?.uuid ? item?.table_number.slice(0, 6) : null}
 								</p>
 								{item.transactions && item.transactions?.length > 0 ? (
-									<div className="top-1 right-2 absolute w-5 h-5 flex items-center text-xs justify-center bg-secondary-main rounded-full text-white">
+									<div className="top-2 right-2.5 absolute w-5 h-5 flex items-center text-xs justify-center bg-secondary-main rounded-full text-white">
 										{item.transactions?.length}
 									</div>
 								) : null}
@@ -148,17 +144,16 @@ const TableView = () => {
 
 	return (
 		<main className="overflow-auto">
-			<CreateTransactionFromTableModal />
-
-			<section>
-				<div ref={tableRef} className="bg-[#F7F7F7] p-1 rounded-lg">
-					<div className={`w-full h-fit grid grid-cols-${selectedArea.width} `}>
-						{new Array(selectedArea.height * selectedArea.width)
-							.fill(0)
-							.map((_, i) => RenderSquare(i, closePopOver, selectedArea))}
-					</div>
+			<div ref={tableRef} className="bg-[#F7F7F7] p-1 rounded-lg">
+				<div
+					ref={tableRef}
+					className={`w-full h-fit grid grid-cols-${selectedArea.width} `}
+				>
+					{new Array(selectedArea.height * selectedArea.width)
+						.fill(0)
+						.map((_, i) => RenderSquare(i, handleClosePopover, selectedArea))}
 				</div>
-			</section>
+			</div>
 		</main>
 	);
 };

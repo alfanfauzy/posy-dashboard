@@ -34,6 +34,7 @@ const PrintQrCodeReceipt = dynamic(
 	},
 );
 
+import CreateTransactionFromTableModal from '../../organisms/modal/CreateTransactionFromTableModal';
 import TransactionHeader from '../../organisms/transaction-header';
 import TransactionView from '../transaction-view';
 
@@ -219,6 +220,7 @@ const TransactionSection = () => {
 				/>
 
 				<CreateTransactionModal />
+				<CreateTransactionFromTableModal />
 
 				{dataQr && <PrintQrCodeReceipt data={dataQr} printReceiptRef={qrRef} />}
 				<audio ref={audioRef} src="/sounds/notif.mp3" />

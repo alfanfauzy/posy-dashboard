@@ -16,6 +16,7 @@ import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {
 	setIsSubscription,
 	setOpenDrawer,
+	setRestaurantOutletId,
 } from '@/view/common/store/slices/auth';
 import {useGetOutletSelectionViewModel} from '@/view/outlet/view-models/GetOutletSelectionViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
@@ -25,7 +26,7 @@ import {getMessaging, onMessage} from 'firebase/messaging';
 import {useRouter} from 'next/router';
 import {closeSnackbar, useSnackbar} from 'notistack';
 import {Loading} from 'posy-fnb-core';
-import React, {ReactNode, useEffect, useRef, useState} from 'react';
+import React, {ReactNode, useEffect, useMemo, useRef, useState} from 'react';
 import {ProSidebarProvider} from 'react-pro-sidebar';
 
 type OrganismsLayoutProps = {
@@ -43,7 +44,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 	const queryClient = useQueryClient();
 	const {width} = useViewportListener();
 	const {replace, asPath, pathname} = useRouter();
-	const {isLoggedIn, isSubscription, openDrawer} = useAppSelector(
+	const {isLoggedIn, isSubscription, openDrawer, outletId} = useAppSelector(
 		state => state.auth,
 	);
 	const [loading, setLoading] = useState(true);
@@ -144,6 +145,21 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		});
 	}, []);
 
+	const outletOptions = useMemo(
+		() =>
+			dataOutletSelection?.map(entry => ({
+				label: entry.outlet_name,
+				value: entry.uuid,
+			})) ?? [],
+		[dataOutletSelection],
+	);
+
+	useEffect(() => {
+		if (!outletId && outletOptions?.length > 0) {
+			dispatch(setRestaurantOutletId(outletOptions[0]?.value));
+		}
+	}, [dispatch, outletId, outletOptions]);
+
 	if (loading) {
 		return (
 			<main className="flex h-screen w-full items-center justify-center">
@@ -158,7 +174,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 				<section className="flex h-full w-full gap-2">
 					{width > 1280 ? (
 						<div>
-							<Sidebar dataOutletSelection={dataOutletSelection || undefined} />
+							<Sidebar outletOptions={outletOptions} />
 						</div>
 					) : (
 						<Drawer
@@ -169,10 +185,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 							closeIcon={null}
 							headerStyle={{display: 'none'}}
 						>
-							<Sidebar
-								isDrawer
-								dataOutletSelection={dataOutletSelection || undefined}
-							/>
+							<Sidebar isDrawer outletOptions={outletOptions} />
 						</Drawer>
 					)}
 

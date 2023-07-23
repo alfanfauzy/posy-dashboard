@@ -1,3 +1,4 @@
+import {GetTableLayoutByFloorQueryKey} from '@/data/table/sources/GetTableLayoutByFloorQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
 import {
@@ -5,6 +6,7 @@ import {
 	CreateCancelTransactionInput,
 } from '@/domain/transaction/repositories/CreateCancelTransactionRepository';
 import {useAppDispatch} from '@/view/common/store/hooks';
+import {onChangeIsOpenCancelOrder} from '@/view/common/store/slices/order';
 import {
 	onChangeCancelTransaction,
 	onChangeSelectedTrxId,
@@ -31,13 +33,15 @@ const CancelTransactionModal = ({
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 
-	const handleClose = () =>
+	const handleClose = () => {
+		dispatch(onChangeIsOpenCancelOrder(false));
 		dispatch(
 			onChangeCancelTransaction({
 				isOpen: false,
 				payload: null,
 			}),
 		);
+	};
 
 	const {createCancelTransaction, isLoading} =
 		useCreateCancelTransactionViewModel({
@@ -46,6 +50,7 @@ const CancelTransactionModal = ({
 				if (data) {
 					queryClient.invalidateQueries([GetTransactionsQueryKey]);
 					queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
+					queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
 					dispatch(onChangeSelectedTrxId({id: ''}));
 					handleClose();
 				}

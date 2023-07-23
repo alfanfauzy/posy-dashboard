@@ -6,7 +6,6 @@ import {onChangeSelectedTable} from '@/view/common/store/slices/table';
 import {
 	onChangeSelectedArea,
 	onChangeSelectedTrxId,
-	onChangeSelectedTable as onChangeSelectedTableTransaction,
 } from '@/view/common/store/slices/transaction';
 import {useRouter} from 'next/router';
 import {Button, Modal} from 'posy-fnb-core';
@@ -35,12 +34,6 @@ const LogoutModal = ({closeLogout, isOpen}: LogoutModalProps) => {
 			dispatch(onResetArea());
 			dispatch(onChangeSelectedTable(null));
 			dispatch(onChangeSelectedArea(null));
-			dispatch(
-				onChangeSelectedTableTransaction({
-					table: null,
-					prevTable: null,
-				}),
-			);
 			closeLogout();
 			await router.push('/auth/login');
 		},
