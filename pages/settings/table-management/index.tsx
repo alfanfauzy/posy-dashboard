@@ -5,8 +5,7 @@ import type {NextPageWithLayout} from '@/view/common/types/index';
 import ViewTableManagementPage from '@/view/table-management/components/pages';
 
 const Page: NextPageWithLayout = () => (
-	// <Guard action="read" on="setting_tax_service">
-	<>
+	<Guard action="view" on="table_management">
 		<MetaHeader
 			title="Posy Resto - Table Management"
 			description={SEO.description}
@@ -14,8 +13,7 @@ const Page: NextPageWithLayout = () => (
 			image={SEO.image}
 		/>
 		<ViewTableManagementPage />
-	</>
-	// </Guard>
+	</Guard>
 );
 
 export default Page;
