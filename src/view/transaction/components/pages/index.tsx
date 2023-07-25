@@ -32,11 +32,18 @@ const ViewTransactionPage = () => {
 		state => state.transaction,
 	);
 
+	const renderSidebar = () => {
+		if (isOpenNotifBar && !selectedTrxId) {
+			return <NotificationSidebar />;
+		} else if (selectedTrxId && !isOpenNotifBar) {
+			return <TransactionSidebabar />;
+		}
+	};
+
 	return (
 		<main className="flex h-full gap-2 overflow-x-hidden overflow-y-hidden">
 			<TransactionSection />
-			{isOpenNotifBar && !selectedTrxId ? <NotificationSidebar /> : null}
-			{selectedTrxId && !isOpenNotifBar ? <TransactionSidebabar /> : null}
+			{renderSidebar()}
 			{isOpenTableCapacity && <TableCapacity />}
 		</main>
 	);

@@ -18,6 +18,7 @@ import {
 	setOpenDrawer,
 	setRestaurantOutletId,
 } from '@/view/common/store/slices/auth';
+import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
 import {useGetOutletSelectionViewModel} from '@/view/outlet/view-models/GetOutletSelectionViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
@@ -117,6 +118,15 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 				queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 				queryClient.invalidateQueries([GetNotificationsQueryKey]);
 				queryClient.invalidateQueries([GetAreasQueryKey]);
+
+				if (message.data?.category === 'PAYMENT') {
+					dispatch(
+						onChangeSelectedTrxId({
+							id: '',
+						}),
+					);
+				}
+
 				enqueueSnackbar({
 					className: 'border-t-8 border-blue-success',
 					style: {

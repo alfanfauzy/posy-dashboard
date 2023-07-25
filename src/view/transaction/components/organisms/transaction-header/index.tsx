@@ -9,7 +9,6 @@ import {
 	onChangeSearch,
 	onChangeStatus,
 	onChangeToggleNotifBar,
-	onChangeToggleTableCapacity,
 	onClearSearch,
 } from '@/view/common/store/slices/transaction';
 import {requestFullScreen} from '@/view/common/utils/UtilsRequestFullScreen';
@@ -146,13 +145,13 @@ const TransactionHeader = ({
 									: 'border-neutral-50 '
 							}`}
 						/>
-						{viewType === 'transaction' && (
+						{/* {viewType === 'transaction' && (
 							<FilterChip
 								label={`Table Capacity: ${dataSummary.available_capacity}/${dataSummary.table_capacity}`}
 								openSearch={openSearch}
 								onClick={() => dispatch(onChangeToggleTableCapacity(true))}
 							/>
-						)}
+						)} */}
 						{viewType === 'transaction' && selectedArea && (
 							<InputSearch
 								isTransaction

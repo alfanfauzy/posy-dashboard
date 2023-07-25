@@ -34,7 +34,7 @@ const NotificationSidebar = () => {
 		);
 
 	return (
-		<main className="relative min-w-[350px] max-w-[350px] h-full rounded-l-lg bg-neutral-10">
+		<main className="relative lg:min-w-[350px] lg:max-w-[350px] min-w-[310px] max-w-[310px] h-full rounded-l-lg bg-neutral-10">
 			<article className="flex h-full flex-col p-4">
 				<section>
 					<div className="flex items-center justify-between">

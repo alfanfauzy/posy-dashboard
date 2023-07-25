@@ -103,7 +103,7 @@ const ViewReportCancellationPage = () => {
 
 	useEffect(() => {
 		setOutletOpt(outletOptions[0].value);
-	}, []);
+	}, [outletOptions]);
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">
@@ -128,7 +128,7 @@ const ViewReportCancellationPage = () => {
 								onChange={handleSelectChange}
 							/>
 						)}
-						<div className="w-1/3 !ml-0">
+						<div className="w-1/3">
 							<InputSearch
 								isOpen
 								placeholder="Search transaction"
