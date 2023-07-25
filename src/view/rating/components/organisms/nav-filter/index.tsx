@@ -62,11 +62,11 @@ const OrganismsNavFilterProduct = ({
 						onClearSearch={() => onChangeQueryParams('search', '')}
 					/>
 				</div> */}
-				<div>
+				{pagination && pagination?.total_objs > 0 && (
 					<p className="text-m-medium text-primary-main">
 						Total ratings: {pagination?.total_objs}
 					</p>
-				</div>
+				)}
 			</div>
 		</aside>
 	);

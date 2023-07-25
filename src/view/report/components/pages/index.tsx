@@ -4,6 +4,7 @@ import {GetTransactionReportSummaryInput} from '@/domain/report/repositories/Get
 import {Response} from '@/domain/vo/BaseResponse';
 import {Can} from '@/view/auth/components/organisms/rbac';
 import InputSearch from '@/view/common/components/atoms/input/search';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {defineds} from '@/view/common/utils/date';
@@ -131,7 +132,7 @@ const ViewReportPage = () => {
 		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">
 			<article>
 				<aside className="flex justify-between">
-					<p className="text-xxl-semibold text-neutral-100 ">Report Summary</p>
+					<NavDrawer title="Report Summary" />
 					<Can I="export_excel" an="transaction_report">
 						<Button
 							size="m"

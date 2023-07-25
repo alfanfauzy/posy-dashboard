@@ -1,4 +1,5 @@
 import InputSearch from '@/view/common/components/atoms/input/search';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {Dates} from '@/view/common/types/date';
 import {defineds} from '@/view/common/utils/date';
@@ -33,9 +34,7 @@ const PagesHistory = () => {
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">
 			<article>
-				<aside className="flex items-start">
-					<p className="text-xxl-semibold text-neutral-100 ">History</p>
-				</aside>
+				<NavDrawer title="History" />
 				<aside className="mt-6">
 					<div className="mt-1 flex items-center space-x-4">
 						<Datepicker

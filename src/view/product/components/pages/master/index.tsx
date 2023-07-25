@@ -1,3 +1,4 @@
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useProductActions from '@/view/common/store/zustand/Product/ProductAction';
 import useProductState from '@/view/common/store/zustand/Product/ProductZustand';
 import {useGetMasterProductsViewModel} from '@/view/product/view-models/GetMasterProductsViewModel';
@@ -36,11 +37,9 @@ const ViewMasterProductPage = () => {
 	});
 
 	return (
-		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
+		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-4">
 			<article>
-				<aside className="flex items-start">
-					<p className="text-xxl-semibold text-neutral-100 ">Product</p>
-				</aside>
+				<NavDrawer title="Product" />
 				<OrganismsNavFilterMasterProduct pagination={pagination} />
 			</article>
 			<OrganismsTableMasterProduct

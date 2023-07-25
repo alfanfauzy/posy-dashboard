@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {Dates} from '@/view/common/types/date';
 import {defineds} from '@/view/common/utils/date';
@@ -53,11 +54,9 @@ const ViewRatingPage = () => {
 	});
 
 	return (
-		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
+		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-4">
 			<article>
-				<aside className="flex items-start">
-					<p className="text-xxl-semibold text-neutral-100 ">Food Ratings</p>
-				</aside>
+				<NavDrawer title="Food Ratings" />
 				<NavFilterRating pagination={pagination} dates={date} />
 			</article>
 			<TableRating

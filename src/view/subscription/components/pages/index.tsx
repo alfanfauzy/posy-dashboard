@@ -1,3 +1,4 @@
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import {whatsapp} from '@/view/common/constants/contact';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
@@ -25,10 +26,7 @@ const ViewSubscriptionPage = () => {
 	return (
 		<main className="flex h-full w-full">
 			<article className="flex h-full w-full flex-col rounded-lg bg-neutral-10 p-4">
-				<section className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-primary-main ">Subscription</p>
-				</section>
-
+				<NavDrawer title="Subscription" />
 				<section className="mt-6 flex gap-6 xl:w-[90%]">
 					<aside className="w-1/3 rounded-3xl border border-neutral-30 p-6 shadow-md">
 						<div>

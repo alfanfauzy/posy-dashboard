@@ -2,6 +2,7 @@ import {GetCancellationReportsInput} from '@/domain/report-cancellation/reposito
 import {GetCancellationReportSummaryInput} from '@/domain/report-cancellation/repositories/GetCancellationSummaryRepository';
 import InputSearch from '@/view/common/components/atoms/input/search';
 import AtomSelect from '@/view/common/components/atoms/select';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {defineds} from '@/view/common/utils/date';
@@ -108,11 +109,7 @@ const ViewReportCancellationPage = () => {
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">
 			<article>
-				<aside className="flex justify-between">
-					<p className="text-xxl-semibold text-neutral-100 ">
-						Cancellation Report
-					</p>
-				</aside>
+				<NavDrawer title="Cancellation Report" />
 				<aside className="mt-6">
 					<div className="mt-1 flex items-center space-x-4">
 						<Datepicker

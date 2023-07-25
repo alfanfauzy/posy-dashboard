@@ -1,6 +1,7 @@
 import {useGetCategoriesUsecase} from '@/data/category/usecases/GetCategoriesUsecase';
 import {useAbility} from '@/view/auth/components/organisms/rbac';
 import AtomModalDiscard from '@/view/common/components/atoms/modal/modal-discard';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useCategoryActions from '@/view/common/store/zustand/Category/CategoryAction';
 import useCategoryState from '@/view/common/store/zustand/Category/CategoryZustand';
 import {useRouter} from 'next/router';
@@ -52,13 +53,11 @@ const ViewCategoryProductPage = () => {
 	const newDataCategory = dataCategory?.filter(data => data.uuid !== '');
 
 	return (
-		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-6">
+		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-4">
 			{ability.can('read', 'product_category') && (
 				<>
 					<article>
-						<aside className="flex items-start">
-							<p className="text-xxl-semibold text-neutral-100 ">Category</p>
-						</aside>
+						<NavDrawer title="Category" />
 						<OrganismsNavFilterCategory pagination={pagination} />
 					</article>
 					<OrganismsTableCategory

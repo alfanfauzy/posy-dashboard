@@ -82,7 +82,7 @@ const OrganismsNavFilterProduct = ({
 				</div>
 				<div>
 					<p className="text-m-medium text-primary-main">
-						Total product: {pagination?.total_objs}
+						Total products: {pagination?.total_objs}
 					</p>
 				</div>
 			</div>

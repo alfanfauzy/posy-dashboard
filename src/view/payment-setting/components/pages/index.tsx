@@ -4,6 +4,7 @@ import {GetPaymentBalanceQueryKey} from '@/data/payment/sources/GetPaymentBalanc
 import {Can} from '@/view/auth/components/organisms/rbac';
 import {useSaveAccountBankViewModal} from '@/view/bank/view-models/CreateSaveAccountBankViewModel';
 import {useGetLinkedBankAccountViewModel} from '@/view/bank/view-models/GetLinkedBankAccountViewModel';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
@@ -193,43 +194,37 @@ const ViewPaymentSettingPage = () => {
 	);
 
 	return (
-		<main className="flex h-full w-full">
-			<article className="flex h-full w-full overflow-auto flex-col rounded-2xl bg-neutral-10 p-6">
-				<aside className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-neutral-100">
-						Payment Integration
-					</p>
-				</aside>
-				<PaymentSettingContext.Provider value={valueProvider}>
-					{isLoading ? (
-						<div className="m-auto">
-							<Loading size={100} />
-						</div>
-					) : (
-						<>
-							{bankAccountData && <PaymentBalanceMolecules />}
-							<PaymentInformationMolecules />
-							<Can I="manage_payment_method" an="payment_integration">
-								{bankAccountData && <PaymentOptionForm />}
-							</Can>
-						</>
-					)}
+		<main className="flex h-full w-full overflow-auto flex-col rounded-2xl bg-neutral-10 p-4">
+			<NavDrawer title="Payment Integration" />
+			<PaymentSettingContext.Provider value={valueProvider}>
+				{isLoading ? (
+					<div className="m-auto">
+						<Loading size={100} />
+					</div>
+				) : (
+					<>
+						{bankAccountData && <PaymentBalanceMolecules />}
+						<PaymentInformationMolecules />
+						<Can I="manage_payment_method" an="payment_integration">
+							{bankAccountData && <PaymentOptionForm />}
+						</Can>
+					</>
+				)}
 
-					{isShowModalDifferentPaymentType && <DifferentPaymentModalOrganism />}
-					<FormProvider {...methods}>
-						{isOpenModal && <FormPaymentSetting />}
-						{isOpenPasswordConfirmationBank && (
-							<PasswordConfirmationBankOrganism />
-						)}
-					</FormProvider>
-					<FormProvider {...methodsWithdraw}>
-						{isOpenFormWithdraw && <FormWithdrawOrganism />}
-						{isOpenPasswordConfirmation && <PasswordConfirmationOrganism />}
-					</FormProvider>
-					{isOpenWithdrawConfirmation && <WithdrawConfirmationMolecules />}
-					{isOpenSuccessConfirmation && <SuccessUpdateInformationMolecules />}
-				</PaymentSettingContext.Provider>
-			</article>
+				{isShowModalDifferentPaymentType && <DifferentPaymentModalOrganism />}
+				<FormProvider {...methods}>
+					{isOpenModal && <FormPaymentSetting />}
+					{isOpenPasswordConfirmationBank && (
+						<PasswordConfirmationBankOrganism />
+					)}
+				</FormProvider>
+				<FormProvider {...methodsWithdraw}>
+					{isOpenFormWithdraw && <FormWithdrawOrganism />}
+					{isOpenPasswordConfirmation && <PasswordConfirmationOrganism />}
+				</FormProvider>
+				{isOpenWithdrawConfirmation && <WithdrawConfirmationMolecules />}
+				{isOpenSuccessConfirmation && <SuccessUpdateInformationMolecules />}
+			</PaymentSettingContext.Provider>
 		</main>
 	);
 };

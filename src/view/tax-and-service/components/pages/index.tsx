@@ -6,6 +6,7 @@ import {
 import {GetTaxQueryKey} from '@/data/tax/sources/GetTaxQuery';
 import {UpdateTax} from '@/domain/tax/repositories/TaxRepository';
 import {useAbility} from '@/view/auth/components/organisms/rbac';
+import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {
@@ -82,9 +83,7 @@ const ViewTaxAndServicePage = () => {
 	return (
 		<main className="flex h-full gap-4 overflow-hidden">
 			<section className="relative h-full flex-1 overflow-hidden rounded-lg bg-neutral-10 p-4">
-				<aside className="flex items-start justify-between">
-					<p className="text-xxl-semibold text-neutral-100">Tax & service</p>
-				</aside>
+				<NavDrawer title="Tax & Service" />
 
 				<section className="mt-6 rounded-3xl border border-neutral-30 p-6 lg:w-3/5">
 					{loadData && (
