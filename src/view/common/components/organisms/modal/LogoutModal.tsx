@@ -59,7 +59,7 @@ const LogoutModal = ({closeLogout, isOpen}: LogoutModalProps) => {
 						variant="secondary"
 						size="l"
 						fullWidth
-						onClick={close}
+						onClick={closeLogout}
 						className="whitespace-nowrap"
 					>
 						Cancel

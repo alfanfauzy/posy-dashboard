@@ -3,6 +3,7 @@ import {GetAreasQueryKey} from '@/data/area/sources/GetAreasQuery';
 import {GetNotificationCounterQueryKey} from '@/data/notification/sources/GetNotificationCounterQuery';
 import {GetNotificationsQueryKey} from '@/data/notification/sources/GetNotificationsQuery';
 import {GetOrdersQueryKey} from '@/data/order/sources/GetOrdersQuery';
+import {GetTableLayoutByFloorQueryKey} from '@/data/table/sources/GetTableLayoutByFloorQuery';
 import {GetTransactionQueryKey} from '@/data/transaction/sources/GetTransactionQuery';
 import {GetTransactionsQueryKey} from '@/data/transaction/sources/GetTransactionsQuery';
 import {GetTransactionSummaryQueryKey} from '@/data/transaction/sources/GetTransactionSummaryQuery';
@@ -118,6 +119,7 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 				queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 				queryClient.invalidateQueries([GetNotificationsQueryKey]);
 				queryClient.invalidateQueries([GetAreasQueryKey]);
+				queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
 
 				if (message.data?.category === 'PAYMENT') {
 					dispatch(
