@@ -108,6 +108,7 @@ const PaymentReportColumn = ({
 							handleOpenModal();
 							setSelectedPaymentReport(record);
 						}}
+						className="text-secondary-main"
 					>
 						View Detail
 					</a>
