@@ -1,5 +1,4 @@
 import Datepicker from '@/view/common/components/atoms/input/datepicker';
-import AtomsInputSearch from '@/view/common/components/atoms/input/search';
 import AtomSelect from '@/view/common/components/atoms/select';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
@@ -65,7 +64,7 @@ const PaymentMethodOptions = [
 	},
 	{
 		label: 'Payment Method: Link Aja',
-		value: 'LINK AJA',
+		value: 'LINKAJA',
 	},
 ];
 
