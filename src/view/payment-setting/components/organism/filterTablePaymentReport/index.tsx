@@ -1,3 +1,4 @@
+import {PaymentReportList} from '@/domain/payment/models/payment-report';
 import Datepicker from '@/view/common/components/atoms/input/datepicker';
 import AtomSelect from '@/view/common/components/atoms/select';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
@@ -29,6 +30,7 @@ type FilterTablePaymentReportProps = {
 			}>
 		>
 	>;
+	setDataReport: React.Dispatch<React.SetStateAction<Array<PaymentReportList>>>;
 };
 
 const CategoryOptions = [
@@ -74,6 +76,7 @@ const FilterTablePaymentReport = ({
 	setAfterId,
 	searchReport,
 	setSearchReport,
+	setDataReport,
 }: FilterTablePaymentReportProps) => {
 	const [isOpenFilterDate, {open: openFilterDate, close: closeFilterDate}] =
 		useDisclosure({initialState: false});
@@ -175,20 +178,6 @@ const FilterTablePaymentReport = ({
 
 	return (
 		<div className="mb-2 flex gap-2 pb-3 overflow-x-auto">
-			{/* <div className="flex flex-col gap-1">
-				<label className="text-m-medium">Date</label>
-				<RangePicker
-					onChange={val => setRangeDate(val)}
-					className="h-[42px] px-3"
-					allowClear={false}
-					disabledDate={disabledDate}
-					defaultValue={rangeDate}
-					onCalendarChange={val => {
-						setRangeDate(val);
-						setAfterId(null);
-					}}
-				/>
-			</div> */}
 			<div>
 				<Datepicker
 					dateProps={rangeDate}
@@ -198,6 +187,7 @@ const FilterTablePaymentReport = ({
 					handleChange={(item: Dates) => {
 						setRangeDate([item]);
 						setAfterId(null);
+						setDataReport([]);
 					}}
 				/>
 			</div>
@@ -206,12 +196,6 @@ const FilterTablePaymentReport = ({
 					options={outletOptions}
 					onChange={e => handleChangeSelect(e, 'outlet')}
 				/>
-				{/* <Select
-					isLoading={isLoadingOutlet}
-					options={OutletSelectOptions}
-					placeholder="ex: Select Outlet"
-					isClearable
-				/> */}
 			</div>
 			<div>
 				<AtomSelect

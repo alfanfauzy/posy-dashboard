@@ -27,8 +27,8 @@ const PaymentReportMolecules = () => {
 	const [loadingTable, setLoadingTable] = useState<boolean>(true);
 	const [date, setDate] = useState<Array<Dates>>([
 		{
-			startDate: defineds.startOfDay,
-			endDate: defineds.last7day,
+			startDate: subDays(defineds.startOfDay, 6),
+			endDate: defineds.startOfDay,
 			key: 'selection',
 		},
 	]);
@@ -44,56 +44,52 @@ const PaymentReportMolecules = () => {
 	const [selectedPaymentReport, setSelectedPaymentReport] =
 		useState<PaymentReportList>();
 
-	const dateBefore7Days = subDays(defineds.startOfDay, 6);
-
 	const paramQuery: GetPaymentReportFilter = useMemo(
 		() => ({
 			restaurant_uuid: restaurantID as string,
-			start_date: format(dateBefore7Days, 'yyyy-MM-dd'),
-			end_date: format(defineds.startOfDay, 'yyyy-MM-dd'),
+			start_date: format(date[0].startDate, 'yyyy-MM-dd'),
+			end_date: format(date[0].endDate, 'yyyy-MM-dd'),
 			limit: 10,
 			after_id: afterId as string,
 		}),
 		[afterId, restaurantID, date],
 	);
 
-	const {fetchNextPage, hasNextPage, isFetchingNextPage} =
-		useGetPaymentReportViewModel(paramQuery, {
-			onSuccess(response) {
-				const paymentReportMapper = mapToPaymentReportList(
-					response.pages[0].data,
+	const {
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+		isLoading: isLoadingPaymentReport,
+	} = useGetPaymentReportViewModel(paramQuery, {
+		onSuccess(response) {
+			const paymentReportMapper = mapToPaymentReportList(
+				response.pages[0].data,
+			);
+
+			const allItems = paymentReportMapper.data.flatMap(page => page);
+
+			setDataReport(currentState => currentState.concat(allItems));
+
+			setLoadingTable(false);
+		},
+		getNextPageParam: lastPage => {
+			if (lastPage?.data?.has_more) {
+				const linkNextPage =
+					lastPage.data.links.map(link => link.href)[0] ?? undefined;
+
+				const params = new URLSearchParams(
+					linkNextPage.slice(linkNextPage.indexOf('?') + 1),
 				);
+				const afterID = params.get('after_id');
 
-				const allItems = paymentReportMapper.data.flatMap(page => page);
+				setAfterId(afterID);
+				return afterID;
+			}
 
-				const isDuplicate = dataReport.some(data =>
-					allItems.some(item => data.transaction_id === item.transaction_id),
-				);
-
-				if (!isDuplicate) {
-					setDataReport(currentState => currentState.concat(allItems));
-				}
-
-				setLoadingTable(false);
-			},
-			getNextPageParam: lastPage => {
-				if (lastPage?.data?.has_more) {
-					const linkNextPage =
-						lastPage.data.links.map(link => link.href)[0] ?? undefined;
-
-					const params = new URLSearchParams(
-						linkNextPage.slice(linkNextPage.indexOf('?') + 1),
-					);
-					const afterID = params.get('after_id');
-
-					setAfterId(afterID);
-					return afterID;
-				}
-
-				return undefined;
-			},
-			keepPreviousData: true,
-		});
+			return undefined;
+		},
+		keepPreviousData: true,
+	});
 
 	useEffect(() => {
 		if (hasNextPage) {
@@ -130,6 +126,7 @@ const PaymentReportMolecules = () => {
 					setAfterId={setAfterId}
 					searchReport={searchReport}
 					setSearchReport={setSearchReport}
+					setDataReport={setDataReport}
 				/>
 				<Table
 					columns={PaymentReportColumn({
@@ -137,7 +134,7 @@ const PaymentReportMolecules = () => {
 						handleOpenModal,
 					})}
 					dataSource={filterData}
-					loading={loadingTable || isFetchingNextPage}
+					loading={loadingTable || isFetchingNextPage || isLoadingPaymentReport}
 					pagination={false}
 				/>
 			</div>
