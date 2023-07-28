@@ -89,7 +89,7 @@ const FilterTablePaymentReport = ({
 
 		const outlets = dataOutletSelection.map(outlet => ({
 			label: `Outlet: ${outlet.outlet_name}`,
-			value: outlet.uuid,
+			value: outlet.outlet_name,
 		}));
 
 		return outlets;
