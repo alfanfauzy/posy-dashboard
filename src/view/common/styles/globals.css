@@ -188,3 +188,15 @@ select {
 .ant-drawer-content-wrapper {
 	box-shadow: none !important;
 }
+
+.notistack-MuiContent {
+	border-radius: 8px !important;
+}
+
+.notistack-MuiContent-success {
+	background-color: #37b175 !important;
+}
+
+.notistack-MuiContent-error {
+	background-color: #d40000 !important;
+}

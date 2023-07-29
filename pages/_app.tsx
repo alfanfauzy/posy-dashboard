@@ -7,7 +7,7 @@ import '@/view/common/styles/globals.css';
 import {AbilityProvider} from '@/view/auth/components/organisms/rbac';
 import Loadingbar from '@/view/common/components/atoms/loading/loading-bar';
 import ModalWrapper from '@/view/common/components/atoms/modal';
-import Layout from '@/view/common/components/templates/layout';
+import DashboardLayout from '@/view/common/components/templates/layout/dashboard-layout';
 import {useLoading} from '@/view/common/hooks/useLoading';
 import {persistor, wrapper} from '@/view/common/store/index';
 import type {NextPageWithLayout} from '@/view/common/types/index';
@@ -47,7 +47,7 @@ const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
 		Component.getLayout ??
 		(page => (
 			<Suspense fallback={page}>
-				<Layout>{page}</Layout>
+				<DashboardLayout>{page}</DashboardLayout>
 			</Suspense>
 		));
 

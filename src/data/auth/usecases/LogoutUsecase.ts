@@ -5,7 +5,6 @@ import {
 	LogoutRepository,
 } from '@/domain/auth/repositories/LogoutRepository';
 import {BaseError} from '@/domain/vo/BaseError';
-import {useSnackbar} from 'notistack';
 
 import {mapToLogoutModel} from '../mappers/AuthMapper';
 import {useLogoutMutation} from '../sources/LogoutMutation';
@@ -16,7 +15,6 @@ export const useLogoutUsecase = ({
 	...options
 }: MutationOptions): LogoutRepository => {
 	let error: BaseError | null = null;
-	const {enqueueSnackbar} = useSnackbar();
 
 	const {
 		mutate,
@@ -34,10 +32,6 @@ export const useLogoutUsecase = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-				enqueueSnackbar({
-					message: err.message,
-					variant: 'error',
-				});
 			}
 		},
 		...options,

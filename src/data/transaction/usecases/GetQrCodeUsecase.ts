@@ -37,10 +37,6 @@ export const useGetQrCodeUsecase = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-				enqueueSnackbar({
-					message: err.message,
-					variant: 'error',
-				});
 			}
 		},
 		...options,

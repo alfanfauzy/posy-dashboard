@@ -30,7 +30,7 @@ import {Sidebar, useProSidebar} from 'react-pro-sidebar';
 
 const LogoutModal = dynamic(() => import('../../organisms/modal/LogoutModal'));
 
-type OutletOptionsType = Array<{label: string; value: string}>;
+export type OutletOptionsType = Array<{label: string; value: string}>;
 
 type TemplatesSidebarProps = {
 	outletOptions: OutletOptionsType;
@@ -69,9 +69,9 @@ const TemplatesSidebar = ({outletOptions, isDrawer}: TemplatesSidebarProps) => {
 		dispatch(onResetArea());
 		dispatch(onChangeSelectedTable(null));
 		dispatch(onChangeSelectedArea(null));
+		dispatch(setOpenDrawer(false));
 		queryClient.invalidateQueries([GetNotificationCounterQueryKey]);
 		queryClient.invalidateQueries([GetNotificationsQueryKey]);
-		dispatch(setOpenDrawer(false));
 	};
 
 	const onCollapseSidebar = () => {

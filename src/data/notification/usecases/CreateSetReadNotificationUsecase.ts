@@ -6,7 +6,6 @@ import {
 } from '@/domain/notification/repositories/CreateSetReadNotificationRepository';
 import {BaseError} from '@/domain/vo/BaseError';
 import {useQueryClient} from '@tanstack/react-query';
-import {useSnackbar} from 'notistack';
 
 import {mapToSetReadNotification} from '../mappers/notificationMapper';
 import {useCreateSetReadNotificationMutation} from '../sources/CreateSetReadNotificationMutation';
@@ -19,7 +18,6 @@ export const useCreateSetReadNotificationUsecase = ({
 	...options
 }: MutationOptions): CreateSetReadNotificationRepository => {
 	let error: BaseError | null = null;
-	const {enqueueSnackbar} = useSnackbar();
 	const queryClient = useQueryClient();
 
 	const {
@@ -39,10 +37,6 @@ export const useCreateSetReadNotificationUsecase = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-				enqueueSnackbar({
-					message: err.message,
-					variant: 'error',
-				});
 			}
 		},
 		...options,
