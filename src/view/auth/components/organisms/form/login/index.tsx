@@ -7,7 +7,7 @@ import {
 import {useLoginViewModel} from '@/view/auth/view-models/LoginViewModel';
 import Logo from '@/view/common/components/atoms/logo';
 import firebaseApp from '@/view/common/config/firebase';
-import {whatsapp} from '@/view/common/constants/contact';
+import {WHATSAPP_NUMBER} from '@/view/common/constants/contact';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch} from '@/view/common/store/hooks';
@@ -141,7 +141,7 @@ const OrganismsFormLogin = () => {
 				<Link
 					passHref
 					target="_blank"
-					href={`https://api.whatsapp.com/send/?phone=${whatsapp}`}
+					href={`https://api.whatsapp.com/send/?phone=${WHATSAPP_NUMBER}`}
 				>
 					<Button variant="secondary" size="l" fullWidth className="mt-4">
 						Sign up

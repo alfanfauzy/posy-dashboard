@@ -4,7 +4,7 @@ import {UseQueryOptions} from '@tanstack/react-query';
 
 import {mapToOutletSelectionModel} from '../mappers/OutletMapper';
 import {useGetOutletSelectionQuery} from '../sources/GetOutletSelectionQuery';
-import {GetOutletSelectionDataResponse} from '../types';
+import {GetOutletSelectionDataResponse} from '../types/GetOutletSelectionType';
 
 export const useGetOutletSelectionUsecase = (
 	options?: UseQueryOptions<Response<DataList<GetOutletSelectionDataResponse>>>,

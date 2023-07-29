@@ -1,7 +1,7 @@
 import {OutletSelection} from '@/domain/outlet/models';
 import {OutlerUsers} from '@/domain/outlet/repositories/GetOutletUserRepository';
 
-import {GetOutletSelectionDataResponse} from '../types';
+import {GetOutletSelectionDataResponse} from '../types/GetOutletSelectionType';
 import {GetOutletUserDataResponse} from '../types/GetOutletUserType';
 
 export const mapToOutletSelectionModel = (

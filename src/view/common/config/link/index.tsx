@@ -98,7 +98,7 @@ export const PROTECT_ROUTES: ProtectRoutesType = [
 				permission: ['setting_tax_service'],
 			},
 			{
-				title: 'Subscription',
+				title: 'General Settings',
 				path: 'settings/subscription',
 				permission: ['setting_subscription'],
 			},
