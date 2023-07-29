@@ -63,6 +63,8 @@ const GuardProvider = ({children, outletOptions}: GuardProviderProps) => {
 	useEffect(() => {
 		if (!outletId && outletOptions?.length > 0) {
 			dispatch(setRestaurantOutletId(outletOptions[0]?.value));
+		} else {
+			dispatch(setRestaurantOutletId(outletId));
 		}
 	}, [dispatch, outletId, outletOptions]);
 
