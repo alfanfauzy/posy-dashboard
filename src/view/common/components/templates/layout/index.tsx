@@ -121,13 +121,11 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 				queryClient.invalidateQueries([GetAreasQueryKey]);
 				queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
 
-				if (message.data?.category === 'PAYMENT') {
-					dispatch(
-						onChangeSelectedTrxId({
-							id: '',
-						}),
-					);
-				}
+				dispatch(
+					onChangeSelectedTrxId({
+						id: '',
+					}),
+				);
 
 				enqueueSnackbar({
 					className: 'border-t-8 border-blue-success',

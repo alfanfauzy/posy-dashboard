@@ -2,8 +2,8 @@ import React from 'react';
 
 export const AreaIcon = () => (
 	<svg
-		width="60"
-		height="61"
+		width="80"
+		height="80"
 		viewBox="0 0 60 61"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"

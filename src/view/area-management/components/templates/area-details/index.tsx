@@ -82,7 +82,11 @@ const AreaDetails = () => {
 	);
 
 	const {UpdateBulkTableByFloor, isLoading: loadUpdateBulk} =
-		useUpdateBulkTableByFloorViewModel({});
+		useUpdateBulkTableByFloorViewModel({
+			onSuccess: () => {
+				reset();
+			},
+		});
 
 	const onSubmit = (form: ValidationSchemaEditTableAreaType) => {
 		UpdateBulkTableByFloor({
