@@ -3,7 +3,7 @@ import {useAppSelector} from '@/view/common/store/hooks';
 import {useUpdateGeneralSettingsViewModel} from '@/view/outlet/view-models/UpdateGeneralSettingsViewModel';
 import {Skeleton} from 'antd';
 import {Toggle} from 'posy-fnb-core';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 type DigitalMenuSettingsProps = {
 	data: GeneralSettings | undefined;
@@ -17,12 +17,7 @@ const DigitalMenuSettings = ({data, isLoading}: DigitalMenuSettingsProps) => {
 	);
 
 	const {UpdateGeneralSettings, isLoading: loadUpdateGeneralSettings} =
-		useUpdateGeneralSettingsViewModel({
-			onSuccess: _dt => {
-				const dt = _dt as GeneralSettings;
-				setActivateDigitalMenu(dt.use_digital_menu);
-			},
-		});
+		useUpdateGeneralSettingsViewModel({});
 
 	const handleUpdateGeneralSettings = (isShow: boolean) => {
 		UpdateGeneralSettings({
@@ -30,6 +25,12 @@ const DigitalMenuSettings = ({data, isLoading}: DigitalMenuSettingsProps) => {
 			use_digital_menu: isShow,
 		});
 	};
+
+	useEffect(() => {
+		if (data) {
+			setActivateDigitalMenu(data.use_digital_menu);
+		}
+	}, [data]);
 
 	return (
 		<section>

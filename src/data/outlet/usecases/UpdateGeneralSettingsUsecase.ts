@@ -5,9 +5,11 @@ import {
 	UpdateGeneralSettingsRepository,
 } from '@/domain/outlet/repositories/UpdateGeneralSettingsRepository';
 import {BaseError} from '@/domain/vo/BaseError';
+import {useQueryClient} from '@tanstack/react-query';
 import {useSnackbar} from 'notistack';
 
 import {mapToUpdateGeneralSettingsModel} from '../mappers/GeneralSettingsMapper';
+import {GetGeneralSettingsQueryKey} from '../sources/GetGeneralSettingsQuery';
 import {useUpdateGeneralSettingsMutation} from '../sources/UpdateGeneralSettingsMutation';
 
 export const useUpdateGeneralSettingsUsecase = ({
@@ -17,6 +19,7 @@ export const useUpdateGeneralSettingsUsecase = ({
 }: MutationOptions): UpdateGeneralSettingsRepository => {
 	let error: BaseError | null = null;
 	const {enqueueSnackbar} = useSnackbar();
+	const queryClient = useQueryClient();
 
 	const {
 		mutate,
@@ -35,6 +38,7 @@ export const useUpdateGeneralSettingsUsecase = ({
 					message: 'Update general settings successfully',
 					variant: 'success',
 				});
+				queryClient.invalidateQueries([GetGeneralSettingsQueryKey]);
 			}
 		},
 		onError: (dataError, ...args) => {

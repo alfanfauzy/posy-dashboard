@@ -10,7 +10,7 @@ const UpdateGeneralSettings = async (
 	input: UpdateGeneralSettingsInput,
 ): Promise<Response<UpdateGeneralSettingsDataResponse>> => {
 	const response = await Post({
-		endpoint: `/user-service/outlet/general/update/`,
+		endpoint: `/user-service/outlet/setting/general/update`,
 		data: input,
 		params: {
 			restaurant_outlet_uuid: input.restaurant_outlet_uuid,
