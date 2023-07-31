@@ -42,7 +42,7 @@ const DigitalMenuSettings = ({data, isLoading}: DigitalMenuSettingsProps) => {
 						paragraph={{rows: 1, width: '100%'}}
 					/>
 				) : null}
-				{!data ? (
+				{data ? (
 					<div className="mt-4 p-5 rounded-2xl bg-neutral-10 border border-neutral-40 w-full flex justify-between shadow-box-2">
 						<span className="text-l-semibold">
 							Activate auto generate QR Digital Menu

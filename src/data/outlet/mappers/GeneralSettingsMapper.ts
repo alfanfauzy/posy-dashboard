@@ -9,8 +9,8 @@ export const mapToGeneralSettingsModel = (
 ): GeneralSettings => ({
 	use_open_shift: datas.general_setting.use_open_shift,
 	use_digital_menu: datas.general_setting.use_digital_menu,
-	updated_at: datas.general_setting.updated_at.seconds,
-	updated_by: datas.general_setting.updated_by,
+	updated_at: datas.general_setting.updated_at?.seconds,
+	updated_by: datas.general_setting?.updated_by,
 });
 
 export const mapToUpdateGeneralSettingsModel = (

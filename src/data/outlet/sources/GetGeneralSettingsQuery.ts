@@ -1,4 +1,4 @@
-import Post from '@/data/common/api/post';
+import Get from '@/data/common/api/get';
 import {GetGeneralSettingsInput} from '@/domain/outlet/repositories/GetGeneralSettingsRepository';
 import {Response} from '@/domain/vo/BaseResponse';
 import {useQuery, UseQueryOptions} from '@tanstack/react-query';
@@ -10,10 +10,9 @@ export const GetGeneralSettingsQueryKey = 'general-settings' as const;
 const GetGeneralSettings = async (
 	input: GetGeneralSettingsInput,
 ): Promise<Response<GetGeneralSettingsDataResponse>> => {
-	const response = await Post({
-		endpoint: `/user-service/outlet/setting/general/?restaurant_outlet_uuid=${input.restaurant_outlet_uuid}`,
-		// params: input,
-		data: {},
+	const response = await Get({
+		endpoint: '/user-service/outlet/setting/general',
+		params: input,
 	});
 
 	return {
