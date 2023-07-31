@@ -12,6 +12,7 @@ export type PaymentReportList = {
 	currency: string;
 	amount: number;
 	fee: number;
+	reference_id: string;
 	fee_detail: {
 		charge_fee: number;
 		charge_fee_unit: 'percent' | 'flat';
