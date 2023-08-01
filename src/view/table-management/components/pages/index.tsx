@@ -3,7 +3,8 @@ import {TableLayout} from '@/domain/table/model/TableLayout';
 import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeSelectedArea} from '@/view/common/store/slices/table';
-import React from 'react';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
+import React, {useEffect} from 'react';
 
 import {useGetTableLayoutByFloorViewModel} from '../../view-models/GetTableLayoutByFloorViewModel';
 import TableDetailSidebar from '../templates/table-detail-sidebar';
@@ -45,6 +46,14 @@ const ViewTableManagementPage = () => {
 	);
 
 	const isLoading = (loadTableLayout && !!selectedArea) || loadArea;
+
+	useEffect(() => {
+		logEvent({
+			category: 'table_management',
+			action: 'table_management_view',
+		});
+	}, []);
+
 	return (
 		<>
 			<main className="h-full w-full flex gap-2">

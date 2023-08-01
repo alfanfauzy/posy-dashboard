@@ -3,10 +3,11 @@ import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {Dates} from '@/view/common/types/date';
 import {defineds} from '@/view/common/utils/date';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import HistoryTable from '../organisms/table';
 
@@ -30,6 +31,13 @@ const PagesHistory = () => {
 			key: 'selection',
 		},
 	]);
+
+	useEffect(() => {
+		logEvent({
+			category: 'history',
+			action: 'history_view',
+		});
+	}, []);
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">

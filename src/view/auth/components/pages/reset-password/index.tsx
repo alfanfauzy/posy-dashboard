@@ -1,8 +1,9 @@
 import CreateNewPasswordForm from '@/view/auth/components/organisms/form/create-new-password';
 import {useVerifyTokenViewModel} from '@/view/auth/view-models/VerifyTokenViewModel';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {useRouter} from 'next/router';
 import {Loading} from 'posy-fnb-core';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import OrganismsFormExpiredLink from '../../organisms/modal/expired-link';
 
@@ -19,6 +20,13 @@ const PagesCreateNewPassword = () => {
 			enabled: !!token,
 		},
 	);
+
+	useEffect(() => {
+		logEvent({
+			category: 'forgot_password',
+			action: 'forgotPassword_createPassword_view',
+		});
+	}, []);
 
 	if (isLoading)
 		return (

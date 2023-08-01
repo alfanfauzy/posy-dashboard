@@ -4,6 +4,7 @@ import {
 	onChangeArea,
 	onChangeToggleDeleteArea,
 } from '@/view/common/store/slices/area';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {Button, Modal} from 'posy-fnb-core';
 import React from 'react';
 
@@ -35,6 +36,10 @@ const DeleteAreaModal = () => {
 			DeleteArea({
 				area_uuid: selectedArea.uuid,
 				restaurant_outlet_uuid: outletId,
+			});
+			logEvent({
+				category: 'area_management',
+				action: 'areamanagement_deletearea_click',
 			});
 		}
 	};

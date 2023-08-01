@@ -4,6 +4,7 @@ import {RefundTransaction} from '@/domain/transaction/repositories/CreateRefundT
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {
 	ValidationSchemaRefundType,
 	validationSchemaRefund,
@@ -79,6 +80,10 @@ const RefundModal = ({close, isOpen, valueRefund}: RefundModalProps) => {
 			...data,
 			transaction_uuid: valueRefund.uuid,
 			restaurant_outlet_uuid: valueRefund.restaurant_outlet_uuid,
+		});
+		logEvent({
+			category: 'refund',
+			action: 'refund_refund_click',
 		});
 	};
 

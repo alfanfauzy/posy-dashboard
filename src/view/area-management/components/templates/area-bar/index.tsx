@@ -5,6 +5,7 @@ import {
 	onChangeArea,
 	onChangeToggleAddArea,
 } from '@/view/common/store/slices/area';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import EmptyArea from '@/view/transaction/components/molecules/empty-state/empty-area';
 import {Button, Loading} from 'posy-fnb-core';
 import React from 'react';
@@ -22,7 +23,7 @@ const Areabar = ({data, isLoading}: AreabarProps) => {
 
 	const isAreaEmpty = (!data || data?.length === 0) && !isLoading;
 
-	const onAddArea = (item: Area) =>
+	const onAddArea = (item: Area) => {
 		dispatch(
 			onChangeArea({
 				uuid: item.uuid,
@@ -31,6 +32,11 @@ const Areabar = ({data, isLoading}: AreabarProps) => {
 				table: '',
 			}),
 		);
+		logEvent({
+			category: 'area_management',
+			action: 'areamanagement_addnewarea_click',
+		});
+	};
 
 	return (
 		<section className="h-full w-1/3 overflow-y-hidden overflow-auto xl:rounded-r-lg rounded-lg bg-neutral-10">

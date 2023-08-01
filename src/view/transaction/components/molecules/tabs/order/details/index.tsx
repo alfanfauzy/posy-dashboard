@@ -10,6 +10,7 @@ import {
 	onChangeIsOpenCreateOrder,
 	onChangeIsOpenPrintToKitchen,
 } from '@/view/common/store/slices/order';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {generateStatusOrder} from '@/view/common/utils/UtilsGenerateOrderStatus';
 import {useCreateServeOrderViewModel} from '@/view/order/view-models/CreateServeOrderViewModel';
 import {useQueryClient} from '@tanstack/react-query';
@@ -25,7 +26,13 @@ const TabOrderDetails = ({dataOrder}: TabOrderDetailsProps) => {
 	const queryClient = useQueryClient();
 	const {outletId} = useAppSelector(state => state.auth);
 
-	const openCreateOrder = () => dispatch(onChangeIsOpenCreateOrder(true));
+	const openCreateOrder = () => {
+		dispatch(onChangeIsOpenCreateOrder(true));
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_addneworder_click',
+		});
+	};
 
 	const {createServeOrder} = useCreateServeOrderViewModel({
 		onSuccess: _data => {
@@ -49,6 +56,10 @@ const TabOrderDetails = ({dataOrder}: TabOrderDetailsProps) => {
 			order_detail_uuid,
 			restaurant_outlet_uuid,
 			rollback_to_kitchen: status === OrderDetailStatus.SERVED,
+		});
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_transactionstatus_click',
 		});
 	};
 

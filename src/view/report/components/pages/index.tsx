@@ -8,13 +8,14 @@ import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {defineds} from '@/view/common/utils/date';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import {dateFormatter, toUnix} from '@/view/common/utils/UtilsdateFormatter';
 import {DownloadFile} from '@/view/common/utils/UtilsDownloadExcel';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 import {Button} from 'posy-fnb-core';
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
 import {useDownloadTransactionReportsViewModel} from '../../view-models/GetDownloadTransactionReportsViewModel';
 import {useGetTransactionReportSummaryViewModel} from '../../view-models/GetTransactionReportSummaryViewModel';
@@ -127,6 +128,13 @@ const ViewReportPage = () => {
 	const handleDownloadReport = () => {
 		downloadReport(queryDownload);
 	};
+
+	useEffect(() => {
+		logEvent({
+			category: 'report',
+			action: 'report_view',
+		});
+	}, []);
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">

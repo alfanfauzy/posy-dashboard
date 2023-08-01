@@ -3,6 +3,7 @@ import Table from '@/view/common/components/atoms/table';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {Dates} from '@/view/common/types/date';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
 import {useGetTransactionsViewModel} from '@/view/transaction/view-models/GetTransactionsViewModel';
 import {useRouter} from 'next/router';
@@ -70,6 +71,10 @@ const HistoryTable = ({date}: HistoryTableProps) => {
 	const handleOpenDetails = (record: Transaction) => {
 		open();
 		setValueState(record);
+		logEvent({
+			category: 'history',
+			action: 'history_transactionviewdetails_click',
+		});
 	};
 
 	return (

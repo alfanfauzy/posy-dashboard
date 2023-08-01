@@ -7,9 +7,10 @@ import {useResetPasswordViewModel} from '@/view/auth/view-models/ResetPasswordVi
 import Logo from '@/view/common/components/atoms/logo';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {useRouter} from 'next/router';
 import {Button, Input} from 'posy-fnb-core';
-import React from 'react';
+import React, {useEffect} from 'react';
 import * as reactHookForm from 'react-hook-form';
 import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 
@@ -37,7 +38,17 @@ const OrganismsFormCreateNewPassword = () => {
 				setTimeout(() => {
 					router.push('/auth/login');
 				}, 1500);
+				logEvent({
+					category: 'forgot_password',
+					action: 'forgotPassword_successMessage_view',
+				});
 			}
+		},
+		onError: () => {
+			logEvent({
+				category: 'forgot_password',
+				action: 'forgotPassword_createPassword_failed',
+			});
 		},
 	});
 
@@ -48,7 +59,18 @@ const OrganismsFormCreateNewPassword = () => {
 			...form,
 			token: router.query.token as string,
 		});
+		logEvent({
+			category: 'forgot_password',
+			action: 'forgotPassword_createPassword_submit',
+		});
 	};
+
+	useEffect(() => {
+		logEvent({
+			category: 'forgot_password',
+			action: 'forgotPassword_createPassword_view',
+		});
+	}, []);
 
 	return (
 		<article className="flex h-full flex-col items-center justify-center overflow-y-auto p-14 lg:p-16 xl:p-24">

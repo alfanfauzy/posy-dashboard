@@ -6,9 +6,10 @@ import {
 	onChangeSelectedTrxId,
 	onChangeToggleNotifBar,
 } from '@/view/common/store/slices/transaction';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {generateBorderColor} from '@/view/transaction/utils/common';
 import {Loading} from 'posy-fnb-core';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import EmptyArea from '../../../molecules/empty-state/empty-area';
 
@@ -43,7 +44,28 @@ const GridView = ({
 			}),
 		);
 		dispatch(onChangeToggleNotifBar(false));
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_transactioncard_click',
+		});
 	};
+
+	const onCreateTransaction = () => {
+		if (!loadCreateTransaction) {
+			handleCreateTransaction(outletId);
+			logEvent({
+				category: 'transaction',
+				action: 'transaction_createnewtransaction_click',
+			});
+		}
+	};
+
+	useEffect(() => {
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_view',
+		});
+	}, []);
 
 	if (!selectedArea) {
 		return <EmptyArea redirect />;
@@ -62,11 +84,7 @@ const GridView = ({
 			{data && data.length === 0 && (
 				<article className="flex h-full items-center justify-center rounded-md bg-neutral-20">
 					<div
-						onClick={
-							!loadCreateTransaction
-								? () => handleCreateTransaction(outletId)
-								: () => undefined
-						}
+						onClick={onCreateTransaction}
 						className="flex flex-col items-center gap-3"
 					>
 						<PlusCircleIcon className="cursor-pointer transition-all duration-300 ease-in-out hover:opacity-60" />

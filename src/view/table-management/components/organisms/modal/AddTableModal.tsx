@@ -1,6 +1,7 @@
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onCloseAddTable} from '@/view/common/store/slices/table';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {tableTypeOptions} from '@/view/table-management/constants';
 import {
 	ValidationSchemaAddTableType,
@@ -44,6 +45,10 @@ const AddTableModal = () => {
 
 	const onSubmit = (form: ValidationSchemaAddTableType) => {
 		CreateUpsertTable({...form, restaurant_outlet_uuid: outletId});
+		logEvent({
+			category: 'table_management',
+			action: 'tablemanagement_addnewtable_click',
+		});
 	};
 
 	return (

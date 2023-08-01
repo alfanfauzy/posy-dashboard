@@ -1,10 +1,20 @@
 import VerifyAccountForm from '@/view/auth/components/organisms/modal/verify-account';
-import React from 'react';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
+import React, {useEffect} from 'react';
 
-const PagesVerifyAccount = () => (
-	<main className="h-full">
-		<VerifyAccountForm />
-	</main>
-);
+const PagesVerifyAccount = () => {
+	useEffect(() => {
+		logEvent({
+			category: 'forgot_password',
+			action: 'forgotPassword_emailSent_view',
+		});
+	}, []);
+
+	return (
+		<main className="h-full">
+			<VerifyAccountForm />
+		</main>
+	);
+};
 
 export default PagesVerifyAccount;

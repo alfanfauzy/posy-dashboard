@@ -1,11 +1,12 @@
 import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import {whatsapp} from '@/view/common/constants/contact';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import Image from 'next/image';
 import Link from 'next/link';
 import {Button, Modal} from 'posy-fnb-core';
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 
 const RenewSubs = require('public/images/renew-subscription.png');
 const subsNeeded = require('public/images/subscription-needed.png');
@@ -22,6 +23,13 @@ const ViewSubscriptionPage = () => {
 			setIsFirstRender(false);
 		}
 	}, [data, isFirstRender]);
+
+	useEffect(() => {
+		logEvent({
+			category: 'subscription',
+			action: 'subscription_view',
+		});
+	}, []);
 
 	return (
 		<main className="flex h-full w-full">

@@ -1,4 +1,5 @@
 import Logo from '@/view/common/components/atoms/logo';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {maskEmail} from '@/view/common/utils/UtilsMaskEmail';
 import {useRouter} from 'next/router';
 import {Button} from 'posy-fnb-core';
@@ -7,6 +8,14 @@ import React from 'react';
 const OrganismsFormVerifyAccount = () => {
 	const router = useRouter();
 	const {email} = router.query || '';
+
+	const handleBackToLogin = () => {
+		router.push('login');
+		logEvent({
+			category: 'forgot_password',
+			action: 'forgotPassword_emailSent_submit',
+		});
+	};
 
 	return (
 		<article className="flex h-full flex-col items-center justify-center overflow-y-auto p-14 lg:p-16 xl:p-24">
@@ -24,7 +33,7 @@ const OrganismsFormVerifyAccount = () => {
 					size="l"
 					fullWidth
 					className="mt-6"
-					onClick={() => router.push('login')}
+					onClick={handleBackToLogin}
 				>
 					Ok
 				</Button>

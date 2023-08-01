@@ -12,6 +12,7 @@ import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {onLoginSuccess} from '@/view/common/store/slices/auth';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {getMessaging, getToken} from 'firebase/messaging';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
@@ -31,7 +32,7 @@ const OrganismsFormLogin = () => {
 		register,
 		handleSubmit,
 		formState: {errors, isValid},
-		setValue,
+		reset,
 		setError,
 	} = useForm({mode: 'onChange', schema: validationSchemaLogin});
 
@@ -41,13 +42,15 @@ const OrganismsFormLogin = () => {
 			if (data) {
 				dispatch(onLoginSuccess(data));
 				router.push('/transaction');
+				logEvent({
+					category: 'login',
+					action: 'login_successful',
+				});
 			}
 		},
 		onError: _error => {
 			const error = _error as BaseError;
-			setValue('email', '');
-			setValue('password', '');
-			setValue('password', '');
+			reset();
 			setError(
 				'password',
 				{message: error.message},
@@ -55,8 +58,44 @@ const OrganismsFormLogin = () => {
 					shouldFocus: true,
 				},
 			);
+			logEvent({
+				category: 'login',
+				action: 'login_failed',
+			});
 		},
 	});
+
+	const onSubmit: reactHookForm.SubmitHandler<
+		ValidationSchemaLoginType
+	> = form => {
+		logEvent({
+			category: 'login',
+			action: 'login_submit',
+		});
+		login({...form, notif_token: notifToken});
+	};
+
+	const handleForgetPassword = () => {
+		router.push('forget-password');
+		logEvent({
+			category: 'login',
+			action: 'login_forgotPassword_click',
+		});
+	};
+
+	const handleSignUp = () => {
+		logEvent({
+			category: 'login',
+			action: 'login_signup_click',
+		});
+	};
+
+	useEffect(() => {
+		logEvent({
+			category: 'login',
+			action: 'login_view',
+		});
+	}, []);
 
 	useEffect(() => {
 		const message = getMessaging(firebaseApp);
@@ -78,12 +117,6 @@ const OrganismsFormLogin = () => {
 				console.log('An error occurred while retrieving token. ', err);
 			});
 	}, []);
-
-	const onSubmit: reactHookForm.SubmitHandler<
-		ValidationSchemaLoginType
-	> = form => {
-		login({...form, notif_token: notifToken});
-	};
 
 	return (
 		<article className="flex h-full flex-col items-center justify-center overflow-y-hidden p-14 lg:p-16 xl:p-24">
@@ -119,8 +152,7 @@ const OrganismsFormLogin = () => {
 							helperText={errors?.password?.message}
 						/>
 						<p
-							role="presentation"
-							onClick={() => router.push('forget-password')}
+							onClick={handleForgetPassword}
 							className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75"
 						>
 							Forgot password
@@ -142,6 +174,7 @@ const OrganismsFormLogin = () => {
 					passHref
 					target="_blank"
 					href={`https://api.whatsapp.com/send/?phone=${whatsapp}`}
+					onClick={handleSignUp}
 				>
 					<Button variant="secondary" size="l" fullWidth className="mt-4">
 						Sign up
