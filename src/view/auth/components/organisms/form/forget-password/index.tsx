@@ -10,9 +10,10 @@ import {
 import {useRequestResetPasswordViewModel} from '@/view/auth/view-models/RequestResetPasswordViewModel';
 import Logo from '@/view/common/components/atoms/logo';
 import {useForm} from '@/view/common/hooks/useForm';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {useRouter} from 'next/router';
 import {Button, Input} from 'posy-fnb-core';
-import React from 'react';
+import React, {useEffect} from 'react';
 import * as reactHookForm from 'react-hook-form';
 
 const OrganismsFormForgetPassword = () => {
@@ -21,7 +22,7 @@ const OrganismsFormForgetPassword = () => {
 	const {
 		register,
 		handleSubmit,
-		setValue,
+		reset,
 		setError,
 		formState: {errors, isValid},
 	} = useForm({
@@ -37,7 +38,7 @@ const OrganismsFormForgetPassword = () => {
 		},
 		onError: _error => {
 			const error = _error as BaseError;
-			setValue('email', '');
+			reset();
 			setError(
 				'email',
 				{message: error.message},
@@ -45,6 +46,10 @@ const OrganismsFormForgetPassword = () => {
 					shouldFocus: true,
 				},
 			);
+			logEvent({
+				category: 'forgot_password',
+				action: 'forgotPassword_failed',
+			});
 		},
 	});
 
@@ -52,7 +57,26 @@ const OrganismsFormForgetPassword = () => {
 		ValidationSchemaForgetPasswordType
 	> = form => {
 		requestResetPassword(form);
+		logEvent({
+			category: 'forgot_password',
+			action: 'forgotPassword_sendLoginLink_click',
+		});
 	};
+
+	const handleBackToLogin = () => {
+		router.push('login');
+		logEvent({
+			category: 'forgot_password',
+			action: 'forgotPassword_backToLogin_click',
+		});
+	};
+
+	useEffect(() => {
+		logEvent({
+			category: 'forgot_password',
+			action: 'forgotPassword_view',
+		});
+	}, []);
 
 	return (
 		<article className="flex h-full flex-col items-center justify-center overflow-y-auto p-14 lg:p-16 xl:p-24">
@@ -75,7 +99,7 @@ const OrganismsFormForgetPassword = () => {
 					/>
 					<p
 						role="presentation"
-						onClick={() => router.push('login')}
+						onClick={handleBackToLogin}
 						className="cursor-pointer self-end text-m-semibold text-primary-main hover:text-opacity-75"
 					>
 						Back to login

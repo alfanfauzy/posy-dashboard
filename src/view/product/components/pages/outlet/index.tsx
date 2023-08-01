@@ -1,8 +1,9 @@
 import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {useRouter} from 'next/router';
-import React, {Key, useState} from 'react';
+import React, {Key, useEffect, useState} from 'react';
 
 import {useGetOutletProductsViewModel} from '../../../view-models/GetOutletProductsViewModel';
 import FormEditProduct from '../../organisms/form/edit-product';
@@ -40,6 +41,13 @@ const ViewProductPage = () => {
 		],
 		sort: {field: 'created_at', value: 'desc'},
 	});
+
+	useEffect(() => {
+		logEvent({
+			category: 'product_outlet',
+			action: 'productOutlet_view',
+		});
+	}, []);
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">

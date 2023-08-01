@@ -9,6 +9,7 @@ import {
 	onChangeIsOpenCreateTransaction,
 	onChangeIsOpenCreateTransactionFromTableView,
 } from '@/view/common/store/slices/transaction';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
 import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
 import dynamic from 'next/dynamic';
@@ -68,6 +69,10 @@ const TransactionDetailsHeader = ({
 					}),
 			  )
 			: dispatch(onChangeIsOpenCreateTransaction(true));
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_edittransactioncard_click',
+		});
 	};
 
 	const handleCancelTransaction = (transaction: Transaction) => {
@@ -82,6 +87,10 @@ const TransactionDetailsHeader = ({
 						},
 					}),
 			  );
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_deletetransactioncard_click',
+		});
 	};
 
 	return (

@@ -29,6 +29,7 @@ import {
 	calculateOrderBeforeDiscount,
 	toRupiah,
 } from '@/view/common/utils/common';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {generateTransactionCode} from '@/view/common/utils/UtilsGenerateTransactionCode';
 import {useCreateOrderManualViewModel} from '@/view/order/view-models/CreateOrderManualViewModel';
 import {useGetMenuProductsViewModel} from '@/view/product/view-models/GetMenuProductsViewModel';
@@ -239,6 +240,10 @@ const ManualSubmitOrder = ({dataTransaction}: ManualSubmitOrderProps) => {
 				restaurant_outlet_uuid: outletId,
 				transaction_uuid: dataTransaction?.uuid,
 				order: payload,
+			});
+			logEvent({
+				category: 'input_order',
+				action: 'inputorder_submitorder_click',
 			});
 		}
 	};

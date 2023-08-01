@@ -3,6 +3,7 @@ import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {Dates} from '@/view/common/types/date';
 import {defineds} from '@/view/common/utils/date';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
 import {useRouter} from 'next/router';
 import React, {useEffect, useState} from 'react';
@@ -52,6 +53,13 @@ const ViewRatingPage = () => {
 		],
 		sort: {field: 'created_at', value: 'desc'},
 	});
+
+	useEffect(() => {
+		logEvent({
+			category: 'food_rating',
+			action: 'foodrating_view',
+		});
+	}, []);
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-4">

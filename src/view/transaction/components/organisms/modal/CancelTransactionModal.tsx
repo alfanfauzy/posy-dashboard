@@ -11,6 +11,7 @@ import {
 	onChangeCancelTransaction,
 	onChangeSelectedTrxId,
 } from '@/view/common/store/slices/transaction';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {useCreateCancelTransactionViewModel} from '@/view/transaction/view-models/CreateCancelTransactionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
@@ -60,6 +61,10 @@ const CancelTransactionModal = ({
 	const onCancelTransaction = () => {
 		if (payload) {
 			createCancelTransaction(payload);
+			logEvent({
+				category: 'cancel_transaction',
+				action: 'canceltransaction_yescanceltransaction_click',
+			});
 		}
 	};
 

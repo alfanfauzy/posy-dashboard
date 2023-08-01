@@ -11,12 +11,13 @@ import Layout from '@/view/common/components/templates/layout';
 import {useLoading} from '@/view/common/hooks/useLoading';
 import {persistor, wrapper} from '@/view/common/store/index';
 import type {NextPageWithLayout} from '@/view/common/types/index';
+import {initiateGoogleAnalytics} from '@/view/common/utils/UtilsAnalytics';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {AxiosError} from 'axios';
 import type {AppProps} from 'next/app';
 import {SnackbarProvider} from 'notistack';
-import {Suspense, useState} from 'react';
+import {Suspense, useEffect, useState} from 'react';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
@@ -50,6 +51,10 @@ const App = ({Component, pageProps, ...rest}: AppPropsWithLayout) => {
 				<Layout>{page}</Layout>
 			</Suspense>
 		));
+
+	useEffect(() => {
+		initiateGoogleAnalytics();
+	}, []);
 
 	return (
 		<QueryClientProvider client={queryClient}>

@@ -1,5 +1,6 @@
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeSelectedTable} from '@/view/common/store/slices/table';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {useDeleteTableViewModel} from '@/view/table-management/view-models/DeleteTableViewModel';
 import {Button, Modal} from 'posy-fnb-core';
 import React from 'react';
@@ -25,6 +26,10 @@ const DeleteTableModal = ({close, isOpen}: DeleteTableModalProps) => {
 		DeleteTable({
 			table_uuid: selectedTable?.uuid || '',
 			restaurant_outlet_uuid: outletId,
+		});
+		logEvent({
+			category: 'table_management',
+			action: 'tablemanagement_deletetable_click',
 		});
 	};
 

@@ -1,9 +1,10 @@
 import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useProductActions from '@/view/common/store/zustand/Product/ProductAction';
 import useProductState from '@/view/common/store/zustand/Product/ProductZustand';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {useGetMasterProductsViewModel} from '@/view/product/view-models/GetMasterProductsViewModel';
 import {useRouter} from 'next/router';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import OrganismsFormMasterProduct from '../../organisms/form/master';
 import OrganismDeleteProductMasterConfirmationModal from '../../organisms/modal/DeleteConfirmationModal';
@@ -35,6 +36,13 @@ const ViewMasterProductPage = () => {
 		],
 		sort: {field: 'created_at', value: 'desc'},
 	});
+
+	useEffect(() => {
+		logEvent({
+			category: 'master_product',
+			action: 'masterProduct_view',
+		});
+	}, []);
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-2xl bg-neutral-10 p-4">

@@ -3,6 +3,7 @@ import {QrCode} from '@/domain/qr-code/model';
 import {Can} from '@/view/auth/components/organisms/rbac';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeIsOpenPrintToKitchen} from '@/view/common/store/slices/order';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {requestFullScreen} from '@/view/common/utils/UtilsRequestFullScreen';
 import {useGetQrCodeViewModel} from '@/view/transaction/view-models/GetQrCodeViewModel';
 import dynamic from 'next/dynamic';
@@ -50,8 +51,23 @@ const OrderTabBottom = ({dataOrder}: OrderTabBottomProps) => {
 		},
 	});
 
-	const handlePrintToKitchen = () =>
+	const handlePrintToKitchen = () => {
 		dispatch(onChangeIsOpenPrintToKitchen(true));
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_printtokitchen_click',
+		});
+	};
+
+	const handleRePrintQr = () => {
+		getQrCode({
+			transaction_uuid: selectedTrxId,
+		});
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_reprintqr_click',
+		});
+	};
 
 	return (
 		<div className="flex gap-2">
@@ -59,11 +75,7 @@ const OrderTabBottom = ({dataOrder}: OrderTabBottomProps) => {
 				<Button
 					fullWidth
 					variant="secondary"
-					onClick={() =>
-						getQrCode({
-							transaction_uuid: selectedTrxId,
-						})
-					}
+					onClick={handleRePrintQr}
 					isLoading={loadQrCode}
 				>
 					<p className="whitespace-nowrap text-m-semibold">Reprint QR</p>

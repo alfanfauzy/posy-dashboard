@@ -103,6 +103,7 @@ build_image:
     - export NEXT_PUBLIC_MESSAGING_SENDER_ID='408454494774'
     - export NEXT_PUBLIC_APP_ID='1:408454494774:web:5e6a6cd83b335f0cf6f697'
     - export NEXT_PUBLIC_MEASUREMENT_ID='G-KSJER3D771'
+    - export NEXT_PUBLIC_GA_ID='G-7QM10WZ085'
     - |
       if [ "$CI_COMMIT_BRANCH" != master ]; then
         export IMAGE_TAG=dev-$CI_COMMIT_SHORT_SHA
@@ -124,6 +125,7 @@ build_image:
         --build-arg NEXT_PUBLIC_MESSAGING_SENDER_ID='408454494774' \
         --build-arg NEXT_PUBLIC_APP_ID='1:408454494774:web:5e6a6cd83b335f0cf6f697' \
         --build-arg NEXT_PUBLIC_MEASUREMENT_ID='G-KSJER3D771' \
+        --build-arg NEXT_PUBLIC_GA_ID='G-7QM10WZ085' \
         $DOCKER_BUILD_OPTS \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$IMAGE_TAG \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:latest \
@@ -166,6 +168,7 @@ build_image_tagged:
     - export NEXT_PUBLIC_MESSAGING_SENDER_ID='594396546324'
     - export NEXT_PUBLIC_APP_ID='1:594396546324:web:b0aae5c38ab315d89a6e01'
     - export NEXT_PUBLIC_MEASUREMENT_ID='G-6R76EC7B7Z'
+    - export NEXT_PUBLIC_GA_ID='G-7QM10WZ085'
     - |
       docker build --progress=plain \
         --build-arg GIT_REPO="$CI_PROJECT_URL" \
@@ -182,6 +185,7 @@ build_image_tagged:
         --build-arg NEXT_PUBLIC_MESSAGING_SENDER_ID='594396546324' \
         --build-arg NEXT_PUBLIC_APP_ID='1:594396546324:web:b0aae5c38ab315d89a6e01' \
         --build-arg NEXT_PUBLIC_MEASUREMENT_ID='G-6R76EC7B7Z' \
+        --build-arg NEXT_PUBLIC_GA_ID='G-7QM10WZ085' \
         $DOCKER_BUILD_OPTS \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:$IMAGE_TAG \
         -t $DOCKER_REGISTRY/$NAMESPACE/$PROJECT_NAME:latest \

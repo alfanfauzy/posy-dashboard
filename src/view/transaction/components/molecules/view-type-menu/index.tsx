@@ -3,6 +3,7 @@ import {
 	ViewType,
 	onChangeViewType,
 } from '@/view/common/store/slices/transaction';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import React from 'react';
 
 const ViewTypeMenu = () => {
@@ -10,6 +11,10 @@ const ViewTypeMenu = () => {
 
 	const handleChangeViewType = (viewType: ViewType) => {
 		dispatch(onChangeViewType(viewType));
+		logEvent({
+			category: 'transaction',
+			action: 'transacrtion_more_click',
+		});
 	};
 
 	return (

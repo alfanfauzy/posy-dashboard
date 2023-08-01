@@ -9,6 +9,7 @@ import {useAbility} from '@/view/auth/components/organisms/rbac';
 import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppSelector} from '@/view/common/store/hooks';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {
 	validationSchemaUpdateTax,
 	type ValidationSchemaUpdateTaxType,
@@ -79,6 +80,13 @@ const ViewTaxAndServicePage = () => {
 	useEffect(() => {
 		setValue('restaurant_outlet_uuid', outletId);
 	}, [outletId]);
+
+	useEffect(() => {
+		logEvent({
+			category: 'tax_and_service',
+			action: 'taxservicefee_view',
+		});
+	}, []);
 
 	return (
 		<main className="flex h-full gap-4 overflow-hidden">

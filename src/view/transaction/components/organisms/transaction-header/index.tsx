@@ -11,6 +11,7 @@ import {
 	onChangeToggleNotifBar,
 	onClearSearch,
 } from '@/view/common/store/slices/transaction';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {requestFullScreen} from '@/view/common/utils/UtilsRequestFullScreen';
 import {useGetNotificationCounterViewModel} from '@/view/notification/view-models/GetNotificationCounterViewModel';
 import {useGetTransactionSummaryViewModel} from '@/view/transaction/view-models/GetTransactionSummaryViewModel';
@@ -62,17 +63,42 @@ const TransactionHeader = ({
 		if (status === statusParams) {
 			dispatch(onChangeStatus(''));
 		} else {
+			const actionName = statusParams?.split('_')?.join('')?.toLowerCase();
 			dispatch(onChangeStatus(statusParams));
+			logEvent({
+				category: 'transaction',
+				action: `transaction_${actionName}_click`,
+			});
 		}
 	};
 
 	const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch(onChangeSearch({search: e.target.value}));
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_search_click',
+		});
 	};
 
 	const onClear = () => {
 		dispatch(onClearSearch());
 		close();
+	};
+
+	const onCreateTransaction = (id: string) => {
+		handleCreateTransaction(id);
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_newtransactionbutton_click',
+		});
+	};
+
+	const onOpenNotifBar = () => {
+		dispatch(onChangeToggleNotifBar(true));
+		logEvent({
+			category: 'transaction',
+			action: 'transaction_notification_click',
+		});
 	};
 
 	return (
@@ -87,7 +113,7 @@ const TransactionHeader = ({
 						} relative hover:bg-secondary-border duration-300 ease-in-out cursor-pointer rounded-full p-1`}
 					>
 						<IoMdNotificationsOutline
-							onClick={() => dispatch(onChangeToggleNotifBar(true))}
+							onClick={onOpenNotifBar}
 							className="cursor-pointer hover:opacity-70"
 							size={28}
 						/>
@@ -168,7 +194,7 @@ const TransactionHeader = ({
 						<div className="w-36">
 							<Can I="create" an="transaction">
 								<Button
-									onClick={() => handleCreateTransaction(outletId)}
+									onClick={() => onCreateTransaction(outletId)}
 									size="m"
 									fullWidth
 									variant="primary"

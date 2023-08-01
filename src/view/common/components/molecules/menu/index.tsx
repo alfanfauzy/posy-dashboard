@@ -1,6 +1,7 @@
 import {Subjects} from '@/view/auth/types';
 import {useAppDispatch} from '@/view/common/store/hooks';
 import {setOpenDrawer} from '@/view/common/store/slices/auth';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {CheckPermission} from '@/view/common/utils/UtilsCheckPermission';
 import {useRouter} from 'next/router';
 import React from 'react';
@@ -21,8 +22,14 @@ const MoleculesMenu = ({item, collapse}: MoleculesMenuProps) => {
 	const {pathname, push, asPath} = useRouter();
 
 	const linkTo = (path: string) => {
+		const actionPath = path?.split('/')?.join('')?.split('-')?.join('');
+
 		push(`/${path}`);
 		dispatch(setOpenDrawer(false));
+		logEvent({
+			category: 'sidebar',
+			action: `sidebar_${actionPath}_click`,
+		});
 	};
 
 	const [, firstPath] = asPath.split('/');

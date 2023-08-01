@@ -3,9 +3,10 @@ import {GetAreaQueryKey} from '@/data/area/sources/GetAreaQuery';
 import {useGetAreasViewModel} from '@/view/area-management/view-models/GetAreasViewModel';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {onChangeArea} from '@/view/common/store/slices/area';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {useQueryClient} from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import Areabar from '../templates/area-bar';
 import AreaDetails from '../templates/area-details';
@@ -58,6 +59,13 @@ const ViewAreaManagementPage = () => {
 			},
 		},
 	);
+
+	useEffect(() => {
+		logEvent({
+			category: 'area_management',
+			action: 'area_management_view',
+		});
+	}, []);
 
 	return (
 		<>

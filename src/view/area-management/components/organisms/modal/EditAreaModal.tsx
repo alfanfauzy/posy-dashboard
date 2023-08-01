@@ -8,6 +8,7 @@ import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useForm} from '@/view/common/hooks/useForm';
 import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
 import {onChangeToggleEditArea} from '@/view/common/store/slices/area';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {Modal} from 'antd';
 import {Button, Input, Select} from 'posy-fnb-core';
 import React, {useEffect, useMemo} from 'react';
@@ -78,6 +79,10 @@ const EditAreaModal = () => {
 	const onSubmit = (form: ValidationSchemaEditAreaType) => {
 		if (selectedArea) {
 			UpdateArea({...form, floor_area_uuid: selectedArea?.uuid});
+			logEvent({
+				category: 'area_management',
+				action: 'areamanagement_editarea_click',
+			});
 		}
 	};
 

@@ -6,6 +6,7 @@ import NavDrawer from '@/view/common/components/molecules/nav-drawer';
 import useDisclosure from '@/view/common/hooks/useDisclosure';
 import {useAppSelector} from '@/view/common/store/hooks';
 import {defineds} from '@/view/common/utils/date';
+import {logEvent} from '@/view/common/utils/UtilsAnalytics';
 import {onChangeQueryParams} from '@/view/common/utils/UtilsChangeQueryParams';
 import {toUnix} from '@/view/common/utils/UtilsdateFormatter';
 import {useGetOutletSelectionViewModel} from '@/view/outlet/view-models/GetOutletSelectionViewModel';
@@ -105,6 +106,13 @@ const ViewReportCancellationPage = () => {
 	useEffect(() => {
 		setOutletOpt(outletOptions[0].value);
 	}, [outletOptions]);
+
+	useEffect(() => {
+		logEvent({
+			category: 'cancellation_report',
+			action: 'cancellationreport_view',
+		});
+	}, []);
 
 	return (
 		<main className="h-full flex-1 overflow-hidden rounded-l-lg bg-neutral-10 p-4">
