@@ -3,7 +3,6 @@ import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
 import {PayloadSaveBankAccount} from '@/domain/bank/repositories/CreateSaveBankRepository';
 import {BaseError} from '@/domain/vo/BaseError';
-import {useSnackbar} from 'notistack';
 
 export const useSaveBankAccountUsecase = ({
 	onSuccess,
@@ -11,7 +10,6 @@ export const useSaveBankAccountUsecase = ({
 	...options
 }: MutationOptions) => {
 	let error: BaseError | null = null;
-	const {enqueueSnackbar} = useSnackbar();
 
 	const {
 		mutate,
@@ -28,11 +26,6 @@ export const useSaveBankAccountUsecase = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-
-				enqueueSnackbar({
-					message: `${err.title} : ${err.message}`,
-					variant: 'error',
-				});
 			}
 		},
 		...options,

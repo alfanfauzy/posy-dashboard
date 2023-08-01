@@ -2,7 +2,6 @@ import {mapToBaseError} from '@/data/common/mappers/ErrorMapper';
 import {MutationOptions} from '@/data/common/types';
 import {PayloadBankCheck} from '@/domain/bank/repositories/CreateCheckBankRepository';
 import {BaseError} from '@/domain/vo/BaseError';
-import {useSnackbar} from 'notistack';
 
 import {useCreateCheckBankMutation} from '../sources/CreateCheckBankMutation';
 
@@ -11,8 +10,7 @@ export const useCheckBankUsecase = ({
 	onError,
 	...options
 }: MutationOptions) => {
-	const error: BaseError | null = null;
-	const {enqueueSnackbar} = useSnackbar();
+	let error: BaseError | null = null;
 
 	const {
 		mutate,
@@ -29,11 +27,6 @@ export const useCheckBankUsecase = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-
-				enqueueSnackbar({
-					message: `${err.title} : ${err.message}`,
-					variant: 'error',
-				});
 			}
 		},
 		...options,
@@ -42,6 +35,10 @@ export const useCheckBankUsecase = ({
 	const checkBank = (payload: PayloadBankCheck) => {
 		mutate(payload);
 	};
+
+	if (_error) {
+		error = mapToBaseError(_error);
+	}
 
 	if (data?.data) {
 		return {

@@ -26,7 +26,7 @@ export const useUpdateProductUsecase = ({
 			if (dataSuccess) {
 				onSuccess?.(dataSuccess?.data, ...args);
 				enqueueSnackbar({
-					message: 'Successfully update product',
+					message: 'Update product successfully',
 					variant: 'success',
 				});
 			}
@@ -35,10 +35,6 @@ export const useUpdateProductUsecase = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-				enqueueSnackbar({
-					message: err.message,
-					variant: 'error',
-				});
 			}
 		},
 		...options,

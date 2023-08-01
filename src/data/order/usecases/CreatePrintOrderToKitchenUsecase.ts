@@ -5,7 +5,6 @@ import {
 	CreatePrintOrderToKitchenRepository,
 } from '@/domain/order/repositories/CreatePrintOrderToKitchenRepository';
 import {BaseError} from '@/domain/vo/BaseError';
-import {useSnackbar} from 'notistack';
 
 import {mapToCreatePrintOrderToKitchenModel} from '../mappers/OrderMapper';
 import {useCreatePrintOrderToKitchenMutation} from '../sources/CreatePrintOrderToKitchenMutation';
@@ -16,7 +15,6 @@ export const useCreatePrintOrderToKitchenUsecase = ({
 	...options
 }: MutationOptions): CreatePrintOrderToKitchenRepository => {
 	let error: BaseError | null = null;
-	const {enqueueSnackbar} = useSnackbar();
 
 	const {
 		mutate,
@@ -36,10 +34,6 @@ export const useCreatePrintOrderToKitchenUsecase = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-				enqueueSnackbar({
-					message: err.message,
-					variant: 'error',
-				});
 			}
 		},
 		...options,

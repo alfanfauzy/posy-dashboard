@@ -3,7 +3,6 @@ import {MutationOptions} from '@/data/common/types';
 import {PaymentWithdrawPayload} from '@/domain/payment/models';
 import {CreatePaymentWithdrawRepository} from '@/domain/payment/repositories/CreatePaymentWithdrawRepository';
 import {BaseError} from '@/domain/vo/BaseError';
-import {useSnackbar} from 'notistack';
 
 import {useCreatePaymentWithdrawMutation} from '../sources/CreatePaymentWithdrawMutation';
 
@@ -13,7 +12,6 @@ export const useCreatePaymentWithdrawUsecases = ({
 	...options
 }: MutationOptions): CreatePaymentWithdrawRepository => {
 	let error: BaseError | null = null;
-	const {enqueueSnackbar} = useSnackbar();
 
 	const {
 		mutate,
@@ -30,11 +28,6 @@ export const useCreatePaymentWithdrawUsecases = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-
-				enqueueSnackbar({
-					message: `${err.title} : ${err.message}`,
-					variant: 'error',
-				});
 			}
 		},
 		...options,

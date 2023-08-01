@@ -41,10 +41,6 @@ export const useUpdateBulkTableByFloorUsecase = ({
 			if (dataError) {
 				const err = mapToBaseError(dataError);
 				onError?.(err, ...args);
-				enqueueSnackbar({
-					message: err.message?.split('_')?.join(' '),
-					variant: 'error',
-				});
 			}
 		},
 		...options,
