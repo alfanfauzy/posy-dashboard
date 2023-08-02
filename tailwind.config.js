@@ -11,6 +11,9 @@ module.exports = {
 				'warning-main': '#CD7B2E',
 				'secondary-hover': '#5440BE',
 			},
+			textColor: {
+				'yellow-warning': '#C69A00',
+			},
 			boxShadow: {
 				modal: '0px -6px 24px rgba(0, 0, 0, 0.15);',
 				'box-1': '0px -6px 24px 0px rgba(0, 0, 0, 0.06);',
