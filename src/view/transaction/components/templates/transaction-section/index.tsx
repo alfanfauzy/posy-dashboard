@@ -50,6 +50,7 @@ const TransactionSection = () => {
 	const {outletId, isSubscription, isLoggedIn} = useAppSelector(
 		state => state.auth,
 	);
+	const {showDigitalMenu} = useAppSelector(state => state.generalSettings);
 
 	const qrRef =
 		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -99,11 +100,13 @@ const TransactionSection = () => {
 			if (_dataQr) {
 				queryClient.invalidateQueries([GetTransactionsQueryKey]);
 				queryClient.invalidateQueries([GetTransactionSummaryQueryKey]);
-				setTimeout(() => {
-					handlePrint();
-					dispatch(onChangeIsOpenCreateTransaction(true));
-				}, 100);
 				dispatch(onChangeSelectedTrxId({id: dt.uuid}));
+				dispatch(onChangeIsOpenCreateTransaction(true));
+				if (showDigitalMenu) {
+					setTimeout(() => {
+						handlePrint();
+					}, 100);
+				}
 			}
 		},
 	});

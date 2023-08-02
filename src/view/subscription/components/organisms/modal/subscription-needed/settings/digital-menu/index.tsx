@@ -1,9 +1,10 @@
 import {GeneralSettings} from '@/domain/outlet/models/GeneralSettings';
-import {useAppSelector} from '@/view/common/store/hooks';
+import {useAppDispatch, useAppSelector} from '@/view/common/store/hooks';
+import {onChangeShowDigitalMenu} from '@/view/common/store/slices/general-settings';
 import {useUpdateGeneralSettingsViewModel} from '@/view/outlet/view-models/UpdateGeneralSettingsViewModel';
 import {Skeleton} from 'antd';
 import {Toggle} from 'posy-fnb-core';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 
 type DigitalMenuSettingsProps = {
 	data: GeneralSettings | undefined;
@@ -11,10 +12,9 @@ type DigitalMenuSettingsProps = {
 };
 
 const DigitalMenuSettings = ({data, isLoading}: DigitalMenuSettingsProps) => {
+	const dispatch = useAppDispatch();
+	const {showDigitalMenu} = useAppSelector(state => state.generalSettings);
 	const {outletId} = useAppSelector(state => state.auth);
-	const [activateDigitalMenu, setActivateDigitalMenu] = useState(
-		data?.use_digital_menu ?? false,
-	);
 
 	const {UpdateGeneralSettings, isLoading: loadUpdateGeneralSettings} =
 		useUpdateGeneralSettingsViewModel({});
@@ -28,9 +28,9 @@ const DigitalMenuSettings = ({data, isLoading}: DigitalMenuSettingsProps) => {
 
 	useEffect(() => {
 		if (data) {
-			setActivateDigitalMenu(data.use_digital_menu);
+			dispatch(onChangeShowDigitalMenu(data.use_digital_menu));
 		}
-	}, [data]);
+	}, [data, dispatch]);
 
 	return (
 		<section>
@@ -50,8 +50,8 @@ const DigitalMenuSettings = ({data, isLoading}: DigitalMenuSettingsProps) => {
 						</span>
 						<Toggle
 							disabled={loadUpdateGeneralSettings}
-							value={activateDigitalMenu}
-							onChange={() => handleUpdateGeneralSettings(!activateDigitalMenu)}
+							value={showDigitalMenu}
+							onChange={() => handleUpdateGeneralSettings(!showDigitalMenu)}
 						/>
 					</div>
 				) : null}

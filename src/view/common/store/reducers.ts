@@ -4,6 +4,7 @@ import PersistStorage from 'redux-persist/lib/storage';
 
 import area from './slices/area';
 import auth from './slices/auth';
+import generalSettings from './slices/general-settings';
 import modal from './slices/modal';
 import order from './slices/order';
 import product from './slices/product';
@@ -13,7 +14,7 @@ import transaction from './slices/transaction';
 const persistConfig = {
 	key: 'root',
 	version: 1,
-	whitelist: ['auth', 'transaction'],
+	whitelist: ['auth', 'transaction', 'general-settings'],
 	storage: PersistStorage,
 };
 
@@ -27,6 +28,7 @@ const persistedReducer = persistReducer(
 		product,
 		area,
 		table,
+		generalSettings,
 	}),
 );
 

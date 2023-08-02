@@ -31,6 +31,7 @@ const CreateTransactionFromTableModal = () => {
 	const {selectedTrxId, createTransactionFromTableView} = useAppSelector(
 		state => state.transaction,
 	);
+	const {showDigitalMenu} = useAppSelector(state => state.generalSettings);
 
 	const qrRef =
 		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -88,11 +89,13 @@ const CreateTransactionFromTableModal = () => {
 			const dt = _dataQr as QrCode;
 			queryClient.invalidateQueries([GetTableLayoutByFloorQueryKey]);
 			queryClient.invalidateQueries([GetAreasQueryKey]);
-			handleClose();
-			setTimeout(() => {
-				handlePrint();
-			}, 100);
 			dispatch(onChangeSelectedTrxId({id: dt.uuid}));
+			handleClose();
+			if (showDigitalMenu) {
+				setTimeout(() => {
+					handlePrint();
+				}, 100);
+			}
 		},
 	});
 

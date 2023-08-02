@@ -19,7 +19,9 @@ import {
 	setOpenDrawer,
 	setRestaurantOutletId,
 } from '@/view/common/store/slices/auth';
+import {onChangeShowDigitalMenu} from '@/view/common/store/slices/general-settings';
 import {onChangeSelectedTrxId} from '@/view/common/store/slices/transaction';
+import {useGetGeneralSettingsViewModel} from '@/view/outlet/view-models/GetGeneralSettingsViewModel';
 import {useGetOutletSelectionViewModel} from '@/view/outlet/view-models/GetOutletSelectionViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import {useQueryClient} from '@tanstack/react-query';
@@ -172,7 +174,23 @@ const OrganismsLayout = ({children}: OrganismsLayoutProps) => {
 		}
 	}, [dispatch, outletId, outletOptions]);
 
-	if (loading) {
+	const {isLoading: loadGeneralSettings} = useGetGeneralSettingsViewModel(
+		{
+			restaurant_outlet_uuid: outletId,
+		},
+		{
+			enabled: !!(outletId && dataSubscription?.isSubscription),
+			onSuccess: dataGeneralSettings => {
+				dispatch(
+					onChangeShowDigitalMenu(
+						dataGeneralSettings?.data.general_setting?.use_digital_menu,
+					),
+				);
+			},
+		},
+	);
+
+	if (loading || loadGeneralSettings) {
 		return (
 			<main className="flex h-screen w-full items-center justify-center">
 				<Loading size={100} />
