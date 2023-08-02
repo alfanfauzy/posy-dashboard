@@ -25,6 +25,7 @@ type OrderTabBottomProps = {
 const OrderTabBottom = ({dataOrder}: OrderTabBottomProps) => {
 	const dispatch = useAppDispatch();
 	const {selectedTrxId} = useAppSelector(state => state.transaction);
+	const {showDigitalMenu} = useAppSelector(state => state.generalSettings);
 
 	const qrRef =
 		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
@@ -76,6 +77,7 @@ const OrderTabBottom = ({dataOrder}: OrderTabBottomProps) => {
 					fullWidth
 					variant="secondary"
 					onClick={handleRePrintQr}
+					disabled={!showDigitalMenu}
 					isLoading={loadQrCode}
 				>
 					<p className="whitespace-nowrap text-m-semibold">Reprint QR</p>

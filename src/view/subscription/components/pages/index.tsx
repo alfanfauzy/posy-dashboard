@@ -1,28 +1,49 @@
 import NavDrawer from '@/view/common/components/molecules/nav-drawer';
-import {whatsapp} from '@/view/common/constants/contact';
+import {useAppSelector} from '@/view/common/store/hooks';
 import {logEvent} from '@/view/common/utils/UtilsAnalytics';
-import {dateFormatter} from '@/view/common/utils/UtilsdateFormatter';
+import {useGetGeneralSettingsViewModel} from '@/view/outlet/view-models/GetGeneralSettingsViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
-import Image from 'next/image';
-import Link from 'next/link';
-import {Button, Modal} from 'posy-fnb-core';
+import dynamic from 'next/dynamic';
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 
-const RenewSubs = require('public/images/renew-subscription.png');
-const subsNeeded = require('public/images/subscription-needed.png');
+import DigitalMenuSettings from '../organisms/modal/subscription-needed/settings/digital-menu';
+import SubscriptionPlan from '../templates/subscription-plan';
+
+const SubscriptionNeededModal = dynamic(
+	() => import('../organisms/modal/subscription-needed'),
+	{
+		loading: () => <div />,
+	},
+);
 
 const ViewSubscriptionPage = () => {
-	const {data} = useGetSubscriptionSectionViewModel();
-
-	const [isOpen, setIsOpen] = useState(false);
+	const {outletId} = useAppSelector(state => state.auth);
+	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [isFirstRender, setIsFirstRender] = useState(true);
 
+	const {data: dataSubscription, isLoading: loadSubscription} =
+		useGetSubscriptionSectionViewModel();
+
+	const {data: dataGeneralSettings, isLoading: loadGeneralSettings} =
+		useGetGeneralSettingsViewModel(
+			{
+				restaurant_outlet_uuid: outletId,
+			},
+			{
+				enabled: !!(outletId && dataSubscription?.isSubscription),
+			},
+		);
+
 	useLayoutEffect(() => {
-		if (isFirstRender && data && !data?.isSubscription) {
-			setIsOpen(true);
+		if (
+			isFirstRender &&
+			dataSubscription &&
+			!dataSubscription?.isSubscription
+		) {
+			setIsOpenModal(true);
 			setIsFirstRender(false);
 		}
-	}, [data, isFirstRender]);
+	}, [dataSubscription, isFirstRender]);
 
 	useEffect(() => {
 		logEvent({
@@ -32,103 +53,27 @@ const ViewSubscriptionPage = () => {
 	}, []);
 
 	return (
-		<main className="flex h-full w-full">
-			<article className="flex h-full w-full flex-col rounded-lg bg-neutral-10 p-4">
-				<NavDrawer title="Subscription" />
-				<section className="mt-6 flex gap-6 xl:w-[90%]">
-					<aside className="w-1/3 rounded-3xl border border-neutral-30 p-6 shadow-md">
-						<div>
-							<p className="text-l-semibold">Subscription Status</p>
-							<p
-								className={`mt-0.5 text-l-semibold ${
-									data?.isSubscription
-										? 'text-green-success'
-										: 'text-red-caution'
-								}`}
-							>
-								{data?.status}
-							</p>
-						</div>
-						<div className="mt-3 border-b border-neutral-30" />
-						<div className="mt-3">
-							<p className="text-m-semibold">Subscription Plan</p>
-							<p className="mt-0.5 text-m-regular">{data?.subscription_name}</p>
-						</div>
-						<div className="mt-3">
-							<p className="text-m-semibold">Expired Date</p>
-							<p
-								className={`mt-0.5 text-m-regular ${
-									data?.isSubscription
-										? 'text-green-success'
-										: 'text-red-caution'
-								}`}
-							>
-								{data?.end_date && dateFormatter(data.end_date)}
-							</p>
-						</div>
-					</aside>
-
-					<aside className="w-2/3 rounded-3xl border border-neutral-30 p-6 shadow-md">
-						<div className="flex flex-col items-center gap-6 lg:flex-row">
-							<Image
-								src={RenewSubs}
-								alt="renew-subscription"
-								width={253}
-								height={201}
-								priority
-							/>
-							<div>
-								<h2 className="text-xxl-bold">Only 199K / Month</h2>
-								<p className="mt-2 text-l-regular text-primary-main">
-									Looking for a powerful and user-friendly POS system for your
-									food and beverage business? Our subscription service has got
-									you covered!
-								</p>
-								<Link
-									passHref
-									target="_blank"
-									href={`https://api.whatsapp.com/send/?phone=${whatsapp}`}
-								>
-									<Button className="mt-10" fullWidth>
-										Renew Subscription
-									</Button>
-								</Link>
-							</div>
-						</div>
-					</aside>
+		<main className="flex h-full w-full bg-neutral-10">
+			<article className="flex h-full w-full flex-col rounded-lg p-4">
+				<NavDrawer title="General Settings" />
+				<section className="mt-6 flex flex-col gap-6">
+					<DigitalMenuSettings
+						data={dataGeneralSettings}
+						isLoading={loadGeneralSettings}
+					/>
+					{/* <ShiftManagementSettings /> */}
+					<SubscriptionPlan
+						data={dataSubscription}
+						isLoading={loadSubscription}
+					/>
 				</section>
 			</article>
-
-			<Modal
-				closeOverlay
-				open={isOpen}
-				handleClose={() => setIsOpen(false)}
-				className="!w-1/2 !p-12"
-			>
-				<section className="flex w-full items-center justify-center gap-4">
-					<div className="w-1/2">
-						<h1 className="text-heading-s-bold text-primary-main">
-							Subscription Needed
-						</h1>
-						<p className="mt-4 text-l-regular text-primary-main">
-							We’re sorry that you need to subscribe to access the application.
-							Please renew the subscription first.
-						</p>
-						<Link
-							passHref
-							target="_blank"
-							href={`https://api.whatsapp.com/send/?phone=${whatsapp}`}
-						>
-							<Button className="mt-10" fullWidth>
-								Renew Subscription
-							</Button>
-						</Link>
-					</div>
-					<div className="w-1/2">
-						<Image priority src={subsNeeded} alt="subscription-needed" />
-					</div>
-				</section>
-			</Modal>
+			{isOpenModal && (
+				<SubscriptionNeededModal
+					isOpen={isOpenModal}
+					setIsOpen={setIsOpenModal}
+				/>
+			)}
 		</main>
 	);
 };

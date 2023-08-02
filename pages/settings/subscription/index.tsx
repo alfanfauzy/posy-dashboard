@@ -6,7 +6,7 @@ import ViewSubscriptionPage from '@/view/subscription/components/pages';
 const Page = () => (
 	<Guard action="read" on="setting_subscription">
 		<MetaHeader
-			title="Posy Resto - Subscription"
+			title="Posy Resto - General Settings"
 			description={SEO.description}
 			keywords={SEO.keywords}
 			image={SEO.image}

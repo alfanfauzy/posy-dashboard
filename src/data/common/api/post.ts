@@ -6,6 +6,7 @@ type Post = {
 	baseURL?: string;
 	headers?: Record<string, string>;
 	isAuth?: boolean;
+	params?: Record<string, unknown>;
 };
 
 /**
@@ -22,13 +23,14 @@ type Post = {
  * });
  */
 
-const Post = async ({baseURL, endpoint, data, headers = {}}: Post) => {
+const Post = async ({baseURL, endpoint, data, params, headers = {}}: Post) => {
 	const {status, ...response} =
 		(await axios.post(endpoint, data, {
 			headers: {
 				...headers,
 			},
 			baseURL,
+			params,
 		})) || {};
 
 	const isSuccess = status === 200 && response.data === 2200;

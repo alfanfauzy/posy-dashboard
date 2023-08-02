@@ -1,4 +1,4 @@
-import {GetOutletSelectionDataResponse} from '@/data/outlet/types';
+import {GetOutletSelectionDataResponse} from '@/data/outlet/types/GetOutletSelectionType';
 import {useGetOutletSelectionUsecase} from '@/data/outlet/usecases/GetOutletSelectionUsecase';
 import {GetOutletSelectionResult} from '@/domain/outlet/repositories/GetOutletSelectionRepository';
 import {DataList, Response} from '@/domain/vo/BaseResponse';

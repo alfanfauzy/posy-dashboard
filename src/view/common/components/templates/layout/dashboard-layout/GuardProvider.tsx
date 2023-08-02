@@ -4,10 +4,12 @@ import {
 	setIsSubscription,
 	setRestaurantOutletId,
 } from '@/view/common/store/slices/auth';
+import {onChangeShowDigitalMenu} from '@/view/common/store/slices/general-settings';
+import {useGetGeneralSettingsViewModel} from '@/view/outlet/view-models/GetGeneralSettingsViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import {useRouter} from 'next/router';
 import {Loading} from 'posy-fnb-core';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import {type OutletOptionsType} from '../../sidebar';
 
@@ -18,7 +20,7 @@ type GuardProviderProps = {
 
 const GuardProvider = ({children, outletOptions}: GuardProviderProps) => {
 	const dispatch = useAppDispatch();
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = React.useState(true);
 	const {replace, asPath, pathname} = useRouter();
 	const {isLoggedIn, outletId} = useAppSelector(state => state.auth);
 
@@ -27,7 +29,23 @@ const GuardProvider = ({children, outletOptions}: GuardProviderProps) => {
 		enabled: isLoggedIn,
 	});
 
-	useEffect(() => {
+	const {isLoading: loadGeneralSettings} = useGetGeneralSettingsViewModel(
+		{
+			restaurant_outlet_uuid: outletId,
+		},
+		{
+			enabled: !!(outletId && dataSubscription?.isSubscription),
+			onSuccess: dataGeneralSettings => {
+				dispatch(
+					onChangeShowDigitalMenu(
+						dataGeneralSettings?.data.general_setting?.use_digital_menu,
+					),
+				);
+			},
+		},
+	);
+
+	React.useEffect(() => {
 		if (!isLoggedIn) replace('/auth/login');
 		else if (
 			dataSubscription &&
@@ -54,13 +72,13 @@ const GuardProvider = ({children, outletOptions}: GuardProviderProps) => {
 		}
 	}, [asPath, isLoggedIn, dataSubscription, replace]);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		if (dataSubscription) {
 			dispatch(setIsSubscription(dataSubscription.isSubscription));
 		}
 	}, [dataSubscription, dispatch]);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		if (!outletId && outletOptions?.length > 0) {
 			dispatch(setRestaurantOutletId(outletOptions[0]?.value));
 		} else {
@@ -68,7 +86,7 @@ const GuardProvider = ({children, outletOptions}: GuardProviderProps) => {
 		}
 	}, [dispatch, outletId, outletOptions]);
 
-	if (loading) {
+	if (loading || loadGeneralSettings) {
 		return (
 			<main className="flex h-screen w-full items-center justify-center">
 				<Loading size={100} />

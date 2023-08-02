@@ -1,5 +1,5 @@
 import {Can} from '@/view/auth/components/organisms/rbac';
-import {whatsapp_link} from '@/view/common/constants/contact';
+import {WHATSAPP_LINK} from '@/view/common/constants/contact';
 import {PaymentSettingContext} from '@/view/common/store/context/PaymentContext';
 import {Button} from 'posy-fnb-core';
 import React, {useContext} from 'react';
@@ -97,7 +97,7 @@ const PaymentInformationWitDataMolecules = () => {
 				<Button
 					size="m"
 					variant="secondary"
-					onClick={() => window.open(whatsapp_link)}
+					onClick={() => window.open(WHATSAPP_LINK, '_blank')}
 				>
 					Contact Support
 				</Button>
