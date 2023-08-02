@@ -5,33 +5,26 @@ import {
 	GetFilterPaymentMethod,
 	GetPaymentMethodsResult,
 } from '@/domain/payment/repositories/GetPaymentMethodRepository';
-import {DataList, Response} from '@/domain/vo/BaseResponse';
+import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
 export const useGetPaymentMethodUsecases = (
 	input?: GetFilterPaymentMethod,
-	options?: UseQueryOptions<Response<DataList<GetPaymentMethodListResponse>>>,
+	options?: UseQueryOptions<Response<Array<GetPaymentMethodListResponse>>>,
 ): GetPaymentMethodsResult => {
 	const {data, ...rest} = useGetPaymentMethodQuery(input, options);
 
-	if (data?.data.objs) {
-		const paymentMethodMapper = mapToPaymentMethod(data.data.objs);
+	if (data?.data) {
+		const paymentMethodMapper = mapToPaymentMethod(data.data);
 
 		return {
 			data: paymentMethodMapper,
-			pagination: {
-				curr_page: data.data.curr_page,
-				per_page: data.data.per_page,
-				total_objs: data.data.total_objs,
-				total_page: data.data.total_page,
-			},
 			...rest,
 		};
 	}
 
 	return {
 		data: undefined,
-		pagination: undefined,
 		...rest,
 	};
 };

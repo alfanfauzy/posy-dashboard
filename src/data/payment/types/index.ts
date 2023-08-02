@@ -28,17 +28,16 @@ export type GetPaymentAccountInfoResponse = {
 
 export type GetPaymentMethodListResponse = {
 	uuid: string;
-	payment_method_category_uuid: string;
 	code: string;
 	name: string;
+	description: string;
 	logo_url: string;
-	priority: number;
 	is_show: boolean;
 	is_integration: boolean;
-	integration_code: string;
-	charge_fee: string;
-	settlement_info: string;
-	metadata: Metadata;
+	charge_fee: number;
+	charge_fee_unit: string;
+	show_for_dm: boolean;
+	show_for_pos: boolean;
 };
 
 export type GetPaymentBalanceResponse = {

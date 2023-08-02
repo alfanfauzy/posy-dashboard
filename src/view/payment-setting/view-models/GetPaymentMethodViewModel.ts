@@ -4,12 +4,12 @@ import {
 	GetFilterPaymentMethod,
 	GetPaymentMethodsResult,
 } from '@/domain/payment/repositories/GetPaymentMethodRepository';
-import {DataList, Response} from '@/domain/vo/BaseResponse';
+import {Response} from '@/domain/vo/BaseResponse';
 import {UseQueryOptions} from '@tanstack/react-query';
 
-export const useGetPaymentMethodViewModal = (
+export const useGetPaymentMethodViewModel = (
 	input?: GetFilterPaymentMethod,
-	options?: UseQueryOptions<Response<DataList<GetPaymentMethodListResponse>>>,
+	options?: UseQueryOptions<Response<Array<GetPaymentMethodListResponse>>>,
 ): GetPaymentMethodsResult => {
 	const result = useGetPaymentMethodUsecases(input, options);
 

@@ -9,10 +9,10 @@ export const GetPaymentMethodQueryKey = 'payment-method/list';
 
 export const GetPaymentMethod = async (
 	input?: GetFilterPaymentMethod,
-): Promise<Response<DataList<GetPaymentMethodListResponse>>> => {
+): Promise<Response<Array<GetPaymentMethodListResponse>>> => {
 	try {
 		const response = await Post({
-			endpoint: `/order-service/transaction/payment/method/v2/get-list`,
+			endpoint: `/order-service/v2/payment-method/get-list`,
 			data: input,
 		});
 
@@ -25,9 +25,9 @@ export const GetPaymentMethod = async (
 
 export const useGetPaymentMethodQuery = (
 	input?: GetFilterPaymentMethod,
-	options?: UseQueryOptions<Response<DataList<GetPaymentMethodListResponse>>>,
+	options?: UseQueryOptions<Response<Array<GetPaymentMethodListResponse>>>,
 ) =>
-	useQuery<Response<DataList<GetPaymentMethodListResponse>>>(
+	useQuery<Response<Array<GetPaymentMethodListResponse>>>(
 		[GetPaymentMethodQueryKey, JSON.stringify(input)],
 		() => GetPaymentMethod(input),
 		{

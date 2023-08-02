@@ -3,7 +3,6 @@
  */
 
 import {FilterInputVariables} from '@/domain/vo/BaseInput';
-import {Pagination} from '@/domain/vo/BasePagination';
 import {ResultQuery} from '@/domain/vo/BaseResponse';
 
 import {PaymentMethod, PaymentMethods} from '../models';
@@ -11,14 +10,10 @@ import {PaymentMethod, PaymentMethods} from '../models';
 export type GetFilterPaymentMethod = FilterInputVariables<
 	'created_at',
 	| keyof Pick<PaymentMethod, 'is_integration' | 'is_show'>
-	| 'with_payment_method'
-	| 'restaurant_uuid'
+	| 'show_for_pos'
+	| 'show_for_dm'
 >;
 
-export type GetPaymentMethodsResult = ResultQuery<
-	PaymentMethods | undefined
-> & {
-	pagination: Pagination | undefined;
-};
+export type GetPaymentMethodsResult = ResultQuery<PaymentMethods | undefined>;
 
 export type GetPaymentMethodResult = ResultQuery<PaymentMethod>;
