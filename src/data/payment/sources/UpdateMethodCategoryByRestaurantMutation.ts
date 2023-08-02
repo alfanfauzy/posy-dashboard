@@ -6,11 +6,12 @@ import {useMutation, UseMutationOptions} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
 export const UpdatePaymentMethodCategoryByRestaurantService = async (
-	payload: PaymentMethodCategoryByRestaurantPayload,
+	param: PaymentMethodCategoryByRestaurantPayload,
 ): Promise<Response<UpdatePaymentMethodCategoryResponse>> => {
+	const {payload, payment_method_uuid} = param;
 	try {
 		const response = await Post({
-			endpoint: `/order-service/order/payment/setting/method-update`,
+			endpoint: `/order-service/v2/payment-method/update/${payment_method_uuid}`,
 			data: payload,
 		});
 
@@ -21,7 +22,7 @@ export const UpdatePaymentMethodCategoryByRestaurantService = async (
 	}
 };
 
-export const useUpdatePaymentMethodCategoryByRestaurantMutationMutation = (
+export const useUpdatePaymentMethodCategoryByRestaurantMutation = (
 	options?: UseMutationOptions<
 		Response<UpdatePaymentMethodCategoryResponse>,
 		AxiosError<Response>,

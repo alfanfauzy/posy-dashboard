@@ -26,9 +26,9 @@ import PaymentBalanceMolecules from '../molecules/payment/balance';
 import PaymentReportMolecules from '../molecules/payment/report';
 import PasswordConfirmationOrganism from '../organism/form/password-confirmation';
 import PasswordConfirmationBankOrganism from '../organism/form/password-confirmation-bank';
-import PaymentOptionForm from '../organism/form/payment/options';
-import FormPaymentSetting from '../organism/form/payment/setting';
 import FormWithdrawOrganism from '../organism/form/withdraw';
+import PaymentOptionForm from '../organism/payment-options';
+import FormPaymentSetting from '../organism/payment/setting';
 
 const ViewPaymentSettingPage = () => {
 	const queryClient = useQueryClient();
