@@ -23,6 +23,7 @@ import DifferentPaymentModalOrganism from '../molecules/modal/different-payment'
 import SuccessUpdateInformationMolecules from '../molecules/modal/success-update-information';
 import WithdrawConfirmationMolecules from '../molecules/modal/withdraw-confirmation';
 import PaymentBalanceMolecules from '../molecules/payment/balance';
+import PaymentReportMolecules from '../molecules/payment/report';
 import PasswordConfirmationOrganism from '../organism/form/password-confirmation';
 import PasswordConfirmationBankOrganism from '../organism/form/password-confirmation-bank';
 import PaymentOptionForm from '../organism/form/payment/options';
