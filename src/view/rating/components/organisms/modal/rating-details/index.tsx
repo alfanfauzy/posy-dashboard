@@ -127,7 +127,12 @@ const RatingDetailsModal = ({
 									<p className="text-l-bold text-primary-main">Notes</p>
 									<div className="flex flex-wrap gap-2">
 										<p className="text-m-medium text-primary-main lowercase">
-											{item.review_note || '-'}
+											{[
+												...item.review,
+												...(item.review_note ? [item.review_note] : []),
+											]
+												.map(item => item.replaceAll('_', ' '))
+												.join(', ') || '-'}
 										</p>
 									</div>
 								</div>

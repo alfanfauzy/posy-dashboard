@@ -5,7 +5,7 @@ export type GetDetailRatingsDataResponse = {
 	product_name: string;
 	addon_information: Array<AddonInformation>;
 	rating: number;
-	review: string;
+	review: Array<string>;
 	review_note: string;
 };
 
