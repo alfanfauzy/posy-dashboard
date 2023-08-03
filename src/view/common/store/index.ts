@@ -15,13 +15,18 @@ import persistedReducer from './reducers';
 
 export const store = configureStore({
 	reducer: persistedReducer,
-	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware({
+	middleware: getDefaultMiddleware => {
+		const middleware = getDefaultMiddleware({
 			serializableCheck: {
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
-		}).concat(logger),
-	devTools: process.env.NODE_ENV === 'development',
+		});
+
+		if (process.env.NODE_ENV === 'development')
+			return middleware.concat(logger);
+
+		return middleware;
+	},
 });
 
 const persistor = persistStore(store, null, () => store.getState());
