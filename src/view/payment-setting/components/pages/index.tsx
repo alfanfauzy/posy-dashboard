@@ -209,6 +209,7 @@ const ViewPaymentSettingPage = () => {
 						<Can I="manage_payment_method" an="payment_integration">
 							{bankAccountData && <PaymentOptionForm />}
 						</Can>
+						{bankAccountData && <PaymentReportMolecules />}
 					</>
 				)}
 
