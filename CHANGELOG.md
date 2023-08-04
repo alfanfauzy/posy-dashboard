@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/compare/v1.3.1...v1.3.2) (2023-08-04)
+
+### Features
+
+- **outlet:** add outlet detail service ([38a1eb6](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/38a1eb68b7b252f4a43875aba831048c4138c92c))
+- **outlet:** add outlet service ([fccd1ff](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/fccd1ffc0c4406d7d57c62efed466ae97c8793f0))
+- **payment report:** add payment report detail service ([5c784b1](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/5c784b1216859620def82d3586b8d63626d11e84))
+- **payment:** add payment report service ([f00dd07](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/f00dd0794b631faf1a80087120dabf42088bb75e))
+- **pos 383:** add feat payment report in payment setting ([fbdd250](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/fbdd250c4202fde883f469c1e1d158841ef68502))
+
+### Bug Fixes
+
+- **code:** remove unused code ([1520c97](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/1520c97a061dda01e1487212e0c4a1a75421ed9a))
+- **pos 820:** fix filter by date ([8b26a00](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/8b26a006d5baf34d48304d6f8e8ec4e2b4f21015))
+- **pos 824:** fix filter by outlet ([351eee4](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/351eee437ade19020082f1e2ddb9f09d988ea35b))
+- **pos 826:** fix filter linkaja ([cf93414](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/cf93414056e118bfea516e7593f01830b44d4234))
+- **pos 827:** fix color text ([17d55ca](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/17d55cafd35340493dbe043c3701c46e6d37a2ec))
+- **pos 828:** fix issue in payment report detail ([ab1e351](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/commit/ab1e351408cc24373d2f89374bc67309b03324d3))
+
 ### [1.3.1](https://git.infra.pvg.im/pvp-front-end/posy-fnb-dashboard/compare/v1.3.0...v1.3.1) (2023-08-04)
 
 ## 1.3.0 (2023-08-03)
