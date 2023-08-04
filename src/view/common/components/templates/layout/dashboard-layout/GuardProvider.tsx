@@ -4,8 +4,6 @@ import {
 	setIsSubscription,
 	setRestaurantOutletId,
 } from '@/view/common/store/slices/auth';
-import {onChangeShowDigitalMenu} from '@/view/common/store/slices/general-settings';
-import {useGetGeneralSettingsViewModel} from '@/view/outlet/view-models/GetGeneralSettingsViewModel';
 import {useGetSubscriptionSectionViewModel} from '@/view/subscription/view-models/GetSubscriptionSectionViewModel';
 import {useRouter} from 'next/router';
 import {Loading} from 'posy-fnb-core';
@@ -28,22 +26,6 @@ const GuardProvider = ({children, outletOptions}: GuardProviderProps) => {
 		queryKey: [pathname],
 		enabled: isLoggedIn,
 	});
-
-	const {isLoading: loadGeneralSettings} = useGetGeneralSettingsViewModel(
-		{
-			restaurant_outlet_uuid: outletId,
-		},
-		{
-			enabled: !!(outletId && dataSubscription?.isSubscription),
-			onSuccess: dataGeneralSettings => {
-				dispatch(
-					onChangeShowDigitalMenu(
-						dataGeneralSettings?.data.general_setting?.use_digital_menu,
-					),
-				);
-			},
-		},
-	);
 
 	React.useEffect(() => {
 		if (!isLoggedIn) replace('/auth/login');
@@ -86,7 +68,7 @@ const GuardProvider = ({children, outletOptions}: GuardProviderProps) => {
 		}
 	}, [dispatch, outletId, outletOptions]);
 
-	if (loading || loadGeneralSettings) {
+	if (loading) {
 		return (
 			<main className="flex h-screen w-full items-center justify-center">
 				<Loading size={100} />
